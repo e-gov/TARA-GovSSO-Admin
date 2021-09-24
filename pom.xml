@@ -7,6 +7,13 @@
     <artifactId>tara-admin-parent</artifactId>
     <version>1.0.2</version>
     <packaging>pom</packaging>
+    <licenses>
+        <license>
+            <name>MIT</name>
+            <url>https://opensource.org/licenses/MIT</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
     <modules>
         <module>tara-admin-ui</module>
