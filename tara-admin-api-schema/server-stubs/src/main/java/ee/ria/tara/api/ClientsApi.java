@@ -7,11 +7,15 @@ package ee.ria.tara.api;
 
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientImportResponse;
+import org.springframework.core.io.Resource;
 import io.swagger.annotations.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -20,7 +24,9 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
+import javax.validation.constraints.*;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Validated
@@ -44,7 +50,7 @@ public interface ClientsApi {
         getRequest().ifPresent(request -> {
             for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
                 if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
-                    ApiUtil.setExampleResponse(request, "application/json", "{  \"client_url\" : \"https://client.example.com/\",  \"institution_metainfo\" : {    \"name\" : \"testname\",    \"type\" : {      \"type\" : \"public\"    },    \"registry_code\" : \"12345678\"  },  \"smartid_settings\" : {    \"should_use_additional_verification_code_check\" : true,    \"relying_party_name\" : \"relying_party_name\",    \"relying_party_UUID\" : \"relying_party_UUID\"  },  \"description\" : \"description\",  \"sla_notification_emails\" : [ \"katkestused@test.ee\", \"katkestused@test.ee\" ],  \"created_at\" : \"2000-01-23T04:56:07.000+00:00\",  \"redirect_uris\" : [ \"https://redirect-uri.test.ee/callback\", \"https://redirect-uri.test.ee/callback\" ],  \"secret\" : \"secret\",  \"client_id\" : \"openIdDemo\",  \"is_user_consent_required\" : true,  \"mid_settings\" : {    \"relying_party_name\" : \"relying_party_name\",    \"relying_party_UUID\" : \"relying_party_UUID\"  },  \"client_secret_export_settings\" : {    \"recipient_id_code\" : \"60001019906\",    \"recipient_name_in_ldap\" : \"Mari-Liis Männik\",    \"recipient_email\" : \"60001019906@eesti.ee\"  },  \"updated_at\" : \"2000-01-23T04:56:07.000+00:00\",  \"client_short_name\" : {    \"ru\" : \"ru\",    \"en\" : \"en\",    \"et\" : \"et\"  },  \"scope\" : [ \"scope\", \"scope\" ],  \"client_contacts\" : [ {    \"phone\" : \"+3726630200\",    \"name\" : \"test@\",    \"department\" : \"test\",    \"email\" : \"test@test.ee\"  }, {    \"phone\" : \"+3726630200\",    \"name\" : \"test@\",    \"department\" : \"test\",    \"email\" : \"test@test.ee\"  } ],  \"id\" : \"id\",  \"backchannel_logout_uri\" : \"https://example.com/\",  \"client_name\" : {    \"ru\" : \"ru\",    \"en\" : \"en\",    \"et\" : \"et\"  },  \"client_logo\" : \"client_logo\",  \"info_notification_emails\" : [ \"teavitused@test.ee\", \"teavitused@test.ee\" ]}");
+                    ApiUtil.setExampleResponse(request, "application/json", "{  \"client_url\" : \"https://client.example.com/\",  \"institution_metainfo\" : {    \"name\" : \"Example Institution\",    \"type\" : {      \"type\" : \"public\"    },    \"registry_code\" : \"12345678\"  },  \"smartid_settings\" : {    \"should_use_additional_verification_code_check\" : true,    \"relying_party_name\" : \"relying_party_name\",    \"relying_party_UUID\" : \"relying_party_UUID\"  },  \"description\" : \"description\",  \"sla_notification_emails\" : [ \"katkestused@test.ee\", \"katkestused@test.ee\" ],  \"created_at\" : \"2000-01-23T04:56:07.000+00:00\",  \"redirect_uris\" : [ \"https://redirect-uri.test.ee/callback\", \"https://redirect-uri.test.ee/callback\" ],  \"secret\" : \"secret\",  \"client_id\" : \"openIdDemo\",  \"is_user_consent_required\" : true,  \"mid_settings\" : {    \"relying_party_name\" : \"relying_party_name\",    \"relying_party_UUID\" : \"relying_party_UUID\"  },  \"client_secret_export_settings\" : {    \"recipient_id_code\" : \"60001019906\",    \"recipient_name_in_ldap\" : \"Mari-Liis Männik\",    \"recipient_email\" : \"60001019906@eesti.ee\"  },  \"updated_at\" : \"2000-01-23T04:56:07.000+00:00\",  \"client_short_name\" : {    \"ru\" : \"ru\",    \"en\" : \"en\",    \"et\" : \"et\"  },  \"scope\" : [ \"scope\", \"scope\" ],  \"client_contacts\" : [ {    \"phone\" : \"+3726630200\",    \"name\" : \"test\",    \"department\" : \"test\",    \"email\" : \"test@example.com\"  }, {    \"phone\" : \"+3726630200\",    \"name\" : \"test\",    \"department\" : \"test\",    \"email\" : \"test@example.com\"  } ],  \"id\" : \"id\",  \"backchannel_logout_uri\" : \"https://example.com/\",  \"client_name\" : {    \"ru\" : \"ru\",    \"en\" : \"en\",    \"et\" : \"et\"  },  \"client_logo\" : \"client_logo\",  \"info_notification_emails\" : [ \"teavitused@test.ee\", \"teavitused@test.ee\" ]}");
                     break;
                 }
             }

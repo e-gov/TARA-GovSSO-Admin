@@ -3,10 +3,12 @@ package ee.ria.tara.configuration;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+
 import org.springframework.web.util.UriComponentsBuilder;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.RequestHandlerSelectors;
 import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.paths.Paths;
 import springfox.documentation.spring.web.paths.RelativePathProvider;
@@ -28,6 +30,7 @@ public class OpenAPIDocumentationConfig {
             .licenseUrl("http://www.apache.org/licenses/LICENSE-2.0.html")
             .termsOfServiceUrl("")
             .version("1.0.0-SNAPSHOT-oas3")
+            .contact(new Contact("","", "info@example.com"))
             .build();
     }
 

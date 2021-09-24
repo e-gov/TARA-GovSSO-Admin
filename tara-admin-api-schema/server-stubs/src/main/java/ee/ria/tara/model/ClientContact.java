@@ -34,7 +34,7 @@ public class ClientContact   {
    * Get name
    * @return name
   */
-  @ApiModelProperty(example = "test@", value = "")
+  @ApiModelProperty(example = "test", value = "")
 
 
   public String getName() {
@@ -54,7 +54,7 @@ public class ClientContact   {
    * Get email
    * @return email
   */
-  @ApiModelProperty(example = "test@test.ee", value = "")
+  @ApiModelProperty(example = "test@example.com", value = "")
 
 
   public String getEmail() {
