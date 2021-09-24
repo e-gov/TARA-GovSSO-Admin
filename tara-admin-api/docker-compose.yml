@@ -1,0 +1,10 @@
+version: "3"
+
+services:
+  tara-admin-api:
+    container_name: "tara-admin-api"
+    build: .
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./target/tara-admin-api.war:/usr/local/tomcat/webapps/ROOT.war"

@@ -1,0 +1,21 @@
+<app-message></app-message>
+<app-header></app-header>
+<div class="main-body">
+  <mat-tab-group animationDuration="0ms" disableRipple dynamicHeight>
+    <mat-tab class="mat-tab-item" label="Asutused" >
+      <ng-template matTabContent>
+        <app-institutions></app-institutions>
+      </ng-template>
+    </mat-tab>
+    <mat-tab class="mat-tab-item" label="Klientrakendused">
+      <ng-template matTabContent>
+        <app-clients></app-clients>
+      </ng-template>
+    </mat-tab>
+    <mat-tab class="mat-tab-item" label="Teavitused">
+      <ng-template matTabContent>
+        <app-alerts></app-alerts>
+      </ng-template>
+    </mat-tab>
+  </mat-tab-group>
+</div>

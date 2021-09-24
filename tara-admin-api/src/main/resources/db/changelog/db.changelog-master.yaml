@@ -1,0 +1,5 @@
+databaseChangeLog:
+  - include:
+      file: db/changelog/TARA2-132-init.yaml
+  - include:
+      file: db/changelog/GSSO-28.yaml

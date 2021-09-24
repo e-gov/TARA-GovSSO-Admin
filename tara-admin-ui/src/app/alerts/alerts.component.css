@@ -1,0 +1,149 @@
+.view-label {
+  text-align: left;
+  float: left;
+}
+
+.add-alert {
+  text-align: right;
+  float: right;
+  cursor: pointer;
+  margin-bottom: 0.75rem;
+}
+
+.search-field {
+  text-align: left;
+  float: left;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+.search-form {
+  width: 100%;
+}
+
+.add-item-container {
+  display: inline-block;
+  width: 100%;
+}
+
+.add-item {
+  margin-top: 15px;
+  white-space: nowrap;
+}
+
+.col-1 {
+  padding-left: unset;
+}
+
+/* Structure */
+.example-container {
+  position: relative;
+  min-height: 200px;
+}
+
+.example-table-container {
+  position: relative;
+  max-height: 60%;
+  overflow: auto;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-column-created {
+  max-width: 124px;
+}
+
+th.mat-header-cell {
+  background-color: gainsboro;
+  border: none;
+}
+
+td.mat-cell {
+  margin-left: 5px;
+  border: none;
+}
+
+.mat-cell > button {
+  width: 100%;
+  background: none !important;
+  border: none;
+  padding: 0 !important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: dodgerblue;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 15px;
+  text-align: left;
+  margin-left: 15px;
+}
+
+.cdk-overlay-container, .cdk-overlay-pane {
+  z-index: 9999 !important;
+}
+
+tr {
+  width: 100%!important;
+}
+
+.table-content-new-line {
+  display: block;
+}
+
+th {
+  background-color: rgba(160, 160, 153, 0.81) !important;
+  color: black;
+  font-size: 14px;
+  font-family: Arial;
+}
+
+
+.mat-row {
+  background-color: lightgray;
+  color: black!important;
+}
+
+.mat-row > td {
+  color: black!important;
+}
+
+.paginator {
+  background-color: white;
+  color: black;
+}
+
+.mat-sort-header-arrow {
+  color: black!important;
+}
+
+::ng-deep.mat-paginator-page-size {
+  float: left!important;
+}
+
+.search-button {
+  border: 2px solid wheat;
+
+}
+
+
+::ng-deep.cdk-overlay-pane {
+  background-color: white!important;
+  color: black!important;
+}
+
+::ng-deep.mat-dialog-container {
+  background: white!important;
+  color: black!important;
+}
+
+
+td {
+  padding-right: 10px;
+  text-align: left;
+}
+th {
+  padding-right: 10px;
+}

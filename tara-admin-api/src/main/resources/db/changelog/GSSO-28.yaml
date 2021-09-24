@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1911794632350-8
+      author: (generated)
+      changes:
+        - addColumn:
+            tableName: client
+            columns:
+              - column:
+                  name: client_logo
+                  type: bytea

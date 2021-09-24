@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+
+  <properties>
+    <targetEnvironment>dev-local</targetEnvironment>
+    <targetNpmRegistry>https://registry.npmjs.org</targetNpmRegistry>
+  </properties>
+
+  <parent>
+    <artifactId>tara-admin-parent</artifactId>
+    <groupId>ee.ria.tara-admin</groupId>
+    <version>1.0.2</version>
+  </parent>
+
+  <artifactId>tara-admin-ui</artifactId>
+  <version>1.0.2</version>
+  <packaging>war</packaging>
+
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.codehaus.mojo</groupId>
+        <artifactId>exec-maven-plugin</artifactId>
+        <version>1.6.0</version>
+        <executions>
+          <execution>
+            <id>install npm</id>
+            <configuration>
+              <executable>npm</executable>
+              <arguments>
+                <argument>install</argument>
+                <argument>--registry=${targetNpmRegistry}</argument>
+              </arguments>
+            </configuration>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+          <!-- ensure `npm install` is called before anything else during the 'Clean Lifecycle' -->
+          <execution>
+            <id>npm install (clean)</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>pre-clean</phase>
+            <configuration>
+              <executable>npm</executable>
+              <arguments>
+                <argument>install</argument>
+                <argument>--registry=${targetNpmRegistry}</argument>
+              </arguments>
+            </configuration>
+          </execution>
+
+          <!-- Output the npm configuration. -->
+          <execution>
+            <id>npm config list (validate)</id>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+            <phase>validate</phase>
+            <configuration>
+              <executable>npm</executable>
+              <arguments>
+                <argument>config</argument>
+                <argument>list</argument>
+              </arguments>
+            </configuration>
+          </execution>
+          <execution>
+            <id>build js</id>
+            <configuration>
+              <executable>npm</executable>
+              <arguments>
+                <argument>run</argument>
+                <argument>build</argument>
+                <argument>--</argument>
+                <argument>--configuration=${targetEnvironment}</argument>
+              </arguments>
+            </configuration>
+            <phase>generate-resources</phase>
+            <goals>
+              <goal>exec</goal>
+            </goals>
+          </execution>
+        </executions>
+        <configuration>
+          <environmentVariables>
+            <!-- The following parameters create an NPM sandbox for CI -->
+            <NPM_CONFIG_PREFIX>${basedir}/npm</NPM_CONFIG_PREFIX>
+            <NPM_CONFIG_CACHE>${NPM_CONFIG_PREFIX}/cache</NPM_CONFIG_CACHE>
+            <NPM_CONFIG_TMP>${project.build.directory}/npmtmp</NPM_CONFIG_TMP>
+          </environmentVariables>
+        </configuration>
+      </plugin>
+
+      <plugin>
+        <artifactId>maven-war-plugin</artifactId>
+        <configuration>
+          <webResources>
+            <resource>
+              <directory>./dist/tara-admin-ui</directory>
+              <targetPath>WEB-INF/classes/static</targetPath>
+            </resource>
+          </webResources>
+          <failOnMissingWebXml>false</failOnMissingWebXml>
+        </configuration>
+      </plugin>
+    </plugins>
+  </build>
+
+</project>

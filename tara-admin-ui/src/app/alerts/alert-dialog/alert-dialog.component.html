@@ -1,0 +1,100 @@
+<form [noValidate]="false"  (ngSubmit)="save(alertForm)" #alertForm="ngForm" >
+  <mat-dialog-content mat-dialog-content class="mt-3" xmlns="http://www.w3.org/1999/html">
+    <div>
+      <label class="font-weight-bold" *ngIf="this.data.dialogType === 'ADD'">Teavituse lisamine</label>
+      <label class="font-weight-bold" *ngIf="this.data.dialogType === 'UPDATE'">Teavituse muutmine</label>
+      <label class="font-weight-bold" *ngIf="this.data.dialogType === 'INFO'">Teavitus</label>
+      <button class="float-right border-0" style="background: none;" mat-dialog-close type="button">
+        <mat-icon class="ml-1 float-right">close</mat-icon>
+      </button>
+    </div>
+    <div class="mat-dialog-container-content">
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Pealkiri</label>
+        <div class="col-sm-8">
+          <input *ngIf="!isInfo()" name="title" type="text" class="form-control w-75" required [(ngModel)]="_title" />
+          <label *ngIf="isInfo()">{{newData.title}}</label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Alguse aeg</label>
+        <div class="col-sm-8" *ngIf="isInfo()">
+          <label>{{getDisplayableDateTime(_start_date.toISOString())}}</label>
+        </div>
+        <div class="col-sm-8 d-flex" *ngIf="!isInfo()">
+          <div class="col-sm-3 p-lg-0">
+            <mat-datepicker-toggle matSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #startDatePicker></mat-datepicker>
+            <input class="form-control w-75" [matDatepicker]="startDatePicker" required [(ngModel)]="_start_date" name="start-date" />
+          </div>
+          <div class="col-sm-3">
+            <input *ngIf="!isInfo()" placeholder="00:00:00" type="text" class="form-control w-75" required
+                   [(ngModel)]="_start_time" name="start-time" />
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Lõpu aeg</label>
+        <div class="col-sm-8" *ngIf="isInfo()">
+          <label>{{getDisplayableDateTime(_end_date.toISOString())}}</label>
+        </div>
+        <div class="col-sm-8 d-flex" *ngIf="!isInfo()">
+          <div class="col-sm-3 p-lg-0">
+            <mat-datepicker-toggle matSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #endDatePicker></mat-datepicker>
+            <input class="form-control w-75" [matDatepicker]="endDatePicker" required [(ngModel)]="_end_date" name="end-date" />
+          </div>
+          <div class="col-sm-3">
+            <input *ngIf="!isInfo()" type="text" placeholder="00:00:00" class="form-control w-75" required
+                   [(ngModel)]="_end_time" name="end-time" />
+          </div>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="!authService.isSsoMode">
+        <label class="col-sm-4 col-form-label">Mõjutatud autentimisvahendid</label>
+        <div class="col-sm-4 m-2">
+          <div *ngFor="let item of getPossibleScopes()" class="form-row" >
+            <mat-checkbox [disabled]="isInfo()" [name]="item"
+                          [checked]="_login_alert.auth_methods.includes(item)"
+                          (change)="onScopeChange($event)">{{item}}
+            </mat-checkbox>
+          </div>
+          <div id="scope-alert" class="alert alert-danger" style="display: none;">
+            Vähemalt 1 autentimisvahend peab olema valitud.
+          </div>
+        </div>
+      </div>
+      <div class="form-group row mt-2" *ngIf="!isInfo() && this._login_alert.enabled">
+        <label class="col-sm-4 col-form-label align-top">Teade TARA login lehel</label>
+        <div class="col-sm-8">
+          <textarea class="w-75" rows="5" [(ngModel)]="_login_alert.message_templates[0].message" required name="notification-text"></textarea>
+        </div>
+      </div>
+      <div *ngIf="isInfo() && this._login_alert.enabled" class="form-group row mt-2">
+        <label class="col-sm-4 col-form-label align-top"></label>
+        <div class="col-sm-4 w-75">
+          <p *ngFor="let item of newData.login_alert.message_templates">
+            {{item.message}}
+          </p>
+        </div>
+      </div>
+      <div class="mt-5">
+        <label *ngIf="isInfo()">
+          Lisatud: {{getDisplayableDateTime(newData.created_at)}}
+        </label>
+        <br>
+        <label *ngIf="isInfo()">
+          Muudetud: {{getDisplayableDateTime(newData.updated_at)}}
+        </label>
+      </div>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions class="float-right">
+    <button *ngIf="!isInfo()" mat-button style="background-color: green; color: white" type="submit">
+      {{data.dialogType === 'UPDATE' ? "Muuda" : "Lisa"}}
+    </button>
+    <button *ngIf="isInfo()" mat-button (click)="this.data.dialogType = 'UPDATE'" type="button">Muuda</button>
+    <button *ngIf="isInfo()" mat-button (click)="delete()" type="button">Kustuta</button>
+    <button mat-button mat-dialog-close type="button">Katkesta</button>
+  </div>
+</form>

@@ -1,0 +1,30 @@
+.message-SUCCESS {
+  background-color: #83ff7e;
+}
+
+.message-INFO {
+  background-color: #ffc24e;
+}
+
+.message-ERROR {
+  background-color: #ff5d56;
+}
+
+.message-component {
+  display: inline-flex!important;
+  z-index: 1001;
+  border: 1px solid gray;
+  padding-right: 0!important;
+  border-radius: 5px;
+  position: fixed;
+  top: 20px;
+  width: 100%;
+}
+
+.close {
+  display: flex;
+  background-color: transparent;
+  position: absolute;
+  top: 0px;
+  right: 0px;
+}

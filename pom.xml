@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>ee.ria.tara-admin</groupId>
+    <artifactId>tara-admin-parent</artifactId>
+    <version>1.0.2</version>
+    <packaging>pom</packaging>
+
+    <modules>
+        <module>tara-admin-ui</module>
+        <module>tara-admin-api</module>
+        <module>tara-admin-api-schema</module>
+        <module>tara-admin-import</module>
+    </modules>
+
+    <properties>
+        <maven.compiler.release>11</maven.compiler.release>
+
+        <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
+    </properties>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>2.5.4</version>
+    </parent>
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <!--
+                        Setting target value here is only needed to fix IntelliJ IDEA not detecting target version from
+                        global maven.compiler.release property. Maven compiler works correctly without it.
+                    -->
+                    <target>${maven.compiler.release}</target>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

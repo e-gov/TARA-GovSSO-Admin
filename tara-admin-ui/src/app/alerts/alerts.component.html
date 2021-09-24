@@ -1,0 +1,89 @@
+<div class="mt-3">
+  <div class="add-item-container">
+    <div class="add-item">
+      <a class="add-alert float-right" (click)="createNewAlert()">Lisa uus teavitus</a>
+    </div>
+  </div>
+  <div class="example-container mat-elevation-z8 text-left">
+    <div class="example-table-container">
+      <table mat-table [dataSource]="this.dataSource" matSort>
+
+        <ng-container matColumnDef="title">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Pealkiri</th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            {{row.title}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="start_time" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Alates</th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            {{getDisplayableDateTime(row.start_time)}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="duration">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Kuni</th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+              {{getDisplayableDateTime(row.end_time)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="display_for_methods">
+          <th mat-header-cell *matHeaderCellDef disableClear>Mõjutatud teenused</th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            {{row.login_alert.auth_methods}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="description">
+          <th mat-header-cell *matHeaderCellDef disableClear>Teavitus teenuse lehel</th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            <p *ngFor="let item of row.login_alert.message_templates">
+              {{item.message}}
+            </p>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+            Registreeritud
+          </th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            {{getDisplayableDateTime(row.created_at)}}
+          </td>
+
+        </ng-container><ng-container matColumnDef="updated_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+            Muudetud
+          </th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            {{getDisplayableDateTime(row.updated_at)}}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell class="mat-cell-last" *matHeaderCellDef disableClear>
+          </th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            <button type="button" (click)="openAlertDialog(row, 'INFO')">Detailid</button>
+            <br />
+            <button type="button" (click)="deleteAlert(row)">Kustuta</button>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+      </table>
+      <mat-paginator #tablePaginator class="paginator" [length]="this.dataSource.data.length" [pageSizeOptions]="[5]" showFirstLastButtons ></mat-paginator>
+    </div>
+    <div *ngIf="dataSource.data.length === 0" style="background-color: white" class="mt-1 text-center">No records found</div>
+  </div>
+</div>

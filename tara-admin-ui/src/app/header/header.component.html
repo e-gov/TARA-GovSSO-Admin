@@ -1,0 +1,13 @@
+<div class="header-container d-flex justify-content-between align-items-center">
+  <header role="banner">
+    {{this.applicationName()}}
+  </header>
+  <div class="main-header">
+    <div class="user-info">
+        <label class="name">{{this.displayUser().getValue()}}</label>
+    </div>
+    <div>
+      <button type="button" (click)="this.logout()">Logi välja</button>
+    </div>
+  </div>
+</div>

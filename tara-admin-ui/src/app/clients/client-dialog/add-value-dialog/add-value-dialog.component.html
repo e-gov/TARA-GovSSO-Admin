@@ -1,0 +1,8 @@
+<div>
+  <p>
+    <b>{{this.data.title}}</b>
+  </p>
+  <input type="text" #input class="form-control" [(ngModel)]="url">
+  <button class="btn-link" (keyup.enter)="save()" (click)="save()" type="button">Lisa</button>
+  <button class="btn-link" (keyup.escape)="cancel()" mat-dialog-close type="button">Katkesta</button>
+</div>

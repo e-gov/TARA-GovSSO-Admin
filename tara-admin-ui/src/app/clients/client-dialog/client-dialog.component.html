@@ -1,0 +1,501 @@
+<form [noValidate]="false" #clientForm (ngSubmit)="save()">
+  <div mat-dialog-actions class="float-right">
+    <button *ngIf="!isInfo()" mat-button style="background-color: green; color: white" type="submit">
+      {{data.dialogType === 'UPDATE' ? "Muuda" : "Lisa"}}
+    </button>
+    <button *ngIf="isInfo()" mat-button (click)="this.data.dialogType = 'UPDATE'" type="button">Muuda</button>
+    <button *ngIf="isInfo()" mat-button (click)="delete()" type="button">Kustuta</button>
+    <button mat-button (keyup.escape)="cancel()" mat-dialog-close type="button">Tagasi</button>
+  </div>
+  <mat-dialog-content mat-dialog-content class="mt-3">
+    <div>
+      <label class="font-weight-bold" *ngIf="this.data.dialogType === 'ADD'">Klientrakenduse lisamine</label>
+      <label class="font-weight-bold" *ngIf="this.data.dialogType === 'UPDATE'">Klientrakenduse muutmine</label>
+      <label class="font-weight-bold" *ngIf="this.data.dialogType === 'INFO'">Klientrakenduse info</label>
+    </div>
+    <div class="mat-dialog-container-content">
+      <h1><span class="font-weight-bold">Asutus</span></h1>
+      <div class="form-group row mt-2">
+        <label class="col-sm-4 col-form-label">Asutus
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Klientrakenduse paigalduse eest vastutav asutus">help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8" *ngIf="!isInfo()">
+          <mat-form-field class="w-75" panelClass="selection-panel">
+            <mat-label>Vali asutus</mat-label>
+            <mat-select required [(ngModel)]="this.newData.institution_metainfo"
+                        [compareWith]="compareInstitutionMetainfo" name="institution_metainfo">
+              <mat-option *ngFor="let institution of this.data.institutions | async"
+                          [value]="institution">{{institution.name + " (" + institution.registry_code + ")"}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+          <label>{{newData.institution_metainfo.registry_code}}</label>
+        </div>
+      </div>
+    </div>
+    <div class="mat-dialog-container-content">
+      <h1><span class="font-weight-bold">Klientrakendus</span></h1>
+      <div class="form-group row mt-2 d-flex">
+        <label class="col-sm-4 col-form-label">Klientrakenduse ID
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Klientrakenduse unikaalne identifikaator, mille klient peab esitama autentimispäringus">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8" *ngIf="!isInfo()">
+          <input name="client_id" type="text" [disabled]="data.dialogType === 'UPDATE'" class="form-control w-75"
+                 [(ngModel)]="_client_id" required/>
+        </div>
+        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+          <label>{{newData.client_id}}</label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Klientrakenduse nimetus
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Klientrakenduse nimetus, mis kuvatakse kasutajale autentimisvalikute lehel. ">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8 d-flex" *ngIf="!isInfo()">
+          <input type="text" class="form-control w-75" [(ngModel)]="_client_name.et" name="client_name_et"/>
+          <button class="btn-link float-right" type="button" (click)="addTranslation(newData.client_name)">Lisa tõlge
+          </button>
+        </div>
+        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+          <label>{{newData.client_name.et}}</label>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="newData.client_name.en || newData.client_name.ru">
+        <label class="col-sm-4 col-form-label"></label>
+        <div class="col-sm-8">
+          <div *ngIf="newData.client_name.en">
+            <button class="btn-link ml-0" type="button" (click)="newData.client_name.en = ''"
+                    [disabled]="data.dialogType === 'INFO'">
+              {{newData.client_name.en + " (eng)"}}
+              <mat-icon *ngIf="!isInfo()" class="ml-1 float-right">close</mat-icon>
+            </button>
+          </div>
+          <div *ngIf="newData.client_name.ru">
+            <button class="btn-link ml-0" type="button" (click)="newData.client_name.ru = ''"
+                    [disabled]="data.dialogType === 'INFO'">
+              {{newData.client_name.ru + " (rus)"}}
+              <mat-icon *ngIf="!isInfo()" class="ml-1 float-right">close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Klientrakenduse lühinimetus
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Klientrakenduse nimetus lühendatud kujul. Kuvatakse kasutajale mobiilseadmega autentimisel. ">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8 d-flex" *ngIf="!isInfo()">
+          <input type="text" class="form-control w-75" [(ngModel)]="_client_short_name.et" name="client_short_name_et"/>
+          <button class="btn-link float-right" type="button" (click)="addTranslation(newData.client_short_name)">Lisa
+            tõlge
+          </button>
+        </div>
+        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+          <label>{{newData.client_short_name.et}}</label>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="newData.client_short_name.en || newData.client_short_name.ru">
+        <label class="col-sm-4 col-form-label"></label>
+        <div class="col-sm-8">
+          <div *ngIf="newData.client_short_name.en">
+            <button class="btn-link ml-0" type="button" (click)="newData.client_short_name.en = ''"
+                    [disabled]="data.dialogType === 'INFO'">
+              {{newData.client_short_name.en + " (eng)"}}
+              <mat-icon *ngIf="!isInfo()" class="ml-1 float-right">close</mat-icon>
+            </button>
+          </div>
+          <div *ngIf="newData.client_short_name.ru">
+            <button class="btn-link ml-0" type="button" (click)="newData.client_short_name.ru = ''"
+                    [disabled]="data.dialogType === 'INFO'">
+              {{newData.client_short_name.ru + " (rus)"}}
+              <mat-icon *ngIf="!isInfo()" class="ml-1 float-right">close</mat-icon>
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+        <div class="form-group row" *ngIf="authService.isSsoMode">
+          <label class="col-sm-4 col-form-label" for="client-logo-file">Klientrakenduse logo
+            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                      matTooltip="Klientrakenduse logo PNG või JPG formaadis.">
+              help_outline
+            </mat-icon>
+          </label>
+          <div class="col-sm-8">
+            <input *ngIf="!isInfo()" type="file" class="form-control w-75" id="client-logo-file" (change)="onImageChange($event)" required>
+            <div *ngIf="!isInfo()" id="client-logo-alert" class="alert alert-danger" style="visibility: hidden;">
+              Logo peab olema kas PNG või JPG formaadis.
+            </div>
+            <div class="preview" *ngIf="clientLogoDataUri">
+              <img [src]="clientLogoDataUri" style="max-width:250px; max-height:250px">
+            </div>
+          </div>
+
+        </div>
+
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Tagasisuunamispäring - lubatud URL-id
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Lubatud tagasisuunamispäringu URL-id, millele saadetakse TARA autentimisprotsessi vastus.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-6">
+          <div *ngFor="let item of newData.redirect_uris!" class="d-block">
+            <div class="form-group row col-sm-8 d-inline">
+              <a href="{{item}}">{{item}}</a>
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="removeRedirectUri(item)">
+                <mat-icon class="ml-1 float-right">close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button *ngIf="!isInfo()" type="button" class="btn-link ml-0" (click)="openRedirectUrlDialog()">Lisa URL
+          </button>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="!isInfo()">
+        <label *ngIf="this.data.dialogType === 'UPDATE'" class="col-sm-4 col-form-label">Saladus
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Uue saladuse väljastamine. ">help_outline
+          </mat-icon>
+        </label>
+        <div *ngIf="this.data.dialogType === 'UPDATE'" class="col-sm-6">
+          <div class="form-group row col-sm-8 mb-0" *ngIf="this.newData.client_secret_export_settings">
+            <div class="w-auto">
+              <div>{{this.newData.client_secret_export_settings.recipient_id_code}}</div>
+              <div>{{this.newData.client_secret_export_settings.recipient_email}}</div>
+            </div>
+            <button class="float-right btn-link" type="button"
+                    (click)="this.newData.client_secret_export_settings = undefined">
+              <mat-icon class="ml-1 float-right">close</mat-icon>
+            </button>
+          </div>
+        </div>
+        <div>
+          <button *ngIf="this.data.dialogType === 'UPDATE'" type="button" class="btn-link ml-0"
+                  style="margin-left: 15px"
+                  (click)="openSecretDialog()">{{this.newData.client_secret_export_settings ? "Muuda adressaat" : "Väljasta uus saladus"}}</button>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="this.data.dialogType === 'ADD'">
+        <label class="col-sm-4 col-form-label">Saladuse adressaat (isikukood)
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Isik, kellele saadetakse krüpteeritud saladus e-mailiga.">help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8 d-flex">
+          <input type="text" class="form-control w-75" name="recipient_id_code"
+                 [(ngModel)]="this.newData.client_secret_export_settings.recipient_id_code" required/>
+        </div>
+      </div>
+      <div class="form-group row" *ngIf="this.data.dialogType === 'ADD'">
+        <label class="col-sm-4 col-form-label">Saladuse adressaadi e-mail
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="E-maili aadress, millele saadetakse krüpteeritud CDOC ümbrik saladus">help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8 d-flex">
+          <input type="text" class="form-control w-75" name="recipient_email"
+                 [(ngModel)]="this.newData.client_secret_export_settings.recipient_email" required/>
+        </div>
+      </div>
+      <form *ngIf="!authService.isSsoMode">
+        <div class="form-row">
+          <label class="col-sm-4 col-form-label">
+            Lubatud scope parameetri väärtused
+            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                      matTooltip="Klientrakenduse poolt saadetavas autentimispäringus lubatud scope parameetri väärtused.">
+              help_outline
+            </mat-icon>
+          </label>
+          <div class="col-sm-4 m-2">
+            <div *ngFor="let item of getPossibleScopes()" class="form-row">
+              <mat-checkbox [disabled]="isInfo()" [name]="item" [checked]="newData.scope.includes(item)"
+                            (change)="onScopeChange($event)">{{item}}</mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </form>
+      <form>
+        <div class="form-row">
+          <label class="col-sm-4 col-form-label">Kasutajalt küsitakse isikuandmete väljastamiseks nõusolekut
+            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                      matTooltip="Määrab ära, kas autentimisprotsessi lõpus kuvatakse kasutajale isikuandmete väljastamiseks nõusoleku küsimise lehekülg.">
+              help_outline
+            </mat-icon>
+          </label>
+          <div class="col-sm-4 m-2">
+            <div class="form-row">
+              <mat-checkbox [disabled]="isInfo()" [checked]="newData.is_user_consent_required"
+                            (change)="newData.is_user_consent_required = !newData.is_user_consent_required"></mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="form-group row" *ngIf="!authService.isSsoMode">
+        <label class="col-sm-4 col-form-label">Klientrakenduse URL
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Tagasiühilduvuse eesmärgil kasutatav URL, mille abil on võimalik rakendusesse tagasi pöörduda. Kasutakse ainult klientide puhul, kes on registreeritud varem kui 2019.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8" *ngIf="!isInfo()">
+          <input type="text" class="form-control w-75" name="client_url" [(ngModel)]="_client_url" [value]="newData.client_url">
+        </div>
+        <label *ngIf="isInfo()">{{newData.client_url ? newData.client_url : "-"}}</label>
+      </div>
+      <div class="form-group row" *ngIf="authService.isSsoMode">
+        <label class="col-sm-4 col-form-label">Taustakanali väljalogimise URL
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Taustakanali väljalogimise otspunkt peab klientrakenduse poolel olema tehtud SSO teenuse väljuvale IP-aadressile kättesaadavaks. SSO teenus sooritab määratud URL-ile päringu kui kasutaja logib välja.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8" *ngIf="!isInfo()">
+          <input required type="text" class="form-control w-75" name="backchannel_logout_uri" [(ngModel)]="_backchannel_logout_uri" [value]="newData.backchannel_logout_uri">
+        </div>
+        <label *ngIf="isInfo()">{{newData.backchannel_logout_uri ? newData.backchannel_logout_uri : "-"}}</label>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Tehniliste teavituste e-mailid.
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Kontaktaadressid, millele edastatakse üldinfot teenusega seotud uuenduste kohta (versiooniuuendused, protokollimuudatusests jm).">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-6">
+          <div *ngFor="let item of newData.info_notification_emails" class="d-block">
+            <div class="form-group row d-inline col-sm-8">
+              <a href="{{item}}">{{item}}</a>
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="removeSupportEmail(item)">
+                <mat-icon class="ml-1 float-right">close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button *ngIf="!isInfo()" type="button" class="btn-link ml-0" (click)="openInfoNotificationEmailDialog()">Lisa
+          e-mail
+        </button>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Katkestustest teavitamise e-mail(id)
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Kontaktaadressid, millele edastatakse info TARA tööd mõjutavate planeeritud ja planeerimata katkestuste kohta.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-6">
+          <div *ngFor="let item of newData.sla_notification_emails" class="d-block">
+            <div class="form-group row d-inline col-sm-8">
+              <a href="{{item}}">{{item}}</a>
+              <button *ngIf="!isInfo()" class="float-right btn-link" type="button"
+                      (click)="removeBlackoutEmail(item)">
+                <mat-icon class="ml-1 float-right">close</mat-icon>
+              </button>
+            </div>
+          </div>
+        </div>
+        <button *ngIf="!isInfo()" type="button" class="btn-link ml-0" (click)="openSlaNotificationEmailDialog()">
+          Lisa e-mail
+        </button>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Lisainfo
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Vabas vormis lisainfo klientrakenduse kohta">help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8">
+      <textarea *ngIf="!isInfo()" class="col-sm-9" rows="5" [(ngModel)]="_description" name="description">
+        </textarea>
+        </div>
+        <div *ngIf="isInfo()">{{newData.description ? newData.description : '-'}}</div>
+      </div>
+    </div>
+    <div *ngIf="newData.scope.includes('smartid') && !authService.isSsoMode" class="mat-dialog-container-content">
+      <h1><span>Smart-ID seadistus</span></h1>
+      <form>
+        <div class="form-row">
+          <label class="col-sm-4 col-form-label">Kasuta kliendispetsiifilist seadistust
+            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                      matTooltip="Märgi valituks ainult juhul kui klientrakenduse jaoks on sõlmitud eraldiseisev Smart-ID leping. Mittevalimise korral kasutatakse vaikimisi TARA kesksest seadistusest Smart-ID lepingu väärtusi.">
+              help_outline
+            </mat-icon>
+          </label>
+          <div class="col-sm-4 m-2">
+            <div class="form-row">
+              <mat-checkbox [disabled]="isInfo()"
+                            [checked]="this._use_specific_smartid_configuration"
+                            (change)="this._use_specific_smartid_configuration = !this._use_specific_smartid_configuration">
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Klientrakenduse ID
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Smart-ID lepingust klientrakenduse jaoks kasutatav UUID väärtus.">help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8">
+          <input *ngIf="!isInfo()" [disabled]="!_use_specific_smartid_configuration" type="text"
+                 class="form-control w-75" name="smartid_relying_party_uuid" [required]="_use_specific_smartid_configuration"
+                 [(ngModel)]="_smartid_settings.relying_party_UUID">
+          <label *ngIf="isInfo()">
+            {{newData.smartid_settings.relying_party_UUID ? newData.smartid_settings.relying_party_UUID : '-'}}
+          </label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Klientrakenduse nimi
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Smart-ID lepingust klientrakenduse jaoks kasutatav klientrakenduse nime väärtus.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8">
+          <input *ngIf="!isInfo()" type="text" class="form-control w-75" name="smartid_relying_party_name"
+                 [(ngModel)]="_smartid_settings.relying_party_name" [required]="_use_specific_smartid_configuration"
+                 [disabled]="!_use_specific_smartid_configuration">
+          <label *ngIf="isInfo()">
+            {{newData.smartid_settings.relying_party_name ? newData.smartid_settings.relying_party_name : '-'}}
+          </label>
+        </div>
+      </div>
+      <form>
+        <div class="form-row">
+          <label class="col-sm-4 col-form-label">Teosta kontrollkoodi lisakontroll enne PIN verifitseerimist
+            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                      matTooltip="Kasutaja käest küsitakse Smart-ID autentimisel lisakontrollina lehel kuvatud kontrollkoodi.">
+              help_outline
+            </mat-icon>
+          </label>
+          <div class="col-sm-4 m-2">
+            <div class="form-row">
+              <mat-checkbox [checked]="newData.smartid_settings.should_use_additional_verification_code_check"
+                            [disabled]="isInfo()"
+                            (change)="newData.smartid_settings.should_use_additional_verification_code_check = !newData.smartid_settings.should_use_additional_verification_code_check">
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <div *ngIf="newData.scope.includes('mid') && !authService.isSsoMode" class="mat-dialog-container-content">
+      <h1><span>Mobiil-ID seadistus</span></h1>
+      <form>
+        <div class="form-row">
+          <label class="col-sm-4 col-form-label">Kasuta kliendispetsiifilist seadistust
+            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                      matTooltip="Märgi valituks ainult juhul kui klientrakenduse jaoks on sõlmitud eraldiseisev Mobiil-ID leping. Mittevalimise korral kasutatakse vaikimisi TARA kesksest seadistusest Mobiil-ID lepingu väärtusi.">
+              help_outline
+            </mat-icon>
+          </label>
+          <div class="col-sm-4 m-2">
+            <div class="form-row">
+              <mat-checkbox [checked]="this._use_specific_mid_configuration"
+                            [disabled]="isInfo()"
+                            (change)="this._use_specific_mid_configuration = !this._use_specific_mid_configuration">
+              </mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </form>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Klientrakenduse ID
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Mobiil-ID lepingust klientrakenduse jaoks kasutatav klientrakenduse ID väärtus.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8">
+          <input *ngIf="!isInfo()" type="text" class="form-control w-75" [(ngModel)]="_mid_settings.relying_party_UUID"
+                 [disabled]="!_use_specific_mid_configuration" name="mid_relying_party_uuid" [required]="_use_specific_mid_configuration">
+          <label *ngIf="isInfo()">
+            {{newData.mid_settings.relying_party_UUID ? newData.mid_settings.relying_party_UUID! : '-'}}
+          </label>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Klientrakenduse nimi
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Mobiil-ID lepingust klientrakenduse jaoks kasutatav klientrakenduse nime väärtus.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8">
+          <input *ngIf="!isInfo()" type="text" class="form-control w-75" [(ngModel)]="_mid_settings.relying_party_name"
+                 [disabled]="!_use_specific_mid_configuration" name="mid_relying_party_name" [required]="_use_specific_mid_configuration">
+          <label *ngIf="isInfo()">
+            {{newData.mid_settings.relying_party_name ? newData.mid_settings.relying_party_name! : '-'}}
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="mat-dialog-container-content">
+      <h1><span>Kontaktisikud</span></h1>
+
+      <label class="col-sm-4 col-form-label">Kontaktisikute nimekiri
+        <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                  matTooltip="Klientrakendusega seotud kontaktisikute detailid">help_outline
+        </mat-icon>
+      </label>
+      <div class="col-sm-8">
+        <ul>
+          <div *ngFor="let item of newData.client_contacts!" class="d-block">
+            <li>
+              <p>
+                <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="removeContact(item)">
+                  Kustuta
+                </button>
+                <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="updateContact(item)">
+                  Muuda
+                </button>
+              </p>
+              <p>Nimi: {{item.name}}</p>
+              <p>E-mail: {{item.email}}</p>
+              <p>Telefon: {{item.phone}}</p>
+              <p>Osakond: {{item.department}}</p>
+            </li>
+          </div>
+        </ul>
+        <button *ngIf="!isInfo()" type="button" class="btn-link" (click)="addContact()">Lisa kontakt</button>
+      </div>
+    </div>
+    <div>
+      <label *ngIf="isInfo()">
+        Registreeritud: {{getDisplayableDateTime(newData.created_at)}}
+      </label>
+      <br>
+      <label *ngIf="isInfo()">
+        Viimati muudetud: {{getDisplayableDateTime(newData.updated_at)}}
+      </label>
+    </div>
+  </mat-dialog-content>
+  <div mat-dialog-actions class="float-right">
+    <button *ngIf="!isInfo()" mat-button style="background-color: green; color: white" type="submit">
+      {{data.dialogType === 'UPDATE' ? "Muuda" : "Lisa"}}
+    </button>
+    <button *ngIf="isInfo()" mat-button (click)="this.data.dialogType = 'UPDATE'" type="button">Muuda</button>
+    <button *ngIf="isInfo()" mat-button (click)="delete()" type="button">Kustuta</button>
+    <button mat-button (keyup.escape)="cancel()" type="button" mat-dialog-close>Tagasi</button>
+  </div>
+</form>

@@ -1,0 +1,21 @@
+<div>
+  <p>Tõlke lisamine</p>
+  <div class="form-group position-relative">
+
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">Inglise keel</label>
+      <div class="col-sm-8 d-flex">
+        <input type="text" #input class="form-control" [(ngModel)]="_newData.en">
+      </div>
+    </div>
+
+    <div class="form-group row">
+      <label class="col-sm-4 col-form-label">Vene keel</label>
+      <div class="col-sm-8 d-flex">
+        <input type="text" class="form-control" [(ngModel)]="_newData.ru">
+      </div>
+    </div>
+  </div>
+  <button class="btn-link" (keyup.enter)="save()" (click)="save()" type="button">Lisa</button>
+  <button class="btn-link" (keyup.escape)="cancel()" mat-dialog-close type="button">Katkesta</button>
+</div>

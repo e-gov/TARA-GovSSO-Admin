@@ -1,0 +1,121 @@
+<div class="overlay" *ngIf="waitingForApiResponse">
+  <div class="center">
+    <mat-progress-spinner diameter=50
+                          mode="indeterminate">
+    </mat-progress-spinner>
+  </div>
+</div>
+<div class="mt-3">
+  <div class="search-bar" *ngIf="withHeader">
+    <div class="search-field">
+      <input class="search-input w-75" type="text" placeholder="Otsi kliendi id järgi"
+             [(ngModel)]="_searchField" (keyup.enter)="search(_searchField)">
+      <button mat-button matSuffix mat-icon-button aria-label="Search" (click)="search(_searchField)">
+        <mat-icon>search</mat-icon>
+      </button>
+    </div>
+    <div class="add-item">
+      <a class="add-application" (click)="createNewClient()">Lisa uus klientrakendus</a>
+    </div>
+  </div>
+  <div class="example-container mat-elevation-z8 text-left">
+    <div class="example-table-container">
+      <table mat-table [dataSource]="this.dataSource" matSort>
+
+        <ng-container matColumnDef="client_id">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Kliendi ID</th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            <ng-container *ngIf="dataSource.data.length > 0">
+              <button type="button" class="ml-0" (click)="openClientDialog(row, 'INFO')">
+                {{row.client_id}}
+              </button>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="client_name" >
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Nimetus</th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            <ng-container *ngIf="dataSource.data.length > 0">
+              {{row.client_name.et}}
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- State Column -->
+        <ng-container matColumnDef="redirect_uris">
+          <th mat-header-cell *matHeaderCellDef>Lubatud redirect URL-id</th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            <ng-container *ngIf="dataSource.data.length > 0">
+              <div *ngFor="let uri of row.redirect_uris" class="w-100 table-content-new-line ml-2">{{uri}}</div>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <!-- Created Column -->
+        <ng-container matColumnDef="scope">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear >
+            Lubatud skoobid
+          </th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }" *matCellDef="let row, let i = index">
+            <div *ngFor="let scope of row.scope">{{scope}}</div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="created_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+            Registreeritud
+          </th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            <ng-container *ngIf="dataSource.data.length > 0">
+              {{getDisplayableDateTime(row.created_at)}}
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="updated_at">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header disableClear>
+            Muudetud
+          </th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            <ng-container *ngIf="dataSource.data.length > 0">
+              {{getDisplayableDateTime(row.updated_at)}}
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell class="mat-cell-last" *matHeaderCellDef disableClear>
+          </th>
+          <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
+              *matCellDef="let row, let i = index">
+            <ng-container *ngIf="dataSource.data.length > 0">
+              <button  type="button" (click)="openClientDialog(row, 'UPDATE')">Muuda</button>
+              <br/>
+              <button type="button" (click)="openChangeSecretDialog(row)">Väljasta uus saladus</button>
+            </ng-container>
+          </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="border-bottom"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns; let i = index"></tr>
+      </table>
+      <mat-paginator #tablePaginator *ngIf="dataSource.data.length > 0" class="paginator"
+                     [length]="this.dataSource.data.length" [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+    </div>
+    <div *ngIf="dataSource.data.length === 0 && !waitingForApiResponse" style="background-color: white" class="mt-1 text-center">
+      No records found
+    </div>
+
+    <div *ngIf="withHeader">
+      <p>
+        <a class="add-application" (click)="importClients()">Impordi klientrakendused failist</a>
+      </p>
+    </div>
+  </div>
+</div>

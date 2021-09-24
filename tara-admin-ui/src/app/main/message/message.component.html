@@ -1,0 +1,6 @@
+<div *ngIf="hasMessage()" [ngClass]="'message-' + this.getMessageType()" class="container message-component">
+  {{this.getMessage()}}
+  <button class="close" (click)="this.clearMessage()">
+    <mat-icon class="float-right">close</mat-icon>
+  </button>
+</div>

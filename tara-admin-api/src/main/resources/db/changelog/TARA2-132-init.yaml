@@ -1,0 +1,236 @@
+databaseChangeLog:
+  - property:
+      name: date_function
+      value: timezone('utc', now())
+      dbms: postgresql
+  - property:
+      name: date_function
+      value: now()
+      dbms: h2
+  - changeSet:
+      id: 1911794632350-1
+      author: (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: institution_pk
+                  name: id
+                  type: SERIAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: registry_code
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: type
+                  type: VARCHAR(255)
+              - column:
+                  name: contact_address
+                  type: VARCHAR(255)
+              - column:
+                  name: contact_email
+                  type: VARCHAR(255)
+              - column:
+                  name: contact_phone
+                  type: VARCHAR(255)
+              - column:
+                  name: billing_email
+                  type: VARCHAR(255)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+            tableName: institution
+  - changeSet:
+      id: 1911794632350-2
+      author: (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: client_pk
+                  name: id
+                  type: SERIAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: client_id
+                  type: VARCHAR(255)
+              - column:
+                  constraints:
+                    nullable: false
+                  name: institution_registry_code
+                  type: VARCHAR(255)
+              - column:
+                  name: description
+                  type: VARCHAR(2048)
+              - column:
+                  name: info_notification_emails
+                  type: VARCHAR(2048)
+              - column:
+                  name: sla_notification_emails
+                  type: VARCHAR(2048)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+            tableName: client
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: client_contacts_pk
+                  name: id
+                  type: SERIAL
+              - column:
+                  constraints:
+                    nullable: false
+                  name: client_id
+                  type: integer
+              - column:
+                  name: name
+                  type: VARCHAR(1024)
+              - column:
+                  name: email
+                  type: VARCHAR(512)
+              - column:
+                  name: phone
+                  type: VARCHAR(100)
+              - column:
+                  name: department
+                  type: VARCHAR(1024)
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+            tableName: client_contact
+  - changeSet:
+      id: 1911794632350-3
+      author: (generated)
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: alert_pk
+                  name: id
+                  type: SERIAL
+              - column:
+                  name: title
+                  type: VARCHAR(255)
+              - column:
+                  name: display_only_for_authmethods
+                  type: VARCHAR(255)
+              - column:
+                  name: email_template
+                  type: VARCHAR(1024)
+              - column:
+                  name: notification_text
+                  type: VARCHAR(1024)
+              - column:
+                  name: notify_clients_by_email
+                  type: BOOLEAN
+              - column:
+                  name: notify_clients_on_tara_login_page
+                  type: BOOLEAN
+              - column:
+                  name: start_time
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+              - column:
+                  name: end_time
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+              - column:
+                  name: send_at
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+              - column:
+                  name: created_at
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+              - column:
+                  name: updated_at
+                  type: timestamp
+                  defaultValueComputed: ${date_function}
+            tableName: alert
+  - changeSet:
+      id: 1911794632350-4
+      author: (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: registry_code
+            indexName: unique_institution_registry_code
+            tableName: institution
+            unique: true
+  - changeSet:
+      id: 1911794632350-5
+      author: (generated)
+      changes:
+        - createIndex:
+            columns:
+              - column:
+                  name: client_id
+            indexName: unique_client_id
+            tableName: client
+            unique: true
+  - changeSet:
+      id: 1911794632350-6
+      author: (generated)
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: institution_registry_code
+            baseTableName: client
+            constraintName: fk_institution_registry_code
+            onUpdate: CASCADE
+            referencedColumnNames: registry_code
+            referencedTableName: institution
+            validate: true
+  - changeSet:
+      id: 1911794632350-7
+      author: (generated)
+      changes:
+        - sql:
+            comment: Grant permissions to tables
+            dbms: '!h2,  postgresql'
+            endDelimiter: \nGO
+            splitStatements: true
+            sql: grant select, insert, delete, update on all tables in schema "public" to "${admin-service-user-name}";
+        - sql:
+            comment: Grant permissions to indexes
+            dbms: '!h2,  postgresql'
+            endDelimiter: \nGO
+            splitStatements: true
+            sql: grant usage, select on all sequences in schema "public" to "${admin-service-user-name}";

@@ -1,0 +1,73 @@
+.btn-link {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #069;
+  text-decoration: underline;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+::ng-deep .mat-dialog-container {
+  background: white!important;
+  color: black!important;
+}
+
+.mat-dialog-content {
+  display: inline;
+}
+
+.mat-datepicker-toggle {
+  color: #005f87;
+}
+
+.mat-datepicker-input {
+  display: inline-block;
+}
+
+::ng-deep.cdk-overlay-pane {
+  background-color: white!important;
+  color: black!important;
+}
+
+.cdk-overlay-pane {
+  max-width: 100% !important;
+}
+
+.col-form-label {
+  text-align: left;
+}
+::ng-deep.mat-checkbox-inner-container {
+  border: 1px solid black!important;
+}
+
+.material-icons {
+  font-size: 16px;
+  vertical-align: middle;
+  position: center;
+  top: -1px;
+  width: fit-content;
+}
+
+.mat-button {
+  border: 2px solid gray;
+}
+
+::ng-deep .mat-tooltip-panel {
+  background-color: transparent!important;
+}
+
+change-secret-dialog {
+  width: 100%;
+}
+
+::ng-deep .mat-checkbox-label {
+  color: black!important;
+}
+
+::ng-deep .mat-checkbox-background {
+  background-color: white!important;
+}

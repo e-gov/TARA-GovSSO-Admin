@@ -1,0 +1,51 @@
+.main-header {
+  text-align: right;
+}
+
+.main-header button {
+  background: none!important;
+  border: none;
+  padding: 0!important;
+  /*optional*/
+  font-family: arial, sans-serif;
+  /*input has OS specific font-family*/
+  color: #fff;
+  font-weight: 500;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+.mat-tab-label {
+  min-width: 25px !important;
+  padding: 5px;
+  font-weight: 700;
+  color: #fff;
+  background-color: #005f87 !important;
+  opacity: 1 !important;
+}
+
+.mat-tab-labels {
+  background-color: #005f87;
+  display: flex;
+}
+
+.mat-tab-label-active {
+  color: #003168 !important;
+  background-color: #fff !important;
+  opacity: 1 !important;
+  border: 0px !important;
+}
+
+.mat-tab-group.mat-primary .mat-ink-bar, .mat-tab-nav-bar.mat-primary .mat-ink-bar {
+  opacity: 0;
+}
+
+.header-container {
+  background-color: #e9ecef;
+  height: 100px;
+  position: relative;
+  color: #fff;
+  background-color: #003168;
+  padding-right: 40px;
+  padding-left: 40px;
+}
