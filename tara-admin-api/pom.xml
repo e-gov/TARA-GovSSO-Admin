@@ -189,8 +189,6 @@
                 <configuration>
                     <image>
                         <env>
-                            <!-- Set LOG_CONSOLE_LEVEL=INFO by default. -->
-                            <BPE_DEFAULT_LOG_CONSOLE_LEVEL>INFO</BPE_DEFAULT_LOG_CONSOLE_LEVEL>
                             <BP_DEBUG_ENABLED>true</BP_DEBUG_ENABLED>
                         </env>
                         <name>tara-admin:latest</name><!-- Use "latest" tag instead of "<version>" tag. -->

@@ -58,7 +58,6 @@ The backend application is built on top of classes generated from the API specif
 | auth.in-memory-username         | N*       | Username used with in-memory authentication              | admin                  |
 | auth.in-memory-password         | N*       | Password used for in-memory authentication               | admin                  |
 | auth.in-memory-authority        | N*       | Authority given by in-memory authentication              | admin-authority        |
-| server.requests.allowed-origin  | N        | CORS allowed origin                                      | http://localhost:4200  |
 \* - Only used when inMemoryAuth profile is active
 
 <a href="db_conf"></a>

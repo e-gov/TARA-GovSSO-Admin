@@ -23,7 +23,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class InstitutionRepositoryIT {
     private final String registryCode = "RC12345CIS";
-    private final String institutionName = "Nortal AS";
+    private final String institutionName = "Example Organization";
     private final Institution testInstitution = createTestInstitution(institutionName, registryCode);
 
     private final InstitutionRepository repository;
@@ -201,11 +201,11 @@ public class InstitutionRepositoryIT {
 
         institution.setRegistryCode(registryCode);
         institution.setType(InstitutionType.TypeEnum.PUBLIC);
-        institution.setContactPhone("37255555555");
-        institution.setContactAddress("Lõõtsa 6, Tallinn, Harjumaa, Eesti");
+        institution.setContactPhone("37200000001");
+        institution.setContactAddress("Lossi plats 1, Tallinn, Harjumaa, Eesti");
         institution.setName(name);
-        institution.setBillingEmail("invoice@nortal.com");
-        institution.setContactEmail("info@nortal.com");
+        institution.setBillingEmail("invoice@example.com");
+        institution.setContactEmail("info@example.com");
         institution.setClients(List.of());
 
         return institution;
