@@ -30,9 +30,6 @@ In addition, the executable jar file can be found at `tara-admin-import/target/c
 
 ## Building and Running in Docker
 
-TODO Disable file logging, it causes error when running in Docker. Current workaround is to delete file appender from
-logback-spring.xml before building.
-
 ```shell
 ./mvnw clean install
 ./mvnw --projects tara-admin-api -DskipTests spring-boot:build-image
