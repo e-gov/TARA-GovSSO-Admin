@@ -107,7 +107,7 @@ public class ClientHelper {
         metadata.setOidcClient(oidcClient);
 
         hydraClient.setClientId(client.getClientId());
-        // NB! For backward compatibility with TARA-Server all client secrets must be saved to Hydra as sha256 digests.
+        // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.
         hydraClient.setClientSecret(hashSecret ? getDigest(client.getSecret()): client.getSecret());
         hydraClient.setClientName(client.getClientName() != null ? client.getClientName().getEt() : null);
 
