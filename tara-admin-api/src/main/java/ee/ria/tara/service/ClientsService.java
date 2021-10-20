@@ -1,5 +1,6 @@
 package ee.ria.tara.service;
 
+import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
@@ -35,17 +36,19 @@ public class ClientsService {
     private final InstitutionRepository institutionRepository;
     private final ClientSecretEmailService clientSecretEmailService;
     private final OidcService oidcService;
+    private final AdminConfigurationProvider adminConfigurationProvider;
 
     @Value("${tara-oidc.url}")
     private String baseUrl;
 
     public ClientsService(ClientRepository clientRepository,
                           ClientSecretEmailService clientSecretEmailService,
-                          InstitutionRepository institutionRepository, OidcService oidcService) {
+                          InstitutionRepository institutionRepository, OidcService oidcService, AdminConfigurationProvider adminConfigurationProvider) {
         this.clientRepository = clientRepository;
         this.clientSecretEmailService = clientSecretEmailService;
         this.institutionRepository = institutionRepository;
         this.oidcService = oidcService;
+        this.adminConfigurationProvider = adminConfigurationProvider;
     }
 
     public List<Client> getAllClients(String clientId) throws FatalApiException {
@@ -139,7 +142,8 @@ public class ClientsService {
         }
         this.saveClientEntity(registryCode, client);
 
-        oidcService.saveClient(convertToHydraClient(client), uri, httpMethod);
+        boolean hashSecret = !adminConfigurationProvider.isSsoMode();
+        oidcService.saveClient(convertToHydraClient(client, hashSecret), uri, httpMethod);
     }
 
     private void assertValidIdCode(ClientSecretExportSettings clientSecretExportSettings) throws InvalidDataException {

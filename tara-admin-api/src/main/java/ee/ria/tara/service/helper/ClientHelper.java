@@ -84,10 +84,6 @@ public class ClientHelper {
         return client;
     }
 
-    public static HydraClient convertToHydraClient(Client client) {
-        return convertToHydraClient(client, true);
-    }
-
     public static HydraClient convertToHydraClient(Client client, boolean hashSecret) {
         HydraClientMetadata metadata = new HydraClientMetadata();
         OidcClient oidcClient = new OidcClient();
