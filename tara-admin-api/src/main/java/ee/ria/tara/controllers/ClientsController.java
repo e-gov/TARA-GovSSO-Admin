@@ -89,7 +89,7 @@ public class ClientsController implements ClientsApi {
     private boolean saveClient(ee.ria.tara.model.Institution institution, Client client) {
         try {
             importService.saveClient(institution, client);
-            log.info(String.format("TARA client: %s successfully imported", client.getClientId()));
+            log.info(String.format("Client: %s successfully imported", client.getClientId()));
             return true;
         } catch (Exception e) {
             log.error("Failed to import client: " + client.getClientId(), e);

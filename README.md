@@ -1,11 +1,11 @@
 <img src="doc/img/eu_regional_development_fund_horizontal.jpg" width="350" height="200">
 
-# TARA admin application
+# TARA/GOVSSO admin application
 
-TARA admin project's main goal is to provide a web application that allows TARA service managers to:
-* manage institutions that want to register OIDC clients in TARA
+TARA/GOVSSO admin project's main goal is to provide a web application that allows TARA/GOVSSO service managers to:
+* manage institutions that want to register OIDC clients in TARA/GOVSSO
 * manage OIDC client registrations
-* manage alerts that are to be displayed on the TARA login page
+* manage alerts that are to be displayed on the TARA/GOVSSO login page
 
 An additional subproject also provides tools to export/import TARA clients. 
 
@@ -18,7 +18,7 @@ Java (JDK 11+) runtime and Node.js (14+) is required to build and run the webapp
 
 ## Building the project
 
-Execute the following command in the projects root directory to build the TARA admin webapp and additional command line tools:
+Execute the following command in the projects root directory to build the TARA/GOVSSO admin webapp and additional command line tools:
 
 ```shell
 ./mvnw clean package

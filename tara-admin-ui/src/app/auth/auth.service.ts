@@ -68,7 +68,7 @@ export class AuthService {
         else
           this.titleService.setTitle("TARA haldusliides");
       }).catch(err => {
-        console.log("failed SSO mode check");
+        console.log("failed ssoMode check");
       });
   }
 }

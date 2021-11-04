@@ -65,7 +65,7 @@
         </div>
       </div>
       <div class="form-group row mt-2" *ngIf="!isInfo() && this._login_alert.enabled">
-        <label class="col-sm-4 col-form-label align-top">Teade TARA login lehel</label>
+        <label class="col-sm-4 col-form-label align-top">Teade autentimisteenuse lehel</label>
         <div class="col-sm-8">
           <textarea class="w-75" rows="5" [(ngModel)]="_login_alert.message_templates[0].message" required name="notification-text"></textarea>
         </div>

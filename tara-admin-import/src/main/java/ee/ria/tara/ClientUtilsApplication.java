@@ -239,7 +239,7 @@ public class ClientUtilsApplication implements CommandLineRunner {
         try {
             log.info("Importing client: " + mapper.writer().writeValueAsString(client));
             importService.saveClient(institution, client);
-            log.info("TARA client successfully imported");
+            log.info("Client successfully imported");
             return true;
         } catch (Exception e) {
             log.error("Failed to import client: " + client.getClientId(), e);

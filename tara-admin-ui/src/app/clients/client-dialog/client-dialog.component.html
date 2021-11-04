@@ -148,7 +148,7 @@
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Autentimise tagasisuunamispäring - lubatud URL-id
           <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
-                    matTooltip="Lubatud autentimise tagasisuunamispäringu URL-id, millele saadetakse TARA autentimisprotsessi vastus.">
+                    matTooltip="Lubatud autentimise tagasisuunamispäringu URL-id, millele saadetakse autentimisprotsessi vastus.">
             help_outline
           </mat-icon>
         </label>
@@ -285,7 +285,7 @@
       <div class="form-group row" *ngIf="authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Taustakanali väljalogimise URL
           <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
-                    matTooltip="Taustakanali väljalogimise otspunkt peab klientrakenduse poolel olema tehtud SSO teenuse väljuvale IP-aadressile kättesaadavaks. SSO teenus sooritab määratud URL-ile päringu kui kasutaja logib välja.">
+                    matTooltip="Taustakanali väljalogimise otspunkt peab klientrakenduse poolel olema tehtud GOVSSO teenuse väljuvale IP-aadressile kättesaadavaks. Kui kasutaja logib välja, sooritab määratud URL-ile päringu GOVSSO server taustal (mitte veebisirvik).">
             help_outline
           </mat-icon>
         </label>
@@ -318,7 +318,7 @@
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Katkestustest teavitamise e-mail(id)
           <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
-                    matTooltip="Kontaktaadressid, millele edastatakse info TARA tööd mõjutavate planeeritud ja planeerimata katkestuste kohta.">
+                    matTooltip="Kontaktaadressid, millele edastatakse info autentimisteenuse tööd mõjutavate planeeritud ja planeerimata katkestuste kohta.">
             help_outline
           </mat-icon>
         </label>
