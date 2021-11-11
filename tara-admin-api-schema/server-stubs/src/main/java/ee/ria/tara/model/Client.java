@@ -45,6 +45,10 @@ public class Client   {
   @Valid
   private List<String> redirectUris = new ArrayList<>();
 
+  @JsonProperty("post_logout_redirect_uris")
+  @Valid
+  private List<String> postLogoutRedirectUris = new ArrayList<>();
+
   @JsonProperty("scope")
   @Valid
   private List<String> scope = new ArrayList<>();
@@ -241,6 +245,32 @@ public class Client   {
 
   public void setRedirectUris(List<String> redirectUris) {
     this.redirectUris = redirectUris;
+  }
+
+  public Client postLogoutRedirectUris(List<String> postLogoutRedirectUris) {
+    this.postLogoutRedirectUris = postLogoutRedirectUris;
+    return this;
+  }
+
+  public Client addPostLogoutRedirectUrisItem(String postLogoutRedirectUrisItem) {
+    this.postLogoutRedirectUris.add(postLogoutRedirectUrisItem);
+    return this;
+  }
+
+  /**
+   * Get postLogoutRedirectUris
+   * @return postLogoutRedirectUris
+  */
+  @ApiModelProperty(required = true, value = "")
+  @NotNull
+
+@Size(min=1) 
+  public List<String> getPostLogoutRedirectUris() {
+    return postLogoutRedirectUris;
+  }
+
+  public void setPostLogoutRedirectUris(List<String> postLogoutRedirectUris) {
+    this.postLogoutRedirectUris = postLogoutRedirectUris;
   }
 
   public Client scope(List<String> scope) {
@@ -575,6 +605,7 @@ public class Client   {
         Objects.equals(this.clientSecretExportSettings, client.clientSecretExportSettings) &&
         Objects.equals(this.institutionMetainfo, client.institutionMetainfo) &&
         Objects.equals(this.redirectUris, client.redirectUris) &&
+        Objects.equals(this.postLogoutRedirectUris, client.postLogoutRedirectUris) &&
         Objects.equals(this.scope, client.scope) &&
         Objects.equals(this.secret, client.secret) &&
         Objects.equals(this.description, client.description) &&
@@ -593,7 +624,7 @@ public class Client   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, scope, secret, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, clientLogo);
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, secret, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, clientLogo);
   }
 
   @Override
@@ -608,6 +639,7 @@ public class Client   {
     sb.append("    clientSecretExportSettings: ").append(toIndentedString(clientSecretExportSettings)).append("\n");
     sb.append("    institutionMetainfo: ").append(toIndentedString(institutionMetainfo)).append("\n");
     sb.append("    redirectUris: ").append(toIndentedString(redirectUris)).append("\n");
+    sb.append("    postLogoutRedirectUris: ").append(toIndentedString(postLogoutRedirectUris)).append("\n");
     sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
     sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");

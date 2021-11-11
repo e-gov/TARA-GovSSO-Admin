@@ -625,6 +625,7 @@ components:
       required:
         - client_id
         - redirect_uris
+        - post_logout_redirect_uris
         - scope
         - institution_metainfo
       properties:
@@ -651,6 +652,13 @@ components:
             type: string
             format: url
             example: 'https://redirect-uri.test.ee/callback'
+        post_logout_redirect_uris:
+          type: array
+          minItems: 1
+          items:
+            type: string
+            format: url
+            example: 'https://logout-redirect-uri.test.ee/callback'
         scope:
           type: array
           minItems: 1

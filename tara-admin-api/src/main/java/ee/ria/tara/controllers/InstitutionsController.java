@@ -29,7 +29,8 @@ public class InstitutionsController implements InstitutionsApi {
     private final AdminConfigurationProvider adminConfigurationProvider;
 
     private static final String ERR_BACKCHANNEL_URI = "Taustakanali väljalogimise URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
-    private static final String ERR_REDIRECT_URI = "Lubatud tagasisuunamispäringu URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
+    private static final String ERR_REDIRECT_URI = "Lubatud autentimise tagasisuunamispäringu URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
+    private static final String ERR_POST_LOGOUT_REDIRECT_URI = "Lubatud väljalogimise tagasisuunamispäringu URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
 
     public InstitutionsController(InstitutionsService institutionsService, ClientsService clientsService, HttpServletRequest request, AdminConfigurationProvider adminConfigurationProvider) {
         this.institutionsService = institutionsService;
@@ -73,8 +74,10 @@ public class InstitutionsController implements InstitutionsApi {
     }
 
     private void validateRedirectUris(Client client) {
-        if (adminConfigurationProvider.isSsoMode())
+        if (adminConfigurationProvider.isSsoMode()) {
             validateUri(client.getBackchannelLogoutUri(), ERR_BACKCHANNEL_URI);
+            client.getPostLogoutRedirectUris().forEach(uri -> validateUri(uri, ERR_POST_LOGOUT_REDIRECT_URI));
+        }
         client.getRedirectUris().forEach(uri -> validateUri(uri, ERR_REDIRECT_URI));
     }
 

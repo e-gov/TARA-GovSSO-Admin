@@ -62,6 +62,7 @@ public class ImportClientFromExcelAllFieldsTest {
                         "\"client_secret\":\"2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b\"," +
                         "\"grant_types\":null," +
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
+                        "\"post_logout_redirect_uris\":[ ]," +
                         "\"response_types\":[\"code\"]," +
                         "\"scope\":\"openid mid idcard smartid eidas eidasonly eidas:country:* email phone\"," +
                         "\"subject_type\":\"public\"," +

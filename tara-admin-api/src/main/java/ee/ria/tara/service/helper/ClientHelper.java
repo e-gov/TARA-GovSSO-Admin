@@ -71,6 +71,7 @@ public class ClientHelper {
         client.setClientName(getNameTranslations(hydraClient.getMetadata().getOidcClient().getNameTranslations()));
         client.setClientShortName(getShortNameTranslations(hydraClient.getMetadata().getOidcClient().getShortNameTranslations()));
         client.setRedirectUris(hydraClient.getRedirectUris());
+        client.setPostLogoutRedirectUris(hydraClient.getPostLogoutRedirectUris());
         client.setScope(Arrays.asList(hydraClient.getScope().split(" ")));
         client.setBackchannelLogoutUri(hydraClient.getBackchannelLogoutUri());
 
@@ -110,6 +111,7 @@ public class ClientHelper {
         hydraClient.setScope(String.join(" ", client.getScope()));
 
         hydraClient.setRedirectUris(client.getRedirectUris());
+        hydraClient.setPostLogoutRedirectUris(client.getPostLogoutRedirectUris());
         hydraClient.setMetadata(metadata);
 
         hydraClient.setBackchannelLogoutUri(client.getBackchannelLogoutUri());

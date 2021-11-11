@@ -62,6 +62,7 @@ public class ImportClientFromJsonFileTest {
                         "  \"client_secret\" : \"2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b\",\n" +
                         "  \"grant_types\" : null,\n" +
                         "  \"redirect_uris\" : [ \"https://back.ee\" ],\n" +
+                        "  \"post_logout_redirect_uris\":[ ]," +
                         "  \"response_types\" : [ \"code\" ],\n" +
                         "  \"scope\" : \"openid idcard mid smartid eidas eidasonly eidas:country:* email phone\",\n" +
                         "  \"subject_type\" : \"public\",\n" +

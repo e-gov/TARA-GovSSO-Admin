@@ -135,6 +135,22 @@ export class ClientDialogComponent implements OnInit {
     });
   }
 
+  openLogoutRedirectUrlDialog(): void {
+      const dialogRef = this.dialog.open(AddValueDialogComponent, {
+        data: {
+          title: "Lubatud tagasipöördumise URL-i lisamine"
+        },
+        backdropClass: 'cdk-overlay-transparent-backdrop',
+        hasBackdrop: true,
+      });
+
+      dialogRef.afterClosed().subscribe((result: any) => {
+        if (result !== "" && result !== undefined) {
+          this.newData.post_logout_redirect_uris.push(result);
+        }
+      });
+    }
+
   openSecretDialog(): void {
     const dialogRef = this.dialog.open(ChangeSecretDialogComponent, {
         width: "600px",
@@ -189,6 +205,10 @@ export class ClientDialogComponent implements OnInit {
 
   removeRedirectUri(uri: string) {
     this.newData.redirect_uris.splice(this.newData.redirect_uris.indexOf(uri), 1)
+  }
+
+  removeLogoutRedirectUri(uri: string) {
+    this.newData.post_logout_redirect_uris.splice(this.newData.post_logout_redirect_uris.indexOf(uri), 1)
   }
 
   removeContact(contact: ClientContact) {

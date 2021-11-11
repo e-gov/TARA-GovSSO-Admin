@@ -39,8 +39,8 @@ export class ClientsComponent implements OnInit {
               public authService: AuthService) {
     if (this.authService.isSsoMode) {
       this.displayedColumns.forEach((element,index)=>{
-           if(element=='scope') this.displayedColumns.splice(index,1);
-        });
+         if(element=='scope') this.displayedColumns.splice(index,1);
+      });
     }
 
     this.dataSource = new MatTableDataSource<Client>();
@@ -113,6 +113,7 @@ export class ClientsComponent implements OnInit {
       client_name: {et: undefined, en: undefined, ru: undefined},
       client_short_name: {et: undefined, en: undefined, ru: undefined},
       redirect_uris: [],
+      post_logout_redirect_uris: [],
       scope: ["openid", "idcard", "mid", "smartid", "eidas", "eidasonly", "eidas:country:*", "email", "phone"],
       is_user_consent_required: false,
       client_url: undefined,

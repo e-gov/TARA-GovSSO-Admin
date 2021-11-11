@@ -51,6 +51,7 @@ public class ClientTestHelper {
         client.setClientUrl("https://localhost:4200");
         client.setInstitutionMetainfo(institutionMetainfo);
         client.setRedirectUris(List.of("https://localhost:4200"));
+        client.setPostLogoutRedirectUris(List.of("https://localhost:4200"));
         ClientSecretExportSettings clientSecretExportSettings = new ClientSecretExportSettings();
         clientSecretExportSettings.setRecipientIdCode("10101010005");
         client.setClientSecretExportSettings(clientSecretExportSettings);

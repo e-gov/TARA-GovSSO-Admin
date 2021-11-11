@@ -35,6 +35,10 @@ public class HydraClient {
     @Size(min=1)
     private List<String> redirectUris;
 
+    @JsonProperty("post_logout_redirect_uris")
+    @Size(min=1)
+    private List<String> postLogoutRedirectUris;
+
     @JsonProperty("response_types")
     private List<String> responseTypes = List.of("code");
 

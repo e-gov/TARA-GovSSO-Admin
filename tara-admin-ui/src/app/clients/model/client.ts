@@ -5,6 +5,7 @@ export type Client = {
   client_short_name: ClientNameTranslation,
   client_secret_export_settings?: ClientSecretExportSettings,
   redirect_uris: string[],
+  post_logout_redirect_uris: string[],
   scope: string[],
   is_user_consent_required: boolean,
   client_url: string | undefined,
