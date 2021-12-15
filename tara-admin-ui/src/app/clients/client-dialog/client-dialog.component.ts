@@ -16,10 +16,10 @@ import {AddContactDialogComponent} from "./add-contact-dialog/add-contact-dialog
 import {ChangeSecretDialogComponent} from "./change-secret-dialog/change-secret-dialog.component";
 import {MatCheckboxChange} from "@angular/material/checkbox";
 import {VerifyComponent} from "../../main/verify/verify.component";
-import {FormControl} from "@angular/forms";
 import {Observable} from "rxjs";
 import {DateHelper} from "../../helper/datehelper";
 import {AuthService} from "../../auth/auth.service";
+import {EditValueDialogComponent} from "./edit-value-dialog/edit-value-dialog.component";
 
 @Component({
   selector: 'app-client-dialog',
@@ -386,4 +386,40 @@ export class ClientDialogComponent implements OnInit {
   cancel() {
     this.mainDialog.close();
   }
+
+  openEditRedirectUrlDialog(url: string) {
+    const dialogRef = this.dialog.open(EditValueDialogComponent, {
+      data: {
+        title: "Muuda autentimise tagasisuunasmispäringu URL-i",
+        url: url
+      },
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe(({newUrl, oldUrl}) => {
+      if (newUrl !== "" && newUrl !== undefined && oldUrl !== "" && oldUrl !== undefined) {
+        const index = this.newData.redirect_uris.indexOf(oldUrl);
+        this.newData.redirect_uris[index] = newUrl;
+      }
+    });
+  }
+
+  openEditLogoutRedirectUrlDialog(url: string) {
+      const dialogRef = this.dialog.open(EditValueDialogComponent, {
+        data: {
+          title: "Muuda väljalogimise tagasisuunasmispäringu URL-i",
+          url: url
+        },
+        backdropClass: 'cdk-overlay-transparent-backdrop',
+        hasBackdrop: true,
+      });
+
+      dialogRef.afterClosed().subscribe(({newUrl, oldUrl}) => {
+        if (newUrl !== "" && newUrl !== undefined && oldUrl !== "" && oldUrl !== undefined) {
+          const index = this.newData.post_logout_redirect_uris.indexOf(oldUrl);
+          this.newData.post_logout_redirect_uris[index] = newUrl;
+        }
+      });
+    }
 }

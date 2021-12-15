@@ -2,13 +2,13 @@ import {Component, Inject, OnInit, ViewChild} from '@angular/core';
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 
 @Component({
-  selector: 'app-add-value-dialog',
-  templateUrl: './add-value-dialog.component.html',
+  selector: 'app-edit-value-dialog',
+  templateUrl: './edit-value-dialog.component.html',
   styles: [`
     .btn-link {
-      background: none!important;
+      background: none !important;
       border: none;
-      padding: 0!important;
+      padding: 0 !important;
       /*optional*/
       font-family: arial, sans-serif;
       /*input has OS specific font-family*/
@@ -20,11 +20,14 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
     }
   `]
 })
-export class AddValueDialogComponent implements OnInit {
-  @ViewChild('input', {static: true}) input:any;
-  url?: string;
+export class EditValueDialogComponent implements OnInit {
+  @ViewChild('input', {static: true}) input: any;
+  oldUrl: string;
 
-  constructor(public dialog: MatDialogRef<AddValueDialogComponent>, @Inject(MAT_DIALOG_DATA) public data: {title: string}) { }
+  constructor(public dialog: MatDialogRef<EditValueDialogComponent>,
+              @Inject(MAT_DIALOG_DATA) public data: { title: string, url: string }) {
+    this.oldUrl = data.url
+  }
 
   ngOnInit(): void {
     this.input.nativeElement.focus();
@@ -34,7 +37,7 @@ export class AddValueDialogComponent implements OnInit {
   }
 
   save() {
-    this.dialog.close(this.url)
+    this.dialog.close({newUrl: this.data.url, oldUrl: this.oldUrl})
   }
 
   cancel() {

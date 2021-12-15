@@ -159,6 +159,8 @@
               <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="removeRedirectUri(item)">
                 <mat-icon class="ml-1 float-right">close</mat-icon>
               </button>
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="openEditRedirectUrlDialog(item)">Muuda
+              </button>
             </div>
           </div>
         </div>
@@ -181,6 +183,8 @@
               <a href="{{item}}">{{item}}</a>
               <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="removeLogoutRedirectUri(item)">
                 <mat-icon class="ml-1 float-right">close</mat-icon>
+              </button>
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="openEditLogoutRedirectUrlDialog(item)">Muuda
               </button>
             </div>
           </div>
