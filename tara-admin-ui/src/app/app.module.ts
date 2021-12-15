@@ -46,6 +46,7 @@ import {AlertsComponent} from "./alerts/alerts.component";
 import {AlertDialogComponent} from "./alerts/alert-dialog/alert-dialog.component";
 import {HttpInterceptorService} from "./http-interceptor.service";
 import {InstitutionClientsDialogComponent} from "./institutions/institution-clients-dialog/institution-clients-dialog.component";
+import {EditValueDialogComponent} from "./clients/client-dialog/edit-value-dialog/edit-value-dialog.component";
 
 export const DATEPICKER_FORMATS = {
   parse: {
@@ -77,7 +78,8 @@ export const DATEPICKER_FORMATS = {
     InstitutionClientsDialogComponent,
     InstitutionsComponent,
     AlertsComponent,
-    AlertDialogComponent
+    AlertDialogComponent,
+    EditValueDialogComponent
   ],
   imports: [
     BrowserModule,
