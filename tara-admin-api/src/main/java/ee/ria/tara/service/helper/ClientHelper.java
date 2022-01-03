@@ -2,7 +2,14 @@ package ee.ria.tara.service.helper;
 
 
 import ee.ria.tara.controllers.exception.FatalApiException;
-import ee.ria.tara.model.*;
+import ee.ria.tara.model.Client;
+import ee.ria.tara.model.ClientContact;
+import ee.ria.tara.model.ClientMidSettings;
+import ee.ria.tara.model.ClientSmartIdSettings;
+import ee.ria.tara.model.InstitutionMetainfo;
+import ee.ria.tara.model.InstitutionType;
+import ee.ria.tara.model.NameTranslations;
+import ee.ria.tara.model.ShortNameTranslations;
 import ee.ria.tara.service.model.HydraClient;
 import ee.ria.tara.service.model.HydraClientMetadata;
 import ee.ria.tara.service.model.HydraOidcClientInstitution;

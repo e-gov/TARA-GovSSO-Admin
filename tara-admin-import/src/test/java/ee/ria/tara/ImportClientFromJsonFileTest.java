@@ -18,7 +18,11 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 
-import static com.github.tomakehurst.wiremock.client.WireMock.*;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
+import static com.github.tomakehurst.wiremock.client.WireMock.getRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlEqualTo;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 @SpringBootTest(classes = ClientUtilsApplication.class, webEnvironment = NONE)

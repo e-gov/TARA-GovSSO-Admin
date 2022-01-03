@@ -1,15 +1,9 @@
 package ee.ria.tara.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ee.ria.tara.configuration.providers.AuthenticationConfigurationProvider;
 import ee.ria.tara.controllers.handler.ErrorHandler;
-import ee.ria.tara.model.Alert;
-import ee.ria.tara.model.Client;
 import ee.ria.tara.model.LoginRequest;
-import ee.ria.tara.model.LoginResponse;
-import ee.ria.tara.service.helper.ClientTestHelper;
-import ee.ria.tara.service.helper.InstitutionTestHelper;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -30,13 +23,12 @@ import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Objects;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 

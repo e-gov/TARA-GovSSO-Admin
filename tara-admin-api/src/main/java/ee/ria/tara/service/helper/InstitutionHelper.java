@@ -6,8 +6,6 @@ import ee.ria.tara.model.InstitutionType;
 import ee.ria.tara.repository.model.Client;
 import ee.ria.tara.repository.model.Institution;
 
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 

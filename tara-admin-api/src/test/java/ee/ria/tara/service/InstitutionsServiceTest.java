@@ -3,9 +3,7 @@ package ee.ria.tara.service;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.model.Institution;
-import ee.ria.tara.model.InstitutionBillingSettings;
 import ee.ria.tara.model.InstitutionMetainfo;
-import ee.ria.tara.model.InstitutionType;
 import ee.ria.tara.repository.InstitutionRepository;
 import ee.ria.tara.service.helper.InstitutionHelper;
 import org.junit.jupiter.api.Assertions;
@@ -19,13 +17,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
 import static ee.ria.tara.service.helper.InstitutionHelper.convertToEntity;
 import static ee.ria.tara.service.helper.InstitutionTestHelper.createTestInstitution;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.eq;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)

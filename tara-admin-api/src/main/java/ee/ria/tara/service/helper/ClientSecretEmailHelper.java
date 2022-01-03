@@ -1,7 +1,6 @@
 package ee.ria.tara.service.helper;
 
 import ee.ria.tara.configuration.providers.ClientSecretEmailConfigurationProvider;
-import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.service.model.Email;
 import freemarker.template.Configuration;

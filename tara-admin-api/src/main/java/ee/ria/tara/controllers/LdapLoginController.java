@@ -5,7 +5,6 @@ import ee.ria.tara.configuration.providers.AuthenticationConfigurationProvider;
 import ee.ria.tara.controllers.exception.AuthenticationException;
 import ee.ria.tara.model.LoginRequest;
 import ee.ria.tara.model.LoginResponse;
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Profile;
 import org.springframework.http.ResponseEntity;

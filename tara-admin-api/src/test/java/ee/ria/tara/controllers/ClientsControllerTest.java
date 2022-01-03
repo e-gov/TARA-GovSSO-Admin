@@ -1,7 +1,6 @@
 package ee.ria.tara.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.handler.ErrorHandler;
 import ee.ria.tara.model.Client;
@@ -17,7 +16,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -28,10 +26,14 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
 
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.any;
+import static org.mockito.Mockito.doCallRealMethod;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.nullable;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 
 @ExtendWith(MockitoExtension.class)
 public class ClientsControllerTest {

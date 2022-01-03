@@ -4,7 +4,6 @@ import ee.ria.tara.api.LogoutApi;
 import ee.ria.tara.api.SsoModeApi;
 import ee.ria.tara.api.WhoamiApi;
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
-import ee.ria.tara.configuration.providers.AuthenticationConfigurationProvider;
 import ee.ria.tara.model.SsoModeResponse;
 import ee.ria.tara.model.WhoAmIResponse;
 import lombok.extern.slf4j.Slf4j;

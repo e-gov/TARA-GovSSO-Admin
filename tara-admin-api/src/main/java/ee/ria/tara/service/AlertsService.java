@@ -4,7 +4,6 @@ import ee.ria.tara.model.Alert;
 import ee.ria.tara.repository.AlertRepository;
 import ee.ria.tara.service.helper.AlertHelper;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

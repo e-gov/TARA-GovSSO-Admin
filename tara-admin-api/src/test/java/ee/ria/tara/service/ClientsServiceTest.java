@@ -2,7 +2,6 @@ package ee.ria.tara.service;
 
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
-import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientSecretExportSettings;
@@ -33,7 +32,12 @@ import static ee.ria.tara.service.helper.ClientTestHelper.createTestClient;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
+import static org.mockito.Mockito.nullable;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)

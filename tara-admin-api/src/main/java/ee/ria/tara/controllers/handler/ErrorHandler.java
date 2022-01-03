@@ -1,6 +1,10 @@
 package ee.ria.tara.controllers.handler;
 
-import ee.ria.tara.controllers.exception.*;
+import ee.ria.tara.controllers.exception.ApiException;
+import ee.ria.tara.controllers.exception.AuthenticationException;
+import ee.ria.tara.controllers.exception.FatalApiException;
+import ee.ria.tara.controllers.exception.InvalidDataException;
+import ee.ria.tara.controllers.exception.RecordDoesNotExistException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;

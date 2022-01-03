@@ -7,7 +7,12 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import ee.ria.tara.model.*;
+import ee.ria.tara.model.Client;
+import ee.ria.tara.model.ClientContact;
+import ee.ria.tara.model.InstitutionMetainfo;
+import ee.ria.tara.model.InstitutionType;
+import ee.ria.tara.model.NameTranslations;
+import ee.ria.tara.model.ShortNameTranslations;
 import ee.ria.tara.repository.ClientRepository;
 import ee.ria.tara.repository.InstitutionRepository;
 import ee.ria.tara.repository.helper.PropertyFilterMixIn;
@@ -33,7 +38,12 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.InputStream;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import static ee.ria.tara.service.helper.ClientHelper.convertToHydraClient;
 
