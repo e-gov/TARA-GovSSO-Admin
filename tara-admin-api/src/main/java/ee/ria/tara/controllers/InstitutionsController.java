@@ -28,9 +28,9 @@ public class InstitutionsController implements InstitutionsApi {
     private final ClientsService clientsService;
     private final AdminConfigurationProvider adminConfigurationProvider;
 
-    private static final String ERR_BACKCHANNEL_URI = "Taustakanali väljalogimise URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
-    private static final String ERR_REDIRECT_URI = "Lubatud autentimise tagasisuunamispäringu URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
-    private static final String ERR_POST_LOGOUT_REDIRECT_URI = "Lubatud väljalogimise tagasisuunamispäringu URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
+    public static final String ERR_BACKCHANNEL_URI = "Taustakanali väljalogimise URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
+    public static final String ERR_REDIRECT_URI = "Lubatud autentimise tagasisuunamispäringu URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
+    public static final String ERR_POST_LOGOUT_REDIRECT_URI = "Lubatud väljalogimise tagasisuunamispäringu URL on kohustuslik, peab kasutama https protokolli ja ei tohi sisaldada userinfo ega fragment osi.";
 
     public InstitutionsController(InstitutionsService institutionsService, ClientsService clientsService, HttpServletRequest request, AdminConfigurationProvider adminConfigurationProvider) {
         this.institutionsService = institutionsService;
@@ -46,12 +46,12 @@ public class InstitutionsController implements InstitutionsApi {
     }
 
     @Override
-    public ResponseEntity<Void> addClientToInsitution(String registryCode, @Valid Client client) {
+    public ResponseEntity<Void> addClientToInstitution(String registryCode, @Valid Client client) {
         log.info(String.format("Incoming request: POST %s, with client_id: %s.", request.getRequestURI(), client.getClientId()));
 
         validateRedirectUris(client);
 
-        clientsService.addClientToInsitution(registryCode, client);
+        clientsService.addClientToInstitution(registryCode, client);
         return ResponseEntity.ok().build();
     }
 
@@ -76,7 +76,11 @@ public class InstitutionsController implements InstitutionsApi {
     private void validateRedirectUris(Client client) {
         if (adminConfigurationProvider.isSsoMode()) {
             validateUri(client.getBackchannelLogoutUri(), ERR_BACKCHANNEL_URI);
-            client.getPostLogoutRedirectUris().forEach(uri -> validateUri(uri, ERR_POST_LOGOUT_REDIRECT_URI));
+            List<String> postLogoutRedirectUris = client.getPostLogoutRedirectUris();
+            if (postLogoutRedirectUris == null || postLogoutRedirectUris.isEmpty()) {
+                throw new ValidationException(ERR_POST_LOGOUT_REDIRECT_URI);
+            }
+            postLogoutRedirectUris.forEach(uri -> validateUri(uri, ERR_POST_LOGOUT_REDIRECT_URI));
         }
         client.getRedirectUris().forEach(uri -> validateUri(uri, ERR_REDIRECT_URI));
     }

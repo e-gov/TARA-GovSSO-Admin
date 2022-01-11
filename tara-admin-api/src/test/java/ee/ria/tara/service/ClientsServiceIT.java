@@ -102,7 +102,7 @@ public class ClientsServiceIT {
                         .willReturn(ok())
         );
 
-        service.addClientToInsitution(registryCode, client);
+        service.addClientToInstitution(registryCode, client);
 
         Assertions.assertEquals(1, clientRepository.findAll().size());
     }
@@ -115,7 +115,7 @@ public class ClientsServiceIT {
         clientRepository.save(client1);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
-                () ->  service.addClientToInsitution(registryCode, client));
+                () ->  service.addClientToInstitution(registryCode, client));
         Assertions.assertTrue(exception.getMessage()
                 .contains("Client.exists"));
     }
@@ -132,7 +132,7 @@ public class ClientsServiceIT {
         );
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
-                () -> service.addClientToInsitution(registryCode, client));
+                () -> service.addClientToInstitution(registryCode, client));
 
         Assertions.assertEquals(0, clientRepository.findAll().size());
         Assertions.assertTrue(exception.getMessage().contains("Oidc.clientError.400"));
@@ -150,7 +150,7 @@ public class ClientsServiceIT {
         );
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
-                () -> service.addClientToInsitution(registryCode, client));
+                () -> service.addClientToInstitution(registryCode, client));
 
         Assertions.assertEquals(0, clientRepository.findAll().size());
         Assertions.assertTrue(exception.getMessage().contains("Oidc.clientError.409"));
@@ -168,7 +168,7 @@ public class ClientsServiceIT {
         );
 
         ApiException exception = assertThrows(ApiException.class,
-                () -> service.addClientToInsitution(registryCode, client));
+                () -> service.addClientToInstitution(registryCode, client));
 
         Assertions.assertEquals(0, clientRepository.findAll().size());
         Assertions.assertTrue(exception.getMessage()

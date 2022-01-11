@@ -91,7 +91,7 @@ public class ClientsService {
     }
 
     @Transactional(rollbackFor = Exception.class)
-    public void addClientToInsitution(String registryCode, Client client) throws ApiException {
+    public void addClientToInstitution(String registryCode, Client client) throws ApiException {
         String uri = String.format("%s/clients", baseUrl);
 
         this.saveClient(client, registryCode, uri, HttpMethod.POST);

@@ -47,7 +47,7 @@ public class Client   {
 
   @JsonProperty("post_logout_redirect_uris")
   @Valid
-  private List<String> postLogoutRedirectUris = new ArrayList<>();
+  private List<String> postLogoutRedirectUris = null;
 
   @JsonProperty("scope")
   @Valid
@@ -253,6 +253,9 @@ public class Client   {
   }
 
   public Client addPostLogoutRedirectUrisItem(String postLogoutRedirectUrisItem) {
+    if (this.postLogoutRedirectUris == null) {
+      this.postLogoutRedirectUris = new ArrayList<>();
+    }
     this.postLogoutRedirectUris.add(postLogoutRedirectUrisItem);
     return this;
   }
@@ -261,8 +264,7 @@ public class Client   {
    * Get postLogoutRedirectUris
    * @return postLogoutRedirectUris
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
+  @ApiModelProperty(value = "")
 
 @Size(min=1) 
   public List<String> getPostLogoutRedirectUris() {

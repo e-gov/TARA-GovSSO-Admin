@@ -37,7 +37,7 @@ public interface InstitutionsApi {
         return Optional.empty();
     }
 
-    @ApiOperation(value = "Add new client for existing institution", nickname = "addClientToInsitution", notes = "", authorizations = {
+    @ApiOperation(value = "Add new client for existing institution", nickname = "addClientToInstitution", notes = "", authorizations = {
         @Authorization(value = "cookieAuth")
     }, tags={ "clients", })
     @ApiResponses(value = { 
@@ -46,7 +46,7 @@ public interface InstitutionsApi {
     @RequestMapping(value = "/institutions/{registry_code}/clients",
         consumes = { "application/json" },
         method = RequestMethod.POST)
-    default ResponseEntity<Void> addClientToInsitution(@ApiParam(value = "Registry code of the institution",required=true) @PathVariable("registry_code") String registryCode,@ApiParam(value = "Client object that needs to be added" ,required=true )  @Valid @RequestBody Client client) {
+    default ResponseEntity<Void> addClientToInstitution(@ApiParam(value = "Registry code of the institution",required=true) @PathVariable("registry_code") String registryCode,@ApiParam(value = "Client object that needs to be added" ,required=true )  @Valid @RequestBody Client client) {
         return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
 
     }

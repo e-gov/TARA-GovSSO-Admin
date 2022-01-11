@@ -147,7 +147,7 @@ public class ClientsServiceTest {
 
         doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
 
-        clientsService.addClientToInsitution("1", client);
+        clientsService.addClientToInstitution("1", client);
 
         verify(repository, times(1)).save(clientEntityCaptor.capture());
         verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
@@ -161,7 +161,7 @@ public class ClientsServiceTest {
         doThrow(new ApiException(errorMessage)).when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
 
         ApiException exception = assertThrows(ApiException.class,
-                () -> clientsService.addClientToInsitution("1", client));
+                () -> clientsService.addClientToInstitution("1", client));
 
         Assertions.assertTrue(exception.getMessage()
                 .contains(errorMessage));
@@ -212,7 +212,7 @@ public class ClientsServiceTest {
 
         doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
 
-        clientsService.addClientToInsitution("10101010005", client);
+        clientsService.addClientToInstitution("10101010005", client);
 
         verify(repository, times(1)).save(clientEntityCaptor.capture());
         verify(clientSecretEmailService, times(1)).sendSigningSecretByEmail(any(Client.class));

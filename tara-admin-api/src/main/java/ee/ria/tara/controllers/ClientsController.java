@@ -59,13 +59,13 @@ public class ClientsController implements ClientsApi {
         }
     }
 
-    private ClientImportResponse saveClients(Map<Institution, List<Client>> insitutionClients) throws Exception {
+    private ClientImportResponse saveClients(Map<Institution, List<Client>> institutionClients) {
         List<Client> clientsFailedToMigrate = new ArrayList<>();
         int clientsTotal = 0;
         int clientsImportedOk = 0;
 
-        for (Institution institution : insitutionClients.keySet()) {
-            for (Client client : insitutionClients.get(institution)) {
+        for (Institution institution : institutionClients.keySet()) {
+            for (Client client : institutionClients.get(institution)) {
                 Assert.notNull(client.getInstitutionMetainfo(), "Missing institutionMetaInfo");
                 Assert.notNull(client.getInstitutionMetainfo().getRegistryCode(), "Missing institutionMetaInfo.registryCode");
                 if (saveClient(institution, client))

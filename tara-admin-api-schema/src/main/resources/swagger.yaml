@@ -211,7 +211,7 @@ paths:
       tags:
         - clients
       summary: Add new client for existing institution
-      operationId: addClientToInsitution
+      operationId: addClientToInstitution
       parameters:
         - name: registry_code
           in: path
@@ -625,7 +625,6 @@ components:
       required:
         - client_id
         - redirect_uris
-        - post_logout_redirect_uris
         - scope
         - institution_metainfo
       properties:
