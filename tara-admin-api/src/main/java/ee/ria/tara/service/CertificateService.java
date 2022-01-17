@@ -7,10 +7,9 @@ import com.unboundid.ldap.sdk.LDAPSearchException;
 import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
-import com.unboundid.util.ssl.SSLUtil;
-import com.unboundid.util.ssl.TrustAllTrustManager;
 import ee.ria.tara.configuration.providers.CertificateServiceConfigurationProvider;
 import ee.ria.tara.controllers.exception.FatalApiException;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
 import org.bouncycastle.asn1.x509.CertificatePolicies;
@@ -19,10 +18,9 @@ import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.springframework.stereotype.Service;
 
-import javax.net.ssl.SSLSocketFactory;
+import javax.net.ssl.SSLContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.security.cert.CertificateException;
 import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
@@ -35,6 +33,7 @@ import static java.lang.String.format;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CertificateService {
     private static final String BASE_DN = "c=EE";
     private static final String SN_QUERY = "serialNumber=PNOEE-%s";
@@ -43,6 +42,7 @@ public class CertificateService {
     public static final CertificateFactory X509_FACTORY;
 
     private final CertificateServiceConfigurationProvider configurationProvider;
+    private final SSLContext sslContext;
 
     static {
         try {
@@ -52,24 +52,15 @@ public class CertificateService {
         }
     }
 
-    public CertificateService(CertificateServiceConfigurationProvider configurationProvider) {
-        this.configurationProvider = configurationProvider;
-    }
-
     public List<X509Certificate> findAuthenticationCertificates(String idCode) throws FatalApiException {
         log.info("Requesting certificate from LDAP for user: " + idCode);
-        try (LDAPConnection connection = new LDAPConnection(getSslSocketFactory())) {
+        try (LDAPConnection connection = new LDAPConnection(sslContext.getSocketFactory())) {
             connection.connect(configurationProvider.getUrl(), configurationProvider.getPort());
             return executeSearch(connection, idCode);
-        } catch (GeneralSecurityException | LDAPException e) {
+        } catch (LDAPException e) {
             log.error(String.format("Failed to find authentication certificate for user: %s.", idCode), e);
             throw new FatalApiException(e);
         }
-    }
-
-    private SSLSocketFactory getSslSocketFactory() throws GeneralSecurityException {
-        SSLUtil sslUtil = new SSLUtil(new TrustAllTrustManager());
-        return sslUtil.createSSLSocketFactory();
     }
 
     private List<X509Certificate> executeSearch(LDAPConnection connection, String idCode) throws LDAPSearchException {
