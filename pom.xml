@@ -31,7 +31,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.5.8</version><!-- TODO Consider upgrading. Versions 2.6.0 and above conflict with Springfox version. -->
+        <version>2.5.9</version><!-- TODO Consider upgrading. Versions 2.6.0 and above conflict with Springfox version. -->
     </parent>
     <dependencies>
         <dependency>
