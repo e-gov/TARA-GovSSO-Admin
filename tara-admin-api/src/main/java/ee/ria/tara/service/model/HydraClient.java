@@ -29,7 +29,7 @@ public class HydraClient {
 
     @JsonProperty("grant_types")
     @Size(min=1)
-    private List<String> grantTypes;
+    private List<String> grantTypes = List.of("authorization_code");
 
     @JsonProperty("redirect_uris")
     @Size(min=1)
