@@ -5,12 +5,12 @@
     <parent>
         <artifactId>tara-admin-parent</artifactId>
         <groupId>ee.ria.tara-admin</groupId>
-        <version>1.0.2</version>
+        <version>1.1.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>tara-admin-api</artifactId>
-    <version>1.0.2</version>
+    <version>1.1.0</version>
     <packaging>war</packaging>
 
     <properties>
@@ -20,8 +20,8 @@
         <logstash-logback.version>7.0.1</logstash-logback.version>
         <greenmail.version>1.6.5</greenmail.version>
         <springfox.version>2.9.2</springfox.version><!-- TODO Consider upgrading. -->
-        <tara-admin-api-schema.version>1.0.2</tara-admin-api-schema.version>
-        <tara-admin-ui.version>1.0.2</tara-admin-ui.version>
+        <tara-admin-api-schema.version>1.1.0</tara-admin-api-schema.version>
+        <tara-admin-ui.version>1.1.0</tara-admin-ui.version>
         <wiremock.version>2.27.2</wiremock.version>
         <apache.poi.version>5.2.0</apache.poi.version>
     </properties>
