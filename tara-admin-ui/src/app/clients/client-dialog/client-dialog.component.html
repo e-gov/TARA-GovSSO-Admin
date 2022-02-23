@@ -127,14 +127,16 @@
 
 
         <div class="form-group row" *ngIf="authService.isSsoMode">
-          <label class="col-sm-4 col-form-label" for="client-logo-file">Klientrakenduse logo
+          <label class="col-sm-4 col-form-label" for="client-logo-file">Klientrakenduse logoo
             <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
                       matTooltip="Klientrakenduse logo PNG või JPG formaadis.">
               help_outline
             </mat-icon>
           </label>
           <div class="col-sm-8">
-            <input *ngIf="!isInfo()" type="file" class="form-control w-75" id="client-logo-file" (change)="onImageChange($event)" required>
+            <input *ngIf="!isInfo()" type="file" class="form-control w-75" id="client-logo-file" (change)="onImageChange($event)">
+            <button class="btn-link float-right" type="button" (click)="removeImage()">Kustuta
+            </button>
             <div *ngIf="!isInfo()" id="client-logo-alert" class="alert alert-danger" style="visibility: hidden;">
               Logo peab olema kas PNG või JPG formaadis.
             </div>

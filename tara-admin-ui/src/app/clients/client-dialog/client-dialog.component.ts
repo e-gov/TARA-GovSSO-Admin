@@ -93,6 +93,13 @@ export class ClientDialogComponent implements OnInit {
     return !['ADD', 'UPDATE'].includes(this.data.dialogType);
   }
 
+  removeImage(): void {
+    console.log("REMOVING IMAGE");
+    this.clientLogoDataUri = null;
+    this._client_logo = null;
+    (<HTMLInputElement>document.getElementById("client-logo-file")).value = null;
+  }
+
   onImageChange(e: any) {
 
     const reader = new FileReader();
