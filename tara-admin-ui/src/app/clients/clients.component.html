@@ -113,7 +113,7 @@
     </div>
 
     <div *ngIf="withHeader">
-      <p>
+      <p *ngIf="!authService.isSsoMode">
         <a class="add-application" (click)="importClients()">Impordi klientrakendused failist</a>
       </p>
     </div>
