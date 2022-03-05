@@ -42,10 +42,24 @@ The backend application is built on top of classes generated from the API specif
 <a href="tls_conf"></a>
 ### Trusted TLS certificates
 
-| Parameter                    | Required | Description                       | Example                                              |
-| ---------------------------- | -------- | --------------------------------- | ---------------------------------------------------- |
-| auth.tls-truststore-path     | Y        | TLS truststore path used for OIDC | tara-admin-api/src/main/resources/tls-truststore.p12 |
-| auth.tls-truststore-password | Y        | TLS truststore password           | changeit                                             |
+| Parameter                    | Required | Description                                                     | Example                                              |
+| ---------------------------- | -------- | --------------------------------------------------------------- | ---------------------------------------------------- |
+| auth.tls-truststore-path     | Y        | Path to TLS truststore which includes LDAP cert; used for OIDC  | tara-admin-api/src/main/resources/tls-truststore.p12 |
+| auth.tls-truststore-password | Y        | TLS truststore password                                         | changeit                                             |
+
+### SMTP TLS certificates
+NB! These are Java System properties, not Spring configuration parameters. These should be supplied to the application from command line, e.g. `-Dfirst.option.name=value1 -Dsecond.option.name=value2`.
+
+If you run the application using Tomcat, you can add these options to JAVA_OPTS, e.g. `JAVA_OPTS=-Dfirst.option.name=value1 -Dsecond.option.name=value2`
+
+| Parameter                         | Required | Description                                          | Example                                              |
+| --------------------------------- | -------- | ---------------------------------------------------- | ---------------------------------------------------- |
+| javax.net.ssl.trustStore          | Y        | TLS truststore path used for SMTP server certificate | /etc/tara/secrets/tls/smtp-truststore.p12            |
+| javax.net.ssl.trustStorePassword  | Y        | TLS truststore password                              | changeit                                             |
+| javax.net.ssl.trustStoreType      | Y        | TLS truststore type                                  | pkcs12                                               |
+| javax.net.ssl.keyStore            | Y        | TLS keystore path used for SMTP client certificate   | /etc/tara/secrets/tls/smtp-keystore.p12              |
+| javax.net.ssl.keyStorePassword    | Y        | TLS keystore password                                | changeit                                             |
+| javax.net.ssl.keyStoreType        | Y        | TLS keystore type                                    | pkcs12                                               |
 
 <a href="auth_conf"></a>
 ### User authentication with LDAP
@@ -92,6 +106,7 @@ The backend application is built on top of classes generated from the API specif
 | spring.mail.password                                 | Y        | Password of the email used to send email containing cdoc | password         |
 | spring.mail.properties.mail.smtp.auth                | Y        | Require authentication                                   | true             |
 | spring.mail.properties.mail.smtp.starttls.enable     | Y        | Start TLS                                                | true             |
+| spring.mail.properties.mail.smtp.starttls.required   | N        | Require TLS, fail if mail server doesn't support it      | true             |
 | spring.mail.properties.mail.smtp.connectiontimeout   | Y        | Timeout of connection                                    | 5000             |
 | spring.mail.properties.mail.smtp.timeout             | Y        | Timeout                                                  | 3000             |
 | spring.mail.properties.mail.smtp.writetimeout        | Y        | Timeout of email sending                                 | 5000             |
