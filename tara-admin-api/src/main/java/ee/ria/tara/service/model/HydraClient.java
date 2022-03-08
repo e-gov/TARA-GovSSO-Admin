@@ -54,6 +54,9 @@ public class HydraClient {
     @JsonProperty("backchannel_logout_uri")
     private String backchannelLogoutUri;
 
+    @JsonProperty("backchannel_logout_session_required")
+    private Boolean backchannelLogoutSessionRequired = true;
+
     @JsonProperty("metadata")
     private HydraClientMetadata metadata;
 

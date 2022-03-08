@@ -72,6 +72,7 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                         "\"subject_type\":\"public\"," +
                         "\"token_endpoint_auth_method\":\"client_secret_basic\"," +
                         "\"backchannel_logout_uri\" : null,\n" +
+                        "\"backchannel_logout_session_required\" : true,\n" +
                         "\"metadata\":{" +
                             "\"display_user_consent\":null," +
                             "\"oidc_client\":{" +

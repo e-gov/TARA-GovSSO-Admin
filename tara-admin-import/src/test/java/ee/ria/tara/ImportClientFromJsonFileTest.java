@@ -72,6 +72,7 @@ public class ImportClientFromJsonFileTest {
                         "  \"subject_type\" : \"public\",\n" +
                         "  \"token_endpoint_auth_method\" : \"client_secret_basic\",\n" +
                         "  \"backchannel_logout_uri\" : null,\n" +
+                        "  \"backchannel_logout_session_required\" : true,\n" +
                         "  \"metadata\" : {\n" +
                         "    \"display_user_consent\" : false,\n" +
                         "    \"oidc_client\" : {\n" +
