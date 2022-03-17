@@ -207,7 +207,11 @@ export class ClientDialogComponent implements OnInit {
   }
 
   getPossibleScopes(): string[] {
-    return environment.clientScopes;
+    if (this.authService.isSsoMode) {
+      return environment.ssoClientScopes;
+    } else {
+      return environment.clientScopes;
+    }
   }
 
   removeRedirectUri(uri: string) {

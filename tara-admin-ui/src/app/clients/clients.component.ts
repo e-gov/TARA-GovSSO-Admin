@@ -103,6 +103,11 @@ export class ClientsComponent implements OnInit {
   }
 
   createNewClient() {
+    var scopes = ["openid", "idcard", "mid", "smartid", "eidas", "eidasonly", "eidas:country:*", "email", "phone"];
+    if (this.authService.isSsoMode) {
+      scopes = ["openid", "email", "phone"];
+    }
+
     let data: Client = {
       institution_metainfo: {
         name: undefined,
@@ -114,7 +119,7 @@ export class ClientsComponent implements OnInit {
       client_short_name: {et: undefined, en: undefined, ru: undefined},
       redirect_uris: [],
       post_logout_redirect_uris: [],
-      scope: ["openid", "idcard", "mid", "smartid", "eidas", "eidasonly", "eidas:country:*", "email", "phone"],
+      scope: scopes,
       is_user_consent_required: false,
       client_url: undefined,
       backchannel_logout_uri: undefined,

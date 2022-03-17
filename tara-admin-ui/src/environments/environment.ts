@@ -7,6 +7,7 @@ export const environment = {
   // https://github.com/angular/angular/issues/20511#issuecomment-430672830
   backendUrl: "//localhost:8080",
   clientScopes: ["openid", "idcard", "mid", "smartid", "eidas", "eidasonly", "eidas:country:*", "email", "phone", "legalperson"],
+  ssoClientScopes: ["openid", "email", "phone"],
   alertScopes: ["idcard", "mid", "smartid", "eidas"],
   institutionType: {public: "Avalik-õiguslik juriidiline isik", private: "Eraõiguslik juriidiline isik"},
   errorMessageDurationInMills: 10000,
