@@ -23,7 +23,7 @@
         <tara-admin-api-schema.version>1.2.0</tara-admin-api-schema.version>
         <tara-admin-ui.version>1.2.0</tara-admin-ui.version>
         <wiremock.version>2.27.2</wiremock.version>
-        <apache.poi.version>5.2.0</apache.poi.version>
+        <apache.poi.version>5.2.2</apache.poi.version>
     </properties>
 
     <dependencies>
