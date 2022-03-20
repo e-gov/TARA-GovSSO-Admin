@@ -60,6 +60,12 @@ export const DATEPICKER_FORMATS = {
   },
 };
 
+declare global {
+  interface Crypto {
+    randomUUID: () => string;
+  }
+}
+
 @NgModule({
   declarations: [
     AppComponent,
