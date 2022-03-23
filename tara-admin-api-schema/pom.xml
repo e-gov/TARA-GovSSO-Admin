@@ -54,7 +54,7 @@
                     <plugin>
                         <groupId>org.openapitools</groupId>
                         <artifactId>openapi-generator-maven-plugin</artifactId>
-                        <version>3.3.4</version><!-- TODO Consider upgrading. -->
+                        <version>5.1.0</version><!-- TODO Consider upgrading. -->
                         <executions>
                             <execution>
                                 <goals>
