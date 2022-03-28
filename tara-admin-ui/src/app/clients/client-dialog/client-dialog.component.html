@@ -125,11 +125,10 @@
         </div>
       </div>
 
-
         <div class="form-group row" *ngIf="authService.isSsoMode">
           <label class="col-sm-4 col-form-label" for="client-logo-file">Klientrakenduse logo
             <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
-                      matTooltip="Klientrakenduse logo PNG või JPG formaadis.">
+                      matTooltip="Logo peab olema SVG formaadis ja faili suurus peab olema väiksem kui 10 kB.">
               help_outline
             </mat-icon>
           </label>
@@ -138,7 +137,7 @@
             <button class="btn-link float-right" type="button" (click)="removeImage()">Kustuta
             </button>
             <div *ngIf="!isInfo()" id="client-logo-alert" class="alert alert-danger" style="visibility: hidden;">
-              Logo peab olema kas PNG või JPG formaadis.
+              Logo peab olema SVG formaadis ja faili suurus peab olema väiksem kui 10 kB.
             </div>
             <div class="preview" *ngIf="clientLogoDataUri">
               <img [src]="clientLogoDataUri" style="max-width:250px; max-height:250px">

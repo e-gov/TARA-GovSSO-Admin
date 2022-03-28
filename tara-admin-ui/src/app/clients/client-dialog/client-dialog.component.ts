@@ -20,6 +20,8 @@ import {Observable} from "rxjs";
 import {DateHelper} from "../../helper/datehelper";
 import {AuthService} from "../../auth/auth.service";
 import {EditValueDialogComponent} from "./edit-value-dialog/edit-value-dialog.component";
+import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+
 
 @Component({
   selector: 'app-client-dialog',
@@ -39,7 +41,7 @@ export class ClientDialogComponent implements OnInit {
   _client_logo?: string;
   _backchannel_logout_uri: string;
 
-  clientLogoDataUri?: string;
+  clientLogoDataUri?: SafeUrl;
   newData: Client;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
@@ -50,7 +52,8 @@ export class ClientDialogComponent implements OnInit {
               },
               public mainDialog: MatDialogRef<ClientDialogComponent>,
               public dialog: MatDialog,
-              public authService: AuthService) {
+              public authService: AuthService,
+              private domSanitizer: DomSanitizer) {
     this.newData = this.validateAndGetNewClient(this.data.obj)
 
     this._client_name = this.newData.client_name;
@@ -64,7 +67,8 @@ export class ClientDialogComponent implements OnInit {
     this._backchannel_logout_uri = this.newData.backchannel_logout_uri;
 
     if (this._client_logo !== undefined) {
-      this.clientLogoDataUri = "data:image/png;base64,"+this._client_logo;
+      var unsafeDataUri = "data:image/svg+xml;base64," + this._client_logo;
+      this.clientLogoDataUri = this.domSanitizer.bypassSecurityTrustUrl(unsafeDataUri);
     }
 
     this._use_specific_smartid_configuration = this.newData.smartid_settings.relying_party_UUID != undefined ||
@@ -94,7 +98,6 @@ export class ClientDialogComponent implements OnInit {
   }
 
   removeImage(): void {
-    console.log("REMOVING IMAGE");
     this.clientLogoDataUri = null;
     this._client_logo = null;
     (<HTMLInputElement>document.getElementById("client-logo-file")).value = null;
@@ -114,11 +117,12 @@ export class ClientDialogComponent implements OnInit {
           var base64Index = image.indexOf(';base64,') + ';base64,'.length;
           var base64 = image.substring(base64Index);
 
-          if (!image.includes('image/png') && !image.includes('image/jpeg')) {
+          if (!image.includes('image/svg+xml') || file.size > 10000) {
               document.getElementById("client-logo-alert").style.visibility = 'visible';
             } else {
               document.getElementById("client-logo-alert").style.visibility = 'hidden';
-              this.clientLogoDataUri = image;
+
+              this.clientLogoDataUri = this.domSanitizer.bypassSecurityTrustUrl(image);
               this._client_logo = base64;
             }
 
