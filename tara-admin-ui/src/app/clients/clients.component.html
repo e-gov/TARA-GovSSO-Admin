@@ -23,7 +23,7 @@
       <table mat-table [dataSource]="this.dataSource" matSort>
 
         <ng-container matColumnDef="client_id">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Kliendi ID</th>
+          <th mat-header-cell *matHeaderCellDef mat-sort-header>Klientrakenduse ID</th>
           <td mat-cell [ngStyle]="{ 'background-color': (i % 2 == 0) ? 'none' : 'white' }"
               *matCellDef="let row, let i = index">
             <ng-container *ngIf="dataSource.data.length > 0">
