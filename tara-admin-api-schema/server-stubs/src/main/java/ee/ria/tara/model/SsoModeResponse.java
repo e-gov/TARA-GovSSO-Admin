@@ -1,18 +1,25 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * SsoModeResponse
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class SsoModeResponse   {
+
   @JsonProperty("ssoMode")
   private Boolean ssoMode;
 
@@ -25,9 +32,8 @@ public class SsoModeResponse   {
    * Get ssoMode
    * @return ssoMode
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "ssoMode", required = false)
   public Boolean getSsoMode() {
     return ssoMode;
   }
@@ -36,9 +42,8 @@ public class SsoModeResponse   {
     this.ssoMode = ssoMode;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -58,7 +63,6 @@ public class SsoModeResponse   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class SsoModeResponse {\n");
-    
     sb.append("    ssoMode: ").append(toIndentedString(ssoMode)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -68,7 +72,7 @@ public class SsoModeResponse   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

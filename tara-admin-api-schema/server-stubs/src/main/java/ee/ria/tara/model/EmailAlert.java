@@ -1,26 +1,35 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import ee.ria.tara.model.MessageTemplate;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * EmailAlert
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class EmailAlert   {
+
   @JsonProperty("enabled")
   private Boolean enabled;
 
   @JsonProperty("send_at")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime sendAt;
 
   @JsonProperty("message_templates")
@@ -36,9 +45,8 @@ public class EmailAlert   {
    * Get enabled
    * @return enabled
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "enabled", required = false)
   public Boolean getEnabled() {
     return enabled;
   }
@@ -56,10 +64,8 @@ public class EmailAlert   {
    * Get sendAt
    * @return sendAt
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "send_at", example = "2019-08-24T14:15:22Z", required = false)
   public OffsetDateTime getSendAt() {
     return sendAt;
   }
@@ -85,10 +91,8 @@ public class EmailAlert   {
    * Get messageTemplates
    * @return messageTemplates
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "message_templates", required = false)
   public List<MessageTemplate> getMessageTemplates() {
     return messageTemplates;
   }
@@ -97,9 +101,8 @@ public class EmailAlert   {
     this.messageTemplates = messageTemplates;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -121,7 +124,6 @@ public class EmailAlert   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class EmailAlert {\n");
-    
     sb.append("    enabled: ").append(toIndentedString(enabled)).append("\n");
     sb.append("    sendAt: ").append(toIndentedString(sendAt)).append("\n");
     sb.append("    messageTemplates: ").append(toIndentedString(messageTemplates)).append("\n");
@@ -133,7 +135,7 @@ public class EmailAlert   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

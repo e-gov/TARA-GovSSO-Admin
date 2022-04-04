@@ -34,17 +34,6 @@
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>2.5.12</version><!-- TODO Consider upgrading. Versions 2.6.0 and above conflict with Springfox version. -->
     </parent>
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <!-- Using newer version than the default imported by springfox-swagger2 to fix vulnerability CVE-2018-10237.
-                     TODO Remove this property after upgrading springfox-swagger2. -->
-                <groupId>com.google.guava</groupId>
-                <artifactId>guava</artifactId>
-                <version>31.1-jre</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

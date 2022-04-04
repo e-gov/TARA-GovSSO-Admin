@@ -1,18 +1,25 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * NameTranslations
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class NameTranslations   {
+
   @JsonProperty("et")
   private String et;
 
@@ -31,9 +38,8 @@ public class NameTranslations   {
    * Get et
    * @return et
   */
-  @ApiModelProperty(value = "")
-
-@Pattern(regexp="^(?!\\s*$).+") @Size(min=3,max=150) 
+  @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 150) 
+  @Schema(name = "et", required = false)
   public String getEt() {
     return et;
   }
@@ -51,9 +57,8 @@ public class NameTranslations   {
    * Get en
    * @return en
   */
-  @ApiModelProperty(value = "")
-
-@Size(min=3,max=150) 
+  @Size(min = 3, max = 150) 
+  @Schema(name = "en", required = false)
   public String getEn() {
     return en;
   }
@@ -71,9 +76,8 @@ public class NameTranslations   {
    * Get ru
    * @return ru
   */
-  @ApiModelProperty(value = "")
-
-@Size(min=3,max=150) 
+  @Size(min = 3, max = 150) 
+  @Schema(name = "ru", required = false)
   public String getRu() {
     return ru;
   }
@@ -82,9 +86,8 @@ public class NameTranslations   {
     this.ru = ru;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -106,7 +109,6 @@ public class NameTranslations   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class NameTranslations {\n");
-    
     sb.append("    et: ").append(toIndentedString(et)).append("\n");
     sb.append("    en: ").append(toIndentedString(en)).append("\n");
     sb.append("    ru: ").append(toIndentedString(ru)).append("\n");
@@ -118,7 +120,7 @@ public class NameTranslations   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

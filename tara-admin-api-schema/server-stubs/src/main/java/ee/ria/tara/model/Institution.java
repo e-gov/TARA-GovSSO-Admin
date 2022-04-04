@@ -1,23 +1,31 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import ee.ria.tara.model.InstitutionBillingSettings;
 import ee.ria.tara.model.InstitutionType;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * Institution
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class Institution   {
+
   @JsonProperty("id")
   private String id;
 
@@ -28,7 +36,7 @@ public class Institution   {
   private String name;
 
   @JsonProperty("type")
-  private InstitutionType type = null;
+  private InstitutionType type;
 
   @JsonProperty("client_ids")
   @Valid
@@ -44,12 +52,14 @@ public class Institution   {
   private String email;
 
   @JsonProperty("billing_settings")
-  private InstitutionBillingSettings billingSettings = null;
+  private InstitutionBillingSettings billingSettings;
 
   @JsonProperty("created_at")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
   @JsonProperty("updated_at")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
   public Institution id(String id) {
@@ -61,9 +71,8 @@ public class Institution   {
    * Get id
    * @return id
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "id", required = false)
   public String getId() {
     return id;
   }
@@ -81,10 +90,8 @@ public class Institution   {
    * Get registryCode
    * @return registryCode
   */
-  @ApiModelProperty(example = "12345678", required = true, value = "")
-  @NotNull
-
-@Pattern(regexp="\\d{3,}") 
+  @NotNull @Pattern(regexp = "\\d{3,}") 
+  @Schema(name = "registry_code", example = "12345678", required = true)
   public String getRegistryCode() {
     return registryCode;
   }
@@ -102,10 +109,8 @@ public class Institution   {
    * Get name
    * @return name
   */
-  @ApiModelProperty(example = "Example Institution", required = true, value = "")
-  @NotNull
-
-@Size(min=3,max=150) 
+  @NotNull @Size(min = 3, max = 150) 
+  @Schema(name = "name", example = "Example Institution", required = true)
   public String getName() {
     return name;
   }
@@ -123,11 +128,8 @@ public class Institution   {
    * Get type
    * @return type
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
+  @NotNull @Valid 
+  @Schema(name = "type", required = true)
   public InstitutionType getType() {
     return type;
   }
@@ -153,9 +155,8 @@ public class Institution   {
    * Get clientIds
    * @return clientIds
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "client_ids", required = false)
   public List<String> getClientIds() {
     return clientIds;
   }
@@ -173,10 +174,8 @@ public class Institution   {
    * Get address
    * @return address
   */
-  @ApiModelProperty(example = "Test st 123", required = true, value = "")
-  @NotNull
-
-@Size(min=3,max=512) 
+  @NotNull @Size(min = 3, max = 512) 
+  @Schema(name = "address", example = "Test st 123", required = true)
   public String getAddress() {
     return address;
   }
@@ -194,10 +193,8 @@ public class Institution   {
    * Get phone
    * @return phone
   */
-  @ApiModelProperty(example = "+3726630200", required = true, value = "")
-  @NotNull
-
-@Pattern(regexp="^[0-9\\+]{5,}$") 
+  @NotNull @Pattern(regexp = "^[0-9\\+]{5,}$") 
+  @Schema(name = "phone", example = "+3726630200", required = true)
   public String getPhone() {
     return phone;
   }
@@ -215,10 +212,8 @@ public class Institution   {
    * Get email
    * @return email
   */
-  @ApiModelProperty(example = "info@example.com", required = true, value = "")
-  @NotNull
-
-@Pattern(regexp="(^.*@.*\\..*$)") @Size(min=5) 
+  @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email
+  @Schema(name = "email", example = "info@example.com", required = true)
   public String getEmail() {
     return email;
   }
@@ -236,11 +231,8 @@ public class Institution   {
    * Get billingSettings
    * @return billingSettings
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
+  @NotNull @Valid 
+  @Schema(name = "billing_settings", required = true)
   public InstitutionBillingSettings getBillingSettings() {
     return billingSettings;
   }
@@ -258,10 +250,8 @@ public class Institution   {
    * Get createdAt
    * @return createdAt
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", required = false)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -279,10 +269,8 @@ public class Institution   {
    * Get updatedAt
    * @return updatedAt
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", required = false)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -291,9 +279,8 @@ public class Institution   {
     this.updatedAt = updatedAt;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -323,7 +310,6 @@ public class Institution   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Institution {\n");
-    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    registryCode: ").append(toIndentedString(registryCode)).append("\n");
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
@@ -343,7 +329,7 @@ public class Institution   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

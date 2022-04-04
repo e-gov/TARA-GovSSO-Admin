@@ -1,18 +1,25 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * ClientContact
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ClientContact   {
+
   @JsonProperty("name")
   private String name;
 
@@ -34,9 +41,8 @@ public class ClientContact   {
    * Get name
    * @return name
   */
-  @ApiModelProperty(example = "test", value = "")
-
-
+  
+  @Schema(name = "name", example = "test", required = false)
   public String getName() {
     return name;
   }
@@ -54,9 +60,8 @@ public class ClientContact   {
    * Get email
    * @return email
   */
-  @ApiModelProperty(example = "test@example.com", value = "")
-
-
+  @javax.validation.constraints.Email
+  @Schema(name = "email", example = "test@example.com", required = false)
   public String getEmail() {
     return email;
   }
@@ -74,9 +79,8 @@ public class ClientContact   {
    * Get phone
    * @return phone
   */
-  @ApiModelProperty(example = "+3726630200", value = "")
-
-
+  
+  @Schema(name = "phone", example = "+3726630200", required = false)
   public String getPhone() {
     return phone;
   }
@@ -94,9 +98,8 @@ public class ClientContact   {
    * Get department
    * @return department
   */
-  @ApiModelProperty(example = "test", value = "")
-
-
+  
+  @Schema(name = "department", example = "test", required = false)
   public String getDepartment() {
     return department;
   }
@@ -105,9 +108,8 @@ public class ClientContact   {
     this.department = department;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -130,7 +132,6 @@ public class ClientContact   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ClientContact {\n");
-    
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    email: ").append(toIndentedString(email)).append("\n");
     sb.append("    phone: ").append(toIndentedString(phone)).append("\n");
@@ -143,7 +144,7 @@ public class ClientContact   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

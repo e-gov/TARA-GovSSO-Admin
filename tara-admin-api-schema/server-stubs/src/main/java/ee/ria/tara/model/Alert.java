@@ -1,21 +1,29 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import ee.ria.tara.model.EmailAlert;
 import ee.ria.tara.model.LoginAlert;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
+import org.springframework.format.annotation.DateTimeFormat;
 import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * Alert
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class Alert   {
+
   @JsonProperty("id")
   private String id;
 
@@ -23,21 +31,25 @@ public class Alert   {
   private String title;
 
   @JsonProperty("start_time")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime startTime;
 
   @JsonProperty("end_time")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime endTime;
 
   @JsonProperty("login_alert")
-  private LoginAlert loginAlert = null;
+  private LoginAlert loginAlert;
 
   @JsonProperty("email_alert")
-  private EmailAlert emailAlert = null;
+  private EmailAlert emailAlert;
 
   @JsonProperty("created_at")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
   @JsonProperty("updated_at")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
   public Alert id(String id) {
@@ -49,9 +61,8 @@ public class Alert   {
    * Get id
    * @return id
   */
-  @ApiModelProperty(example = "1234567", value = "")
-
-
+  
+  @Schema(name = "id", example = "1234567", required = false)
   public String getId() {
     return id;
   }
@@ -69,10 +80,8 @@ public class Alert   {
    * Get title
    * @return title
   */
-  @ApiModelProperty(example = "Plaaniline katkestus SK teenustes", required = true, value = "")
-  @NotNull
-
-@Size(max=255) 
+  @NotNull @Size(max = 255) 
+  @Schema(name = "title", example = "Plaaniline katkestus SK teenustes", required = true)
   public String getTitle() {
     return title;
   }
@@ -90,11 +99,8 @@ public class Alert   {
    * Get startTime
    * @return startTime
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
+  @NotNull @Valid 
+  @Schema(name = "start_time", example = "2019-08-24T14:15:22Z", required = true)
   public OffsetDateTime getStartTime() {
     return startTime;
   }
@@ -112,11 +118,8 @@ public class Alert   {
    * Get endTime
    * @return endTime
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
+  @NotNull @Valid 
+  @Schema(name = "end_time", example = "2019-08-24T14:15:22Z", required = true)
   public OffsetDateTime getEndTime() {
     return endTime;
   }
@@ -134,10 +137,8 @@ public class Alert   {
    * Get loginAlert
    * @return loginAlert
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "login_alert", required = false)
   public LoginAlert getLoginAlert() {
     return loginAlert;
   }
@@ -155,10 +156,8 @@ public class Alert   {
    * Get emailAlert
    * @return emailAlert
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "email_alert", required = false)
   public EmailAlert getEmailAlert() {
     return emailAlert;
   }
@@ -176,10 +175,8 @@ public class Alert   {
    * Get createdAt
    * @return createdAt
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", required = false)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -197,10 +194,8 @@ public class Alert   {
    * Get updatedAt
    * @return updatedAt
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", required = false)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -209,9 +204,8 @@ public class Alert   {
     this.updatedAt = updatedAt;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -238,7 +232,6 @@ public class Alert   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Alert {\n");
-    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    title: ").append(toIndentedString(title)).append("\n");
     sb.append("    startTime: ").append(toIndentedString(startTime)).append("\n");
@@ -255,7 +248,7 @@ public class Alert   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

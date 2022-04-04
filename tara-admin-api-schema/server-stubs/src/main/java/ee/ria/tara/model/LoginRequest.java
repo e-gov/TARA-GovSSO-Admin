@@ -1,18 +1,25 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * LoginRequest
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class LoginRequest   {
+
   @JsonProperty("username")
   private String username;
 
@@ -28,10 +35,8 @@ public class LoginRequest   {
    * Get username
    * @return username
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
+  @NotNull 
+  @Schema(name = "username", required = true)
   public String getUsername() {
     return username;
   }
@@ -49,10 +54,8 @@ public class LoginRequest   {
    * Get password
    * @return password
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
+  @NotNull 
+  @Schema(name = "password", required = true)
   public String getPassword() {
     return password;
   }
@@ -61,9 +64,8 @@ public class LoginRequest   {
     this.password = password;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -84,7 +86,6 @@ public class LoginRequest   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class LoginRequest {\n");
-    
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("    password: ").append(toIndentedString(password)).append("\n");
     sb.append("}");
@@ -95,7 +96,7 @@ public class LoginRequest   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

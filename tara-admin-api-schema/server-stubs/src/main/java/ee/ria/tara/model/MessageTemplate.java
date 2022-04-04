@@ -1,18 +1,25 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * MessageTemplate
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class MessageTemplate   {
+
   @JsonProperty("message")
   private String message;
 
@@ -28,9 +35,8 @@ public class MessageTemplate   {
    * Get message
    * @return message
   */
-  @ApiModelProperty(example = "Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00", value = "")
-
-@Size(min=1,max=255) 
+  @Size(min = 1, max = 255) 
+  @Schema(name = "message", example = "Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00", required = false)
   public String getMessage() {
     return message;
   }
@@ -48,9 +54,8 @@ public class MessageTemplate   {
    * Get locale
    * @return locale
   */
-  @ApiModelProperty(example = "et", value = "")
-
-
+  
+  @Schema(name = "locale", example = "et", required = false)
   public String getLocale() {
     return locale;
   }
@@ -59,9 +64,8 @@ public class MessageTemplate   {
     this.locale = locale;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -82,7 +86,6 @@ public class MessageTemplate   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class MessageTemplate {\n");
-    
     sb.append("    message: ").append(toIndentedString(message)).append("\n");
     sb.append("    locale: ").append(toIndentedString(locale)).append("\n");
     sb.append("}");
@@ -93,7 +96,7 @@ public class MessageTemplate   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

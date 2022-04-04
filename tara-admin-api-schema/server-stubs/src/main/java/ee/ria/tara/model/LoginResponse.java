@@ -1,18 +1,25 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * LoginResponse
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class LoginResponse   {
+
   @JsonProperty("error")
   private String error;
 
@@ -28,9 +35,8 @@ public class LoginResponse   {
    * Get error
    * @return error
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "error", required = false)
   public String getError() {
     return error;
   }
@@ -48,9 +54,8 @@ public class LoginResponse   {
    * Get username
    * @return username
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "username", required = false)
   public String getUsername() {
     return username;
   }
@@ -59,9 +64,8 @@ public class LoginResponse   {
     this.username = username;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -82,7 +86,6 @@ public class LoginResponse   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class LoginResponse {\n");
-    
     sb.append("    error: ").append(toIndentedString(error)).append("\n");
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("}");
@@ -93,7 +96,7 @@ public class LoginResponse   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

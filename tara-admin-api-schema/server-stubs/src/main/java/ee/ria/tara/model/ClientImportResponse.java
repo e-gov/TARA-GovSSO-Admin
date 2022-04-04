@@ -1,20 +1,27 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.util.ArrayList;
 import java.util.List;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * ClientImportResponse
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ClientImportResponse   {
+
   @JsonProperty("status")
   private String status;
 
@@ -40,9 +47,8 @@ public class ClientImportResponse   {
    * Get status
    * @return status
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "status", required = false)
   public String getStatus() {
     return status;
   }
@@ -60,9 +66,8 @@ public class ClientImportResponse   {
    * Get clientsCount
    * @return clientsCount
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "clients_count", required = false)
   public Integer getClientsCount() {
     return clientsCount;
   }
@@ -80,9 +85,8 @@ public class ClientImportResponse   {
    * Get clientsImportSuccessCount
    * @return clientsImportSuccessCount
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "clients_import_success_count", required = false)
   public Integer getClientsImportSuccessCount() {
     return clientsImportSuccessCount;
   }
@@ -100,9 +104,8 @@ public class ClientImportResponse   {
    * Get clientsImportFailedCount
    * @return clientsImportFailedCount
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "clients_import_failed_count", required = false)
   public Integer getClientsImportFailedCount() {
     return clientsImportFailedCount;
   }
@@ -128,9 +131,8 @@ public class ClientImportResponse   {
    * Get clientsNotImported
    * @return clientsNotImported
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "clients_not_imported", required = false)
   public List<String> getClientsNotImported() {
     return clientsNotImported;
   }
@@ -139,9 +141,8 @@ public class ClientImportResponse   {
     this.clientsNotImported = clientsNotImported;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -165,7 +166,6 @@ public class ClientImportResponse   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ClientImportResponse {\n");
-    
     sb.append("    status: ").append(toIndentedString(status)).append("\n");
     sb.append("    clientsCount: ").append(toIndentedString(clientsCount)).append("\n");
     sb.append("    clientsImportSuccessCount: ").append(toIndentedString(clientsImportSuccessCount)).append("\n");
@@ -179,7 +179,7 @@ public class ClientImportResponse   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

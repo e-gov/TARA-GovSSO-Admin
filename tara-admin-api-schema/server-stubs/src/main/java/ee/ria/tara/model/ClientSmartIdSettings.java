@@ -1,18 +1,25 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * ClientSmartIdSettings
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ClientSmartIdSettings   {
+
   @JsonProperty("relying_party_UUID")
   private String relyingPartyUUID;
 
@@ -31,9 +38,8 @@ public class ClientSmartIdSettings   {
    * Get relyingPartyUUID
    * @return relyingPartyUUID
   */
-  @ApiModelProperty(value = "")
-
-@Size(max=512) 
+  @Size(max = 512) 
+  @Schema(name = "relying_party_UUID", required = false)
   public String getRelyingPartyUUID() {
     return relyingPartyUUID;
   }
@@ -51,9 +57,8 @@ public class ClientSmartIdSettings   {
    * Get relyingPartyName
    * @return relyingPartyName
   */
-  @ApiModelProperty(value = "")
-
-@Size(max=512) 
+  @Size(max = 512) 
+  @Schema(name = "relying_party_name", required = false)
   public String getRelyingPartyName() {
     return relyingPartyName;
   }
@@ -71,9 +76,8 @@ public class ClientSmartIdSettings   {
    * Get shouldUseAdditionalVerificationCodeCheck
    * @return shouldUseAdditionalVerificationCodeCheck
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "should_use_additional_verification_code_check", required = false)
   public Boolean getShouldUseAdditionalVerificationCodeCheck() {
     return shouldUseAdditionalVerificationCodeCheck;
   }
@@ -82,9 +86,8 @@ public class ClientSmartIdSettings   {
     this.shouldUseAdditionalVerificationCodeCheck = shouldUseAdditionalVerificationCodeCheck;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -106,7 +109,6 @@ public class ClientSmartIdSettings   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ClientSmartIdSettings {\n");
-    
     sb.append("    relyingPartyUUID: ").append(toIndentedString(relyingPartyUUID)).append("\n");
     sb.append("    relyingPartyName: ").append(toIndentedString(relyingPartyName)).append("\n");
     sb.append("    shouldUseAdditionalVerificationCodeCheck: ").append(toIndentedString(shouldUseAdditionalVerificationCodeCheck)).append("\n");
@@ -118,7 +120,7 @@ public class ClientSmartIdSettings   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

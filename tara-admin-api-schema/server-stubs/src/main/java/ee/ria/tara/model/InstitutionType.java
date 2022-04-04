@@ -1,19 +1,26 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * InstitutionType
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class InstitutionType   {
+
   /**
    * Gets or Sets type
    */
@@ -28,20 +35,24 @@ public class InstitutionType   {
       this.value = value;
     }
 
-    @Override
     @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
     public String toString() {
       return String.valueOf(value);
     }
 
     @JsonCreator
-    public static TypeEnum fromValue(String text) {
+    public static TypeEnum fromValue(String value) {
       for (TypeEnum b : TypeEnum.values()) {
-        if (String.valueOf(b.value).equals(text)) {
+        if (b.value.equals(value)) {
           return b;
         }
       }
-      throw new IllegalArgumentException("Unexpected value '" + text + "'");
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
     }
   }
 
@@ -57,10 +68,8 @@ public class InstitutionType   {
    * Get type
    * @return type
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-
+  @NotNull 
+  @Schema(name = "type", required = true)
   public TypeEnum getType() {
     return type;
   }
@@ -69,9 +78,8 @@ public class InstitutionType   {
     this.type = type;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -91,7 +99,6 @@ public class InstitutionType   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class InstitutionType {\n");
-    
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -101,7 +108,7 @@ public class InstitutionType   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

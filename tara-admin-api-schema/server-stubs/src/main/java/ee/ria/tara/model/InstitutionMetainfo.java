@@ -1,19 +1,26 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import ee.ria.tara.model.InstitutionType;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * InstitutionMetainfo
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class InstitutionMetainfo   {
+
   @JsonProperty("name")
   private String name;
 
@@ -21,7 +28,7 @@ public class InstitutionMetainfo   {
   private String registryCode;
 
   @JsonProperty("type")
-  private InstitutionType type = null;
+  private InstitutionType type;
 
   public InstitutionMetainfo name(String name) {
     this.name = name;
@@ -32,10 +39,8 @@ public class InstitutionMetainfo   {
    * Get name
    * @return name
   */
-  @ApiModelProperty(example = "Example Institution", required = true, value = "")
-  @NotNull
-
-
+  @NotNull 
+  @Schema(name = "name", example = "Example Institution", required = true)
   public String getName() {
     return name;
   }
@@ -53,10 +58,8 @@ public class InstitutionMetainfo   {
    * Get registryCode
    * @return registryCode
   */
-  @ApiModelProperty(example = "12345678", required = true, value = "")
-  @NotNull
-
-@Pattern(regexp="\\d{3,}") 
+  @NotNull @Pattern(regexp = "\\d{3,}") 
+  @Schema(name = "registry_code", example = "12345678", required = true)
   public String getRegistryCode() {
     return registryCode;
   }
@@ -74,11 +77,8 @@ public class InstitutionMetainfo   {
    * Get type
    * @return type
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
+  @NotNull @Valid 
+  @Schema(name = "type", required = true)
   public InstitutionType getType() {
     return type;
   }
@@ -87,9 +87,8 @@ public class InstitutionMetainfo   {
     this.type = type;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -111,7 +110,6 @@ public class InstitutionMetainfo   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class InstitutionMetainfo {\n");
-    
     sb.append("    name: ").append(toIndentedString(name)).append("\n");
     sb.append("    registryCode: ").append(toIndentedString(registryCode)).append("\n");
     sb.append("    type: ").append(toIndentedString(type)).append("\n");
@@ -123,7 +121,7 @@ public class InstitutionMetainfo   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

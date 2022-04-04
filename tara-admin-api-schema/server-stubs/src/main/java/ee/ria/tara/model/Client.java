@@ -1,5 +1,6 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
@@ -10,19 +11,27 @@ import ee.ria.tara.model.ClientSmartIdSettings;
 import ee.ria.tara.model.InstitutionMetainfo;
 import ee.ria.tara.model.NameTranslations;
 import ee.ria.tara.model.ShortNameTranslations;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * Client
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class Client   {
+
   @JsonProperty("id")
   private String id;
 
@@ -30,16 +39,16 @@ public class Client   {
   private String clientId;
 
   @JsonProperty("client_name")
-  private NameTranslations clientName = null;
+  private NameTranslations clientName;
 
   @JsonProperty("client_short_name")
-  private ShortNameTranslations clientShortName = null;
+  private ShortNameTranslations clientShortName;
 
   @JsonProperty("client_secret_export_settings")
-  private ClientSecretExportSettings clientSecretExportSettings = null;
+  private ClientSecretExportSettings clientSecretExportSettings;
 
   @JsonProperty("institution_metainfo")
-  private InstitutionMetainfo institutionMetainfo = null;
+  private InstitutionMetainfo institutionMetainfo;
 
   @JsonProperty("redirect_uris")
   @Valid
@@ -77,19 +86,21 @@ public class Client   {
   private String backchannelLogoutUri;
 
   @JsonProperty("mid_settings")
-  private ClientMidSettings midSettings = null;
+  private ClientMidSettings midSettings;
 
   @JsonProperty("smartid_settings")
-  private ClientSmartIdSettings smartidSettings = null;
+  private ClientSmartIdSettings smartidSettings;
 
   @JsonProperty("client_contacts")
   @Valid
   private List<ClientContact> clientContacts = null;
 
   @JsonProperty("created_at")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
   @JsonProperty("updated_at")
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
   @JsonProperty("client_logo")
@@ -104,9 +115,8 @@ public class Client   {
    * Get id
    * @return id
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "id", required = false)
   public String getId() {
     return id;
   }
@@ -124,10 +134,8 @@ public class Client   {
    * Get clientId
    * @return clientId
   */
-  @ApiModelProperty(example = "openIdDemo", required = true, value = "")
-  @NotNull
-
-@Pattern(regexp="^(?!\\s*$).+") @Size(min=3,max=255) 
+  @NotNull @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 255) 
+  @Schema(name = "client_id", example = "openIdDemo", required = true)
   public String getClientId() {
     return clientId;
   }
@@ -145,10 +153,8 @@ public class Client   {
    * Get clientName
    * @return clientName
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "client_name", required = false)
   public NameTranslations getClientName() {
     return clientName;
   }
@@ -166,10 +172,8 @@ public class Client   {
    * Get clientShortName
    * @return clientShortName
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "client_short_name", required = false)
   public ShortNameTranslations getClientShortName() {
     return clientShortName;
   }
@@ -187,10 +191,8 @@ public class Client   {
    * Get clientSecretExportSettings
    * @return clientSecretExportSettings
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "client_secret_export_settings", required = false)
   public ClientSecretExportSettings getClientSecretExportSettings() {
     return clientSecretExportSettings;
   }
@@ -208,11 +210,8 @@ public class Client   {
    * Get institutionMetainfo
    * @return institutionMetainfo
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-  @Valid
-
+  @NotNull @Valid 
+  @Schema(name = "institution_metainfo", required = true)
   public InstitutionMetainfo getInstitutionMetainfo() {
     return institutionMetainfo;
   }
@@ -227,6 +226,9 @@ public class Client   {
   }
 
   public Client addRedirectUrisItem(String redirectUrisItem) {
+    if (this.redirectUris == null) {
+      this.redirectUris = new ArrayList<>();
+    }
     this.redirectUris.add(redirectUrisItem);
     return this;
   }
@@ -235,10 +237,8 @@ public class Client   {
    * Get redirectUris
    * @return redirectUris
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-@Size(min=1) 
+  @NotNull @Size(min = 1) 
+  @Schema(name = "redirect_uris", required = true)
   public List<String> getRedirectUris() {
     return redirectUris;
   }
@@ -264,9 +264,8 @@ public class Client   {
    * Get postLogoutRedirectUris
    * @return postLogoutRedirectUris
   */
-  @ApiModelProperty(value = "")
-
-@Size(min=1) 
+  @Size(min = 1) 
+  @Schema(name = "post_logout_redirect_uris", required = false)
   public List<String> getPostLogoutRedirectUris() {
     return postLogoutRedirectUris;
   }
@@ -281,6 +280,9 @@ public class Client   {
   }
 
   public Client addScopeItem(String scopeItem) {
+    if (this.scope == null) {
+      this.scope = new ArrayList<>();
+    }
     this.scope.add(scopeItem);
     return this;
   }
@@ -289,10 +291,8 @@ public class Client   {
    * Get scope
    * @return scope
   */
-  @ApiModelProperty(required = true, value = "")
-  @NotNull
-
-@Size(min=1) 
+  @NotNull @Size(min = 1) 
+  @Schema(name = "scope", required = true)
   public List<String> getScope() {
     return scope;
   }
@@ -310,9 +310,8 @@ public class Client   {
    * Get secret
    * @return secret
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "secret", required = false)
   public String getSecret() {
     return secret;
   }
@@ -330,9 +329,8 @@ public class Client   {
    * Get description
    * @return description
   */
-  @ApiModelProperty(value = "")
-
-@Size(min=3,max=4000) 
+  @Size(min = 3, max = 4000) 
+  @Schema(name = "description", required = false)
   public String getDescription() {
     return description;
   }
@@ -358,9 +356,8 @@ public class Client   {
    * Get infoNotificationEmails
    * @return infoNotificationEmails
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "info_notification_emails", required = false)
   public List<String> getInfoNotificationEmails() {
     return infoNotificationEmails;
   }
@@ -386,9 +383,8 @@ public class Client   {
    * Get slaNotificationEmails
    * @return slaNotificationEmails
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "sla_notification_emails", required = false)
   public List<String> getSlaNotificationEmails() {
     return slaNotificationEmails;
   }
@@ -406,9 +402,8 @@ public class Client   {
    * Get isUserConsentRequired
    * @return isUserConsentRequired
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "is_user_consent_required", example = "false", required = false)
   public Boolean getIsUserConsentRequired() {
     return isUserConsentRequired;
   }
@@ -426,9 +421,8 @@ public class Client   {
    * Get clientUrl
    * @return clientUrl
   */
-  @ApiModelProperty(example = "https://client.example.com/", value = "")
-
-
+  
+  @Schema(name = "client_url", example = "https://client.example.com/", required = false)
   public String getClientUrl() {
     return clientUrl;
   }
@@ -446,9 +440,8 @@ public class Client   {
    * Get backchannelLogoutUri
    * @return backchannelLogoutUri
   */
-  @ApiModelProperty(example = "https://example.com/", value = "")
-
-
+  
+  @Schema(name = "backchannel_logout_uri", example = "https://example.com/", required = false)
   public String getBackchannelLogoutUri() {
     return backchannelLogoutUri;
   }
@@ -466,10 +459,8 @@ public class Client   {
    * Get midSettings
    * @return midSettings
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "mid_settings", required = false)
   public ClientMidSettings getMidSettings() {
     return midSettings;
   }
@@ -487,10 +478,8 @@ public class Client   {
    * Get smartidSettings
    * @return smartidSettings
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "smartid_settings", required = false)
   public ClientSmartIdSettings getSmartidSettings() {
     return smartidSettings;
   }
@@ -516,10 +505,8 @@ public class Client   {
    * Get clientContacts
    * @return clientContacts
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "client_contacts", required = false)
   public List<ClientContact> getClientContacts() {
     return clientContacts;
   }
@@ -537,10 +524,8 @@ public class Client   {
    * Get createdAt
    * @return createdAt
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", required = false)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -558,10 +543,8 @@ public class Client   {
    * Get updatedAt
    * @return updatedAt
   */
-  @ApiModelProperty(value = "")
-
-  @Valid
-
+  @Valid 
+  @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", required = false)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
@@ -579,9 +562,8 @@ public class Client   {
    * Get clientLogo
    * @return clientLogo
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "client_logo", required = false)
   public byte[] getClientLogo() {
     return clientLogo;
   }
@@ -590,9 +572,8 @@ public class Client   {
     this.clientLogo = clientLogo;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -621,19 +602,18 @@ public class Client   {
         Objects.equals(this.clientContacts, client.clientContacts) &&
         Objects.equals(this.createdAt, client.createdAt) &&
         Objects.equals(this.updatedAt, client.updatedAt) &&
-        Objects.equals(this.clientLogo, client.clientLogo);
+        Arrays.equals(this.clientLogo, client.clientLogo);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, secret, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, clientLogo);
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, secret, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class Client {\n");
-    
     sb.append("    id: ").append(toIndentedString(id)).append("\n");
     sb.append("    clientId: ").append(toIndentedString(clientId)).append("\n");
     sb.append("    clientName: ").append(toIndentedString(clientName)).append("\n");
@@ -664,7 +644,7 @@ public class Client   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

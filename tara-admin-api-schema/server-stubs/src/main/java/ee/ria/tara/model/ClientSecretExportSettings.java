@@ -1,18 +1,25 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * ClientSecretExportSettings
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ClientSecretExportSettings   {
+
   @JsonProperty("recipient_id_code")
   private String recipientIdCode;
 
@@ -31,9 +38,8 @@ public class ClientSecretExportSettings   {
    * Get recipientIdCode
    * @return recipientIdCode
   */
-  @ApiModelProperty(example = "60001019906", value = "")
-
-@Pattern(regexp="^[0-9]{11,11}$") 
+  @Pattern(regexp = "^[0-9]{11,11}$") 
+  @Schema(name = "recipient_id_code", example = "60001019906", required = false)
   public String getRecipientIdCode() {
     return recipientIdCode;
   }
@@ -51,9 +57,8 @@ public class ClientSecretExportSettings   {
    * Get recipientNameInLdap
    * @return recipientNameInLdap
   */
-  @ApiModelProperty(example = "Mari-Liis Männik", value = "")
-
-@Size(min=5) 
+  @Size(min = 5) 
+  @Schema(name = "recipient_name_in_ldap", example = "Mari-Liis Männik", required = false)
   public String getRecipientNameInLdap() {
     return recipientNameInLdap;
   }
@@ -71,9 +76,8 @@ public class ClientSecretExportSettings   {
    * Get recipientEmail
    * @return recipientEmail
   */
-  @ApiModelProperty(example = "60001019906@eesti.ee", value = "")
-
-@Pattern(regexp="(^.*@.*\\..*$)") @Size(min=5) 
+  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email
+  @Schema(name = "recipient_email", example = "60001019906@eesti.ee", required = false)
   public String getRecipientEmail() {
     return recipientEmail;
   }
@@ -82,9 +86,8 @@ public class ClientSecretExportSettings   {
     this.recipientEmail = recipientEmail;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -106,7 +109,6 @@ public class ClientSecretExportSettings   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class ClientSecretExportSettings {\n");
-    
     sb.append("    recipientIdCode: ").append(toIndentedString(recipientIdCode)).append("\n");
     sb.append("    recipientNameInLdap: ").append(toIndentedString(recipientNameInLdap)).append("\n");
     sb.append("    recipientEmail: ").append(toIndentedString(recipientEmail)).append("\n");
@@ -118,7 +120,7 @@ public class ClientSecretExportSettings   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

@@ -1,18 +1,25 @@
 package ee.ria.tara.model;
 
+import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+import java.time.OffsetDateTime;
 import javax.validation.Valid;
 import javax.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import javax.annotation.Generated;
 
 /**
  * WhoAmIResponse
  */
 
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class WhoAmIResponse   {
+
   @JsonProperty("username")
   private String username;
 
@@ -25,9 +32,8 @@ public class WhoAmIResponse   {
    * Get username
    * @return username
   */
-  @ApiModelProperty(value = "")
-
-
+  
+  @Schema(name = "username", required = false)
   public String getUsername() {
     return username;
   }
@@ -36,9 +42,8 @@ public class WhoAmIResponse   {
     this.username = username;
   }
 
-
   @Override
-  public boolean equals(java.lang.Object o) {
+  public boolean equals(Object o) {
     if (this == o) {
       return true;
     }
@@ -58,7 +63,6 @@ public class WhoAmIResponse   {
   public String toString() {
     StringBuilder sb = new StringBuilder();
     sb.append("class WhoAmIResponse {\n");
-    
     sb.append("    username: ").append(toIndentedString(username)).append("\n");
     sb.append("}");
     return sb.toString();
@@ -68,7 +72,7 @@ public class WhoAmIResponse   {
    * Convert the given object to string with each line indented by 4 spaces
    * (except the first line).
    */
-  private String toIndentedString(java.lang.Object o) {
+  private String toIndentedString(Object o) {
     if (o == null) {
       return "null";
     }

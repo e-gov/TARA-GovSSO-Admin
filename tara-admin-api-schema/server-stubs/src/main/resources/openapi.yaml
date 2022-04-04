@@ -1,0 +1,1139 @@
+openapi: 3.0.0
+info:
+  contact:
+    email: info@example.com
+  description: |
+    TARA/GOVSSO admin webapp API
+    [http://swagger.io](http://swagger.io) or on
+    [irc.freenode.net, #swagger](http://swagger.io/irc/).
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  title: TARA/GOVSSO admin
+  version: 1.0.0-SNAPSHOT-oas3
+externalDocs:
+  description: Find out more about Swagger
+  url: http://swagger.io
+servers:
+- url: https://virtserver.swaggerhub.com/edurdo/admin/1.0.0
+security:
+- cookieAuth: []
+tags:
+- description: Institution
+  name: institutions
+- description: OpenID Connect client details
+  name: clients
+- description: alerts regarding service SLA
+  name: alerts
+- description: information about application regime
+  name: application
+paths:
+  /institutions:
+    get:
+      operationId: getAllInstitutions
+      parameters:
+      - description: Filters search results by name or registry code
+        explode: true
+        in: query
+        name: filter_by
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Institution'
+                type: array
+          description: Successful operation
+        "400":
+          description: Invalid input
+        "500":
+          description: Internal server error
+      summary: Get list of all institutions
+      tags:
+      - institutions
+      x-accepts: application/json
+      x-tags:
+      - tag: institutions
+    post:
+      operationId: addInstitution
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Institution'
+        description: Institution object that needs to be added
+        required: true
+      responses:
+        "405":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Add a new institution
+      tags:
+      - institutions
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: institutions
+  /institutions/{registry_code}:
+    delete:
+      operationId: deleteInstitution
+      parameters:
+      - description: Registry code of the institution
+        explode: false
+        in: path
+        name: registry_code
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Deletes an existing institution
+      tags:
+      - institutions
+      x-accepts: application/json
+      x-tags:
+      - tag: institutions
+    put:
+      operationId: updateInstitution
+      parameters:
+      - description: Registry code of the institution
+        explode: false
+        in: path
+        name: registry_code
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Institution'
+        description: Institution object that needs to be updated
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Update an existing institution
+      tags:
+      - institutions
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: institutions
+  /clients:
+    get:
+      operationId: getAllClients
+      parameters:
+      - description: Filters search results by client_id or name
+        explode: true
+        in: query
+        name: filter_by
+        required: false
+        schema:
+          type: string
+        style: form
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Client'
+                type: array
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Get all registered clients
+      tags:
+      - clients
+      x-accepts: application/json
+      x-tags:
+      - tag: clients
+  /clients/import:
+    post:
+      operationId: importClients
+      requestBody:
+        $ref: '#/components/requestBodies/inline_object'
+        content:
+          multipart/form-data:
+            schema:
+              properties:
+                file:
+                  format: binary
+                  type: string
+              type: object
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ClientImportResponse'
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Import clients
+      tags:
+      - clients
+      x-contentType: multipart/form-data
+      x-accepts: application/json
+      x-tags:
+      - tag: clients
+  /institutions/metainfo:
+    get:
+      operationId: getInstitutionMetainfo
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/InstitutionMetainfo'
+                type: array
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Get list of existing institutions and their types.
+      tags:
+      - institutions
+      x-accepts: application/json
+      x-tags:
+      - tag: institutions
+  /institutions/{registry_code}/clients:
+    get:
+      operationId: getAllInstitutionClients
+      parameters:
+      - description: Registry code of the institution
+        explode: false
+        in: path
+        name: registry_code
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Client'
+                type: array
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Get all registered clients for existing institution
+      tags:
+      - clients
+      x-accepts: application/json
+      x-tags:
+      - tag: clients
+    post:
+      operationId: addClientToInstitution
+      parameters:
+      - description: Registry code of the institution
+        explode: false
+        in: path
+        name: registry_code
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/Client'
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Add new client for existing institution
+      tags:
+      - clients
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: clients
+  /institutions/{registry_code}/clients/{client_id}:
+    delete:
+      operationId: deleteClient
+      parameters:
+      - description: Registry code of the institution
+        explode: false
+        in: path
+        name: registry_code
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: OpenID Connect client_id
+        explode: false
+        in: path
+        name: client_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Delete existing client for given institution
+      tags:
+      - clients
+      x-accepts: application/json
+      x-tags:
+      - tag: clients
+    put:
+      operationId: updateClient
+      parameters:
+      - description: Registry code of the institution
+        explode: false
+        in: path
+        name: registry_code
+        required: true
+        schema:
+          type: string
+        style: simple
+      - description: OpenID Connect client_id
+        explode: false
+        in: path
+        name: client_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/Client'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                type: string
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Update existing client for existing institution
+      tags:
+      - clients
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: clients
+  /alerts:
+    get:
+      operationId: getAllAlerts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Alert'
+                type: array
+          description: Successful operation
+        "400":
+          description: Invalid input
+      summary: Get all registered alerts
+      tags:
+      - alerts
+      x-accepts: application/json
+      x-tags:
+      - tag: alerts
+    post:
+      operationId: addAlert
+      requestBody:
+        $ref: '#/components/requestBodies/Alert'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Add new alert
+      tags:
+      - alerts
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: alerts
+  /alerts/{alert_id}:
+    delete:
+      operationId: deleteAlert
+      parameters:
+      - description: Alert ID
+        explode: false
+        in: path
+        name: alert_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      responses:
+        "200":
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Delete existing alert
+      tags:
+      - alerts
+      x-accepts: application/json
+      x-tags:
+      - tag: alerts
+    put:
+      operationId: updateAlert
+      parameters:
+      - description: Alert ID
+        explode: false
+        in: path
+        name: alert_id
+        required: true
+        schema:
+          type: string
+        style: simple
+      requestBody:
+        $ref: '#/components/requestBodies/Alert'
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Alert'
+          description: Successful operation
+        "400":
+          description: Invalid input
+      security:
+      - cookieAuth: []
+      summary: Update existing alert
+      tags:
+      - alerts
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: alerts
+  /login:
+    post:
+      description: Logs user into the system. Returns a session cookie if login is
+        successful or HTTP 401 on failure
+      operationId: loginUser
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+        description: Authentication request object
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+          description: successful operation
+          headers:
+            X-Rate-Limit:
+              description: calls per hour allowed by the user
+              explode: false
+              schema:
+                format: int32
+                type: integer
+              style: simple
+            X-Expires-After:
+              description: date in UTC when token expires
+              explode: false
+              schema:
+                format: date-time
+                type: string
+              style: simple
+        "401":
+          description: Invalid username/password supplied
+      summary: Logs user into the system
+      tags:
+      - user
+      x-contentType: application/json
+      x-accepts: application/json
+      x-tags:
+      - tag: user
+  /logout:
+    post:
+      operationId: logoutUser
+      responses:
+        default:
+          description: successful operation
+      summary: Logs out current logged in user session
+      tags:
+      - user
+      x-accepts: application/json
+      x-tags:
+      - tag: user
+  /whoami:
+    get:
+      description: The method is used to check if user is logged in
+      operationId: whoAmI
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/WhoAmIResponse'
+          description: Success
+      summary: Check if user is already logged in
+      tags:
+      - user
+      x-accepts: application/json
+      x-tags:
+      - tag: user
+  /ssoMode:
+    get:
+      description: Returns true if application is running in GOVSSO mode and false
+        if running in TARA mode.
+      operationId: ssoMode
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SsoModeResponse'
+          description: Success
+      summary: Check what mode the application is running in
+      tags:
+      - application
+      x-accepts: application/json
+      x-tags:
+      - tag: application
+components:
+  requestBodies:
+    Client:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Client'
+      description: Client object that needs to be added
+      required: true
+    Alert:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Alert'
+      description: Client object that needs to be added
+      required: true
+    inline_object:
+      content:
+        multipart/form-data:
+          schema:
+            $ref: '#/components/schemas/inline_object'
+  schemas:
+    NameTranslations:
+      example:
+        ru: ru
+        en: en
+        et: et
+      properties:
+        et:
+          maxLength: 150
+          minLength: 3
+          pattern: ^(?!\s*$).+
+          type: string
+        en:
+          maxLength: 150
+          minLength: 3
+          type: string
+        ru:
+          maxLength: 150
+          minLength: 3
+          type: string
+      type: object
+    ShortNameTranslations:
+      example:
+        ru: ru
+        en: en
+        et: et
+      properties:
+        et:
+          maxLength: 40
+          minLength: 3
+          pattern: ^(?!\s*$).+
+          type: string
+        en:
+          maxLength: 40
+          minLength: 3
+          type: string
+        ru:
+          maxLength: 40
+          minLength: 3
+          type: string
+      type: object
+    InstitutionBillingSettings:
+      example:
+        email: email
+      properties:
+        email:
+          format: email
+          minLength: 5
+          pattern: (^.*@.*\..*$)
+          type: string
+      type: object
+    ClientSecretExportSettings:
+      example:
+        recipient_id_code: "60001019906"
+        recipient_name_in_ldap: Mari-Liis Männik
+        recipient_email: 60001019906@eesti.ee
+      properties:
+        recipient_id_code:
+          example: "60001019906"
+          pattern: ^[0-9]{11,11}$
+          type: string
+        recipient_name_in_ldap:
+          example: Mari-Liis Männik
+          minLength: 5
+          type: string
+        recipient_email:
+          example: 60001019906@eesti.ee
+          format: email
+          minLength: 5
+          pattern: (^.*@.*\..*$)
+          type: string
+      type: object
+    ClientMidSettings:
+      example:
+        relying_party_name: relying_party_name
+        relying_party_UUID: relying_party_UUID
+      properties:
+        relying_party_UUID:
+          maxLength: 512
+          type: string
+        relying_party_name:
+          maxLength: 512
+          type: string
+      type: object
+    ClientSmartIdSettings:
+      example:
+        should_use_additional_verification_code_check: true
+        relying_party_name: relying_party_name
+        relying_party_UUID: relying_party_UUID
+      properties:
+        relying_party_UUID:
+          maxLength: 512
+          type: string
+        relying_party_name:
+          maxLength: 512
+          type: string
+        should_use_additional_verification_code_check:
+          type: boolean
+      type: object
+    Institution:
+      example:
+        address: Test st 123
+        billing_settings:
+          email: email
+        updated_at: 2019-08-24T14:15:22Z
+        phone: +3726630200
+        name: Example Institution
+        created_at: 2019-08-24T14:15:22Z
+        id: id
+        type:
+          type: public
+        registry_code: "12345678"
+        client_ids:
+        - openIdDemo
+        - openIdDemo
+        email: info@example.com
+      properties:
+        id:
+          type: string
+        registry_code:
+          example: "12345678"
+          pattern: \d{3,}
+          type: string
+        name:
+          example: Example Institution
+          maxLength: 150
+          minLength: 3
+          type: string
+        type:
+          $ref: '#/components/schemas/InstitutionType'
+        client_ids:
+          items:
+            example: openIdDemo
+            type: string
+          type: array
+        address:
+          example: Test st 123
+          maxLength: 512
+          minLength: 3
+          type: string
+        phone:
+          example: +3726630200
+          pattern: ^[0-9\+]{5,}$
+          type: string
+        email:
+          example: info@example.com
+          format: email
+          minLength: 5
+          pattern: (^.*@.*\..*$)
+          type: string
+        billing_settings:
+          $ref: '#/components/schemas/InstitutionBillingSettings'
+        created_at:
+          example: 2019-08-24T14:15:22Z
+          format: date-time
+          type: string
+        updated_at:
+          example: 2019-08-24T14:15:22Z
+          format: date-time
+          type: string
+      required:
+      - address
+      - billing_settings
+      - email
+      - name
+      - phone
+      - registry_code
+      - type
+      type: object
+    InstitutionMetainfo:
+      example:
+        name: Example Institution
+        type:
+          type: public
+        registry_code: "12345678"
+      properties:
+        name:
+          example: Example Institution
+          type: string
+        registry_code:
+          example: "12345678"
+          pattern: \d{3,}
+          type: string
+        type:
+          $ref: '#/components/schemas/InstitutionType'
+      required:
+      - name
+      - registry_code
+      - type
+      type: object
+    InstitutionType:
+      example:
+        type: public
+      properties:
+        type:
+          enum:
+          - public
+          - private
+          type: string
+      required:
+      - type
+    Client:
+      example:
+        client_url: https://client.example.com/
+        post_logout_redirect_uris:
+        - https://logout-redirect-uri.test.ee/callback
+        - https://logout-redirect-uri.test.ee/callback
+        institution_metainfo:
+          name: Example Institution
+          type:
+            type: public
+          registry_code: "12345678"
+        smartid_settings:
+          should_use_additional_verification_code_check: true
+          relying_party_name: relying_party_name
+          relying_party_UUID: relying_party_UUID
+        description: description
+        sla_notification_emails:
+        - katkestused@test.ee
+        - katkestused@test.ee
+        created_at: 2019-08-24T14:15:22Z
+        redirect_uris:
+        - https://redirect-uri.test.ee/callback
+        - https://redirect-uri.test.ee/callback
+        secret: secret
+        client_id: openIdDemo
+        is_user_consent_required: false
+        mid_settings:
+          relying_party_name: relying_party_name
+          relying_party_UUID: relying_party_UUID
+        client_secret_export_settings:
+          recipient_id_code: "60001019906"
+          recipient_name_in_ldap: Mari-Liis Männik
+          recipient_email: 60001019906@eesti.ee
+        updated_at: 2019-08-24T14:15:22Z
+        client_short_name:
+          ru: ru
+          en: en
+          et: et
+        scope:
+        - scope
+        - scope
+        client_contacts:
+        - phone: +3726630200
+          name: test
+          department: test
+          email: test@example.com
+        - phone: +3726630200
+          name: test
+          department: test
+          email: test@example.com
+        id: id
+        backchannel_logout_uri: https://example.com/
+        client_name:
+          ru: ru
+          en: en
+          et: et
+        client_logo: client_logo
+        info_notification_emails:
+        - teavitused@test.ee
+        - teavitused@test.ee
+      properties:
+        id:
+          type: string
+        client_id:
+          example: openIdDemo
+          maxLength: 255
+          minLength: 3
+          pattern: ^(?!\s*$).+
+          type: string
+        client_name:
+          $ref: '#/components/schemas/NameTranslations'
+        client_short_name:
+          $ref: '#/components/schemas/ShortNameTranslations'
+        client_secret_export_settings:
+          $ref: '#/components/schemas/ClientSecretExportSettings'
+        institution_metainfo:
+          $ref: '#/components/schemas/InstitutionMetainfo'
+        redirect_uris:
+          items:
+            example: https://redirect-uri.test.ee/callback
+            format: url
+            type: string
+          minItems: 1
+          type: array
+        post_logout_redirect_uris:
+          items:
+            example: https://logout-redirect-uri.test.ee/callback
+            format: url
+            type: string
+          minItems: 1
+          type: array
+        scope:
+          items:
+            maxLength: 200
+            minLength: 2
+            type: string
+          minItems: 1
+          type: array
+        secret:
+          type: string
+        description:
+          maxLength: 4000
+          minLength: 3
+          type: string
+        info_notification_emails:
+          items:
+            example: teavitused@test.ee
+            format: email
+            minLength: 5
+            pattern: (^.*@.*\..*$)
+            type: string
+          type: array
+        sla_notification_emails:
+          items:
+            example: katkestused@test.ee
+            format: email
+            minLength: 5
+            pattern: (^.*@.*\..*$)
+            type: string
+          type: array
+        is_user_consent_required:
+          example: false
+          type: boolean
+        client_url:
+          example: https://client.example.com/
+          format: url
+          type: string
+        backchannel_logout_uri:
+          example: https://example.com/
+          format: url
+          type: string
+        mid_settings:
+          $ref: '#/components/schemas/ClientMidSettings'
+        smartid_settings:
+          $ref: '#/components/schemas/ClientSmartIdSettings'
+        client_contacts:
+          items:
+            $ref: '#/components/schemas/ClientContact'
+          type: array
+        created_at:
+          example: 2019-08-24T14:15:22Z
+          format: date-time
+          type: string
+        updated_at:
+          example: 2019-08-24T14:15:22Z
+          format: date-time
+          type: string
+        client_logo:
+          format: byte
+          type: string
+      required:
+      - client_id
+      - institution_metainfo
+      - redirect_uris
+      - scope
+      type: object
+    ClientContact:
+      example:
+        phone: +3726630200
+        name: test
+        department: test
+        email: test@example.com
+      properties:
+        name:
+          example: test
+          type: string
+        email:
+          example: test@example.com
+          format: email
+          type: string
+        phone:
+          example: +3726630200
+          format: phone
+          type: string
+        department:
+          example: test
+          type: string
+    LoginAlert:
+      example:
+        auth_methods:
+        - idcard
+        - idcard
+        message_templates:
+        - message: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+            häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+          locale: et
+        - message: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+            häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+          locale: et
+        enabled: true
+      properties:
+        enabled:
+          type: boolean
+        message_templates:
+          items:
+            $ref: '#/components/schemas/MessageTemplate'
+          type: array
+        auth_methods:
+          items:
+            example: idcard
+            type: string
+          type: array
+      type: object
+    EmailAlert:
+      example:
+        send_at: 2019-08-24T14:15:22Z
+        message_templates:
+        - message: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+            häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+          locale: et
+        - message: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+            häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+          locale: et
+        enabled: true
+      properties:
+        enabled:
+          type: boolean
+        send_at:
+          example: 2019-08-24T14:15:22Z
+          format: date-time
+          type: string
+        message_templates:
+          items:
+            $ref: '#/components/schemas/MessageTemplate'
+          type: array
+      type: object
+    MessageTemplate:
+      example:
+        message: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+          häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+        locale: et
+      properties:
+        message:
+          example: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+            häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+          maxLength: 255
+          minLength: 1
+          type: string
+        locale:
+          example: et
+          type: string
+      type: object
+    Alert:
+      example:
+        start_time: 2019-08-24T14:15:22Z
+        updated_at: 2019-08-24T14:15:22Z
+        end_time: 2019-08-24T14:15:22Z
+        email_alert:
+          send_at: 2019-08-24T14:15:22Z
+          message_templates:
+          - message: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+              häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+            locale: et
+          - message: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+              häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+            locale: et
+          enabled: true
+        created_at: 2019-08-24T14:15:22Z
+        id: "1234567"
+        title: Plaaniline katkestus SK teenustes
+        login_alert:
+          auth_methods:
+          - idcard
+          - idcard
+          message_templates:
+          - message: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+              häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+            locale: et
+          - message: Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine
+              häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00
+            locale: et
+          enabled: true
+      properties:
+        id:
+          example: "1234567"
+          type: string
+        title:
+          example: Plaaniline katkestus SK teenustes
+          maxLength: 255
+          type: string
+        start_time:
+          example: 2019-08-24T14:15:22Z
+          format: date-time
+          type: string
+        end_time:
+          example: 2019-08-24T14:15:22Z
+          format: date-time
+          type: string
+        login_alert:
+          $ref: '#/components/schemas/LoginAlert'
+        email_alert:
+          $ref: '#/components/schemas/EmailAlert'
+        created_at:
+          example: 2019-08-24T14:15:22Z
+          format: date-time
+          type: string
+        updated_at:
+          example: 2019-08-24T14:15:22Z
+          format: date-time
+          type: string
+      required:
+      - end_time
+      - start_time
+      - title
+      type: object
+    LoginRequest:
+      example:
+        password: password
+        username: username
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+      required:
+      - password
+      - username
+      type: object
+    LoginResponse:
+      example:
+        error: error
+        username: username
+      properties:
+        error:
+          type: string
+        username:
+          type: string
+      type: object
+    WhoAmIResponse:
+      example:
+        username: username
+      properties:
+        username:
+          type: string
+      type: object
+    SsoModeResponse:
+      example:
+        ssoMode: true
+      properties:
+        ssoMode:
+          type: boolean
+      type: object
+    ClientImportResponse:
+      example:
+        clients_import_success_count: 6
+        clients_count: 0
+        clients_import_failed_count: 1
+        clients_not_imported:
+        - clients_not_imported
+        - clients_not_imported
+        status: status
+      properties:
+        status:
+          type: string
+        clients_count:
+          type: integer
+        clients_import_success_count:
+          type: integer
+        clients_import_failed_count:
+          type: integer
+        clients_not_imported:
+          items:
+            type: string
+          type: array
+      type: object
+    inline_object:
+      properties:
+        file:
+          format: binary
+          type: string
+      type: object
+  securitySchemes:
+    cookieAuth:
+      in: cookie
+      name: SESSION
+      type: apiKey

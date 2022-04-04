@@ -19,7 +19,6 @@
         <commons-email.version>1.5</commons-email.version>
         <logstash-logback.version>7.0.1</logstash-logback.version>
         <greenmail.version>1.6.7</greenmail.version>
-        <springfox.version>2.9.2</springfox.version><!-- TODO Consider upgrading. -->
         <tara-admin-api-schema.version>1.3.0</tara-admin-api-schema.version>
         <tara-admin-ui.version>1.3.0</tara-admin-ui.version>
         <wiremock.version>2.27.2</wiremock.version>
@@ -50,12 +49,6 @@
         <dependency>
             <groupId>org.liquibase</groupId>
             <artifactId>liquibase-core</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>io.springfox</groupId>
-            <artifactId>springfox-swagger2</artifactId>
-            <version>${springfox.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
