@@ -13,10 +13,6 @@
 
     <packaging>jar</packaging>
 
-    <properties>
-        <wiremock.version>2.27.2</wiremock.version>
-    </properties>
-
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
