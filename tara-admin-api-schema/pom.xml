@@ -16,7 +16,7 @@
         <sourceDirectory>server-stubs/src/main/java</sourceDirectory>
     </build>
 
-    <dependencies>
+    <dependencies><!-- Ordered by scope, groupId, artifactId. -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
