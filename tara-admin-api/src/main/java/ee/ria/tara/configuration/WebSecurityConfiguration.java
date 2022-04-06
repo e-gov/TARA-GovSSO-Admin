@@ -1,66 +1,59 @@
 package ee.ria.tara.configuration;
 
-import ee.ria.tara.configuration.providers.AuthenticationConfigurationProvider;
+import ee.ria.tara.configuration.providers.SecurityConfigurationProperties;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAuthenticationProvider;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
-import org.springframework.security.provisioning.UserDetailsManager;
-import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
-import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Arrays;
+import java.util.List;
 
 @Configuration
 @EnableWebSecurity
+@RequiredArgsConstructor
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
-    private final AuthenticationConfigurationProvider configurationProvider;
 
-    public WebSecurityConfiguration(AuthenticationConfigurationProvider configurationProvider) {
-        this.configurationProvider = configurationProvider;
-    }
+    private final SecurityConfigurationProperties securityConfProperties;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .addFilterBefore(new SessionCookieFilter(), BasicAuthenticationFilter.class)
                 .cors()
                     .and()
                 .csrf()
                     .ignoringAntMatchers("/login")
                     .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
                     .and()
-                .exceptionHandling()
-                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
+                .headers()
+                    .xssProtection().xssProtectionEnabled(false)
+                        .and()
+                    .frameOptions().deny()
+                    .httpStrictTransportSecurity()
+                    .maxAgeInSeconds(186 * 24 * 60 * 60)
+                        .and()
                     .and()
                 .logout()
-                    .logoutUrl("/logout")
-                    .invalidateHttpSession(true)
-                    .deleteCookies("JSESSIONID")
                     .logoutSuccessHandler(new HttpLogoutSuccessHandler())
                     .and()
                 .sessionManagement()
-                    .sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
                     .maximumSessions(1)
-                    //.sessionRegistry(sessionRegistry)
                     .maxSessionsPreventsLogin(true)
+                        .and()
                     .and()
-                .and()
                 .authorizeRequests()
                     .antMatchers("/", "/main", "/login", "/ssoMode", "/actuator/health")
                         .permitAll()
@@ -73,32 +66,17 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    @Profile("!inMemoryAuth")
-    public AuthenticationProvider activeDirectoryLdapAuthenticationProvider() {
-        ActiveDirectoryLdapAuthenticationProvider provider = new ActiveDirectoryLdapAuthenticationProvider(
-                configurationProvider.getLdapDomain(),
-                configurationProvider.getLdapUrl()
-        );
-        provider.setConvertSubErrorCodesToExceptions(true);
-
-        return provider;
+    CorsConfigurationSource corsConfigurationSource() {
+        CorsConfiguration configuration = new CorsConfiguration();
+        configuration.setAllowCredentials(true);
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PUT", "DELETE"));
+        configuration.setMaxAge((long) securityConfProperties.getCookieMaxAgeSeconds());
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", configuration);
+        return source;
     }
 
-    @Bean
-    @Profile("inMemoryAuth")
-    public UserDetailsManager inMemoryUserDetailsManager() {
-        InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
-        manager.createUser(User
-                .withUsername(configurationProvider.getInMemoryUsername())
-                .password(passwordEncoder().encode(configurationProvider.getInMemoryPassword()))
-                .authorities(configurationProvider.getInMemoryAuthority())
-                .build());
-        return manager;
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 
     //TODO: add logging

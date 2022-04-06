@@ -1,5 +1,6 @@
 package ee.ria.tara.conf;
 
+import ee.ria.tara.configuration.OidcConfiguration;
 import ee.ria.tara.configuration.providers.TlsConfigurationProvider;
 import ee.ria.tara.service.ImportService;
 import lombok.Builder;
@@ -18,7 +19,7 @@ import javax.sql.DataSource;
 @Validated
 @Configuration
 @Profile("importFromFile")
-@Import({ImportService.class, ee.ria.tara.configuration.Configuration.class, TlsConfigurationProvider.class})
+@Import({ImportService.class, OidcConfiguration.class, TlsConfigurationProvider.class})
 public class FileImportConfiguration {
 
     @Value("${file-import.file-name}")
