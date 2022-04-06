@@ -86,6 +86,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     private CsrfTokenRepository csrfTokenRepository() {
         CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        repository.setCookieName("__Host-XSRF-TOKEN");
+        repository.setHeaderName("__Host-X-XSRF-TOKEN");
         repository.setSecure(true);
         repository.setCookiePath("/");
         repository.setCookieMaxAge(securityConfProperties.getCookieMaxAgeSeconds());
