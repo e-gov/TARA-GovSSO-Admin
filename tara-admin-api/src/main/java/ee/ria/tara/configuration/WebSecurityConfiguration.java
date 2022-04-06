@@ -35,8 +35,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .cors()
                     .and()
                 .csrf()
-                    .ignoringAntMatchers("/login")
-                    .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse())
+                    .csrfTokenRepository(csrfTokenRepository())
                     .and()
                 .headers()
                     .xssProtection().xssProtectionEnabled(false)
@@ -85,6 +84,12 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         return source;
     }
 
+    private CsrfTokenRepository csrfTokenRepository() {
+        CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
+        repository.setSecure(true);
+        repository.setCookiePath("/");
+        repository.setCookieMaxAge(securityConfProperties.getCookieMaxAgeSeconds());
+        return repository;
     }
 
     //TODO: add logging
