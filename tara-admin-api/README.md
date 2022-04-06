@@ -9,6 +9,7 @@
     * [Database schema initialization and migration](#db_conf_updates)
     * [Mail server client](#smtp_conf)
     * [Email content for issuing secrets](#email_conf)
+    * [Session security configuration](#security_conf)
     * [Logging](#logging)
     * [Health endpoint](#health)
 - [APPENDIX](#appendix)
@@ -128,6 +129,13 @@ The email content and metadata can be configured using the following configurati
 | tara.admin.data-file.encrypted-file-name  | Y        | Encrypted file name in cdoc       | parooliymbrik.txt                                   |
 | tara.admin.data-file.text-file-name       | Y        | Client secret text file template  | client-secret-txt-template.ftl                     |
 
+<a href="security_conf"></a>
+## Security configuration
+
+| Parameter        | Mandatory | Default value | Description, example |
+| :---------------- | :---------- | :---------- | :---------------- |
+| `tara.admin.security.content-security-policy` | No | | Content security policy. Default value `connect-src 'self'; default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; base-uri 'none'; frame-ancestors 'none'; block-all-mixed-content` |
+| `tara.admin.security.cookie-max-age-seconds` | No | 3600 | Session cookies max age in seconds. Minimum value -1. A positive value indicates when the cookie should expire relative to the current time. A value of 0 means the cookie should expire immediately. A negative value results in no "Max-Age" attribute in which case the cookie is removed when the browser is closed. |
 
 <a href="logging"></a>
 ### Logging
