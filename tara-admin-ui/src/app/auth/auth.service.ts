@@ -5,6 +5,7 @@ import {RestClient} from "../http/client";
 import {LoginRequest} from "./login-request.model";
 import {Router} from "@angular/router";
 import {Title} from "@angular/platform-browser";
+import {MessageService} from "../main/message/message.service";
 
 @Injectable()
 export class AuthService {
@@ -12,16 +13,19 @@ export class AuthService {
   public isSsoMode: boolean = false;
   private readonly currentUser: BehaviorSubject<string>;
 
-  constructor(private httpClient: RestClient,
-              private router: Router,
-              private titleService: Title) {
+  constructor(
+    private httpClient: RestClient,
+    private router: Router,
+    private titleService: Title,
+    private messageService: MessageService,
+  ) {
     // @ts-ignore
     this.currentUser = new BehaviorSubject<string>(null);
     this.checkCurrentUser();
     this.checkSsoMode();
   }
 
-  getCurrentUser() : BehaviorSubject<string>{
+  getCurrentUser(): BehaviorSubject<string> {
     return this.currentUser;
   }
 
@@ -33,6 +37,7 @@ export class AuthService {
         this.hasCheckedUser = true;
 
         if (response.username) {
+          this.messageService.clearMessage();
           this.router.navigate(["/main"])
         }
       }).catch(err => {
@@ -43,10 +48,9 @@ export class AuthService {
   login(loginRequest: LoginRequest) {
     return this.httpClient.post("/login", loginRequest)
       .pipe(map(result => {
-      this.currentUser.next(result.username);
-      this.checkSsoMode();
-      return result;
-    }));
+        this.currentUser.next(result.username);
+        return result;
+      }));
   }
 
   logout() {
@@ -68,7 +72,7 @@ export class AuthService {
         else
           this.titleService.setTitle("TARA haldusliides");
       }).catch(err => {
-        console.log("failed ssoMode check");
-      });
+      console.log("failed ssoMode check");
+    });
   }
 }

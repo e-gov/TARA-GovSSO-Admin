@@ -10,11 +10,12 @@ import {environment} from "../environments/environment";
 export class HttpInterceptorService implements HttpInterceptor {
 
   constructor(private router: Router,
-              public messageService: MessageService){ }
+              public messageService: MessageService) {
+  }
 
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(req).pipe(
-      catchError( (error) => {
+      catchError((error) => {
         if (error instanceof HttpErrorResponse) {
           if (this.isAuthError(error)) {
             this.handleHttpErrorResponse(error);
@@ -29,7 +30,7 @@ export class HttpInterceptorService implements HttpInterceptor {
   }
 
   private handleHttpErrorResponse(error: HttpErrorResponse) {
-    if (!error.url!.includes("/whoami") || !error.url!.includes("/ssoMode")) {
+    if (!error.url!.includes("/whoami") && !error.url!.includes("/ssoMode")) {
       if (error.url!.includes("/login")) {
         this.messageService.showMessage(JSON.stringify(error.error), "ERROR", environment.errorMessageDurationInMills)
         return;
