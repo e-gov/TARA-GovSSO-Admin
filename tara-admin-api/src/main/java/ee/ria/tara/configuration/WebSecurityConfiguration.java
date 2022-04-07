@@ -2,7 +2,6 @@ package ee.ria.tara.configuration;
 
 import ee.ria.tara.configuration.providers.SecurityConfigurationProperties;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -10,32 +9,33 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Arrays;
-import java.util.List;
 
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
+    public static final String COOKIE_NAME_XSRF_TOKEN = "__Host-XSRF-TOKEN";
+    public static final String COOKIE_NAME_SESSION = "__Host-SESSION";
+
     private final SecurityConfigurationProperties securityConfProperties;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .cors()
-                    .and()
+                .cors().disable()
                 .csrf()
                     .csrfTokenRepository(csrfTokenRepository())
+                    .and()
+                .exceptionHandling()
+                    .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED))
                     .and()
                 .headers()
                     .xssProtection().xssProtectionEnabled(false)
@@ -62,32 +62,21 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .and()
                     .and()
                 .authorizeRequests()
-                    .antMatchers("/", "/main", "/login", "/ssoMode", "/actuator/health")
+                    .antMatchers("/", "/login", "/ssoMode", "/actuator/**")
                         .permitAll()
                     .antMatchers(HttpMethod.GET, "/alerts")
                         .permitAll()
-                    .antMatchers("/index.html", "/*.js", "/*.css", "/assets/ria-logo.png")
+                    .antMatchers("/*.js", "/*.css", "/*.woff2", "/*.woff", "/*.ttf")
+                        .permitAll()
+                    .antMatchers("/index.html", "/assets/ria-logo.png", "/favicon.ico")
                         .permitAll()
                     .antMatchers("/**")
                         .authenticated();
     }
 
-    @Bean
-    CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowCredentials(true);
-        configuration.setAllowedHeaders(List.of("*"));
-        configuration.setAllowedMethods(Arrays.asList("OPTIONS", "GET", "POST", "PUT", "DELETE"));
-        configuration.setMaxAge((long) securityConfProperties.getCookieMaxAgeSeconds());
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
-    }
-
     private CsrfTokenRepository csrfTokenRepository() {
         CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
-        repository.setCookieName("__Host-XSRF-TOKEN");
-        repository.setHeaderName("__Host-X-XSRF-TOKEN");
+        repository.setCookieName(COOKIE_NAME_XSRF_TOKEN);
         repository.setSecure(true);
         repository.setCookiePath("/");
         repository.setCookieMaxAge(securityConfProperties.getCookieMaxAgeSeconds());

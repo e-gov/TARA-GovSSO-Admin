@@ -118,7 +118,6 @@ declare global {
     MatNativeDateModule,
     HttpClientXsrfModule.withOptions({
       cookieName: '__Host-XSRF-TOKEN',
-      headerName: '__Host-X-XSRF-TOKEN',
     }),
   ],
   providers: [RestClient, AuthService, AuthGuard, MessageService, ClientsService, InstitutionsService, AlertsService, HttpInterceptorService, MatDatepickerModule, MatNativeDateModule,

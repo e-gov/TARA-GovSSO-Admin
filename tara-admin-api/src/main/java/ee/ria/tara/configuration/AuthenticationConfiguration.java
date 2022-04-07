@@ -15,7 +15,7 @@ import org.springframework.security.provisioning.UserDetailsManager;
 
 @Configuration
 @RequiredArgsConstructor
-public class InMemoryAuthConfiguration {
+public class AuthenticationConfiguration {
 
     private final AuthenticationConfigurationProvider configurationProvider;
 
