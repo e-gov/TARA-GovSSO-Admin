@@ -3,3 +3,5 @@ databaseChangeLog:
       file: db/changelog/TARA2-132-init.yaml
   - include:
       file: db/changelog/GSSO-28.yaml
+  - include:
+      file: db/changelog/GSSO-339.yaml

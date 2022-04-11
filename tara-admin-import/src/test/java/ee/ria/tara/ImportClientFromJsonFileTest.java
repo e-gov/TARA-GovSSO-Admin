@@ -98,7 +98,8 @@ public class ImportClientFromJsonFileTest {
                         "        \"relying_party_UUID\" : null,\n" +
                         "        \"relying_party_name\" : null,\n" +
                         "        \"should_use_additional_verification_code_check\" : true\n" +
-                        "      }\n" +
+                        "      },\n" +
+                        "      \"logo\" : null\n" +
                         "    }\n" +
                         "  },\n" +
                         "  \"created_at\" : null,\n" +

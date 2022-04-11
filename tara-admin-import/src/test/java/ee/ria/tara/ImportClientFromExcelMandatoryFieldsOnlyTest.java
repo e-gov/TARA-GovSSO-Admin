@@ -82,7 +82,8 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                                 "\"legacy_return_url\":null," +
                                 "\"institution\":{\"registry_code\":\"12345678\",\"sector\":\"public\"}," +
                                 "\"mid_settings\":null," +
-                                "\"smartid_settings\":null" +
+                                "\"smartid_settings\":null," +
+                                "\"logo\" : null\n" +
                             "}" +
                         "}," +
                         "\"created_at\":null," +

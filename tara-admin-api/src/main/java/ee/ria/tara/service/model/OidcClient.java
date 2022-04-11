@@ -45,5 +45,8 @@ public class OidcClient {
   @JsonProperty("smartid_settings")
   @NotNull
   private ClientSmartIdSettings smartidSettings;
+
+  @JsonProperty("logo")
+  private byte[] logo;
 }
 

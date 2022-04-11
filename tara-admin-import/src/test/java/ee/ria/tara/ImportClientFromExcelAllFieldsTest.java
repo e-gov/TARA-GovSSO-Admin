@@ -83,7 +83,8 @@ public class ImportClientFromExcelAllFieldsTest {
                                 "\"legacy_return_url\":\"https://tagasi.ee\"," +
                                 "\"institution\":{\"registry_code\":\"12345678\",\"sector\":\"public\"}," +
                                 "\"mid_settings\":null," +
-                                "\"smartid_settings\":null" +
+                                "\"smartid_settings\":null," +
+                                "\"logo\" : null\n" +
                             "}" +
                         "}," +
                         "\"created_at\":null," +

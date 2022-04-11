@@ -41,5 +41,4 @@ public class Client {
     private OffsetDateTime createdAt;
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
-    private byte[] clientLogo;
 }

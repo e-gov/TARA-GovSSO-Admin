@@ -1,0 +1,10 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1911794632350-9
+      author: (generated)
+      changes:
+        - dropColumn:
+            tableName: client
+            columns:
+              - column:
+                  name: client_logo

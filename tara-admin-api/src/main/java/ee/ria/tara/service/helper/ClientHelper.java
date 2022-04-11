@@ -41,7 +41,6 @@ public class ClientHelper {
             client.setInfoNotificationEmails(entity.getInfoNotificationEmails());
             client.setSlaNotificationEmails(entity.getSlaNotificationEmails());
             client.setClientContacts(getClientContacts(entity));
-            client.setClientLogo(entity.getClientLogo());
 
         } else {
             if (log.isDebugEnabled()) {
@@ -81,6 +80,7 @@ public class ClientHelper {
         client.setPostLogoutRedirectUris(hydraClient.getPostLogoutRedirectUris());
         client.setScope(Arrays.asList(hydraClient.getScope().split(" ")));
         client.setBackchannelLogoutUri(hydraClient.getBackchannelLogoutUri());
+        client.setClientLogo(hydraClient.getMetadata().getOidcClient().getLogo());
 
         client.setIsUserConsentRequired(hydraClient.getMetadata().getDisplayUserConsent());
         client.setClientUrl(getOidcClientLegacyReturnUrl(hydraClient));
@@ -106,6 +106,7 @@ public class ClientHelper {
         oidcClient.setShortNameTranslations(client.getClientShortName());
         oidcClient.setLegacyReturnUrl(client.getClientUrl());
         oidcClient.setInstitution(hydraOidcClientInstitution);
+        oidcClient.setLogo(client.getClientLogo());
 
         metadata.setDisplayUserConsent(client.getIsUserConsentRequired());
         metadata.setOidcClient(oidcClient);
@@ -139,7 +140,6 @@ public class ClientHelper {
         entity.setInfoNotificationEmails(client.getInfoNotificationEmails());
         entity.setSlaNotificationEmails(client.getSlaNotificationEmails());
         entity.setClientContacts(getClientContacts(client, entity));
-        entity.setClientLogo(client.getClientLogo());
         return entity;
     }
 
