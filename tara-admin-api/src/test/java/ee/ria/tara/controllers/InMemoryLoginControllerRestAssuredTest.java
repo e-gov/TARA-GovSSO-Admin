@@ -18,8 +18,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.context.annotation.Import;
 
-import static ee.ria.tara.configuration.WebSecurityConfiguration.COOKIE_NAME_SESSION;
-import static ee.ria.tara.configuration.WebSecurityConfiguration.COOKIE_NAME_XSRF_TOKEN;
+import static ee.ria.tara.configuration.SecurityConfiguration.COOKIE_NAME_SESSION;
+import static ee.ria.tara.configuration.SecurityConfiguration.COOKIE_NAME_XSRF_TOKEN;
 import static io.restassured.RestAssured.given;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.RANDOM_PORT;
 

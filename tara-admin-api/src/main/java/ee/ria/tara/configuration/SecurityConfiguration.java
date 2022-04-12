@@ -13,6 +13,7 @@ import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
 import org.springframework.security.web.csrf.CsrfTokenRepository;
+import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     public static final String COOKIE_NAME_XSRF_TOKEN = "__Host-XSRF-TOKEN";
     public static final String COOKIE_NAME_SESSION = "__Host-SESSION";
@@ -30,6 +31,9 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+                .requestCache()
+                    .requestCache(httpSessionRequestCache())
+                    .and()
                 .cors().disable()
                 .csrf()
                     .csrfTokenRepository(csrfTokenRepository())
@@ -72,6 +76,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers("/**")
                         .authenticated();
+    }
+
+    private HttpSessionRequestCache httpSessionRequestCache() {
+        HttpSessionRequestCache httpSessionRequestCache = new HttpSessionRequestCache();
+        // Disables session creation if session does not exist and any request returns 401 unauthorized error.
+        httpSessionRequestCache.setCreateSessionAllowed(false);
+        return httpSessionRequestCache;
     }
 
     private CsrfTokenRepository csrfTokenRepository() {

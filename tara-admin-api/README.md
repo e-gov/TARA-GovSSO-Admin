@@ -130,7 +130,7 @@ The email content and metadata can be configured using the following configurati
 | tara.admin.data-file.text-file-name       | Y        | Client secret text file template  | client-secret-txt-template.ftl                     |
 
 <a href="security_conf"></a>
-## Security configuration
+### Security configuration
 
 | Parameter        | Mandatory | Default value | Description, example |
 | :---------------- | :---------- | :---------- | :---------------- |
