@@ -7,8 +7,16 @@ import org.springframework.context.annotation.Configuration;
 @Configuration(proxyBeanMethods = false)
 public class CookieConfiguration {
 
+    public static final String COOKIE_NAME_XSRF_TOKEN = "__Host-XSRF-TOKEN";
+    public static final String COOKIE_NAME_SESSION = "__Host-SESSION";
+
     @Bean
-    CookieSameSiteSupplier applicationCookieSameSiteSupplier() {
-        return CookieSameSiteSupplier.ofStrict();
+    CookieSameSiteSupplier csrfCookieSameSiteSupplier() {
+        return CookieSameSiteSupplier.ofStrict().whenHasName(COOKIE_NAME_XSRF_TOKEN);
+    }
+
+    @Bean
+    CookieSameSiteSupplier sessionCookieSameSiteSupplier() {
+        return CookieSameSiteSupplier.ofStrict().whenHasName(COOKIE_NAME_SESSION);
     }
 }

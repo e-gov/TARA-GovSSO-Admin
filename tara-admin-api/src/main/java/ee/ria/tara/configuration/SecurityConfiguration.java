@@ -18,13 +18,12 @@ import org.springframework.security.web.savedrequest.HttpSessionRequestCache;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import static ee.ria.tara.configuration.CookieConfiguration.COOKIE_NAME_XSRF_TOKEN;
+
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-
-    public static final String COOKIE_NAME_XSRF_TOKEN = "__Host-XSRF-TOKEN";
-    public static final String COOKIE_NAME_SESSION = "__Host-SESSION";
 
     private final SecurityConfigurationProperties securityConfProperties;
 
