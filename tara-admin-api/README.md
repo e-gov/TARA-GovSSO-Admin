@@ -135,7 +135,6 @@ The email content and metadata can be configured using the following configurati
 | Parameter        | Mandatory | Default value | Description, example |
 | :---------------- | :---------- | :---------- | :---------------- |
 | `tara.admin.security.content-security-policy` | No | | Content security policy. Default value `connect-src 'self'; default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; base-uri 'none'; frame-ancestors 'none'; block-all-mixed-content` |
-| `tara.admin.security.cookie-max-age-seconds` | No | 3600 | Session cookies max age in seconds. Minimum value -1. A positive value indicates when the cookie should expire relative to the current time. A value of 0 means the cookie should expire immediately. A negative value results in no "Max-Age" attribute in which case the cookie is removed when the browser is closed. |
 
 <a href="logging"></a>
 ### Logging

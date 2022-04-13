@@ -89,7 +89,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
         repository.setCookieName(COOKIE_NAME_XSRF_TOKEN);
         repository.setSecure(true);
         repository.setCookiePath("/");
-        repository.setCookieMaxAge(securityConfProperties.getCookieMaxAgeSeconds());
         return repository;
     }
 

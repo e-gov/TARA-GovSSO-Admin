@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
 @ActiveProfiles({"test", "inMemoryAuth"})
-public class WebSecurityConfigurationTest {
+public class SecurityConfigurationTest {
     private static final int STATUS_200 = HttpStatus.OK.value();
     private static final int STATUS_401 = HttpStatus.UNAUTHORIZED.value();
     private static final int STATUS_403 = HttpStatus.FORBIDDEN.value();

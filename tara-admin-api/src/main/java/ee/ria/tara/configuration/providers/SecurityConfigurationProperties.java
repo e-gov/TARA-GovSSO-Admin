@@ -28,7 +28,4 @@ public class SecurityConfigurationProperties {
 
     @NotBlank
     String contentSecurityPolicy = DEFAULT_CONTENT_SECURITY_POLICY;
-
-    @Min(value = -1)
-    int cookieMaxAgeSeconds = 3600;
 }

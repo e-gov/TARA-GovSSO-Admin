@@ -107,8 +107,8 @@ public class InMemoryLoginControllerRestAssuredTest {
     private void assertCsrfCookiePresent(ExtractableResponse<Response> response) {
         Cookie cookie = ((RestAssuredResponseImpl) response).getDetailedCookies().get(COOKIE_NAME_XSRF_TOKEN);
         Assertions.assertNotNull(cookie);
-        Assertions.assertEquals(3600, cookie.getMaxAge());
-        Assertions.assertNotNull(cookie.getExpiryDate());
+        Assertions.assertEquals(-1, cookie.getMaxAge());
+        Assertions.assertNull(cookie.getExpiryDate());
         Assertions.assertEquals("/", cookie.getPath());
         Assertions.assertEquals("Strict", cookie.getSameSite());
         Assertions.assertFalse(cookie.isHttpOnly());
