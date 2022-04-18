@@ -10,5 +10,6 @@ import java.util.List;
 public interface ClientRepository extends JpaRepository<Client, Long> {
     void deleteByClientIdAndInstitution_RegistryCode(String clientId, String registryCode);
     Client findByClientId(String clientId);
+    Client findByEidasRequesterId(String eidasRequesterId);
     List<Client> findAllByInstitution_RegistryCode(String registryCode);
 }

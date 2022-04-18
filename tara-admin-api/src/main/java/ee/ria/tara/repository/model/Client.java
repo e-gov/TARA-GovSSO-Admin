@@ -30,6 +30,8 @@ public class Client {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "institution_registry_code", referencedColumnName = "registry_code")
     private Institution institution;
+    // Only stored here to check and ensure uniqueness
+    private String eidasRequesterId;
     private String description;
     @Convert(converter = StringListConverter.class)
     private List<String> infoNotificationEmails;

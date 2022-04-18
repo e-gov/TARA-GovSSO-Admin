@@ -5,3 +5,5 @@ databaseChangeLog:
       file: db/changelog/GSSO-28.yaml
   - include:
       file: db/changelog/GSSO-339.yaml
+  - include:
+      file: db/changelog/AUT-887.yaml

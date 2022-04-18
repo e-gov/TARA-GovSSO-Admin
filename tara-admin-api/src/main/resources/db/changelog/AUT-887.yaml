@@ -1,0 +1,13 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1911794632350-10
+      author: (generated)
+      changes:
+        - addColumn:
+            tableName: client
+            columns:
+              - column:
+                  name: eidas_requester_id
+                  type: VARCHAR(1024)
+                  constraints:
+                    unique: true

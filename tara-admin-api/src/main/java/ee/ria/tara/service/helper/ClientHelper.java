@@ -37,6 +37,7 @@ public class ClientHelper {
             client.getInstitutionMetainfo().setName(entity.getInstitution().getName());
 
             client.setId(entity.getId().toString());
+            client.setEidasRequesterId(entity.getEidasRequesterId());
             client.setDescription(entity.getDescription());
             client.setInfoNotificationEmails(entity.getInfoNotificationEmails());
             client.setSlaNotificationEmails(entity.getSlaNotificationEmails());
@@ -81,6 +82,7 @@ public class ClientHelper {
         client.setScope(Arrays.asList(hydraClient.getScope().split(" ")));
         client.setBackchannelLogoutUri(hydraClient.getBackchannelLogoutUri());
         client.setClientLogo(hydraClient.getMetadata().getOidcClient().getLogo());
+        client.setEidasRequesterId(hydraClient.getMetadata().getOidcClient().getEidasRequesterId());
 
         client.setIsUserConsentRequired(hydraClient.getMetadata().getDisplayUserConsent());
         client.setClientUrl(getOidcClientLegacyReturnUrl(hydraClient));
@@ -105,6 +107,7 @@ public class ClientHelper {
         oidcClient.setShortName(client.getClientShortName() != null ? client.getClientShortName().getEt() : null);
         oidcClient.setShortNameTranslations(client.getClientShortName());
         oidcClient.setLegacyReturnUrl(client.getClientUrl());
+        oidcClient.setEidasRequesterId(client.getEidasRequesterId());
         oidcClient.setInstitution(hydraOidcClientInstitution);
         oidcClient.setLogo(client.getClientLogo());
 
@@ -135,6 +138,7 @@ public class ClientHelper {
 
         entity.setId(client.getId() == null ? null : Long.valueOf(client.getId()));
         entity.setClientId(client.getClientId());
+        entity.setEidasRequesterId(client.getEidasRequesterId());
         entity.setDescription(client.getDescription());
         entity.setInstitution(institution);
         entity.setInfoNotificationEmails(client.getInfoNotificationEmails());
@@ -213,7 +217,7 @@ public class ClientHelper {
     }
 
     @SneakyThrows
-    private static String getDigest(String secret) {
+    public static String getDigest(String secret) {
         if (secret == null)
             return null;
 

@@ -787,6 +787,7 @@ components:
         secret: secret
         client_id: openIdDemo
         is_user_consent_required: false
+        eidas_requester_id: 33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f
         mid_settings:
           relying_party_name: relying_party_name
           relying_party_UUID: relying_party_UUID
@@ -860,6 +861,12 @@ components:
           minItems: 1
           type: array
         secret:
+          type: string
+        eidas_requester_id:
+          example: 33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f
+          maxLength: 1024
+          minLength: 3
+          pattern: ^(?!\s*$).+
           type: string
         description:
           maxLength: 4000

@@ -667,6 +667,12 @@ components:
             type: string
         secret:
           type: string
+        eidas_requester_id:
+          type: string
+          minLength: 3
+          maxLength: 1024
+          pattern: ^(?!\s*$).+
+          example: 33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f
         description:
           type: string
           minLength: 3

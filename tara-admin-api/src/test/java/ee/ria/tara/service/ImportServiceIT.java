@@ -40,7 +40,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.reset;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static ee.ria.tara.service.helper.ClientTestHelper.createTestClient;
-import static ee.ria.tara.service.helper.ClientTestHelper.createTestInstitution;
+import static ee.ria.tara.service.helper.ClientTestHelper.createValidPrivateInstitution;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -105,7 +105,7 @@ public class ImportServiceIT {
         Exception expectedEx = assertThrows(IllegalArgumentException.class, () -> {
             importService.importFromExcelFile(new FileInputStream("src/test/resources/import_files/invalid_content.xlsx"));
         });
-        assertEquals("Invalid header row. Expecting following header columns: [Institution name, Institution registry code, Client ID, Redirect URI, Secret, Return URL (legacy), Client name (et), Client name (en), Client name (ru), Client shortname (et), Client shortname (en), Client shortname (ru), Contacts, Description]", expectedEx.getMessage());
+        assertEquals("Invalid header row. Expecting following header columns: [Institution name, Institution registry code, Client ID, Redirect URI, Secret, Return URL (legacy), Client name (et), Client name (en), Client name (ru), Client shortname (et), Client shortname (en), Client shortname (ru), Contacts, eIDAS RequesterID, Description]", expectedEx.getMessage());
     }
 
     @Test
@@ -145,6 +145,7 @@ public class ImportServiceIT {
         assertEquals("Тест-ru", entry.getValue().get(4).getClientShortName().getRu());
         assertEquals(List.of(getContact("Kalle Kajakas", "kalle.kajakas@kajakas.com", "+37207114725", "example department")), entry.getValue().get(4).getClientContacts());
         assertEquals("openIdDemo3", entry.getValue().get(4).getDescription());
+        assertEquals("58ee2267-7864-4e09-958b-b53c3135298e", entry.getValue().get(4).getEidasRequesterId());
 
         entry = iterator.next();
         assertEquals("Example Institution", entry.getKey().getName());
@@ -167,7 +168,7 @@ public class ImportServiceIT {
     public void saveClientToDatabase() {
         Assertions.assertNotNull(institutionRepository.findInstitutionByRegistryCode(registryCode));
 
-        Institution mockInstiution = createTestInstitution("1234567890", "Test institution & company");
+        Institution mockInstiution = createValidPrivateInstitution("1234567890", "Test institution & company");
         Client mockClient = createTestClient();
         stubFor(get("/clients/" + mockClient.getClientId()).willReturn(ok()));
         stubFor(put("/clients/" + mockClient.getClientId()).willReturn(ok()));

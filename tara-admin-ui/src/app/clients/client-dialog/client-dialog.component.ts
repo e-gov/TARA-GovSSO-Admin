@@ -2,10 +2,10 @@ import {Component, Inject, OnInit} from '@angular/core';
 // @ts-ignore
 import {
   Client,
+  ClientContact,
   ClientMidSettings,
   ClientNameTranslation,
   ClientSmartIdSettings,
-  ClientContact,
   InstitutionMetainfo
 } from "../model/client";
 import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
@@ -35,6 +35,7 @@ export class ClientDialogComponent implements OnInit {
   _client_url?: string;
   _mid_settings?: ClientMidSettings;
   _smartid_settings?: ClientSmartIdSettings;
+  _eidas_requester_id?: string;
   _description?: string;
   _use_specific_mid_configuration: boolean;
   _use_specific_smartid_configuration: boolean;
@@ -58,6 +59,7 @@ export class ClientDialogComponent implements OnInit {
 
     this._client_name = this.newData.client_name;
     this._client_short_name = this.newData.client_short_name;
+    this._eidas_requester_id = this.newData.eidas_requester_id;
     this._description = this.newData.description;
     this._client_id = this.newData.client_id;
     this._client_url = this.newData.client_url;

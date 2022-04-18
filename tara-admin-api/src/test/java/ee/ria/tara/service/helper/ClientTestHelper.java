@@ -16,7 +16,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 
 public class ClientTestHelper {
-    public static void compareClientWithHydraClient(Client client, HydraClient hydraClient){
+    public static void compareClientWithHydraClient(Client client, HydraClient hydraClient) {
         Assertions.assertEquals(client.getClientId(), hydraClient.getClientId());
         Assertions.assertEquals(client.getClientUrl(), hydraClient.getMetadata().getOidcClient().getLegacyReturnUrl());
         Assertions.assertEquals(client.getRedirectUris(), hydraClient.getRedirectUris());
@@ -35,6 +35,12 @@ public class ClientTestHelper {
 
         Assertions.assertEquals(client.getCreatedAt(), OffsetDateTime.parse(hydraClient.getCreatedAt()));
         Assertions.assertEquals(client.getUpdatedAt(), OffsetDateTime.parse(hydraClient.getUpdatedAt()));
+    }
+
+    public static Client createValidSSOClient() {
+        Client client = createTestClient();
+        client.setEidasRequesterId(null);
+        return client;
     }
 
     public static Client createTestClient() {
@@ -65,6 +71,7 @@ public class ClientTestHelper {
         clientSecretExportSettings.setRecipientIdCode("10101010005");
         client.setClientSecretExportSettings(clientSecretExportSettings);
         client.setScope(List.of("mid"));
+        client.setEidasRequesterId("f75256ee-740d-4427-84ad-0f4b08417259");
         client.setSmartidSettings(new ClientSmartIdSettings());
         client.setMidSettings(new ClientMidSettings());
         client.setCreatedAt(OffsetDateTime.now());
@@ -73,10 +80,13 @@ public class ClientTestHelper {
         return client;
     }
 
-    public static Institution createTestInstitution(String registryCode, String name) {
+    public static Institution createValidPrivateInstitution(String registryCode, String name) {
         Institution institution = new Institution();
         institution.setRegistryCode(registryCode);
         institution.setName(name);
+        InstitutionType institutionType = new InstitutionType();
+        institutionType.setType(InstitutionType.TypeEnum.PRIVATE);
+        institution.setType(institutionType);
         return institution;
     }
 }

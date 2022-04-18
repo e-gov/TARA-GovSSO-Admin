@@ -18,6 +18,8 @@ import ee.ria.tara.repository.InstitutionRepository;
 import ee.ria.tara.repository.helper.PropertyFilterMixIn;
 import ee.ria.tara.repository.model.Institution;
 import ee.ria.tara.service.helper.ClientHelper;
+import ee.ria.tara.service.helper.ClientValidator;
+import ee.ria.tara.service.helper.ScopeFilter;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
@@ -56,6 +58,8 @@ public class ImportService {
     private String baseUrl;
     private final ClientRepository clientRepository;
     private final InstitutionRepository institutionRepository;
+    private final ClientValidator clientValidator;
+    private final ScopeFilter scopeFilter;
     private final RestTemplate restTemplate;
     private final static ObjectMapper mapper = JsonMapper.builder()
             .addModule(new JavaTimeModule())
@@ -120,7 +124,8 @@ public class ImportService {
             client.setClientShortName(clientShortName);
 
             client.setClientContacts(getContacts(row, getNullIfEmpty(getCellValue(row, 12))));
-            client.setDescription(getNullIfEmpty(getCellValue(row, 13)));
+            client.setEidasRequesterId(getCellValue(row, 13));
+            client.setDescription(getNullIfEmpty(getCellValue(row, 14)));
             client.setScope(defaultListOfScopes);
 
             if (clients.containsKey(institution))
@@ -155,9 +160,9 @@ public class ImportService {
     private void assertValidHeader(Row row) {
         List<String> expectedColumnValues = List.of("Institution name", "Institution registry code", "Client ID",
                 "Redirect URI", "Secret", "Return URL (legacy)", "Client name (et)", "Client name (en)", "Client name (ru)",
-                "Client shortname (et)", "Client shortname (en)", "Client shortname (ru)", "Contacts", "Description" );
+                "Client shortname (et)", "Client shortname (en)", "Client shortname (ru)", "Contacts", "eIDAS RequesterID", "Description" );
         List<String> actualColumnValues = new ArrayList<>();
-        for (int i = 0; i < 14; i++) {
+        for (int i = 0; i < 15; i++) {
             actualColumnValues.add(getCellValue(row, i));
         }
 
@@ -173,6 +178,9 @@ public class ImportService {
 
         log.info("Importing client: " + mapper.writer().writeValueAsString(client));
         String uri = String.format("%s/clients", baseUrl);
+
+        clientValidator.validateClient(client, institution.getType().getType());
+        client.setScope(scopeFilter.filterInstitutionClientScopes(client.getScope(), institution.getType().getType()));
 
         try {
 

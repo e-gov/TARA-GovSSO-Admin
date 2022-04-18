@@ -103,11 +103,9 @@ export class ClientsComponent implements OnInit {
   }
 
   createNewClient() {
-    var uuid = undefined;
     var scopes = ["openid", "idcard", "mid", "smartid", "eidas", "eidasonly", "eidas:country:*", "email", "phone"];
     if (this.authService.isSsoMode) {
       scopes = ["openid", "email", "phone"];
-      uuid = crypto.randomUUID();
     }
 
     let data: Client = {
@@ -116,7 +114,7 @@ export class ClientsComponent implements OnInit {
         registry_code: undefined,
         type: {type: "private"}
         },
-      client_id: uuid,
+      client_id: this.authService.isSsoMode ? crypto.randomUUID() : undefined,
       client_name: {et: undefined, en: undefined, ru: undefined},
       client_short_name: {et: undefined, en: undefined, ru: undefined},
       redirect_uris: [],
@@ -139,6 +137,7 @@ export class ClientsComponent implements OnInit {
         relying_party_name: undefined,
       },
       client_contacts: [],
+      eidas_requester_id: this.authService.isSsoMode ? undefined : crypto.randomUUID(),
       description: undefined,
       client_logo: undefined
     };

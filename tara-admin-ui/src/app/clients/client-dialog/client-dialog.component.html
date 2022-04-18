@@ -285,7 +285,7 @@
         <div class="col-sm-8" *ngIf="!isInfo()">
           <input type="text" class="form-control w-75" name="client_url" [(ngModel)]="_client_url" [value]="newData.client_url">
         </div>
-        <label *ngIf="isInfo()">{{newData.client_url ? newData.client_url : "-"}}</label>
+        <label *ngIf="isInfo()">{{newData.client_url}}</label>
       </div>
       <div class="form-group row" *ngIf="authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Taustakanali väljalogimise URL
@@ -297,10 +297,10 @@
         <div class="col-sm-8" *ngIf="!isInfo()">
           <input required type="text" class="form-control w-75" name="backchannel_logout_uri" [(ngModel)]="_backchannel_logout_uri" [value]="newData.backchannel_logout_uri">
         </div>
-        <label *ngIf="isInfo()">{{newData.backchannel_logout_uri ? newData.backchannel_logout_uri : "-"}}</label>
+        <label *ngIf="isInfo()">{{newData.backchannel_logout_uri}}</label>
       </div>
       <div class="form-group row">
-        <label class="col-sm-4 col-form-label">Tehniliste teavituste e-mailid.
+        <label class="col-sm-4 col-form-label">Tehniliste teavituste e-mailid
           <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
                     matTooltip="Kontaktaadressid, millele edastatakse üldinfot teenusega seotud uuenduste kohta (versiooniuuendused, protokollimuudatusests jm).">
             help_outline
@@ -342,6 +342,20 @@
           Lisa e-mail
         </button>
       </div>
+      <div class="form-group row" *ngIf="!authService.isSsoMode">
+        <label class="col-sm-4 col-form-label">eIDAS RequesterID
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Klientrakenduse unikaalne identifikaator, mis edastatakse EU eID autentimise puhul välisriigi autentimisteenusele.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8" *ngIf="!isInfo()">
+          <input type="text" class="form-control w-75" name="eidas_requester_id" [(ngModel)]="newData.eidas_requester_id">
+        </div>
+        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+          <label>{{newData.eidas_requester_id}}</label>
+        </div>
+      </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Lisainfo
           <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
@@ -352,7 +366,7 @@
       <textarea *ngIf="!isInfo()" class="col-sm-9" rows="5" [(ngModel)]="_description" name="description">
         </textarea>
         </div>
-        <div *ngIf="isInfo()">{{newData.description ? newData.description : '-'}}</div>
+        <div *ngIf="isInfo()">{{newData.description}}</div>
       </div>
     </div>
     <div *ngIf="newData.scope.includes('smartid') && !authService.isSsoMode" class="mat-dialog-container-content">
@@ -387,7 +401,7 @@
                  class="form-control w-75" name="smartid_relying_party_uuid" [required]="_use_specific_smartid_configuration"
                  [(ngModel)]="_smartid_settings.relying_party_UUID">
           <label *ngIf="isInfo()">
-            {{newData.smartid_settings.relying_party_UUID ? newData.smartid_settings.relying_party_UUID : '-'}}
+            {{newData.smartid_settings.relying_party_UUID}}
           </label>
         </div>
       </div>
@@ -403,7 +417,7 @@
                  [(ngModel)]="_smartid_settings.relying_party_name" [required]="_use_specific_smartid_configuration"
                  [disabled]="!_use_specific_smartid_configuration">
           <label *ngIf="isInfo()">
-            {{newData.smartid_settings.relying_party_name ? newData.smartid_settings.relying_party_name : '-'}}
+            {{newData.smartid_settings.relying_party_name}}
           </label>
         </div>
       </div>
@@ -458,7 +472,7 @@
           <input *ngIf="!isInfo()" type="text" class="form-control w-75" [(ngModel)]="_mid_settings.relying_party_UUID"
                  [disabled]="!_use_specific_mid_configuration" name="mid_relying_party_uuid" [required]="_use_specific_mid_configuration">
           <label *ngIf="isInfo()">
-            {{newData.mid_settings.relying_party_UUID ? newData.mid_settings.relying_party_UUID! : '-'}}
+            {{newData.mid_settings.relying_party_UUID}}
           </label>
         </div>
       </div>
@@ -473,7 +487,7 @@
           <input *ngIf="!isInfo()" type="text" class="form-control w-75" [(ngModel)]="_mid_settings.relying_party_name"
                  [disabled]="!_use_specific_mid_configuration" name="mid_relying_party_name" [required]="_use_specific_mid_configuration">
           <label *ngIf="isInfo()">
-            {{newData.mid_settings.relying_party_name ? newData.mid_settings.relying_party_name! : '-'}}
+            {{newData.mid_settings.relying_party_name}}
           </label>
         </div>
       </div>

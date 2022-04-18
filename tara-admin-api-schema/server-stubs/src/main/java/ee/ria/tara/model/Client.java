@@ -65,6 +65,9 @@ public class Client   {
   @JsonProperty("secret")
   private String secret;
 
+  @JsonProperty("eidas_requester_id")
+  private String eidasRequesterId;
+
   @JsonProperty("description")
   private String description;
 
@@ -318,6 +321,25 @@ public class Client   {
 
   public void setSecret(String secret) {
     this.secret = secret;
+  }
+
+  public Client eidasRequesterId(String eidasRequesterId) {
+    this.eidasRequesterId = eidasRequesterId;
+    return this;
+  }
+
+  /**
+   * Get eidasRequesterId
+   * @return eidasRequesterId
+  */
+  @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 1024) 
+  @Schema(name = "eidas_requester_id", example = "33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f", required = false)
+  public String getEidasRequesterId() {
+    return eidasRequesterId;
+  }
+
+  public void setEidasRequesterId(String eidasRequesterId) {
+    this.eidasRequesterId = eidasRequesterId;
   }
 
   public Client description(String description) {
@@ -591,6 +613,7 @@ public class Client   {
         Objects.equals(this.postLogoutRedirectUris, client.postLogoutRedirectUris) &&
         Objects.equals(this.scope, client.scope) &&
         Objects.equals(this.secret, client.secret) &&
+        Objects.equals(this.eidasRequesterId, client.eidasRequesterId) &&
         Objects.equals(this.description, client.description) &&
         Objects.equals(this.infoNotificationEmails, client.infoNotificationEmails) &&
         Objects.equals(this.slaNotificationEmails, client.slaNotificationEmails) &&
@@ -607,7 +630,7 @@ public class Client   {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, secret, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -624,6 +647,7 @@ public class Client   {
     sb.append("    postLogoutRedirectUris: ").append(toIndentedString(postLogoutRedirectUris)).append("\n");
     sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
     sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
+    sb.append("    eidasRequesterId: ").append(toIndentedString(eidasRequesterId)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    infoNotificationEmails: ").append(toIndentedString(infoNotificationEmails)).append("\n");
     sb.append("    slaNotificationEmails: ").append(toIndentedString(slaNotificationEmails)).append("\n");

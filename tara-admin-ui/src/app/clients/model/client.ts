@@ -16,6 +16,7 @@ export type Client = {
   smartid_settings: ClientSmartIdSettings,
   client_contacts: ClientContact[],
   mid_settings: ClientMidSettings,
+  eidas_requester_id: string | undefined,
   description: string | undefined,
   client_logo: string | undefined,
   backchannel_logout_uri: string | undefined

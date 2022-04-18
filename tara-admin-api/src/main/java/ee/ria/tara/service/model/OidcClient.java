@@ -34,6 +34,9 @@ public class OidcClient {
   @JsonProperty("legacy_return_url")
   private String legacyReturnUrl;
 
+  @JsonProperty("eidas_requester_id")
+  private String eidasRequesterId;
+
   @JsonProperty("institution")
   @NotNull
   private HydraOidcClientInstitution institution;

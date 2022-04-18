@@ -1,0 +1,102 @@
+package ee.ria.tara.service.helper;
+
+import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
+import ee.ria.tara.controllers.exception.InvalidDataException;
+import ee.ria.tara.model.Client;
+import ee.ria.tara.repository.ClientRepository;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.test.context.ActiveProfiles;
+
+import java.util.Arrays;
+
+import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
+import static ee.ria.tara.model.InstitutionType.TypeEnum.PUBLIC;
+import static ee.ria.tara.service.helper.ClientTestHelper.createTestClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.createValidSSOClient;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.Mockito.doReturn;
+
+@ActiveProfiles("test")
+@ExtendWith(MockitoExtension.class)
+public class ClientValidatorTest {
+
+    @Mock
+    private ClientRepository clientRepository;
+    @Mock
+    private AdminConfigurationProvider adminConfigurationProvider;
+
+    @InjectMocks
+    private ClientValidator clientValidator;
+
+    @Test
+    public void validateClient_ssoMode_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        Client client = createValidSSOClient();
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    public void validateClient_taraMode_successfulValidation() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+        Client client = createTestClient();
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    public void validateClient_ssoPrivateInstitution_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidSSOClient();
+        client.setScope(Arrays.asList(
+                "idcard", "mid", "smartid", "openid", "eidas", "eidasonly", "eidas:country:*",
+                "email", "phone", "legalperson", "invalid_value", "unknown_value"));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PRIVATE));
+        Assertions.assertTrue(exception.getMessage().contains("Client.sso.privateInstitution"));
+    }
+
+    @Test
+    public void validateClient_ssoEidasRequesterIdSet_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidSSOClient();
+        client.setEidasRequesterId("Some-value");
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("eIDAS RequesterID must not be set in SSO mode"));
+    }
+
+    @Test
+    public void validateClient_taraEidasRequesterIdMissing_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createTestClient();
+        client.setEidasRequesterId("");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PRIVATE));
+        Assertions.assertTrue(exception.getMessage().contains("Client.eidasRequesterId.missing"));
+    }
+
+    @Test
+    public void validateClient_taraClientAlreadyExistsWithEidasRequesterId_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createTestClient();
+        doReturn(new ee.ria.tara.repository.model.Client())
+                .when(clientRepository)
+                .findByEidasRequesterId(client.getEidasRequesterId());
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PRIVATE));
+        Assertions.assertTrue(exception.getMessage().contains("Client.eidasRequesterId.exists"));
+    }
+}
