@@ -26,8 +26,20 @@ public class ClientValidator {
         if (adminConfProvider.isSsoMode() && institutionType == InstitutionType.TypeEnum.PRIVATE) {
             throw new InvalidDataException("Client.sso.privateInstitution");
         }
+        validateName(client);
         validateRedirectUris(client);
         validateEidasRequesterId(client);
+    }
+
+    private void validateName(Client client) {
+        if (adminConfProvider.isSsoMode()) {
+            if (StringUtils.isBlank(client.getClientName().getEt())) {
+                throw new InvalidDataException("Client.sso.clientName");
+            }
+            if (StringUtils.isBlank(client.getClientShortName().getEt())) {
+                throw new InvalidDataException("Client.sso.clientShortName");
+            }
+        }
     }
 
     private void validateRedirectUris(Client client) {

@@ -3,6 +3,8 @@ package ee.ria.tara.service.helper;
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.model.Client;
+import ee.ria.tara.model.NameTranslations;
+import ee.ria.tara.model.ShortNameTranslations;
 import ee.ria.tara.repository.ClientRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -17,9 +19,8 @@ import java.util.List;
 
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PUBLIC;
-import static ee.ria.tara.service.helper.ClientTestHelper.createValidTARAClient;
 import static ee.ria.tara.service.helper.ClientTestHelper.createValidSSOClient;
-import static org.junit.jupiter.api.Assertions.assertEquals;
+import static ee.ria.tara.service.helper.ClientTestHelper.createValidTARAClient;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
@@ -46,6 +47,41 @@ public class ClientValidatorTest {
     public void validateClient_taraMode_successfulValidation() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
         Client client = createValidTARAClient();
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    public void validateClient_ssoClientNameMissing_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidSSOClient();
+        client.setClientName(new NameTranslations());
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.sso.clientName"));
+    }
+
+    @Test
+    public void validateClient_ssoClientShortNameMissing_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidSSOClient();
+        client.setClientShortName(new ShortNameTranslations());
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.sso.clientShortName"));
+    }
+
+    @Test
+    public void validateClient_taraNameMissing_valid() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidTARAClient();
+        client.setClientName(new NameTranslations());
+        client.setClientShortName(new ShortNameTranslations());
+
         clientValidator.validateClient(client, PUBLIC);
     }
 
