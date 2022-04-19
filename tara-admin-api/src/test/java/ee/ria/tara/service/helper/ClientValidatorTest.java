@@ -13,10 +13,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PUBLIC;
-import static ee.ria.tara.service.helper.ClientTestHelper.createTestClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.createValidTARAClient;
 import static ee.ria.tara.service.helper.ClientTestHelper.createValidSSOClient;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -44,22 +45,92 @@ public class ClientValidatorTest {
     @Test
     public void validateClient_taraMode_successfulValidation() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
-        Client client = createTestClient();
+        Client client = createValidTARAClient();
         clientValidator.validateClient(client, PUBLIC);
     }
 
     @Test
-    public void validateClient_ssoPrivateInstitution_exceptionThrown() {
+    public void validateClient_ssoBackchannelLogoutUriUriMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = createValidSSOClient();
-        client.setScope(Arrays.asList(
-                "idcard", "mid", "smartid", "openid", "eidas", "eidasonly", "eidas:country:*",
-                "email", "phone", "legalperson", "invalid_value", "unknown_value"));
+        client.setBackchannelLogoutUri(null);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
-                () -> clientValidator.validateClient(client, PRIVATE));
-        Assertions.assertTrue(exception.getMessage().contains("Client.sso.privateInstitution"));
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.backchannelUri.missing"));
+    }
+
+    @Test
+    public void validateClient_ssoPostLogoutUriUriMissing_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidSSOClient();
+        client.setPostLogoutRedirectUris(null);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.postLogoutRedirectUri.missing"));
+    }
+
+    @Test
+    public void validateClient_ssoPostLogoutUriUriInvalid_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidSSOClient();
+        client.setPostLogoutRedirectUris(Arrays.asList("invalid.uri¤", "valid-uri.com"));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.postLogoutRedirectUri.missing"));
+    }
+
+    @Test
+    public void validateClient_ssoRedirectUriUriInvalid_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidSSOClient();
+        client.setRedirectUris(Arrays.asList("invalid.uri¤", "valid-uri.com"));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.redirectUri.missing"));
+    }
+
+    @Test
+    public void validateClient_taraPostLogoutRedirectUriPresent_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidTARAClient();
+        client.setPostLogoutRedirectUris(List.of("valid-uri.com"));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Post logout redirect uris must not be set in TARA mode"));
+    }
+
+    @Test
+    public void validateClient_taraBackchannelLogoutUriPresent_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidTARAClient();
+        client.setBackchannelLogoutUri("valid-uri.com");
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Backchannel logout uri must not be set in TARA mode"));
+    }
+
+    @Test
+    public void validateClient_taraRedirectUriUriInvalid_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidTARAClient();
+        client.setRedirectUris(Arrays.asList("invalid.uri¤", "valid-uri.com"));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.redirectUri.missing"));
     }
 
     @Test
@@ -78,7 +149,7 @@ public class ClientValidatorTest {
     public void validateClient_taraEidasRequesterIdMissing_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createTestClient();
+        Client client = createValidTARAClient();
         client.setEidasRequesterId("");
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -90,7 +161,7 @@ public class ClientValidatorTest {
     public void validateClient_taraClientAlreadyExistsWithEidasRequesterId_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createTestClient();
+        Client client = createValidTARAClient();
         doReturn(new ee.ria.tara.repository.model.Client())
                 .when(clientRepository)
                 .findByEidasRequesterId(client.getEidasRequesterId());

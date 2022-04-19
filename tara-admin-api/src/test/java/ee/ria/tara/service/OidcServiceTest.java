@@ -29,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static ee.ria.tara.service.helper.ClientTestHelper.createTestClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.createValidTARAClient;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -58,14 +58,14 @@ public class OidcServiceTest {
 
     @BeforeEach
     public void setUp() {
-        client = createTestClient();
+        client = createValidTARAClient();
 
         ReflectionTestUtils.setField(oidcService, "baseUrl", "http://");
     }
 
     @Test
     public void testGetAllClients() throws ApiException {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(createTestClient(), false);
+        HydraClient hydraClient = ClientHelper.convertToHydraClient(createValidTARAClient(), false);
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
@@ -92,7 +92,7 @@ public class OidcServiceTest {
 
     @Test
     public void testGetAllClientsWithFilter() throws ApiException {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(createTestClient(), false);
+        HydraClient hydraClient = ClientHelper.convertToHydraClient(createValidTARAClient(), false);
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
@@ -129,7 +129,7 @@ public class OidcServiceTest {
 
     @Test
     public void testSaveClient() throws ApiException {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(createTestClient(), false);
+        HydraClient hydraClient = ClientHelper.convertToHydraClient(createValidTARAClient(), false);
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
@@ -144,7 +144,7 @@ public class OidcServiceTest {
 
     @Test
     public void testSaveClientWhenHydraRequestFailsClientError400() {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(createTestClient(), false);
+        HydraClient hydraClient = ClientHelper.convertToHydraClient(createValidTARAClient(), false);
 
         doThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST))
                 .when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(), eq(Object.class));
@@ -157,7 +157,7 @@ public class OidcServiceTest {
 
     @Test
     public void testSaveClientWhenHydraRequestFailsClientError409() {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(createTestClient(), false);
+        HydraClient hydraClient = ClientHelper.convertToHydraClient(createValidTARAClient(), false);
 
         doThrow(new HttpClientErrorException(HttpStatus.valueOf(409)))
                 .when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(), eq(Object.class));
@@ -170,7 +170,7 @@ public class OidcServiceTest {
 
     @Test
     public void testSaveClientWhenHydraRequestFailsServerError() {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(createTestClient(), false);
+        HydraClient hydraClient = ClientHelper.convertToHydraClient(createValidTARAClient(), false);
 
         doThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR))
                 .when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(), eq(Object.class));

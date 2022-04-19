@@ -38,12 +38,14 @@ public class ClientTestHelper {
     }
 
     public static Client createValidSSOClient() {
-        Client client = createTestClient();
+        Client client = createValidTARAClient();
         client.setEidasRequesterId(null);
+        client.setBackchannelLogoutUri("https://localhost:4200");
+        client.setPostLogoutRedirectUris(List.of("https://localhost:4200"));
         return client;
     }
 
-    public static Client createTestClient() {
+    public static Client createValidTARAClient() {
         Client client = new Client();
         NameTranslations nameTranslations = new NameTranslations();
         ShortNameTranslations shortNameTranslations = new ShortNameTranslations();
@@ -65,8 +67,8 @@ public class ClientTestHelper {
         client.setClientUrl("https://localhost:4200");
         client.setInstitutionMetainfo(institutionMetainfo);
         client.setRedirectUris(List.of("https://localhost:4200"));
-        client.setBackchannelLogoutUri("https://localhost:4200");
-        client.setPostLogoutRedirectUris(List.of("https://localhost:4200"));
+        client.setBackchannelLogoutUri(null);
+        client.setPostLogoutRedirectUris(null);
         ClientSecretExportSettings clientSecretExportSettings = new ClientSecretExportSettings();
         clientSecretExportSettings.setRecipientIdCode("10101010005");
         client.setClientSecretExportSettings(clientSecretExportSettings);

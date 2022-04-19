@@ -57,7 +57,7 @@ public class ClientsControllerTest {
         ReflectionTestUtils.setField(errorHandler, "messageSource", messageSource);
         JacksonTester.initFields(this, new ObjectMapper());
 
-        client = ClientTestHelper.createTestClient();
+        client = ClientTestHelper.createValidTARAClient();
 
         mvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(errorHandler)

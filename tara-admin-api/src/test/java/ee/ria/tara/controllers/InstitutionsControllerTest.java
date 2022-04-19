@@ -40,7 +40,6 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.never;
 import static org.mockito.Mockito.nullable;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -80,7 +79,7 @@ public class InstitutionsControllerTest {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        client = ClientTestHelper.createTestClient();
+        client = ClientTestHelper.createValidTARAClient();
         institution = InstitutionTestHelper.createTestInstitution();
 
         JacksonTester.initFields(this, objectMapper);
@@ -123,43 +122,6 @@ public class InstitutionsControllerTest {
     }
 
     @Test
-    public void testAddClientInSsoMode() throws Exception {
-        String registryCode = client.getInstitutionMetainfo().getRegistryCode();
-
-        doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doNothing().when(clientsService).addClientToInstitution(eq(registryCode), any(Client.class));
-
-        MockHttpServletResponse response = mvc.perform(
-                post(String.format("/institutions/%s/clients", registryCode))
-                        .content(jsonClient.write(client).getJson())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse();
-
-        Assertions.assertEquals(200, response.getStatus());
-        verify(clientsService, times(1)).addClientToInstitution(eq(registryCode), any(Client.class));
-    }
-
-    @Test
-    public void testAddClientInSsoModeWithoutPostLogoutRedirectUrisExceptionThrown() throws Exception {
-        String registryCode = client.getInstitutionMetainfo().getRegistryCode();
-        client.setPostLogoutRedirectUris(null);
-
-        doCallRealMethod().when(errorHandler).handleValidationException(any());
-        doReturn(true).when(adminConfigurationProvider).isSsoMode();
-
-        MockHttpServletResponse response = mvc.perform(
-                        post(String.format("/institutions/%s/clients", registryCode))
-                                .content(jsonClient.write(client).getJson())
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse();
-
-        Assertions.assertEquals(400, response.getStatus());
-        verify(clientsService, never()).addClientToInstitution(any(), any());
-    }
-
-    @Test
     public void testUpdateClient() throws Exception {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
         String clientId = client.getClientId();
@@ -175,45 +137,6 @@ public class InstitutionsControllerTest {
 
         Assertions.assertEquals(200, response.getStatus());
         verify(clientsService, times(1)).updateClient(eq(registryCode), eq(clientId), any(Client.class));
-    }
-
-    @Test
-    public void testUpdateClientInSsoMode() throws Exception {
-        String registryCode = client.getInstitutionMetainfo().getRegistryCode();
-        String clientId = client.getClientId();
-
-        doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doNothing().when(clientsService).updateClient(anyString(), anyString(), any(Client.class));
-
-        MockHttpServletResponse response = mvc.perform(
-                put(String.format("/institutions/%s/clients/%s", registryCode, clientId))
-                        .content(jsonClient.write(client).getJson())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse();
-
-        Assertions.assertEquals(200, response.getStatus());
-        verify(clientsService, times(1)).updateClient(eq(registryCode), eq(clientId), any(Client.class));
-    }
-
-    @Test
-    public void testUpdateClientInSsoModeWithoutPostLogoutRedirectUrisExceptionThrown() throws Exception {
-        String registryCode = client.getInstitutionMetainfo().getRegistryCode();
-        String clientId = client.getClientId();
-        client.setPostLogoutRedirectUris(null);
-
-        doCallRealMethod().when(errorHandler).handleValidationException(any());
-        doReturn(true).when(adminConfigurationProvider).isSsoMode();
-
-        MockHttpServletResponse response = mvc.perform(
-                put(String.format("/institutions/%s/clients/%s", registryCode, clientId))
-                        .content(jsonClient.write(client).getJson())
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .accept(MediaType.APPLICATION_JSON))
-                .andReturn().getResponse();
-
-        Assertions.assertEquals(400, response.getStatus());
-        verify(clientsService, never()).updateClient(any(), any(), any());
     }
 
     @Test

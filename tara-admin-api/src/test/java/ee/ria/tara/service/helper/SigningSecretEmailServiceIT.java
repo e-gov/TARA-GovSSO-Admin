@@ -30,7 +30,7 @@ class SigningSecretEmailServiceIT {
     @Test
     @Disabled("TODO AUT-740 Add test certificate")
     void testSendSigningSecretByEmail() throws Exception {
-        Client client = ClientTestHelper.createTestClient();
+        Client client = ClientTestHelper.createValidTARAClient();
         ClientSecretExportSettings clientSecretExportSettings = new ClientSecretExportSettings();
         clientSecretExportSettings.setRecipientEmail(TO);
         clientSecretExportSettings.setRecipientIdCode(ID_CODE);
