@@ -68,7 +68,7 @@ public class ImportClientFromExcelAllFieldsTest {
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
                         "\"post_logout_redirect_uris\": null," +
                         "\"response_types\":[\"code\"]," +
-                        "\"scope\":\"openid mid idcard smartid eidas eidasonly eidas:country:* email phone\"," +
+                        "\"scope\":\"openid eidas eidasonly eidas:country:* idcard mid smartid email phone\"," +
                         "\"subject_type\":\"public\"," +
                         "\"token_endpoint_auth_method\":\"client_secret_basic\"," +
                         "\"backchannel_logout_uri\" : null,\n" +
@@ -81,6 +81,7 @@ public class ImportClientFromExcelAllFieldsTest {
                                 "\"short_name\":\"nimi_et\"," +
                                 "\"short_name_translations\":{\"et\":\"nimi_et\",\"en\":\"name_en\",\"ru\":\"имя_ru\"}," +
                                 "\"legacy_return_url\":\"https://tagasi.ee\"," +
+                                "\"eidas_requester_id\":\"1234\"," +
                                 "\"institution\":{\"registry_code\":\"12345678\",\"sector\":\"public\"}," +
                                 "\"mid_settings\":null," +
                                 "\"smartid_settings\":null," +

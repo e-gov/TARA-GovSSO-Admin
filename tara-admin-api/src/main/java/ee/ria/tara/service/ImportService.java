@@ -105,6 +105,9 @@ public class ImportService {
             institutionMetainfo.setType(type);
             institutionMetainfo.setRegistryCode(institution.getRegistryCode());
 
+            // Why constant type PUBLIC?
+            institution.setType(type);
+
             client.setInstitutionMetainfo(institutionMetainfo);
             client.setClientId(getCellValue(row, 2));
             client.setRedirectUris(Arrays.asList(getCellValue(row, 3)));

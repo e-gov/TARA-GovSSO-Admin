@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import ee.ria.tara.conf.CasExportConfiguration;
 import ee.ria.tara.conf.FileImportConfiguration;
+import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientContact;
 import ee.ria.tara.model.Institution;
@@ -16,6 +17,8 @@ import ee.ria.tara.model.NameTranslations;
 import ee.ria.tara.model.ShortNameTranslations;
 import ee.ria.tara.repository.helper.PropertyFilterMixIn;
 import ee.ria.tara.service.ImportService;
+import ee.ria.tara.service.helper.ClientValidator;
+import ee.ria.tara.service.helper.ScopeFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
@@ -56,7 +59,13 @@ import static org.springframework.util.StringUtils.isEmpty;
 
 @Slf4j
 @EnableAutoConfiguration(exclude = {LiquibaseAutoConfiguration.class, DataSourceAutoConfiguration.class})
-@Import({CasExportConfiguration.class, FileImportConfiguration.class})
+@Import({
+        CasExportConfiguration.class,
+        FileImportConfiguration.class,
+        ClientValidator.class,
+        AdminConfigurationProvider.class,
+        ScopeFilter.class,
+})
 public class ClientUtilsApplication implements CommandLineRunner {
 
     public static final List<String> ALLOWED_PROFILES = List.of("importFromFile", "exportFromCas");
@@ -196,11 +205,13 @@ public class ClientUtilsApplication implements CommandLineRunner {
 
     private Map<Institution, List<Client>> importClientsFromJsonFile(Path path) throws Exception {
         Assert.notNull(fileImportConfigurationProvider, "configuration cannot be null");
-        Institution institution = new Institution();
-        institution.setName(defaultInstitutionName);
-        institution.setRegistryCode(defaultInstitutionCode);
         if (Files.exists(path) && Files.isReadable(path)) {
-            return Map.of(institution, Arrays.asList(mapper.readerFor(Client[].class).with(JsonReadFeature.ALLOW_TRAILING_COMMA).readValue(path.toFile(), Client[].class)));
+            List<Client> clients = Arrays.asList(mapper.readerFor(Client[].class).with(JsonReadFeature.ALLOW_TRAILING_COMMA).readValue(path.toFile(), Client[].class));
+            Institution institution = new Institution();
+            institution.setRegistryCode(clients.get(0).getInstitutionMetainfo().getRegistryCode());
+            institution.setName(clients.get(0).getInstitutionMetainfo().getName());
+            institution.setType(clients.get(0).getInstitutionMetainfo().getType());
+            return Map.of(institution, clients);
         } else {
             throw new IllegalStateException(String.format("File %s does not exist or is not readable!", fileImportConfigurationProvider.getFileName() ));
         }

@@ -68,7 +68,7 @@ public class ImportClientFromJsonFileTest {
                         "  \"redirect_uris\" : [ \"https://back.ee\" ],\n" +
                         "  \"post_logout_redirect_uris\": null," +
                         "  \"response_types\" : [ \"code\" ],\n" +
-                        "  \"scope\" : \"openid idcard mid smartid eidas eidasonly eidas:country:* email phone\",\n" +
+                        "  \"scope\" : \"openid eidas eidasonly eidas:country:* idcard mid smartid email phone\",\n" +
                         "  \"subject_type\" : \"public\",\n" +
                         "  \"token_endpoint_auth_method\" : \"client_secret_basic\",\n" +
                         "  \"backchannel_logout_uri\" : null,\n" +
@@ -89,6 +89,7 @@ public class ImportClientFromJsonFileTest {
                         "        \"ru\" : null\n" +
                         "      },\n" +
                         "      \"legacy_return_url\" : null,\n" +
+                        "      \"eidas_requester_id\" : \"111222333444\",\n" +
                         "      \"institution\" : {\n" +
                         "        \"registry_code\" : \"12345678\",\n" +
                         "        \"sector\" : \"public\"\n" +
