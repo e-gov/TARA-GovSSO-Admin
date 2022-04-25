@@ -119,7 +119,7 @@ export class ClientDialogComponent implements OnInit {
           var base64Index = image.indexOf(';base64,') + ';base64,'.length;
           var base64 = image.substring(base64Index);
 
-          if (!image.includes('image/svg+xml') || file.size > 10000) {
+          if (!image.includes('image/svg+xml') || file.size > 10240) {
               document.getElementById("client-logo-alert").style.visibility = 'visible';
             } else {
               document.getElementById("client-logo-alert").style.visibility = 'hidden';

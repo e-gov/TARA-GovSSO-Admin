@@ -42,6 +42,7 @@ public class ClientTestHelper {
         client.setEidasRequesterId(null);
         client.setBackchannelLogoutUri("https://localhost:4200");
         client.setPostLogoutRedirectUris(List.of("https://localhost:4200"));
+        client.setClientLogo(new byte[10240]);
         return client;
     }
 
@@ -78,6 +79,7 @@ public class ClientTestHelper {
         client.setMidSettings(new ClientMidSettings());
         client.setCreatedAt(OffsetDateTime.now());
         client.setUpdatedAt(OffsetDateTime.now());
+        client.setClientLogo(null);
 
         return client;
     }

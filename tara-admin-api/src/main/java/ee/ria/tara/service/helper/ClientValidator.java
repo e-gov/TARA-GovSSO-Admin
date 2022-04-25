@@ -19,6 +19,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClientValidator {
 
+    private static final int LOGO_ALLOWED_MAX_SIZE_IN_BYTES = 10 * 1024;
+
     private final AdminConfigurationProvider adminConfProvider;
     private final ClientRepository clientRepository;
 
@@ -29,6 +31,7 @@ public class ClientValidator {
         validateName(client);
         validateRedirectUris(client);
         validateEidasRequesterId(client);
+        validateLogo(client.getClientLogo());
     }
 
     private void validateName(Client client) {
@@ -101,8 +104,8 @@ public class ClientValidator {
     }
 
     /*
-        The field has a unique constraint thus this check should not be necessary.
-        But catching that exception is a problem with @Transactional function.
+        Given database field has a unique constraint thus this check should not be necessary,
+        but catching that exception during insertion is a problem with @Transactional function.
         TODO: catch the exception during saving and throw "Client.eidasRequesterId.exists" from there.
      */
     private void validateClientWithEidasRequesterIdDoesNotExist(Client client) {
@@ -111,6 +114,18 @@ public class ClientValidator {
         if (existingClientWithEidasRequesterId != null &&
                 !StringUtils.equals(existingClientWithEidasRequesterId.getClientId(), client.getClientId())) {
             throw new InvalidDataException("Client.eidasRequesterId.exists");
+        }
+    }
+
+    private void validateLogo(byte[] logo) {
+        if (adminConfProvider.isSsoMode()) {
+            if (logo != null && logo.length > LOGO_ALLOWED_MAX_SIZE_IN_BYTES) {
+                throw new InvalidDataException("Client.logo.tooLarge");
+            }
+        } else {
+            if (logo != null) {
+                throw new IllegalStateException("Client logo must not be set in TARA mode");
+            }
         }
     }
 }

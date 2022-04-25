@@ -206,4 +206,28 @@ public class ClientValidatorTest {
                 () -> clientValidator.validateClient(client, PRIVATE));
         Assertions.assertTrue(exception.getMessage().contains("Client.eidasRequesterId.exists"));
     }
+
+    @Test
+    public void validateClient_ssoClientWithTooLargeLogo_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidSSOClient();
+        client.setClientLogo(new byte[10241]);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.logo.tooLarge"));
+    }
+
+    @Test
+    public void validateClient_taraClientWithLogo_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = createValidTARAClient();
+        client.setClientLogo(new byte[10240]);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PRIVATE));
+        Assertions.assertTrue(exception.getMessage().contains("Client logo must not be set in TARA mode"));
+    }
 }
