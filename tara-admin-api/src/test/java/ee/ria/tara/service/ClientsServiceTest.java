@@ -33,7 +33,7 @@ import java.util.List;
 
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 import static ee.ria.tara.service.helper.ClientTestHelper.compareClientWithHydraClient;
-import static ee.ria.tara.service.helper.ClientTestHelper.createValidTARAClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
@@ -88,14 +88,14 @@ public class ClientsServiceTest {
 
     @BeforeEach
     public void setUp() {
-        client = createValidTARAClient();
+        client = validTARAClient();
 
         ReflectionTestUtils.setField(clientsService, "baseUrl", "http://");
     }
 
     @Test
     public void testGetAllClients() throws ApiException {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(createValidTARAClient(), false);
+        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
@@ -124,7 +124,7 @@ public class ClientsServiceTest {
 
     @Test
     public void testGetAllClientsWithFilter() throws ApiException {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(createValidTARAClient(), false);
+        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 

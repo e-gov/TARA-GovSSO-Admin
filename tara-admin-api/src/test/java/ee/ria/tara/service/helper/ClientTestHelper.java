@@ -37,8 +37,8 @@ public class ClientTestHelper {
         Assertions.assertEquals(client.getUpdatedAt(), OffsetDateTime.parse(hydraClient.getUpdatedAt()));
     }
 
-    public static Client createValidSSOClient() {
-        Client client = createValidTARAClient();
+    public static Client validSSOClient() {
+        Client client = validTARAClient();
         client.setEidasRequesterId(null);
         client.setBackchannelLogoutUri("https://localhost:4200");
         client.setPostLogoutRedirectUris(List.of("https://localhost:4200"));
@@ -46,7 +46,7 @@ public class ClientTestHelper {
         return client;
     }
 
-    public static Client createValidTARAClient() {
+    public static Client validTARAClient() {
         Client client = new Client();
         NameTranslations nameTranslations = new NameTranslations();
         ShortNameTranslations shortNameTranslations = new ShortNameTranslations();
@@ -73,7 +73,7 @@ public class ClientTestHelper {
         ClientSecretExportSettings clientSecretExportSettings = new ClientSecretExportSettings();
         clientSecretExportSettings.setRecipientIdCode("10101010005");
         client.setClientSecretExportSettings(clientSecretExportSettings);
-        client.setScope(List.of("mid"));
+        client.setScope(List.of("openid"));
         client.setEidasRequesterId("f75256ee-740d-4427-84ad-0f4b08417259");
         client.setSmartidSettings(new ClientSmartIdSettings());
         client.setMidSettings(new ClientMidSettings());

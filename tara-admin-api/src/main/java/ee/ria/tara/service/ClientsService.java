@@ -136,8 +136,8 @@ public class ClientsService {
      */
     private void saveClient(Client client, String registryCode, String uri, HttpMethod httpMethod) {
         Institution institution = institutionRepository.findInstitutionByRegistryCode(registryCode);
-        clientValidator.validateClient(client, institution.getType());
         client.setScope(scopeFilter.filterInstitutionClientScopes(client.getScope(), institution.getType()));
+        clientValidator.validateClient(client, institution.getType());
         saveClientEntity(ClientHelper.convertToEntity(client, institution));
 
         boolean hashSecret = !adminConfigurationProvider.isSsoMode();

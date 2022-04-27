@@ -3,22 +3,28 @@ package ee.ria.tara.service;
 import ee.ria.tara.model.Alert;
 import ee.ria.tara.repository.AlertRepository;
 import ee.ria.tara.service.helper.AlertHelper;
+import ee.ria.tara.service.helper.AlertValidator;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class AlertsService {
-    private final AlertRepository repository;
 
-    public AlertsService(AlertRepository repository) {
-        this.repository = repository;
-    }
+    private static final List<String> ALLOWED_AUTHENTICATION_METHODS = List.of("idcard", "mid", "smartid", "eidas");
+
+    private final AlertRepository repository;
+    private final AlertValidator alertValidator;
 
     public Alert addAlert(Alert alert) {
+        filterAlertAuthenticationMethods(alert);
+        alertValidator.validateAlert(alert);
         Alert savedAlert = AlertHelper.convertFromEntity(this.saveAlert(alert));
 
         log.info(String.format("Added alert: %s.", alert.getTitle()));
@@ -26,7 +32,16 @@ public class AlertsService {
         return savedAlert;
     }
 
+    private void filterAlertAuthenticationMethods(Alert alert) {
+        List<String> filteredAuthMethods = ALLOWED_AUTHENTICATION_METHODS.stream()
+                .filter(alert.getLoginAlert().getAuthMethods()::contains)
+                .collect(Collectors.toList());
+        alert.getLoginAlert().setAuthMethods(filteredAuthMethods);
+    }
+
     public Alert updateAlert(Alert alert) {
+        filterAlertAuthenticationMethods(alert);
+        alertValidator.validateAlert(alert);
         Alert updatedAlert = AlertHelper.convertFromEntity(this.saveAlert(alert));
 
         log.info(String.format("Updating alert with ID: %s.", alert.getId()));

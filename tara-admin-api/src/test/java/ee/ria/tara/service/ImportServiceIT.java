@@ -39,7 +39,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.reset;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static ee.ria.tara.service.helper.ClientTestHelper.createValidTARAClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static ee.ria.tara.service.helper.ClientTestHelper.createValidPrivateInstitution;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -64,7 +64,7 @@ public class ImportServiceIT {
 
     @BeforeEach
     public void setUp() {
-        client = createValidTARAClient();
+        client = validTARAClient();
         ReflectionTestUtils.setField(importService, "baseUrl", wireMockServer.baseUrl());
     }
 
@@ -169,7 +169,7 @@ public class ImportServiceIT {
         Assertions.assertNotNull(institutionRepository.findInstitutionByRegistryCode(registryCode));
 
         Institution mockInstiution = createValidPrivateInstitution("1234567890", "Test institution & company");
-        Client mockClient = createValidTARAClient();
+        Client mockClient = validTARAClient();
         stubFor(get("/clients/" + mockClient.getClientId()).willReturn(ok()));
         stubFor(put("/clients/" + mockClient.getClientId()).willReturn(ok()));
 

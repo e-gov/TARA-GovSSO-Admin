@@ -2,7 +2,6 @@ package ee.ria.tara.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.controllers.handler.ErrorHandler;
 import ee.ria.tara.model.Alert;
 import ee.ria.tara.model.EmailAlert;
@@ -38,7 +37,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
-
 @ExtendWith(MockitoExtension.class)
 public class AlertsControllerTest {
     private MockMvc mvc;
@@ -53,8 +51,6 @@ public class AlertsControllerTest {
     private HttpServletRequest request;
     @Mock
     private AlertsService service;
-    @Mock
-    private AdminConfigurationProvider adminConfigurationProvider;
 
     @InjectMocks
     private AlertsController controller;

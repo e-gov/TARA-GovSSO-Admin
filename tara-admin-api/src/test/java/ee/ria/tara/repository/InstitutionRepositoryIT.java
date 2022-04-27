@@ -157,7 +157,7 @@ public class InstitutionRepositoryIT {
     public void testUpdateInstitutionWhenConnectedClient() {
         String newRegistryCode = "newRegistryCode";
 
-        Client client = ClientTestHelper.createValidTARAClient();
+        Client client = ClientTestHelper.validTARAClient();
         Institution institution = repository.findAllByRegistryCodeContainingIgnoreCaseOrNameContainingIgnoreCase(institutionName, institutionName).get(0);
 
         clientRepository.save(ClientHelper.convertToEntity(client, institution));

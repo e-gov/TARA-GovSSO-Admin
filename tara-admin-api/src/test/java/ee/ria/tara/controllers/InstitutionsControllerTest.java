@@ -79,7 +79,7 @@ public class InstitutionsControllerTest {
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
-        client = ClientTestHelper.createValidTARAClient();
+        client = ClientTestHelper.validTARAClient();
         institution = InstitutionTestHelper.createTestInstitution();
 
         JacksonTester.initFields(this, objectMapper);

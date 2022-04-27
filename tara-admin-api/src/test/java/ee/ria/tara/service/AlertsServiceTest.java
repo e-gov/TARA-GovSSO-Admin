@@ -1,11 +1,12 @@
 package ee.ria.tara.service;
 
+import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.model.Alert;
-import ee.ria.tara.model.EmailAlert;
-import ee.ria.tara.model.LoginAlert;
 import ee.ria.tara.model.MessageTemplate;
 import ee.ria.tara.repository.AlertRepository;
 import ee.ria.tara.service.helper.AlertHelper;
+import ee.ria.tara.service.helper.AlertValidator;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -13,40 +14,34 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
-import java.time.OffsetDateTime;
 import java.util.List;
 
+import static ee.ria.tara.service.helper.AlertTestHelper.validSSOAlert;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doReturn;
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
 import static org.mockito.internal.verification.VerificationModeFactory.times;
 
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class AlertsServiceTest {
-    @Mock
-    private LoginAlert loginAlert;
-
-    @Mock
-    private EmailAlert emailAlert;
-
-    @Mock
-    private MessageTemplate messageTemplate;
-
-    @Mock
-    private Alert alert;
 
     @Mock
     private AlertRepository repository;
+
+    @Mock
+    private AlertValidator alertValidator;
 
     @InjectMocks
     private AlertsService service;
 
     @Test
     public void testGetAllAlerts() {
-        mockAlert();
+        Alert alert = validSSOAlert();
 
         doReturn(List.of(AlertHelper.convertToEntity(alert))).when(repository).findAll();
 
@@ -58,7 +53,7 @@ public class AlertsServiceTest {
 
     @Test
     public void testAddAlert() {
-        mockAlert();
+        Alert alert = validSSOAlert();
 
         doReturn(AlertHelper.convertToEntity(alert)).when(repository).save(any());
 
@@ -68,10 +63,23 @@ public class AlertsServiceTest {
         this.compare(alert, entity);
     }
 
+    @Test
+    public void testAddAlert_validationFails_exceptionThrown() {
+        Alert alert = validSSOAlert();
+
+        String errorMessage = "Validation failed";
+        doThrow(new InvalidDataException(errorMessage)).when(alertValidator).validateAlert(alert);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> service.addAlert(alert));
+
+        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
+        verify(repository, times(0)).save(any());
+    }
 
     @Test
     public void testUpdateAlert() {
-        mockAlert();
+        Alert alert = validSSOAlert();
 
         doReturn(AlertHelper.convertToEntity(alert)).when(repository).save(any());
 
@@ -81,16 +89,11 @@ public class AlertsServiceTest {
         this.compare(alert, entity);
     }
 
-
     @Test
     public void testDeleteAlert() {
-        String id = "1";
-
-        doReturn(id).when(alert).getId();
-
+        Alert alert = validSSOAlert();
         service.deleteAlert(alert.getId());
-
-        verify(repository, times(1)).deleteById(Long.valueOf(id));
+        verify(repository, times(1)).deleteById(Long.valueOf(alert.getId()));
     }
 
     private void compare(Alert initial, Alert retrieved) {
@@ -132,25 +135,6 @@ public class AlertsServiceTest {
         assertEquals(initialLoginAlertMessage, retrievedLoginAlertMessage);
         assertEquals(initial.getLoginAlert().getEnabled(), retrieved.getLoginAlert().getEnabled());
         assertEquals(initial.getLoginAlert().getAuthMethods(), retrieved.getLoginAlert().getAuthMethods());
-    }
-
-    private void mockAlert() {
-        doReturn(OffsetDateTime.now()).when(alert).getCreatedAt();
-        doReturn(OffsetDateTime.now()).when(alert).getUpdatedAt();
-        doReturn(OffsetDateTime.now()).when(alert).getStartTime();
-        doReturn(OffsetDateTime.now()).when(alert).getEndTime();
-        doReturn(OffsetDateTime.now()).when(emailAlert).getSendAt();
-
-        doReturn("et").when(messageTemplate).getLocale();
-        doReturn("message").when(messageTemplate).getMessage();
-        doReturn(List.of(messageTemplate)).when(emailAlert).getMessageTemplates();
-        doReturn(List.of(messageTemplate)).when(loginAlert).getMessageTemplates();
-
-        doReturn("1").when(alert).getId();
-        doReturn(List.of("123")).when(loginAlert).getAuthMethods();
-
-        doReturn(emailAlert).when(alert).getEmailAlert();
-        doReturn(loginAlert).when(alert).getLoginAlert();
     }
 }
 

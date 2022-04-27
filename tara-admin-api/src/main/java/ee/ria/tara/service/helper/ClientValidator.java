@@ -29,6 +29,7 @@ public class ClientValidator {
             throw new InvalidDataException("Client.sso.privateInstitution");
         }
         validateName(client);
+        validateScopes(client);
         validateRedirectUris(client);
         validateEidasRequesterId(client);
         validateLogo(client.getClientLogo());
@@ -42,6 +43,12 @@ public class ClientValidator {
             if (StringUtils.isBlank(client.getClientShortName().getEt())) {
                 throw new InvalidDataException("Client.sso.clientShortName");
             }
+        }
+    }
+
+    private void validateScopes(Client client) {
+        if (CollectionUtils.isEmpty(client.getScope())) {
+            throw new InvalidDataException("Client.scope.missing");
         }
     }
 

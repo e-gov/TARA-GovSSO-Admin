@@ -15,12 +15,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PUBLIC;
-import static ee.ria.tara.service.helper.ClientTestHelper.createValidSSOClient;
-import static ee.ria.tara.service.helper.ClientTestHelper.createValidTARAClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.validSSOClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
@@ -39,14 +40,14 @@ public class ClientValidatorTest {
     @Test
     public void validateClient_ssoMode_successfulValidation() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        Client client = createValidSSOClient();
+        Client client = validSSOClient();
         clientValidator.validateClient(client, PUBLIC);
     }
 
     @Test
     public void validateClient_taraMode_successfulValidation() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
-        Client client = createValidTARAClient();
+        Client client = validTARAClient();
         clientValidator.validateClient(client, PUBLIC);
     }
 
@@ -54,7 +55,7 @@ public class ClientValidatorTest {
     public void validateClient_ssoClientNameMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidSSOClient();
+        Client client = validSSOClient();
         client.setClientName(new NameTranslations());
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -66,7 +67,7 @@ public class ClientValidatorTest {
     public void validateClient_ssoClientShortNameMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidSSOClient();
+        Client client = validSSOClient();
         client.setClientShortName(new ShortNameTranslations());
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -78,7 +79,7 @@ public class ClientValidatorTest {
     public void validateClient_taraNameMissing_valid() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidTARAClient();
+        Client client = validTARAClient();
         client.setClientName(new NameTranslations());
         client.setClientShortName(new ShortNameTranslations());
 
@@ -89,7 +90,7 @@ public class ClientValidatorTest {
     public void validateClient_ssoBackchannelLogoutUriUriMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidSSOClient();
+        Client client = validSSOClient();
         client.setBackchannelLogoutUri(null);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -98,10 +99,34 @@ public class ClientValidatorTest {
     }
 
     @Test
+    public void validateClient_ssoScopeMissing_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setScope(Collections.emptyList());
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.scope.missing"));
+    }
+
+    @Test
+    public void validateClient_taraScopeMissing_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setScope(Collections.emptyList());
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.scope.missing"));
+    }
+
+    @Test
     public void validateClient_ssoPostLogoutUriUriMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidSSOClient();
+        Client client = validSSOClient();
         client.setPostLogoutRedirectUris(null);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -113,7 +138,7 @@ public class ClientValidatorTest {
     public void validateClient_ssoPostLogoutUriUriInvalid_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidSSOClient();
+        Client client = validSSOClient();
         client.setPostLogoutRedirectUris(Arrays.asList("invalid.uri¤", "valid-uri.com"));
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -125,7 +150,7 @@ public class ClientValidatorTest {
     public void validateClient_ssoRedirectUriUriInvalid_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidSSOClient();
+        Client client = validSSOClient();
         client.setRedirectUris(Arrays.asList("invalid.uri¤", "valid-uri.com"));
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -137,7 +162,7 @@ public class ClientValidatorTest {
     public void validateClient_taraPostLogoutRedirectUriPresent_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidTARAClient();
+        Client client = validTARAClient();
         client.setPostLogoutRedirectUris(List.of("valid-uri.com"));
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
@@ -149,7 +174,7 @@ public class ClientValidatorTest {
     public void validateClient_taraBackchannelLogoutUriPresent_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidTARAClient();
+        Client client = validTARAClient();
         client.setBackchannelLogoutUri("valid-uri.com");
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
@@ -161,7 +186,7 @@ public class ClientValidatorTest {
     public void validateClient_taraRedirectUriUriInvalid_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidTARAClient();
+        Client client = validTARAClient();
         client.setRedirectUris(Arrays.asList("invalid.uri¤", "valid-uri.com"));
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -173,7 +198,7 @@ public class ClientValidatorTest {
     public void validateClient_ssoEidasRequesterIdSet_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidSSOClient();
+        Client client = validSSOClient();
         client.setEidasRequesterId("Some-value");
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
@@ -185,7 +210,7 @@ public class ClientValidatorTest {
     public void validateClient_taraEidasRequesterIdMissing_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidTARAClient();
+        Client client = validTARAClient();
         client.setEidasRequesterId("");
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -197,7 +222,7 @@ public class ClientValidatorTest {
     public void validateClient_taraClientAlreadyExistsWithEidasRequesterId_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidTARAClient();
+        Client client = validTARAClient();
         doReturn(new ee.ria.tara.repository.model.Client())
                 .when(clientRepository)
                 .findByEidasRequesterId(client.getEidasRequesterId());
@@ -211,7 +236,7 @@ public class ClientValidatorTest {
     public void validateClient_ssoClientWithTooLargeLogo_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidSSOClient();
+        Client client = validSSOClient();
         client.setClientLogo(new byte[10241]);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -223,7 +248,7 @@ public class ClientValidatorTest {
     public void validateClient_taraClientWithLogo_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = createValidTARAClient();
+        Client client = validTARAClient();
         client.setClientLogo(new byte[10240]);
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,

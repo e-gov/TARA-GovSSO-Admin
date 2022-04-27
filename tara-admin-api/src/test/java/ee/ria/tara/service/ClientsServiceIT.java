@@ -37,7 +37,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.reset;
 import static com.github.tomakehurst.wiremock.client.WireMock.serverError;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static ee.ria.tara.service.helper.ClientTestHelper.createValidTARAClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -62,7 +62,7 @@ public class ClientsServiceIT {
 
     @BeforeEach
     public void setUp() {
-        client = createValidTARAClient();
+        client = validTARAClient();
 
         ReflectionTestUtils.setField(service, "baseUrl", wireMockServer.baseUrl());
         ReflectionTestUtils.setField(oidcService, "baseUrl", wireMockServer.baseUrl());

@@ -182,8 +182,8 @@ public class ImportService {
         log.info("Importing client: " + mapper.writer().writeValueAsString(client));
         String uri = String.format("%s/clients", baseUrl);
 
-        clientValidator.validateClient(client, institution.getType().getType());
         client.setScope(scopeFilter.filterInstitutionClientScopes(client.getScope(), institution.getType().getType()));
+        clientValidator.validateClient(client, institution.getType().getType());
 
         try {
 
