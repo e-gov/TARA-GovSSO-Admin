@@ -39,8 +39,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.reset;
 import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
-import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static ee.ria.tara.service.helper.ClientTestHelper.createValidPrivateInstitution;
+import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
