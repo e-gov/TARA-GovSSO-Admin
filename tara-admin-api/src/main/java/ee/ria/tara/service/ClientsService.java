@@ -146,9 +146,10 @@ public class ClientsService {
 
         if (shouldGenerateNewSecret(client)) {
             assertValidIdCode(client.getClientSecretExportSettings());
+            String newSecret = SecureRandomAlphaNumericStringGenerator.INSTANCE.generate(SIGNING_SECRET_LENGTH);
+            client.setSecret(newSecret);
             clientSecretEmailService.sendSigningSecretByEmail(client);
 
-            String newSecret = SecureRandomAlphaNumericStringGenerator.INSTANCE.generate(SIGNING_SECRET_LENGTH);
             hydraClient.setClientSecret(hashSecret ? ClientHelper.getDigest(newSecret) : newSecret);
             oidcService.saveClient(hydraClient, uri, httpMethod);
         }
