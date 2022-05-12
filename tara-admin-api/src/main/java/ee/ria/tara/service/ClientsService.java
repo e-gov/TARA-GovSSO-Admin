@@ -151,7 +151,8 @@ public class ClientsService {
             clientSecretEmailService.sendSigningSecretByEmail(client);
 
             hydraClient.setClientSecret(hashSecret ? ClientHelper.getDigest(newSecret) : newSecret);
-            oidcService.saveClient(hydraClient, uri, httpMethod);
+            String putRequestUri = String.format("%s/clients/%s", baseUrl, client.getClientId());
+            oidcService.saveClient(hydraClient, putRequestUri, HttpMethod.PUT);
         }
     }
 
