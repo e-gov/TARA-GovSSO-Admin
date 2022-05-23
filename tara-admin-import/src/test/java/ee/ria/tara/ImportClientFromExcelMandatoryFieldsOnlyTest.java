@@ -80,7 +80,7 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                                 "\"name_translations\":{\"et\":null,\"en\":null,\"ru\":null}," +
                                 "\"short_name\":null,\"short_name_translations\":{\"et\":null,\"en\":null,\"ru\":null}," +
                                 "\"legacy_return_url\":null," +
-                                "\"eidas_requester_id\":\"1234\"," +
+                                "\"eidas_requester_id\":\"urn:uuid:59999382-daa6-11ec-b3dd-8396fd413a71\"," +
                                 "\"institution\":{\"registry_code\":\"12345678\",\"sector\":\"public\"}," +
                                 "\"mid_settings\":null," +
                                 "\"smartid_settings\":null," +

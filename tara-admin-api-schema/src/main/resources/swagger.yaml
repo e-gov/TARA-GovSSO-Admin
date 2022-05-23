@@ -669,10 +669,12 @@ components:
           type: string
         eidas_requester_id:
           type: string
-          minLength: 3
           maxLength: 1024
-          pattern: ^(?!\s*$).+
-          example: 33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f
+          # Must begin with a letter, followed by any combination of letters, digits, plus (+), period (.), or
+          # hyphen (-) signs, followed by a colon, followed by anything.
+          # If the string begins with "urn:uuid:", then it needs to be followed by a valid UUID.
+          pattern: ^((?!urn:uuid:)[a-zA-Z][a-zA-Z0-9+.-]*:.*|urn:uuid:[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$
+          example: urn:uuid:33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f
         description:
           type: string
           minLength: 3

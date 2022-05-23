@@ -332,8 +332,8 @@ public class Client   {
    * Get eidasRequesterId
    * @return eidasRequesterId
   */
-  @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 1024) 
-  @Schema(name = "eidas_requester_id", example = "33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f", required = false)
+  @Pattern(regexp = "^((?!urn:uuid:)[a-zA-Z][a-zA-Z0-9+.-]*:.*|urn:uuid:[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$") @Size(max = 1024) 
+  @Schema(name = "eidas_requester_id", example = "urn:uuid:33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f", required = false)
   public String getEidasRequesterId() {
     return eidasRequesterId;
   }

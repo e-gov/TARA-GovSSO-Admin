@@ -33,6 +33,6 @@
     },
     "client_id": "mock_client_id",
     "secret": "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b",
-    "eidas_requester_id": "111222333444"
+    "eidas_requester_id": "urn:uuid:59999382-daa6-11ec-b3dd-8396fd413a71"
   }
 ]

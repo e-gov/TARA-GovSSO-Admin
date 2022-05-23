@@ -137,7 +137,7 @@ export class ClientsComponent implements OnInit {
         relying_party_name: undefined,
       },
       client_contacts: [],
-      eidas_requester_id: this.authService.isSsoMode ? undefined : crypto.randomUUID(),
+      eidas_requester_id: this.authService.isSsoMode ? undefined : "urn:uuid:" + crypto.randomUUID(),
       description: undefined,
       client_logo: undefined
     };

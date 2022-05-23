@@ -74,7 +74,7 @@ public class ClientTestHelper {
         clientSecretExportSettings.setRecipientIdCode("10101010005");
         client.setClientSecretExportSettings(clientSecretExportSettings);
         client.setScope(List.of("openid"));
-        client.setEidasRequesterId("f75256ee-740d-4427-84ad-0f4b08417259");
+        client.setEidasRequesterId("urn:uuid:f75256ee-740d-4427-84ad-0f4b08417259");
         client.setSmartidSettings(new ClientSmartIdSettings());
         client.setMidSettings(new ClientMidSettings());
         client.setCreatedAt(OffsetDateTime.now());

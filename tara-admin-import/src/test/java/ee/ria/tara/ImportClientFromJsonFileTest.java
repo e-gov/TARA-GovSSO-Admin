@@ -89,7 +89,7 @@ public class ImportClientFromJsonFileTest {
                         "        \"ru\" : null\n" +
                         "      },\n" +
                         "      \"legacy_return_url\" : null,\n" +
-                        "      \"eidas_requester_id\" : \"111222333444\",\n" +
+                        "      \"eidas_requester_id\" : \"urn:uuid:59999382-daa6-11ec-b3dd-8396fd413a71\",\n" +
                         "      \"institution\" : {\n" +
                         "        \"registry_code\" : \"12345678\",\n" +
                         "        \"sector\" : \"public\"\n" +

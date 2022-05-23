@@ -81,7 +81,7 @@ public class ImportClientFromExcelAllFieldsTest {
                                 "\"short_name\":\"nimi_et\"," +
                                 "\"short_name_translations\":{\"et\":\"nimi_et\",\"en\":\"name_en\",\"ru\":\"имя_ru\"}," +
                                 "\"legacy_return_url\":\"https://tagasi.ee\"," +
-                                "\"eidas_requester_id\":\"1234\"," +
+                                "\"eidas_requester_id\":\"urn:uuid:576daff2-daa7-11ec-9aca-9fe50333be49\"," +
                                 "\"institution\":{\"registry_code\":\"12345678\",\"sector\":\"public\"}," +
                                 "\"mid_settings\":null," +
                                 "\"smartid_settings\":null," +
