@@ -208,7 +208,7 @@ public class ImportService {
 
             ee.ria.tara.repository.model.Client clientEntity = ClientHelper.convertToEntity(client, dbInstitution);
             clientRepository.save(clientEntity);
-            log.info(String.format("Client with client_id: '%s' added", clientEntity.getClientId()));
+            log.info("Client added: " + clientEntity);
         } catch (Exception e) {
             throw new IllegalStateException("Something went wrong while saving to admin-service database: " + e.getMessage(), e);
         }

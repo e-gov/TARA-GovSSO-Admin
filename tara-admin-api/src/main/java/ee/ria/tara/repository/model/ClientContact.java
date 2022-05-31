@@ -2,6 +2,7 @@ package ee.ria.tara.repository.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
@@ -20,6 +21,7 @@ import java.time.OffsetDateTime;
 public class ClientContact {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "client_id", referencedColumnName = "id" , nullable = false, updatable = false)
+    @ToString.Exclude
     private Client client;
 
     @Id

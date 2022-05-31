@@ -111,7 +111,7 @@ public class ClientsService {
 
     private void saveClientEntity(ee.ria.tara.repository.model.Client client) {
         try {
-            log.info("Saving client with client_id: " + client.getClientId());
+            log.info("Saving client: " + client);
             clientRepository.save(client);
         } catch (DataIntegrityViolationException ex) {
             log.error(String.format("Failed to save client: %s.", client.getClientId()), ex);
