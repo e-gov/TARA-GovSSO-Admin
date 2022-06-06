@@ -82,6 +82,10 @@ public class Client {
   @JsonProperty("is_user_consent_required")
   private Boolean isUserConsentRequired;
 
+  @JsonProperty("skip_user_consent_client_ids")
+  @Valid
+  private List<String> skipUserConsentClientIds = null;
+
   @JsonProperty("client_url")
   private String clientUrl;
 
@@ -434,6 +438,33 @@ public class Client {
     this.isUserConsentRequired = isUserConsentRequired;
   }
 
+  public Client skipUserConsentClientIds(List<String> skipUserConsentClientIds) {
+    this.skipUserConsentClientIds = skipUserConsentClientIds;
+    return this;
+  }
+
+  public Client addSkipUserConsentClientIdsItem(String skipUserConsentClientIdsItem) {
+    if (this.skipUserConsentClientIds == null) {
+      this.skipUserConsentClientIds = new ArrayList<>();
+    }
+    this.skipUserConsentClientIds.add(skipUserConsentClientIdsItem);
+    return this;
+  }
+
+  /**
+   * Get skipUserConsentClientIds
+   * @return skipUserConsentClientIds
+  */
+  
+  @Schema(name = "skip_user_consent_client_ids", required = false)
+  public List<String> getSkipUserConsentClientIds() {
+    return skipUserConsentClientIds;
+  }
+
+  public void setSkipUserConsentClientIds(List<String> skipUserConsentClientIds) {
+    this.skipUserConsentClientIds = skipUserConsentClientIds;
+  }
+
   public Client clientUrl(String clientUrl) {
     this.clientUrl = clientUrl;
     return this;
@@ -618,6 +649,7 @@ public class Client {
         Objects.equals(this.infoNotificationEmails, client.infoNotificationEmails) &&
         Objects.equals(this.slaNotificationEmails, client.slaNotificationEmails) &&
         Objects.equals(this.isUserConsentRequired, client.isUserConsentRequired) &&
+        Objects.equals(this.skipUserConsentClientIds, client.skipUserConsentClientIds) &&
         Objects.equals(this.clientUrl, client.clientUrl) &&
         Objects.equals(this.backchannelLogoutUri, client.backchannelLogoutUri) &&
         Objects.equals(this.midSettings, client.midSettings) &&
@@ -630,7 +662,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -652,6 +684,7 @@ public class Client {
     sb.append("    infoNotificationEmails: ").append(toIndentedString(infoNotificationEmails)).append("\n");
     sb.append("    slaNotificationEmails: ").append(toIndentedString(slaNotificationEmails)).append("\n");
     sb.append("    isUserConsentRequired: ").append(toIndentedString(isUserConsentRequired)).append("\n");
+    sb.append("    skipUserConsentClientIds: ").append(toIndentedString(skipUserConsentClientIds)).append("\n");
     sb.append("    clientUrl: ").append(toIndentedString(clientUrl)).append("\n");
     sb.append("    backchannelLogoutUri: ").append(toIndentedString(backchannelLogoutUri)).append("\n");
     sb.append("    midSettings: ").append(toIndentedString(midSettings)).append("\n");

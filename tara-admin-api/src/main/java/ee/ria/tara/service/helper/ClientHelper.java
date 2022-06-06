@@ -25,6 +25,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 public class ClientHelper {
@@ -83,6 +84,7 @@ public class ClientHelper {
         client.setBackchannelLogoutUri(hydraClient.getBackchannelLogoutUri());
         client.setClientLogo(hydraClient.getMetadata().getOidcClient().getLogo());
         client.setEidasRequesterId(hydraClient.getMetadata().getOidcClient().getEidasRequesterId());
+        client.setSkipUserConsentClientIds(hydraClient.getMetadata().getSkipUserConsentClientIds());
 
         client.setIsUserConsentRequired(hydraClient.getMetadata().getDisplayUserConsent());
         client.setClientUrl(getOidcClientLegacyReturnUrl(hydraClient));
@@ -113,6 +115,7 @@ public class ClientHelper {
 
         metadata.setDisplayUserConsent(client.getIsUserConsentRequired());
         metadata.setOidcClient(oidcClient);
+        metadata.setSkipUserConsentClientIds(client.getSkipUserConsentClientIds() != null ? getDistinctSkipUserConsentClientIds(client) : null);
 
         hydraClient.setClientId(client.getClientId());
         // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.
@@ -214,6 +217,12 @@ public class ClientHelper {
 
     private static String getOidcClientLegacyReturnUrl(HydraClient hydraClient) {
         return hydraClient.getMetadata().getOidcClient().getLegacyReturnUrl();
+    }
+
+    private static List<String> getDistinctSkipUserConsentClientIds(Client client) {
+        return client.getSkipUserConsentClientIds().stream()
+                .distinct()
+                .collect(Collectors.toList());
     }
 
     @SneakyThrows

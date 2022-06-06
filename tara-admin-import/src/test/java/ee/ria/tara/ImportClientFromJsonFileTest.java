@@ -75,6 +75,7 @@ public class ImportClientFromJsonFileTest {
                         "  \"backchannel_logout_session_required\" : true,\n" +
                         "  \"metadata\" : {\n" +
                         "    \"display_user_consent\" : false,\n" +
+                        "    \"skip_user_consent_client_ids\" : null,\n" +
                         "    \"oidc_client\" : {\n" +
                         "      \"name\" : \"name_et\",\n" +
                         "      \"name_translations\" : {\n" +

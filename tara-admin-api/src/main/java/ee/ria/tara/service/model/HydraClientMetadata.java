@@ -7,6 +7,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import javax.validation.constraints.NotNull;
+import java.util.List;
 
 @Setter
 @Getter
@@ -16,6 +17,10 @@ public class HydraClientMetadata   {
   @JsonProperty("display_user_consent")
   @NotNull
   private Boolean displayUserConsent;
+
+  @JsonProperty("skip_user_consent_client_ids")
+  @NotNull
+  private List<String> skipUserConsentClientIds;
 
   @JsonProperty("oidc_client")
   @NotNull

@@ -760,6 +760,9 @@ components:
           type:
             type: public
           registry_code: "12345678"
+        skip_user_consent_client_ids:
+        - openIdDemo
+        - openIdDemo
         smartid_settings:
           should_use_additional_verification_code_check: true
           relying_party_name: relying_party_name
@@ -878,6 +881,11 @@ components:
         is_user_consent_required:
           example: false
           type: boolean
+        skip_user_consent_client_ids:
+          items:
+            example: openIdDemo
+            type: string
+          type: array
         client_url:
           example: https://client.example.com/
           format: url

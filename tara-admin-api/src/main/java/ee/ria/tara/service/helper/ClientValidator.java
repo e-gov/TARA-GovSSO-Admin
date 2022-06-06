@@ -14,6 +14,9 @@ import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +36,24 @@ public class ClientValidator {
         validateRedirectUris(client);
         validateEidasRequesterId(client);
         validateLogo(client.getClientLogo());
+        if (client.getSkipUserConsentClientIds() != null) {
+            validateSkipUserConsentClients(client.getSkipUserConsentClientIds(), client.getClientId());
+        }
+    }
+
+    private void validateSkipUserConsentClients(List<String> skipUserConsentClientIds, String currentClientId) {
+        Set<String> existingClientIds = clientRepository.findAll()
+                .stream()
+                .map(client -> client.getClientId())
+                .collect(Collectors.toUnmodifiableSet());
+        if (skipUserConsentClientIds.contains(currentClientId)) {
+            throw new InvalidDataException("Client.skipUserConsent.clients.invalid");
+        }
+        for (String skipUserConsentClientId : skipUserConsentClientIds) {
+            if (!existingClientIds.contains(skipUserConsentClientId)) {
+                throw new InvalidDataException("Client.skipUserConsent.clients.missing");
+            }
+        }
     }
 
     private void validateName(Client client) {

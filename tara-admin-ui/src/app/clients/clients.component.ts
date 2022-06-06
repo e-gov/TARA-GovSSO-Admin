@@ -120,7 +120,7 @@ export class ClientsComponent implements OnInit {
       redirect_uris: [],
       post_logout_redirect_uris: [],
       scope: scopes,
-      is_user_consent_required: false,
+      is_user_consent_required: true,
       client_url: undefined,
       backchannel_logout_uri: undefined,
       info_notification_emails: [],
@@ -139,7 +139,8 @@ export class ClientsComponent implements OnInit {
       client_contacts: [],
       eidas_requester_id: this.authService.isSsoMode ? undefined : "urn:uuid:" + crypto.randomUUID(),
       description: undefined,
-      client_logo: undefined
+      client_logo: undefined,
+      skip_user_consent_client_ids: undefined
     };
 
     this.openClientDialog(data, "ADD");

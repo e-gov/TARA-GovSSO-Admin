@@ -143,7 +143,6 @@
               <img [src]="clientLogoDataUri" style="max-width:250px; max-height:250px">
             </div>
           </div>
-
         </div>
 
       <div class="form-group row">
@@ -275,6 +274,32 @@
           </div>
         </div>
       </form>
+
+      <div class="form-group row" *ngIf="authService.isSsoMode">
+        <label class="col-sm-4 col-form-label">Klientrakenduste ID-d, mille seansis olemasolu korral nõusolekut mitte küsida
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Klientrakenduse ID-d on saadaval klientrakenduste nimekirjas. Rakendub ainult siis, kui kasutajalt isikuandmete väljastamise nõusoleku küsimine on sisse lülitatud.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-6">
+          <div *ngFor="let item of newData.skip_user_consent_client_ids!" class="d-block">
+            <div class="form-group row col-sm-8 d-inline">
+              {{item}}
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="removeConsentClient(item)">
+                <mat-icon class="ml-1 float-right">close</mat-icon>
+              </button>
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="openEditConsentClientDialog(item)">Muuda
+              </button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button *ngIf="!isInfo()" type="button" class="btn-link ml-0" (click)="openConsentClientDialog()">Lisa ID
+          </button>
+        </div>
+      </div>
+
       <div class="form-group row" *ngIf="!authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Klientrakenduse URL
           <mat-icon inline class="material-icons ml-3" style="font-size: 20px"

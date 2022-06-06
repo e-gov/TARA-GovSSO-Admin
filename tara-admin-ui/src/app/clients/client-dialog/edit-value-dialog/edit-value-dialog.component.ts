@@ -22,11 +22,11 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 })
 export class EditValueDialogComponent implements OnInit {
   @ViewChild('input', {static: true}) input: any;
-  oldUrl: string;
+  oldValue: string;
 
   constructor(public dialog: MatDialogRef<EditValueDialogComponent>,
-              @Inject(MAT_DIALOG_DATA) public data: { title: string, url: string }) {
-    this.oldUrl = data.url
+              @Inject(MAT_DIALOG_DATA) public data: { title: string, value: string }) {
+    this.oldValue = data.value
   }
 
   ngOnInit(): void {
@@ -37,7 +37,7 @@ export class EditValueDialogComponent implements OnInit {
   }
 
   save() {
-    this.dialog.close({newUrl: this.data.url, oldUrl: this.oldUrl})
+    this.dialog.close({newValue: this.data.value, oldValue: this.oldValue})
   }
 
   cancel() {

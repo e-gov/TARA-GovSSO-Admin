@@ -14,6 +14,7 @@ export type Client = {
   created_at: string | undefined,
   updated_at: string | undefined,
   smartid_settings: ClientSmartIdSettings,
+  skip_user_consent_client_ids: string[],
   client_contacts: ClientContact[],
   mid_settings: ClientMidSettings,
   eidas_requester_id: string | undefined,

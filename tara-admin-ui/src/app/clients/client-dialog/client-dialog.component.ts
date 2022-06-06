@@ -164,6 +164,22 @@ export class ClientDialogComponent implements OnInit {
       });
     }
 
+    openConsentClientDialog(): void {
+        const dialogRef = this.dialog.open(AddValueDialogComponent, {
+          data: {
+            title: "Lisa klientrakenduse ID, millega nõusolekut ei küsita"
+          },
+          backdropClass: 'cdk-overlay-transparent-backdrop',
+          hasBackdrop: true,
+        });
+
+        dialogRef.afterClosed().subscribe((result: any) => {
+          if (result !== "" && result !== undefined) {
+            this.newData.skip_user_consent_client_ids.push(result);
+          }
+        });
+      }
+
   openSecretDialog(): void {
     const dialogRef = this.dialog.open(ChangeSecretDialogComponent, {
         width: "600px",
@@ -226,6 +242,10 @@ export class ClientDialogComponent implements OnInit {
 
   removeLogoutRedirectUri(uri: string) {
     this.newData.post_logout_redirect_uris.splice(this.newData.post_logout_redirect_uris.indexOf(uri), 1)
+  }
+
+  removeConsentClient(client: string) {
+    this.newData.skip_user_consent_client_ids.splice(this.newData.skip_user_consent_client_ids.indexOf(client), 1)
   }
 
   removeContact(contact: ClientContact) {
@@ -381,6 +401,10 @@ export class ClientDialogComponent implements OnInit {
       newClient.mid_settings = {};
     }
 
+    if (newClient.skip_user_consent_client_ids == undefined) {
+      newClient.skip_user_consent_client_ids = [];
+    }
+
     if (newClient.info_notification_emails == undefined) {
       newClient.info_notification_emails = [];
     }
@@ -408,16 +432,16 @@ export class ClientDialogComponent implements OnInit {
     const dialogRef = this.dialog.open(EditValueDialogComponent, {
       data: {
         title: "Muuda autentimise tagasisuunasmispäringu URL-i",
-        url: url
+        value: url
       },
       backdropClass: 'cdk-overlay-transparent-backdrop',
       hasBackdrop: true,
     });
 
-    dialogRef.afterClosed().subscribe(({newUrl, oldUrl}) => {
-      if (newUrl !== "" && newUrl !== undefined && oldUrl !== "" && oldUrl !== undefined) {
-        const index = this.newData.redirect_uris.indexOf(oldUrl);
-        this.newData.redirect_uris[index] = newUrl;
+    dialogRef.afterClosed().subscribe(({newValue, oldValue}) => {
+      if (newValue !== "" && newValue !== undefined && oldValue !== "" && oldValue !== undefined) {
+        const index = this.newData.redirect_uris.indexOf(oldValue);
+        this.newData.redirect_uris[index] = newValue;
       }
     });
   }
@@ -426,16 +450,34 @@ export class ClientDialogComponent implements OnInit {
       const dialogRef = this.dialog.open(EditValueDialogComponent, {
         data: {
           title: "Muuda väljalogimise tagasisuunasmispäringu URL-i",
-          url: url
+          value: url
         },
         backdropClass: 'cdk-overlay-transparent-backdrop',
         hasBackdrop: true,
       });
 
-      dialogRef.afterClosed().subscribe(({newUrl, oldUrl}) => {
-        if (newUrl !== "" && newUrl !== undefined && oldUrl !== "" && oldUrl !== undefined) {
-          const index = this.newData.post_logout_redirect_uris.indexOf(oldUrl);
-          this.newData.post_logout_redirect_uris[index] = newUrl;
+      dialogRef.afterClosed().subscribe(({newValue, oldValue}) => {
+        if (newValue !== "" && newValue !== undefined && oldValue !== "" && oldValue !== undefined) {
+          const index = this.newData.post_logout_redirect_uris.indexOf(oldValue);
+          this.newData.post_logout_redirect_uris[index] = newValue;
+        }
+      });
+    }
+
+  openEditConsentClientDialog(client: string) {
+      const dialogRef = this.dialog.open(EditValueDialogComponent, {
+        data: {
+          title: "Muuda klientrakenduse ID",
+          value: client
+        },
+        backdropClass: 'cdk-overlay-transparent-backdrop',
+        hasBackdrop: true,
+      });
+
+      dialogRef.afterClosed().subscribe(({newValue, oldValue}) => {
+        if (newValue !== "" && newValue !== undefined && oldValue !== "" && oldValue !== undefined) {
+          const index = this.newData.skip_user_consent_client_ids.indexOf(oldValue);
+          this.newData.skip_user_consent_client_ids[index] = newValue;
         }
       });
     }

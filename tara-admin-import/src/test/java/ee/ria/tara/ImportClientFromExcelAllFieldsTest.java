@@ -75,6 +75,7 @@ public class ImportClientFromExcelAllFieldsTest {
                         "\"backchannel_logout_session_required\" : true,\n" +
                         "\"metadata\":{" +
                             "\"display_user_consent\":null," +
+                            "\"skip_user_consent_client_ids\" : null,\n" +
                             "\"oidc_client\":{" +
                                 "\"name\":\"Eestikeelne nimi\"," +
                                 "\"name_translations\":{\"et\":\"Eestikeelne nimi\",\"en\":\"English name\",\"ru\":\"Русское имя\"}," +
