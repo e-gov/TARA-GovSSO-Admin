@@ -2,13 +2,14 @@ package ee.ria.tara.configuration;
 
 import ee.ria.tara.configuration.providers.SecurityConfigurationProperties;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
@@ -23,12 +24,12 @@ import static ee.ria.tara.configuration.CookieConfiguration.COOKIE_NAME_XSRF_TOK
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
-public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
+public class SecurityConfiguration {
 
     private final SecurityConfigurationProperties securityConfProperties;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
                 .requestCache()
                     .requestCache(httpSessionRequestCache())
@@ -75,6 +76,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         .permitAll()
                     .antMatchers("/**")
                         .authenticated();
+        return http.build();
     }
 
     private HttpSessionRequestCache httpSessionRequestCache() {
