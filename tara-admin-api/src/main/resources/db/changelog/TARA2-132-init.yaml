@@ -28,6 +28,7 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: false
+                    unique: true
                   name: registry_code
                   type: VARCHAR(255)
               - column:
