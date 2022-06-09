@@ -23,7 +23,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class EmailAlert   {
+public class EmailAlert {
 
   @JsonProperty("enabled")
   private Boolean enabled;

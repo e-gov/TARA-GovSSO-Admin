@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class SsoModeResponse   {
+public class SsoModeResponse {
 
   @JsonProperty("ssoMode")
   private Boolean ssoMode;

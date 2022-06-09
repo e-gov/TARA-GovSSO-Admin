@@ -2,10 +2,8 @@ openapi: 3.0.0
 info:
   contact:
     email: info@example.com
-  description: |
-    TARA/GOVSSO admin webapp API
-    [http://swagger.io](http://swagger.io) or on
-    [irc.freenode.net, #swagger](http://swagger.io/irc/).
+  description: "TARA/GOVSSO admin webapp API\n[http://swagger.io](http://swagger.io)\
+    \ or on\n[irc.freenode.net, #swagger](http://swagger.io/irc/).\n"
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
@@ -76,7 +74,7 @@ paths:
       summary: Add a new institution
       tags:
       - institutions
-      x-contentType: application/json
+      x-content-type: application/json
       x-accepts: application/json
       x-tags:
       - tag: institutions
@@ -133,7 +131,7 @@ paths:
       summary: Update an existing institution
       tags:
       - institutions
-      x-contentType: application/json
+      x-content-type: application/json
       x-accepts: application/json
       x-tags:
       - tag: institutions
@@ -172,15 +170,10 @@ paths:
     post:
       operationId: importClients
       requestBody:
-        $ref: '#/components/requestBodies/inline_object'
         content:
           multipart/form-data:
             schema:
-              properties:
-                file:
-                  format: binary
-                  type: string
-              type: object
+              $ref: '#/components/schemas/importClients_request'
       responses:
         "200":
           content:
@@ -195,7 +188,7 @@ paths:
       summary: Import clients
       tags:
       - clients
-      x-contentType: multipart/form-data
+      x-content-type: multipart/form-data
       x-accepts: application/json
       x-tags:
       - tag: clients
@@ -275,7 +268,7 @@ paths:
       summary: Add new client for existing institution
       tags:
       - clients
-      x-contentType: application/json
+      x-content-type: application/json
       x-accepts: application/json
       x-tags:
       - tag: clients
@@ -347,7 +340,7 @@ paths:
       summary: Update existing client for existing institution
       tags:
       - clients
-      x-contentType: application/json
+      x-content-type: application/json
       x-accepts: application/json
       x-tags:
       - tag: clients
@@ -389,7 +382,7 @@ paths:
       summary: Add new alert
       tags:
       - alerts
-      x-contentType: application/json
+      x-content-type: application/json
       x-accepts: application/json
       x-tags:
       - tag: alerts
@@ -445,7 +438,7 @@ paths:
       summary: Update existing alert
       tags:
       - alerts
-      x-contentType: application/json
+      x-content-type: application/json
       x-accepts: application/json
       x-tags:
       - tag: alerts
@@ -488,7 +481,7 @@ paths:
       summary: Logs user into the system
       tags:
       - user
-      x-contentType: application/json
+      x-content-type: application/json
       x-accepts: application/json
       x-tags:
       - tag: user
@@ -555,11 +548,6 @@ components:
             $ref: '#/components/schemas/Alert'
       description: Client object that needs to be added
       required: true
-    inline_object:
-      content:
-        multipart/form-data:
-          schema:
-            $ref: '#/components/schemas/inline_object'
   schemas:
     NameTranslations:
       example:
@@ -619,7 +607,7 @@ components:
       properties:
         recipient_id_code:
           example: "60001019906"
-          pattern: ^[0-9]{11,11}$
+          pattern: "^[0-9]{11,11}$"
           type: string
         recipient_name_in_ldap:
           example: Mari-Liis Männik
@@ -681,7 +669,7 @@ components:
           type: string
         registry_code:
           example: "12345678"
-          pattern: \d{3,}
+          pattern: "\\d{3,}"
           type: string
         name:
           example: Example Institution
@@ -702,7 +690,7 @@ components:
           type: string
         phone:
           example: +3726630200
-          pattern: ^[0-9\+]{5,}$
+          pattern: "^[0-9\\+]{5,}$"
           type: string
         email:
           example: info@example.com
@@ -741,7 +729,7 @@ components:
           type: string
         registry_code:
           example: "12345678"
-          pattern: \d{3,}
+          pattern: "\\d{3,}"
           type: string
         type:
           $ref: '#/components/schemas/InstitutionType'
@@ -865,7 +853,7 @@ components:
         eidas_requester_id:
           example: urn:uuid:33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f
           maxLength: 1024
-          pattern: ^((?!urn:uuid:)[a-zA-Z][a-zA-Z0-9+.-]*:.*|urn:uuid:[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$
+          pattern: "^((?!urn:uuid:)[a-zA-Z][a-zA-Z0-9+.-]*:.*|urn:uuid:[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$"
           type: string
         description:
           maxLength: 4000
@@ -1132,7 +1120,7 @@ components:
             type: string
           type: array
       type: object
-    inline_object:
+    importClients_request:
       properties:
         file:
           format: binary

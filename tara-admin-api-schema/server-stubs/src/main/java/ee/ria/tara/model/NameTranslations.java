@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class NameTranslations   {
+public class NameTranslations {
 
   @JsonProperty("et")
   private String et;

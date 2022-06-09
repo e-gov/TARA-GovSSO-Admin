@@ -19,7 +19,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class InstitutionType   {
+public class InstitutionType {
 
   /**
    * Gets or Sets type

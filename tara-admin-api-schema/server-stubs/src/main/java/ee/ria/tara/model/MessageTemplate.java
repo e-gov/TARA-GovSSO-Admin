@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class MessageTemplate   {
+public class MessageTemplate {
 
   @JsonProperty("message")
   private String message;

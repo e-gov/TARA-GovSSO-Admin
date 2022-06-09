@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class WhoAmIResponse   {
+public class WhoAmIResponse {
 
   @JsonProperty("username")
   private String username;

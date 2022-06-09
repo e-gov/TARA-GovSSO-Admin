@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class ClientSmartIdSettings   {
+public class ClientSmartIdSettings {
 
   @JsonProperty("relying_party_UUID")
   private String relyingPartyUUID;

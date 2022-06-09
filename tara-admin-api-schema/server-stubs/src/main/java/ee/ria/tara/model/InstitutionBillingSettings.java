@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class InstitutionBillingSettings   {
+public class InstitutionBillingSettings {
 
   @JsonProperty("email")
   private String email;

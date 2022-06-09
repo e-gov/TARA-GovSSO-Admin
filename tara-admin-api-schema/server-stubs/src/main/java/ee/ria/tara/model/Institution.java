@@ -24,7 +24,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class Institution   {
+public class Institution {
 
   @JsonProperty("id")
   private String id;

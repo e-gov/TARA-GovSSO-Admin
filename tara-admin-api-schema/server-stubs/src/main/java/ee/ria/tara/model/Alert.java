@@ -22,7 +22,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class Alert   {
+public class Alert {
 
   @JsonProperty("id")
   private String id;

@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class LoginResponse   {
+public class LoginResponse {
 
   @JsonProperty("error")
   private String error;

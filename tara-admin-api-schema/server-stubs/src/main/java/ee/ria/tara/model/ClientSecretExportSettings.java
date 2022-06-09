@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  */
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
-public class ClientSecretExportSettings   {
+public class ClientSecretExportSettings {
 
   @JsonProperty("recipient_id_code")
   private String recipientIdCode;
