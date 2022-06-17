@@ -120,7 +120,7 @@ export class ClientsComponent implements OnInit {
       redirect_uris: [],
       post_logout_redirect_uris: [],
       scope: scopes,
-      is_user_consent_required: true,
+      is_user_consent_required: this.authService.isSsoMode,
       client_url: undefined,
       backchannel_logout_uri: undefined,
       info_notification_emails: [],
