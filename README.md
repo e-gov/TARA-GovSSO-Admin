@@ -32,6 +32,6 @@ In addition, the executable jar file can be found at `tara-admin-import/target/c
 
 ```shell
 ./mvnw clean install
-./mvnw --projects tara-admin-api -DskipTests spring-boot:build-image
-docker run --rm -p 16080:8080 tara-admin:latest
+./mvnw --projects tara-admin-api -DskipTests -Djacoco.skip=true spring-boot:build-image
+docker run --rm -p 17080:8080 tara-admin:latest
 ```
