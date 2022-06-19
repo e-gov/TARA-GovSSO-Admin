@@ -16,8 +16,11 @@ import ee.ria.tara.service.model.HydraOidcClientInstitution;
 import ee.ria.tara.service.model.OidcClient;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.bouncycastle.util.encoders.Hex;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -44,6 +47,16 @@ public class ClientHelper {
             client.setSlaNotificationEmails(entity.getSlaNotificationEmails());
             client.setClientContacts(getClientContacts(entity));
 
+            if (!backchannelLogoutHostAndPortMatches(client.getBackchannelLogoutUri(),
+                    entity.getBackchannelLogoutHostAndPort())) {
+                log.warn("Client with ID '{}' has non-matching back-channel logout URL host and port in Hydra '{}' " +
+                        "with value in admin database '{}', returning empty URL",
+                        client.getClientId(),
+                        client.getBackchannelLogoutUri(),
+                        entity.getBackchannelLogoutHostAndPort());
+                client.setBackchannelLogoutUri(null);
+            }
+
         } else {
             if (log.isDebugEnabled()) {
                 log.warn(String.format("Client with client_id: %s  not found in database.", hydraClient.getClientId()));
@@ -64,6 +77,17 @@ public class ClientHelper {
             clientContacts.add(clientContact);
         }
         return clientContacts;
+    }
+
+    private static boolean backchannelLogoutHostAndPortMatches(String backchannelLogoutUri,
+                                                               String backchannelLogoutHostAndPort) {
+        String hostAndPortFromParsedUri;
+        try {
+            hostAndPortFromParsedUri = getBackchannelLogoutHostAndPort(backchannelLogoutUri);
+        } catch (MalformedURLException e) {
+            return false;
+        }
+        return StringUtils.equals(hostAndPortFromParsedUri, backchannelLogoutHostAndPort);
     }
 
     public static Client convertToClient(HydraClient hydraClient) {
@@ -136,6 +160,7 @@ public class ClientHelper {
         return hydraClient;
     }
 
+    @SneakyThrows
     public static ee.ria.tara.repository.model.Client convertToEntity(Client client, ee.ria.tara.repository.model.Institution institution) {
         ee.ria.tara.repository.model.Client entity = new ee.ria.tara.repository.model.Client();
 
@@ -147,6 +172,8 @@ public class ClientHelper {
         entity.setInfoNotificationEmails(client.getInfoNotificationEmails());
         entity.setSlaNotificationEmails(client.getSlaNotificationEmails());
         entity.setClientContacts(getClientContacts(client, entity));
+        entity.setBackchannelLogoutHostAndPort(getBackchannelLogoutHostAndPort(client.getBackchannelLogoutUri()));
+
         return entity;
     }
 
@@ -237,4 +264,17 @@ public class ClientHelper {
             throw new FatalApiException(e);
         }
     }
+
+    private static String getBackchannelLogoutHostAndPort(String backchannelLogoutUri) throws MalformedURLException {
+        if (StringUtils.isNotBlank(backchannelLogoutUri)) {
+            URL url = new URL(backchannelLogoutUri);
+            int port = url.getPort();
+            if (port < 0) {
+                port = 443;
+            }
+            return url.getHost() + ":" + port;
+        }
+        return null;
+    }
+
 }

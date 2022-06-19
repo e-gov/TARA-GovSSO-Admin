@@ -32,6 +32,8 @@ public class Client {
     private Institution institution;
     // Only stored here to check and ensure uniqueness
     private String eidasRequesterId;
+    // Host and port parts from HydraClient.backchannelLogoutUri duplicated here for read-only consuming by outproxy.
+    private String backchannelLogoutHostAndPort;
     private String description;
     @Convert(converter = StringListConverter.class)
     private List<String> infoNotificationEmails;

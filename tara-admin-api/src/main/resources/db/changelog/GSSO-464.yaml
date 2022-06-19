@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1911794632350-11
+      author: (generated)
+      changes:
+        - addColumn:
+            tableName: client
+            columns:
+              - column:
+                  name: backchannel_logout_host_and_port
+                  type: VARCHAR(259)
