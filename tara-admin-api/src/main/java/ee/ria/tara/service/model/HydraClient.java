@@ -27,6 +27,14 @@ public class HydraClient {
     @Pattern(regexp="-A-Za-z0-9")
     private String clientSecret;
 
+    @ToString.Include(name = "clientSecret")
+    public String clientSecretToString() {
+        if (clientSecret == null) {
+            return "null";
+        }
+        return "[non-null value]";
+    }
+
     @JsonProperty("grant_types")
     @Size(min=1)
     private List<String> grantTypes = List.of("authorization_code");

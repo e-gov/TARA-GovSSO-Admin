@@ -51,5 +51,14 @@ public class OidcClient {
 
   @JsonProperty("logo")
   private byte[] logo;
+
+  @ToString.Include(name = "logo")
+  public String logoToString() {
+    if (logo == null) {
+      return "null";
+    }
+    return "[" + logo.length + " bytes]";
+  }
+
 }
 

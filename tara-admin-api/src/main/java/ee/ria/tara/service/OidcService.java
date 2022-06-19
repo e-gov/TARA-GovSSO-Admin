@@ -117,10 +117,10 @@ public class OidcService {
 
     public void saveClient(HydraClient client, String uri, HttpMethod httpMethod) throws ApiException {
         try {
-            log.info("Sending " + httpMethod.name() + " request to OIDC service.", value("url.full", uri));
+            log.info("Sending " + httpMethod.name() + " request to OIDC service: " + client, value("url.full", uri));
             ResponseEntity<Object> response = restTemplate.exchange(uri, httpMethod, new HttpEntity<>(client), Object.class);
+
             if (log.isDebugEnabled()) {
-                log.debug("OIDC request: {}", value("request", client));
                 log.debug("OIDC response: {}", value("response", response));
             }
         } catch (HttpClientErrorException ex) {
