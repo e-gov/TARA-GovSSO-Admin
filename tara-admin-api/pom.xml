@@ -22,6 +22,11 @@
         <tara-admin-api-schema.version>1.4.3</tara-admin-api-schema.version>
         <tara-admin-ui.version>1.4.3</tara-admin-ui.version>
         <apache.poi.version>5.2.2</apache.poi.version>
+
+        <!-- TODO H2 2.x requires a more specific constraint definition at https://github.com/e-gov/TARA2-Admin/blob/v1.4.3/tara-admin-api/src/main/resources/db/changelog/TARA2-132-init.yaml#L31
+              but existing Liquibase changesets should not be modified (error "Validation Failed: 1 change sets check
+              sum"). H2 is used only during tests. PostgreSQL usage is not affected. -->
+        <h2.version>1.4.200</h2.version>
     </properties>
 
     <dependencies><!-- Ordered by scope, groupId, artifactId. -->
