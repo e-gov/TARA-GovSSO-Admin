@@ -87,6 +87,67 @@ public class ClientValidatorTest {
     }
 
     @Test
+    public void validateClient_taraShortNameTooLong_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        String fortyOneCharacterString = "12345678901234567890123456789012345678901";
+        Client client = validTARAClient();
+        client.getClientShortName().setEt(fortyOneCharacterString);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.shortName.tooLong"));
+    }
+
+    @Test
+    public void validateClient_taraShortNameWithMaxLength_valid() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        String fortyOneCharacterString = "1234567890123456789012345678901234567890";
+        Client client = validTARAClient();
+        client.getClientShortName().setEt(fortyOneCharacterString);
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    public void validateClient_taraShortNameWithNonGsm7CharactersTooLong_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        String twentyOneCharacterUcs2String = "12345678901234567890Õ";
+        Client client = validTARAClient();
+        client.getClientShortName().setEt(twentyOneCharacterUcs2String);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.shortName.tooLong"));
+    }
+
+    @Test
+    public void validateClient_taraShortNameWithNonGsm7CharactersMaxLength_valid() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        String fortyOneCharacterString = "1234567890123456789Õ";
+        Client client = validTARAClient();
+        client.getClientShortName().setEt(fortyOneCharacterString);
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    public void validateClient_taraShortNameWithNonUcs2Characters_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        String nonUcs2String = "abc-\uD83D\uDE00";
+        Client client = validTARAClient();
+        client.getClientShortName().setEt(nonUcs2String);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.shortName.forbiddenCharacters"));
+    }
+
+    @Test
     public void validateClient_ssoBackchannelLogoutUriUriMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 

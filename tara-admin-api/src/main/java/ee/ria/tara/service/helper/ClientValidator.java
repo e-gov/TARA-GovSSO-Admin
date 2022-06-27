@@ -23,6 +23,9 @@ import java.util.stream.Collectors;
 public class ClientValidator {
 
     private static final int LOGO_ALLOWED_MAX_SIZE_IN_BYTES = 10 * 1024;
+    private static final int MAX_SHORT_NAME_LENGTH = 40;
+    private static final int MAX_SHORT_NAME_GSM7_LENGTH = 20;
+    private static final String GSM_7_CHARACTERS = "@£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞ^{}[~]|€ÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà";
 
     private final AdminConfigurationProvider adminConfProvider;
     private final ClientRepository clientRepository;
@@ -65,6 +68,42 @@ public class ClientValidator {
                 throw new InvalidDataException("Client.sso.clientShortName");
             }
         }
+        validateShortName(client.getClientShortName().getEt());
+        validateShortName(client.getClientShortName().getEn());
+        validateShortName(client.getClientShortName().getRu());
+    }
+
+    private void validateShortName(String shortName) {
+        if (shortName == null) {
+            return;
+        }
+        if (containsNonUcs2Characters(shortName)) {
+            throw new InvalidDataException("Client.shortName.forbiddenCharacters");
+        }
+        if (shortName.length() > MAX_SHORT_NAME_LENGTH) {
+            throw new InvalidDataException("Client.shortName.tooLong");
+        }
+        if (containsNonGsm7Characters(shortName) && shortName.length() > MAX_SHORT_NAME_GSM7_LENGTH) {
+            throw new InvalidDataException("Client.shortName.tooLong");
+        }
+    }
+
+    private boolean containsNonGsm7Characters(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (GSM_7_CHARACTERS.indexOf(str.charAt(i)) == -1) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private boolean containsNonUcs2Characters(String str) {
+        for (int i = 0; i < str.length(); i++) {
+            if (! Character.isBmpCodePoint(str.charAt(i)) || Character.isSurrogate(str.charAt(i))) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void validateScopes(Client client) {
