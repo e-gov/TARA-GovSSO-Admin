@@ -28,6 +28,7 @@ import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -272,7 +273,7 @@ public class ClientHelper {
             if (port < 0) {
                 port = 443;
             }
-            return url.getHost() + ":" + port;
+            return url.getHost().toLowerCase(Locale.ROOT) + ":" + port;
         }
         return null;
     }
