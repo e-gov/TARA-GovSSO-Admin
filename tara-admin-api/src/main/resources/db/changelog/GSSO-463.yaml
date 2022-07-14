@@ -1,0 +1,15 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1911794632350-12
+      author: (generated)
+      preConditions:
+        - onFail: CONTINUE
+        - changeLogPropertyDefined:
+            property: admin-outproxy-user-name
+      changes:
+        - sql:
+            comment: Grant minimal privileges to outproxy role to read only necessary data.
+            dbms: '!h2,  postgresql'
+            endDelimiter: \nGO
+            splitStatements: true
+            sql: grant select (backchannel_logout_host_and_port) on public.client to "${admin-outproxy-user-name}";

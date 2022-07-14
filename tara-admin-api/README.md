@@ -94,6 +94,7 @@ If you run the application using Tomcat, you can add these options to JAVA_OPTS,
 | spring.liquibase.user | N | Database user to execute liquibase scripts (must have schema and data manipulation rights in the database). | `admin-user`  | 
 | spring.liquibase.password | N | Database user password. | `changeme`  |
 | spring.liquibase.parameters.admin-service-user-name | N | Postgres database user that is used by the admin service. Must be same as the value supplied in `spring.datasource.username`  | `service-user` |
+| spring.liquibase.parameters.admin-outproxy-user-name | N | Postgres database user that is used by the outproxy service. | `outproxy-user` |
 
 
 <a href="smtp_conf"></a>
