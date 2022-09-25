@@ -60,7 +60,7 @@ public class ClientContact {
    * Get email
    * @return email
   */
-  @javax.validation.constraints.Email
+  @Email
   @Schema(name = "email", example = "test@example.com", required = false)
   public String getEmail() {
     return email;

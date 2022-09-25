@@ -29,7 +29,7 @@ import javax.annotation.Generated;
 
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 @Controller
-@RequestMapping("${openapi.tARAGOVSSOAdmin.base-path:/edurdo/admin/1.0.0}")
+@RequestMapping("${openapi.tARAGovSSOAdmin.base-path:/edurdo/admin/1.0.0}")
 public class ClientsApiController implements ClientsApi {
 
     private final NativeWebRequest request;

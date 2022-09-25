@@ -2,12 +2,12 @@ openapi: 3.0.0
 info:
   contact:
     email: info@example.com
-  description: "TARA/GOVSSO admin webapp API\n[http://swagger.io](http://swagger.io)\
+  description: "TARA/GovSSO admin webapp API\n[http://swagger.io](http://swagger.io)\
     \ or on\n[irc.freenode.net, #swagger](http://swagger.io/irc/).\n"
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
-  title: TARA/GOVSSO admin
+  title: TARA/GovSSO admin
   version: 1.0.0-SNAPSHOT-oas3
 externalDocs:
   description: Find out more about Swagger
@@ -516,7 +516,7 @@ paths:
       - tag: user
   /ssoMode:
     get:
-      description: Returns true if application is running in GOVSSO mode and false
+      description: Returns true if application is running in GovSSO mode and false
         if running in TARA mode.
       operationId: ssoMode
       responses:

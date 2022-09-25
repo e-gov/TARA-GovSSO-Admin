@@ -32,7 +32,7 @@ public class InstitutionBillingSettings {
    * Get email
    * @return email
   */
-  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email
+  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @Email
   @Schema(name = "email", required = false)
   public String getEmail() {
     return email;

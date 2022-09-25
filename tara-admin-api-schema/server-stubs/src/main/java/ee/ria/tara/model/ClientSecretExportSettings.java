@@ -76,7 +76,7 @@ public class ClientSecretExportSettings {
    * Get recipientEmail
    * @return recipientEmail
   */
-  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email
+  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @Email
   @Schema(name = "recipient_email", example = "60001019906@eesti.ee", required = false)
   public String getRecipientEmail() {
     return recipientEmail;

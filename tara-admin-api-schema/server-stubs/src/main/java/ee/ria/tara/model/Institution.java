@@ -212,7 +212,7 @@ public class Institution {
    * Get email
    * @return email
   */
-  @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email
+  @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @Email
   @Schema(name = "email", example = "info@example.com", required = true)
   public String getEmail() {
     return email;

@@ -18,8 +18,8 @@ public class SpringDocConfiguration {
         return new OpenAPI()
                 .info(
                         new Info()
-                                .title("TARA/GOVSSO admin")
-                                .description("TARA/GOVSSO admin webapp API [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/). ")
+                                .title("TARA/GovSSO admin")
+                                .description("TARA/GovSSO admin webapp API [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/). ")
                                 .contact(
                                         new Contact()
                                                 .email("info@example.com")
