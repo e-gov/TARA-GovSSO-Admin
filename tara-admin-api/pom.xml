@@ -22,10 +22,10 @@
         <cdoc4j.version>1.4</cdoc4j.version>
         <commons-email.version>1.5</commons-email.version>
         <logstash-logback.version>7.2</logstash-logback.version>
-        <greenmail.version>1.6.9</greenmail.version>
+        <greenmail.version>1.6.10</greenmail.version>
         <tara-admin-api-schema.version>1.5.2</tara-admin-api-schema.version>
         <tara-admin-ui.version>1.5.2</tara-admin-ui.version>
-        <apache.poi.version>5.2.2</apache.poi.version>
+        <apache.poi.version>5.2.3</apache.poi.version>
 
         <!-- TODO H2 2.x requires a more specific constraint definition at https://github.com/e-gov/TARA2-Admin/blob/v1.4.3/tara-admin-api/src/main/resources/db/changelog/TARA2-132-init.yaml#L31
               but existing Liquibase changesets should not be modified (error "Validation Failed: 1 change sets check
