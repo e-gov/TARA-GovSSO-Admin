@@ -68,7 +68,7 @@ export class AuthService {
       .then(response => {
         this.isSsoMode = response.ssoMode;
         if (this.isSsoMode)
-          this.titleService.setTitle("GOVSSO haldusliides");
+          this.titleService.setTitle("GovSSO haldusliides");
         else
           this.titleService.setTitle("TARA haldusliides");
       }).catch(err => {

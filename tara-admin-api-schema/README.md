@@ -1,4 +1,4 @@
-# TARA/GOVSSO admin web application API
+# TARA/GovSSO admin web application API
 
 ## API specification 
 

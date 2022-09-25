@@ -28,7 +28,7 @@ export class HeaderComponent implements OnInit {
 
   applicationName() {
     if (this.authService.isSsoMode)
-      return "GOVSSO haldusliides"
+      return "GovSSO haldusliides"
     else
       return "TARA haldusliides"
   }

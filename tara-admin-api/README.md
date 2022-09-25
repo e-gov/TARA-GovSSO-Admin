@@ -1,8 +1,8 @@
-# TARA/GOVSSO admin web application
+# TARA/GovSSO admin web application
 
 - [Overview](#overview)
 - [Configuration parameters](#configuration)
-    * [Integration with TARA/GOVSSO OIDC service](#hydra_integration_conf)
+    * [Integration with TARA/GovSSO OIDC service](#hydra_integration_conf)
     * [Trusted TLS certificates](#tls_conf)
     * [User authentication with LDAP](#auth_conf)
     * [Database](#db_conf)  
@@ -18,7 +18,7 @@
 
 ## Overview
 
-The TARA/GOVSSO admin web application is built on top of Spring Boot backend service with an Angular frontend application which is packaged to a single deployable Java war file.
+The TARA/GovSSO admin web application is built on top of Spring Boot backend service with an Angular frontend application which is packaged to a single deployable Java war file.
 
 The frontend application source code is provided in the ´tara-admin-ui´ subproject. See details [here](../tara-admin-ui/README.md).
 
@@ -31,13 +31,13 @@ The backend application is built on top of classes generated from the API specif
 ### Application mode
 | Parameter                    | Required | Description                       | Example                                              |
 | ---------------------------- | -------- | --------------------------------- | ---------------------------------------------------- |
-| tara.admin.sso-mode           | N        | Toggle between GOVSSO mode when true and TARA mode when false, false by default  | false                                                 |
+| tara.admin.sso-mode           | N        | Toggle between GovSSO mode when true and TARA mode when false, false by default  | false                                                 |
 
 <a href="oidc_conf"></a>
-### Integration with TARA/GOVSSO OIDC service
+### Integration with TARA/GovSSO OIDC service
 | Parameter                    | Required | Description                       | Example                                              |
 | ---------------------------- | -------- | --------------------------------- | ---------------------------------------------------- |
-| tara-oidc.url                | Y        | TARA/GOVSSO OIDC service's admin url     | https://example.com:4445              |
+| tara-oidc.url                | Y        | TARA/GovSSO OIDC service's admin url     | https://example.com:4445              |
 
 
 <a href="tls_conf"></a>
