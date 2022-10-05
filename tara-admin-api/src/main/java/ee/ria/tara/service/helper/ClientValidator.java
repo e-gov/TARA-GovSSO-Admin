@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ClientValidator {
 
-    private static final int LOGO_ALLOWED_MAX_SIZE_IN_BYTES = 10 * 1024;
+    private static final int LOGO_ALLOWED_MAX_SIZE_IN_BYTES = 100 * 1024;
     private static final int MAX_SHORT_NAME_LENGTH = 40;
     private static final int MAX_SHORT_NAME_GSM7_LENGTH = 20;
     private static final String GSM_7_CHARACTERS = "@£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞ^{}[~]|€ÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà \r\n\\";

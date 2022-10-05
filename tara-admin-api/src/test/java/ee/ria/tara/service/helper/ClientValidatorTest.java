@@ -298,7 +298,7 @@ public class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
-        client.setClientLogo(new byte[10241]);
+        client.setClientLogo(new byte[100 * 1024 + 1]);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
