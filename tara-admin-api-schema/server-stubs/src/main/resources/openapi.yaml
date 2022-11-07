@@ -2,8 +2,10 @@ openapi: 3.0.0
 info:
   contact:
     email: info@example.com
-  description: "TARA/GovSSO admin webapp API\n[http://swagger.io](http://swagger.io)\
-    \ or on\n[irc.freenode.net, #swagger](http://swagger.io/irc/).\n"
+  description: |
+    TARA/GovSSO admin webapp API
+    [http://swagger.io](http://swagger.io) or on
+    [irc.freenode.net, #swagger](http://swagger.io/irc/).
   license:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
