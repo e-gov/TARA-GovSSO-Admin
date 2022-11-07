@@ -12,19 +12,31 @@
     <artifactId>tara-admin-api-schema</artifactId>
     <version>1.5.3</version>
 
+    <properties>
+        <springdoc.version>1.6.12</springdoc.version>
+    </properties>
+
     <build>
         <sourceDirectory>server-stubs/src/main/java</sourceDirectory>
     </build>
 
     <dependencies><!-- Ordered by scope, groupId, artifactId. -->
         <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
+        <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>1.6.12</version>
+            <version>${springdoc.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
         </dependency>
     </dependencies>
 
@@ -49,8 +61,7 @@
                     <plugin>
                         <groupId>org.openapitools</groupId>
                         <artifactId>openapi-generator-maven-plugin</artifactId>
-                        <!-- TODO Version >= 6.1.0 generated sources produce runtime errors. -->
-                        <version>6.0.1</version>
+                        <version>6.2.1</version>
                         <executions>
                             <execution>
                                 <goals>
