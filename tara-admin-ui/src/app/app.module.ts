@@ -51,10 +51,12 @@ import {
   InstitutionClientsDialogComponent
 } from "./institutions/institution-clients-dialog/institution-clients-dialog.component";
 import {EditValueDialogComponent} from "./clients/client-dialog/edit-value-dialog/edit-value-dialog.component";
+import { FormErrorsComponent } from "./form-errors/form-errors.component";
 
 export const DATEPICKER_FORMATS = {
   parse: {
-    dateInput: 'DD.MM.YYYY',
+    dateInput: 'DD.MM.YYYY', // TODO: This has no effect when using NativeDateAdapter, see
+                             //       https://github.com/angular/components/blob/14.2.7/src/material/core/datetime/native-date-adapter.ts#L128
   },
   display: {
     dateInput: 'DD.MM.YYYY',
@@ -89,7 +91,8 @@ declare global {
     InstitutionsComponent,
     AlertsComponent,
     AlertDialogComponent,
-    EditValueDialogComponent
+    EditValueDialogComponent,
+    FormErrorsComponent
   ],
   imports: [
     BrowserModule,

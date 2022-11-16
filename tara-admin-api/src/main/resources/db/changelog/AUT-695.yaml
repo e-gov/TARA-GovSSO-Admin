@@ -1,0 +1,20 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1911794632350-13
+      author: (generated)
+      changes:
+        - addColumn:
+            tableName: alert
+            columns:
+              - column:
+                  name: notification_templates
+                  type: VARCHAR(2048)
+        - sql:
+            dbms: '!h2,  postgresql'
+            sql: "UPDATE alert SET notification_templates = ('[{\"locale\": \"et\", \"message\": ' || to_json(alert.notification_text) || '}]');"
+        - addNotNullConstraint:
+            tableName: alert
+            columnName: notification_templates
+        - dropColumn:
+            tableName: alert
+            columnName: notification_text

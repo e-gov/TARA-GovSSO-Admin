@@ -1,5 +1,7 @@
 package ee.ria.tara.repository.model;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import ee.ria.tara.repository.helper.JsonConverter;
 import ee.ria.tara.repository.helper.StringListConverter;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
@@ -30,7 +32,8 @@ public class Alert {
     private OffsetDateTime startTime;
     private OffsetDateTime endTime;
     private Boolean notifyClientsOnTaraLoginPage;
-    private String notificationText;
+    @Convert(converter = JsonConverter.class)
+    private JsonNode notificationTemplates;
     @Convert(converter = StringListConverter.class)
     private List<String> displayOnlyForAuthmethods;
     private Boolean notifyClientsByEmail;

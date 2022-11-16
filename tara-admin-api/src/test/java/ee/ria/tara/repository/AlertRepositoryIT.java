@@ -1,5 +1,6 @@
 package ee.ria.tara.repository;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.tara.repository.model.Alert;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -22,8 +23,10 @@ import java.util.List;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class AlertRepositoryIT {
+
+    public static final ObjectMapper jsonMapper = new ObjectMapper();
+
     private final AlertRepository repository;
-    private final String title = "Title";
 
     @Test
     @Order(1)
@@ -81,11 +84,17 @@ public class AlertRepositoryIT {
 
     private Alert createTestAlert() {
         Alert alert = new Alert();
-
-        alert.setTitle(title);
+        alert.setTitle("Title");
         alert.setEmailTemplate("Erakorraline katkestus");
         alert.setEndTime(OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS));
-        alert.setNotificationText("Erakorraline katkestus");
+        alert.setNotificationTemplates(
+                jsonMapper.createArrayNode()
+                        .add(jsonMapper.createObjectNode()
+                                .put("locale", "et")
+                                .put("message", "Erakorraline katkestus"))
+                        .add(jsonMapper.createObjectNode()
+                                .put("locale", "en")
+                                .put("message", "Emergency interruption")));
         alert.setNotifyClientsByEmail(true);
         alert.setSendAt(OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS));
         alert.setNotifyClientsOnTaraLoginPage(true);

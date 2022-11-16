@@ -1,13 +1,15 @@
-import {Component, Inject, OnInit} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 // @ts-ignore
-import {MAT_DIALOG_DATA, MatDialog, MatDialogRef} from "@angular/material/dialog";
-import {Alert, LoginAlert} from "../model/alert";
-import {environment} from "../../../environments/environment";
-import {MatCheckboxChange} from "@angular/material/checkbox";
-import {DateHelper} from "../../helper/datehelper";
-import {MessageService} from "../../main/message/message.service";
-import {NgForm} from "@angular/forms";
-import {AuthService} from "../../auth/auth.service";
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { Alert, MessageTemplate } from "../model/alert";
+import { environment } from "../../../environments/environment";
+import { DateHelper } from "../../helper/datehelper";
+import { MessageService } from "../../main/message/message.service";
+import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
+import { AuthService } from "../../auth/auth.service";
+
+type DialogType = "ADD" | "UPDATE" | "INFO";
+type TypeActionFn = (type: any, alert: Alert) => Promise<any>;
 
 @Component({
   selector: 'app-alert-dialog',
@@ -15,37 +17,68 @@ import {AuthService} from "../../auth/auth.service";
   styleUrls: ['./alert-dialog.component.css']
 })
 export class AlertDialogComponent implements OnInit {
-  _id: string;
-  _title: string;
-  _start_date: Date;
-  _end_date: Date;
-  _start_time: string;
-  _end_time: string;
-  _login_alert: LoginAlert;
 
-  newData: Alert;
+  readonly LANGUAGES = ['et', 'en', 'ru'];
 
-  constructor(@Inject(MAT_DIALOG_DATA) public data: {
-                dialogType: "ADD" | "UPDATE" | "INFO"
-                obj: Alert,
-                onTypeAction: (type: any, alert: Alert) => Promise<any>;
+  form: FormGroup;
+  alertScopes: string[];
+
+  dialogType: DialogType;
+  obj?: Alert;
+  onTypeAction: TypeActionFn;
+
+  constructor(@Inject(MAT_DIALOG_DATA) data: {
+                dialogType: DialogType,
+                obj?: Alert,
+                onTypeAction: TypeActionFn;
               },
               public mainDialog: MatDialogRef<AlertDialogComponent>,
               public messageService: MessageService,
               public dialog: MatDialog,
               public authService: AuthService) {
-    this.newData = JSON.parse(JSON.stringify(data.obj));
+    this.alertScopes = environment.alertScopes;
+    this.dialogType = data.dialogType;
+    this.obj = data.obj;
+    this.onTypeAction = data.onTypeAction;
 
-    let parsedStartDateTime = DateHelper.parseDateTime(this.newData.start_time)
-    let parsedEndDateTime = DateHelper.parseDateTime(this.newData.end_time)
-
-    this._id = this.newData.id!;
-    this._title = this.newData.title;
-    this._start_date = new Date(this.newData.start_time);
-    this._end_date = new Date(this.newData.end_time);
-    this._start_time = parsedStartDateTime.time;
-    this._end_time = parsedEndDateTime.time;
-    this._login_alert = JSON.parse(JSON.stringify(this.newData.login_alert));
+    const currentDate = new Date();
+    const defaultStartTime = new Date(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate(), 0, 0, 0)
+    const defaultEndTime = new Date(currentDate.getUTCFullYear(), currentDate.getUTCMonth(), currentDate.getUTCDate() + 1, 0, 0, 0)
+    this.form = new FormGroup({
+      title: new FormControl(''),
+      startDate: new FormControl(defaultStartTime),
+      startTime: new FormControl('00:00:00'),
+      endDate: new FormControl(defaultEndTime),
+      endTime: new FormControl('00:00:00'),
+      messageTemplates: new FormGroup(
+        this.LANGUAGES.reduce((acc: any, language: string) => {
+          return {...acc, [language]: new FormControl('')};
+        }, {})
+      ),
+      alertScopes: new FormGroup(
+        this.alertScopes.reduce((acc: any, alertScope: string) => {
+          return {...acc, [alertScope]: new FormControl(false)};
+        }, {}),
+        this.alertScopesValidator())
+    });
+    if (this.obj != undefined) {
+      const parsedStartDateTime = DateHelper.parseDateTime(this.obj.start_time)
+      const parsedEndDateTime = DateHelper.parseDateTime(this.obj.end_time)
+      this.form.setValue({
+        title: this.obj.title,
+        startDate: new Date(this.obj.start_time),
+        startTime: parsedStartDateTime.time,
+        endDate: new Date(this.obj.end_time),
+        endTime: parsedEndDateTime.time,
+        messageTemplates: this.LANGUAGES.reduce((acc: any, language: string) => {
+          const template = this.obj!.login_alert.message_templates.find(template => template.locale === language);
+          return {...acc, [language]: template != undefined ? template.message : ''};
+        }, {}),
+        alertScopes: this.alertScopes.reduce((acc: any, alertScope: string) => {
+          return {...acc, [alertScope]: this.obj!.login_alert.auth_methods.includes(alertScope)};
+        }, {})
+      });
+    }
   }
 
   ngOnInit(): void {
@@ -55,48 +88,45 @@ export class AlertDialogComponent implements OnInit {
   }
 
   isInfo(): boolean {
-    return !['ADD', 'UPDATE'].includes(this.data.dialogType);
+    return !['ADD', 'UPDATE'].includes(this.dialogType);
   }
 
-  save(form: NgForm) {
-    if (!this.authService.isSsoMode) {
-      if (this._login_alert.auth_methods.length === 0) {
-        document.getElementById("scope-alert").style.display = 'block';
-        return;
-      } else {
-        document.getElementById("scope-alert").style.display = 'hidden';
-      }
+  findExistingMessageTemplate(locale: string): MessageTemplate | undefined {
+    return this.obj!.login_alert.message_templates.find(template => template.locale === locale);
+  }
+
+  save() {
+    if (this.form.invalid) {
+      this.form.markAllAsTouched();
+      return;
     }
-
-    this.newData.id = this._id;
-    this.newData.title = this._title;
-    this.newData.login_alert = this._login_alert;
-    this.newData.start_time = this.convertToDateTime(this._start_date, this._start_time);
-    this.newData.end_time = this.convertToDateTime(this._end_date, this._end_time);
-    this.newData.email_alert = undefined;
-
-    this.data.onTypeAction(this.data.dialogType, this.newData).then(() => {
+    const formValue = this.form.value;
+    const newObj: Alert = {
+      id: this.obj?.id,
+      title: formValue.title,
+      login_alert: {
+        enabled: this.obj?.login_alert.enabled !== false,
+        auth_methods: Object.entries(formValue.alertScopes)
+          .filter(([alertScope, enabled]) => enabled)
+          .map(([alertScope, enabled]) => alertScope),
+        message_templates: this.LANGUAGES
+          .map(language => {
+            return {locale: language, message: formValue.messageTemplates[language]};
+          })
+          .filter(template => template.message == null || template.message.trim().length > 0)
+      },
+      start_time: this.convertToDateTime(formValue.startDate, formValue.startTime),
+      end_time: this.convertToDateTime(formValue.endDate, formValue.endTime),
+    };
+    this.onTypeAction(this.dialogType, newObj).then(() => {
       this.mainDialog.close();
     });
   }
 
   delete() {
-    this.data.onTypeAction(this.data.dialogType, this.data.obj).then(() => {
+    this.onTypeAction(this.dialogType, this.obj!).then(() => {
       this.mainDialog.close();
     });
-  }
-
-  getPossibleScopes() {
-    return environment.alertScopes;
-  }
-
-  onScopeChange(event: MatCheckboxChange) {
-    if (event.checked) {
-      this._login_alert.auth_methods.push(event.source.name!)
-    } else {
-      this._login_alert.auth_methods =
-        this._login_alert.auth_methods.filter((val: string) => val !== event.source.name)
-    }
   }
 
   convertToDateTime(dateValue: Date, timeString: string) {
@@ -109,5 +139,19 @@ export class AlertDialogComponent implements OnInit {
 
   getDisplayableDateTime(dateTime: string) {
     return DateHelper.convertToDisplayString(dateTime);
+  }
+
+  private alertScopesValidator(): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      if (this.authService.isSsoMode) {
+        return null;
+      }
+      if(Object.values(control.value).some(checked => checked)) {
+        return null;
+      }
+      return {
+        alertScopeRequired: "Vähemalt 1 autentimisvahend peab olema valitud."
+      };
+    }
   }
 }

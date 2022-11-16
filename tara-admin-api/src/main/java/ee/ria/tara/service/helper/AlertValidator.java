@@ -10,7 +10,9 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -38,12 +40,26 @@ public class AlertValidator {
         if (CollectionUtils.isEmpty(messageTemplates)) {
             throw new InvalidDataException("Alert.message.missing");
         }
-        if (messageTemplates.size() > 1) {
-            throw new IllegalStateException("Single message template expected");
+        if (hasDuplicateLocales(messageTemplates)) {
+            throw new InvalidDataException("Multiple message templates for single locale");
         }
-        if (StringUtils.isBlank(messageTemplates.get(0).getMessage())) {
+        if (messageTemplates.stream()
+                .map(MessageTemplate::getMessage)
+                .anyMatch(StringUtils::isBlank)) {
             throw new InvalidDataException("Alert.message.missing");
         }
+    }
+
+    private boolean hasDuplicateLocales(List<MessageTemplate> messageTemplates) {
+        Set<String> foundLocales = new HashSet<>();
+        for (MessageTemplate messageTemplate : messageTemplates) {
+            String locale = messageTemplate.getLocale();
+            if (foundLocales.contains(locale)) {
+                return true;
+            }
+            foundLocales.add(locale);
+        }
+        return false;
     }
 
     private void validateAuthenticationMethods(List<String> authMethods) {

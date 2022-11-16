@@ -43,6 +43,18 @@ public class AlertValidatorTest {
     }
 
     @Test
+    public void validateAlert_multipleMessageTemplates_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        Alert alert = validSSOAlert();
+        List<MessageTemplate> messageTemplates = List.of(
+                new MessageTemplate().locale("et").message("Eesti keeles"),
+                new MessageTemplate().locale("ru").message("На русском"),
+                new MessageTemplate().locale("en").message("In English"));
+        alert.getLoginAlert().setMessageTemplates(messageTemplates);
+        alertValidator.validateAlert(alert);
+    }
+
+    @Test
     public void validateAlert_ssoAuthMethodsNotEmpty_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
@@ -87,13 +99,16 @@ public class AlertValidatorTest {
     }
 
     @Test
-    public void validateAlert_moreThanOneMessageTemplates_exceptionThrown() {
+    public void validateAlert_moreThanOneMessageTemplatesPerLocale_exceptionThrown() {
         Alert alert = validSSOAlert();
-        alert.getLoginAlert().getMessageTemplates().add(new MessageTemplate());
+        List<MessageTemplate> messageTemplates = List.of(
+                new MessageTemplate().locale("et").message("Eesti keeles"),
+                new MessageTemplate().locale("et").message("Duplicate locale"));
+        alert.getLoginAlert().setMessageTemplates(messageTemplates);
 
-        IllegalStateException exception = assertThrows(IllegalStateException.class,
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> alertValidator.validateAlert(alert));
-        Assertions.assertTrue(exception.getMessage().contains("Single message template expected"));
+        Assertions.assertTrue(exception.getMessage().contains("Multiple message templates for single locale"));
     }
 
     @Test

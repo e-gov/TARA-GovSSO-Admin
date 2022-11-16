@@ -12,6 +12,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Sort;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.util.List;
@@ -43,7 +44,7 @@ public class AlertsServiceTest {
     public void testGetAllAlerts() {
         Alert alert = validSSOAlert();
 
-        doReturn(List.of(AlertHelper.convertToEntity(alert))).when(repository).findAll();
+        doReturn(List.of(AlertHelper.convertToEntity(alert))).when(repository).findAll(any(Sort.class));
 
         List<Alert> alerts = service.getAlerts();
 

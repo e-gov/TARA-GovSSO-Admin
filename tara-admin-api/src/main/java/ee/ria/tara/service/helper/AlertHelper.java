@@ -1,11 +1,20 @@
 package ee.ria.tara.service.helper;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JavaType;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.tara.model.EmailAlert;
 import ee.ria.tara.model.LoginAlert;
 import ee.ria.tara.model.MessageTemplate;
 import ee.ria.tara.repository.model.Alert;
 
+import java.util.List;
+
 public class AlertHelper {
+
+    private static final ObjectMapper jsonMapper = new ObjectMapper();
+
     public static Alert convertToEntity(ee.ria.tara.model.Alert alert) {
         Alert entity = new Alert();
         Long id = alert.getId() != null ? Long.valueOf(alert.getId()) : null;
@@ -16,11 +25,7 @@ public class AlertHelper {
         entity.setEndTime(alert.getEndTime());
 
         LoginAlert loginAlert = alert.getLoginAlert();
-        String loginAlertMessage = loginAlert.getMessageTemplates().stream()
-                .filter(m -> m.getLocale().equals("et"))
-                .map(MessageTemplate::getMessage)
-                .findFirst().orElse(null);
-        entity.setNotificationText(loginAlertMessage);
+        entity.setNotificationTemplates(jsonMapper.valueToTree(loginAlert.getMessageTemplates()));
         entity.setDisplayOnlyForAuthmethods(loginAlert.getAuthMethods());
         entity.setNotifyClientsOnTaraLoginPage(loginAlert.getEnabled());
 
@@ -31,7 +36,6 @@ public class AlertHelper {
                     .filter(m -> m.getLocale().equals("et"))
                     .map(MessageTemplate::getMessage)
                     .findFirst().orElse(null);
-            entity.setNotificationText(loginAlertMessage);
             entity.setEmailTemplate(emailAlertMessage);
             entity.setSendAt(emailAlert.getSendAt());
             entity.setNotifyClientsByEmail(emailAlert.getEnabled());
@@ -53,12 +57,9 @@ public class AlertHelper {
         LoginAlert loginAlert = new LoginAlert();
         EmailAlert emailAlert = new EmailAlert();
 
-        MessageTemplate loginMessage = new MessageTemplate();
-        loginMessage.setMessage(entity.getNotificationText());
-        loginMessage.setLocale("et");
         loginAlert.setEnabled(entity.getNotifyClientsOnTaraLoginPage());
         loginAlert.setAuthMethods(entity.getDisplayOnlyForAuthmethods());
-        loginAlert.addMessageTemplatesItem(loginMessage);
+        loginAlert.setMessageTemplates(convertNotificationTemplates(entity.getNotificationTemplates()));
 
         MessageTemplate emailMessage = new MessageTemplate();
         emailMessage.setMessage(entity.getEmailTemplate());
@@ -79,4 +80,15 @@ public class AlertHelper {
 
         return alert;
     }
+
+    private static List<MessageTemplate> convertNotificationTemplates(JsonNode jsonNode) {
+        try {
+            JavaType targetType = jsonMapper.getTypeFactory()
+                    .constructParametricType(List.class, MessageTemplate.class);
+            return jsonMapper.treeToValue(jsonNode, targetType);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

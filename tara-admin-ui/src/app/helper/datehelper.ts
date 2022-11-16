@@ -1,11 +1,11 @@
 export class DateHelper {
-  static convertToDisplayString(dateTime: string) {
+  static convertToDisplayString(dateTime: string | Date) {
     let parsedDateTime = this.parseDateTime(dateTime);
 
     return parsedDateTime.date + " " + parsedDateTime.time;
   }
 
-  static parseDateTime(dateTime: string): { date: string, time: string } {
+  static parseDateTime(dateTime: string | Date | undefined): { date: string, time: string } {
     if (dateTime == undefined || dateTime === "") {
       return { date: "", time: "" }
     }

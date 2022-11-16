@@ -19,7 +19,7 @@ export class HttpInterceptorService implements HttpInterceptor {
         if (error instanceof HttpErrorResponse) {
           if (this.isAuthError(error)) {
             this.handleHttpErrorResponse(error);
-            return [];
+            return []; // TODO: Throw error? Right now misleading success messages are shown when session has expired.
           } else {
             return throwError(error);
           }
@@ -30,12 +30,12 @@ export class HttpInterceptorService implements HttpInterceptor {
   }
 
   private handleHttpErrorResponse(error: HttpErrorResponse) {
-    if (!error.url!.includes("/whoami") && !error.url!.includes("/ssoMode")) {
-      if (error.url!.includes("/login")) {
-        this.messageService.showMessage(JSON.stringify(error.error), "ERROR", environment.errorMessageDurationInMills)
-        return;
-      }
-
+    const url = error.url!;
+    if (url.includes("/login")) {
+      this.messageService.showMessage(JSON.stringify(error.error), "ERROR", environment.errorMessageDurationInMills)
+      return;
+    }
+    if (!url.includes("/whoami") && !url.includes("/ssoMode")) {
       this.messageService.showMessage("Session expired.", "ERROR", environment.errorMessageDurationInMills)
     }
     this.router.navigate(["/"]);

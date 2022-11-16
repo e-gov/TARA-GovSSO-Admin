@@ -1,0 +1,6 @@
+<div *ngIf="control.invalid && control.errors && (control.dirty || control.touched)"
+     class="alert alert-danger my-2">
+  <div *ngFor="let error of control.errors! | keyvalue">
+    {{ error.value }}
+  </div>
+</div>

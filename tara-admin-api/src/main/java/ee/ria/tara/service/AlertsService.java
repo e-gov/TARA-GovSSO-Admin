@@ -6,9 +6,9 @@ import ee.ria.tara.service.helper.AlertHelper;
 import ee.ria.tara.service.helper.AlertValidator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -60,10 +60,11 @@ public class AlertsService {
     }
 
     public List<Alert> getAlerts() {
-        List<Alert> alerts = new ArrayList<>();
-
-        repository.findAll().forEach(entity -> alerts.add(AlertHelper.convertFromEntity(entity)));
-
-        return alerts;
+        return repository.findAll(Sort.by(
+                Sort.Order.asc("startTime"),
+                Sort.Order.asc("id")))
+            .stream()
+            .map(AlertHelper::convertFromEntity)
+            .collect(Collectors.toList());
     }
 }
