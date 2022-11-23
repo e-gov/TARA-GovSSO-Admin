@@ -180,19 +180,23 @@ public class ClientHelper {
 
     private static List<ee.ria.tara.repository.model.ClientContact> getClientContacts(Client client, ee.ria.tara.repository.model.Client parentEntity) {
         if (client.getClientContacts() == null)
-            return null;
+            return List.of();
 
-        List<ee.ria.tara.repository.model.ClientContact> list = new ArrayList<>();
-        for (ClientContact model : client.getClientContacts()) {
-            ee.ria.tara.repository.model.ClientContact clientContact = new ee.ria.tara.repository.model.ClientContact();
-            clientContact.setClient(parentEntity);
-            clientContact.setName(model.getName());
-            clientContact.setEmail(model.getEmail());
-            clientContact.setPhone(model.getPhone());
-            clientContact.setDepartment(model.getDepartment());
-            list.add(clientContact);
-        }
-        return list;
+        return client.getClientContacts()
+                .stream()
+                .map(model -> toEntity(parentEntity, model))
+                .collect(Collectors.toList());
+    }
+
+    private static ee.ria.tara.repository.model.ClientContact toEntity(ee.ria.tara.repository.model.Client parentEntity,
+                                                                       ClientContact model) {
+        ee.ria.tara.repository.model.ClientContact clientContact = new ee.ria.tara.repository.model.ClientContact();
+        clientContact.setClient(parentEntity);
+        clientContact.setName(model.getName());
+        clientContact.setEmail(model.getEmail());
+        clientContact.setPhone(model.getPhone());
+        clientContact.setDepartment(model.getDepartment());
+        return clientContact;
     }
 
     private static NameTranslations getNameTranslations(NameTranslations nameTranslations) {
