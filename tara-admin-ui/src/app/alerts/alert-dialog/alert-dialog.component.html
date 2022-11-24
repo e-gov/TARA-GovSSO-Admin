@@ -13,14 +13,14 @@
         <label class="col-sm-4 col-form-label">Pealkiri</label>
         <div class="col-sm-8">
           <input *ngIf="!isInfo()" name="title" type="text" class="form-control" required formControlName="title"/>
-          <label *ngIf="isInfo()">{{ obj.title }}</label>
+          <label *ngIf="isInfo()" class="form-control-plaintext">{{ obj.title }}</label>
         </div>
       </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Alguse aeg</label>
         <div class="col-sm-8" *ngIf="isInfo()">
           <!-- TODO: pipe -->
-          <label>{{ getDisplayableDateTime(obj.start_time) }}</label>
+          <label class="form-control-plaintext">{{ getDisplayableDateTime(obj.start_time) }}</label>
         </div>
         <div class="col-sm-8" *ngIf="!isInfo()">
           <div class="row">
@@ -40,7 +40,7 @@
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Lõpu aeg</label>
         <div class="col-sm-8" *ngIf="isInfo()">
-          <label>{{getDisplayableDateTime(obj.end_time)}}</label>
+          <label class="form-control-plaintext">{{getDisplayableDateTime(obj.end_time)}}</label>
         </div>
         <div class="col-sm-8" *ngIf="!isInfo()">
           <div class="row">
@@ -60,13 +60,15 @@
       <div class="form-group row" *ngIf="!authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Mõjutatud autentimisvahendid</label>
         <div class="col-sm-4">
-          <div *ngFor="let item of alertScopes" formGroupName="alertScopes" class="form-check">
-            <input *ngIf="!isInfo()" type="checkbox" class="form-check-input" [id]="'alertScopes.' + item"
-                   [name]="'alertScopes.' + item"
-                   [formControlName]="item" />
-            <input *ngIf="isInfo()" disabled type="checkbox" class="form-check-input" [id]="'alertScopes.' + item"
-                   [name]="'alertScopes.' + item" [checked]="this.obj.login_alert.auth_methods.includes(item)"/>
-            <label class="form-check-label" [for]="'alertScopes.' + item">{{ item }}</label>
+          <div class="form-control-plaintext">
+            <div *ngFor="let item of alertScopes" formGroupName="alertScopes" class="form-check">
+              <input *ngIf="!isInfo()" type="checkbox" class="form-check-input" [id]="'alertScopes.' + item"
+                     [name]="'alertScopes.' + item"
+                     [formControlName]="item" />
+              <input *ngIf="isInfo()" disabled type="checkbox" class="form-check-input" [id]="'alertScopes.' + item"
+                     [name]="'alertScopes.' + item" [checked]="this.obj.login_alert.auth_methods.includes(item)"/>
+              <label class="form-check-label" [for]="'alertScopes.' + item">{{ item }}</label>
+            </div>
           </div>
           <app-form-errors [control]="form.get('alertScopes')!"></app-form-errors>
         </div>
@@ -80,9 +82,7 @@
                       [name]="'messageTemplates.' + language"></textarea>
           </div>
           <div *ngIf="isInfo()" class="col-sm-8">
-            <p>
-              {{ findExistingMessageTemplate(language)?.message }}
-            </p>
+            <p class="keep-line-breaks form-control-plaintext">{{ findExistingMessageTemplate(language)?.message }}</p>
           </div>
         </div>
       </ng-template>

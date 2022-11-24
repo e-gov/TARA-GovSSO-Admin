@@ -71,3 +71,7 @@ change-secret-dialog {
 ::ng-deep .mat-checkbox-background {
   background-color: white!important;
 }
+
+.keep-line-breaks {
+  white-space: pre-line;
+}
