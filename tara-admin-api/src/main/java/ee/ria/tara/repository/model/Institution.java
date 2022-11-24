@@ -39,6 +39,7 @@ public class Institution implements Serializable {
     private InstitutionType.TypeEnum type;
     private String billingEmail;
     @CreationTimestamp
+    @Column(updatable = false)
     private OffsetDateTime createdAt;
     @UpdateTimestamp
     private OffsetDateTime updatedAt;
