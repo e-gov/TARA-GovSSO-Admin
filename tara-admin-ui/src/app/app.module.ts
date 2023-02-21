@@ -56,9 +56,7 @@ import {DateAdapter} from '@angular/material/core';
 import {CustomDateAdapter} from './alerts/alert-dialog/custom-date-adapter';
 
 export const DATEPICKER_FORMATS = {
-  parse: {
-    dateInput: 'DD.MM.YYYY',
-  },
+  parse: {}, // An empty parse object is necessary to enable changing dates manually at the datpicker input
   display: {
     dateInput: 'DD.MM.YYYY',
     monthYearLabel: 'MMM YYYY',
