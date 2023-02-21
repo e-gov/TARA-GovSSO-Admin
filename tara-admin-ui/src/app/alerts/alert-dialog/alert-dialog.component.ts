@@ -7,6 +7,8 @@ import { DateHelper } from "../../helper/datehelper";
 import { MessageService } from "../../main/message/message.service";
 import { AbstractControl, FormControl, FormGroup, ValidationErrors, ValidatorFn } from "@angular/forms";
 import { AuthService } from "../../auth/auth.service";
+import { DateAdapter } from '@angular/material/core';
+import { CustomDateAdapter } from './custom-date-adapter';
 
 type DialogType = "ADD" | "UPDATE" | "INFO";
 type TypeActionFn = (type: any, alert: Alert) => Promise<any>;
@@ -14,7 +16,10 @@ type TypeActionFn = (type: any, alert: Alert) => Promise<any>;
 @Component({
   selector: 'app-alert-dialog',
   templateUrl: './alert-dialog.component.html',
-  styleUrls: ['./alert-dialog.component.css']
+  styleUrls: ['./alert-dialog.component.css'],
+  providers: [
+    {provide: DateAdapter, useClass: CustomDateAdapter}
+  ]
 })
 export class AlertDialogComponent implements OnInit {
 

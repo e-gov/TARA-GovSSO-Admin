@@ -52,11 +52,12 @@ import {
 } from "./institutions/institution-clients-dialog/institution-clients-dialog.component";
 import {EditValueDialogComponent} from "./clients/client-dialog/edit-value-dialog/edit-value-dialog.component";
 import { FormErrorsComponent } from "./form-errors/form-errors.component";
+import {DateAdapter} from '@angular/material/core';
+import {CustomDateAdapter} from './alerts/alert-dialog/custom-date-adapter';
 
 export const DATEPICKER_FORMATS = {
   parse: {
-    dateInput: 'DD.MM.YYYY', // TODO: This has no effect when using NativeDateAdapter, see
-                             //       https://github.com/angular/components/blob/14.2.7/src/material/core/datetime/native-date-adapter.ts#L128
+    dateInput: 'DD.MM.YYYY',
   },
   display: {
     dateInput: 'DD.MM.YYYY',
@@ -127,7 +128,8 @@ declare global {
     {provide: MAT_DIALOG_DEFAULT_OPTIONS, useValue: {hasBackdrop: false}},
     {provide: MAT_DATE_FORMATS, useValue: DATEPICKER_FORMATS},
     {provide: MAT_DATE_LOCALE, useValue: 'et'},
-    {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true}],
+    {provide: HTTP_INTERCEPTORS, useClass: HttpInterceptorService, multi: true},
+    {provide: DateAdapter, useClass: CustomDateAdapter}],
   bootstrap: [AppComponent]
 })
 export class AppModule {
