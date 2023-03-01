@@ -5,12 +5,12 @@
     <parent>
         <artifactId>tara-admin-parent</artifactId>
         <groupId>ee.ria.tara-admin</groupId>
-        <version>1.5.5</version>
+        <version>1.5.6</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>tara-admin-api</artifactId>
-    <version>1.5.5</version>
+    <version>1.5.6</version>
     <packaging>war</packaging>
 
     <properties>
@@ -23,8 +23,8 @@
         <commons-email.version>1.5</commons-email.version>
         <logstash-logback.version>7.3</logstash-logback.version>
         <greenmail.version>1.6.14</greenmail.version>
-        <tara-admin-api-schema.version>1.5.5</tara-admin-api-schema.version>
-        <tara-admin-ui.version>1.5.5</tara-admin-ui.version>
+        <tara-admin-api-schema.version>1.5.6</tara-admin-api-schema.version>
+        <tara-admin-ui.version>1.5.6</tara-admin-ui.version>
         <apache.poi.version>5.2.3</apache.poi.version>
 
         <!-- Upgrade Liquibase to get newer bundled Apache Commons Text. TODO Remove when Spring Boot includes Liquibase >= 4.17.1 -->
