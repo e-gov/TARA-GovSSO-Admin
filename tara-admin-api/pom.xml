@@ -18,11 +18,11 @@
         (see https://issues.apache.org/jira/browse/MNG-4979 ). -->
         <spring-boot.build-image.imageName>tara-admin:latest</spring-boot.build-image.imageName><!-- Use "latest" tag instead of version tag. -->
 
-        <bouncycastle.version>1.70</bouncycastle.version>
+        <bouncycastle.version>1.72</bouncycastle.version>
         <cdoc4j.version>1.4</cdoc4j.version>
         <commons-email.version>1.5</commons-email.version>
-        <logstash-logback.version>7.2</logstash-logback.version>
-        <greenmail.version>1.6.11</greenmail.version>
+        <logstash-logback.version>7.3</logstash-logback.version>
+        <greenmail.version>1.6.14</greenmail.version>
         <tara-admin-api-schema.version>1.5.5</tara-admin-api-schema.version>
         <tara-admin-ui.version>1.5.5</tara-admin-ui.version>
         <apache.poi.version>5.2.3</apache.poi.version>
@@ -73,7 +73,7 @@
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
-            <artifactId>bcprov-jdk15on</artifactId>
+            <artifactId>bcprov-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
         </dependency>
         <dependency>
