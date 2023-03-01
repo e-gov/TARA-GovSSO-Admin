@@ -48,7 +48,7 @@ public class ClientImportResponse {
    * @return status
   */
   
-  @Schema(name = "status", required = false)
+  @Schema(name = "status", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getStatus() {
     return status;
   }
@@ -67,7 +67,7 @@ public class ClientImportResponse {
    * @return clientsCount
   */
   
-  @Schema(name = "clients_count", required = false)
+  @Schema(name = "clients_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public Integer getClientsCount() {
     return clientsCount;
   }
@@ -86,7 +86,7 @@ public class ClientImportResponse {
    * @return clientsImportSuccessCount
   */
   
-  @Schema(name = "clients_import_success_count", required = false)
+  @Schema(name = "clients_import_success_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public Integer getClientsImportSuccessCount() {
     return clientsImportSuccessCount;
   }
@@ -105,7 +105,7 @@ public class ClientImportResponse {
    * @return clientsImportFailedCount
   */
   
-  @Schema(name = "clients_import_failed_count", required = false)
+  @Schema(name = "clients_import_failed_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public Integer getClientsImportFailedCount() {
     return clientsImportFailedCount;
   }
@@ -132,7 +132,7 @@ public class ClientImportResponse {
    * @return clientsNotImported
   */
   
-  @Schema(name = "clients_not_imported", required = false)
+  @Schema(name = "clients_not_imported", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public List<String> getClientsNotImported() {
     return clientsNotImported;
   }

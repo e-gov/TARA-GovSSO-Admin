@@ -36,7 +36,7 @@ public class LoginResponse {
    * @return error
   */
   
-  @Schema(name = "error", required = false)
+  @Schema(name = "error", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getError() {
     return error;
   }
@@ -55,7 +55,7 @@ public class LoginResponse {
    * @return username
   */
   
-  @Schema(name = "username", required = false)
+  @Schema(name = "username", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getUsername() {
     return username;
   }

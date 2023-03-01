@@ -40,7 +40,7 @@ public class InstitutionMetainfo {
    * @return name
   */
   @NotNull 
-  @Schema(name = "name", example = "Example Institution", required = true)
+  @Schema(name = "name", example = "Example Institution", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getName() {
     return name;
   }
@@ -59,7 +59,7 @@ public class InstitutionMetainfo {
    * @return registryCode
   */
   @NotNull @Pattern(regexp = "\\d{3,}") 
-  @Schema(name = "registry_code", example = "12345678", required = true)
+  @Schema(name = "registry_code", example = "12345678", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getRegistryCode() {
     return registryCode;
   }
@@ -78,7 +78,7 @@ public class InstitutionMetainfo {
    * @return type
   */
   @NotNull @Valid 
-  @Schema(name = "type", required = true)
+  @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
   public InstitutionType getType() {
     return type;
   }

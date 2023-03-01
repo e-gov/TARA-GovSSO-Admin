@@ -39,7 +39,7 @@ public class ClientSecretExportSettings {
    * @return recipientIdCode
   */
   @Pattern(regexp = "^[0-9]{11,11}$") 
-  @Schema(name = "recipient_id_code", example = "60001019906", required = false)
+  @Schema(name = "recipient_id_code", example = "60001019906", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getRecipientIdCode() {
     return recipientIdCode;
   }
@@ -58,7 +58,7 @@ public class ClientSecretExportSettings {
    * @return recipientNameInLdap
   */
   @Size(min = 5) 
-  @Schema(name = "recipient_name_in_ldap", example = "Mari-Liis Männik", required = false)
+  @Schema(name = "recipient_name_in_ldap", example = "Mari-Liis Männik", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getRecipientNameInLdap() {
     return recipientNameInLdap;
   }
@@ -77,7 +77,7 @@ public class ClientSecretExportSettings {
    * @return recipientEmail
   */
   @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @Email
-  @Schema(name = "recipient_email", example = "60001019906@eesti.ee", required = false)
+  @Schema(name = "recipient_email", example = "60001019906@eesti.ee", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getRecipientEmail() {
     return recipientEmail;
   }

@@ -39,7 +39,7 @@ public class NameTranslations {
    * @return et
   */
   @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 150) 
-  @Schema(name = "et", required = false)
+  @Schema(name = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getEt() {
     return et;
   }
@@ -58,7 +58,7 @@ public class NameTranslations {
    * @return en
   */
   @Size(min = 3, max = 150) 
-  @Schema(name = "en", required = false)
+  @Schema(name = "en", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getEn() {
     return en;
   }
@@ -77,7 +77,7 @@ public class NameTranslations {
    * @return ru
   */
   @Size(min = 3, max = 150) 
-  @Schema(name = "ru", required = false)
+  @Schema(name = "ru", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getRu() {
     return ru;
   }

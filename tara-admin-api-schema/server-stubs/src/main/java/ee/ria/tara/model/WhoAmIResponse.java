@@ -33,7 +33,7 @@ public class WhoAmIResponse {
    * @return username
   */
   
-  @Schema(name = "username", required = false)
+  @Schema(name = "username", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getUsername() {
     return username;
   }

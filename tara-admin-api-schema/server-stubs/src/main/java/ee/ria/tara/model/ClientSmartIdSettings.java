@@ -39,7 +39,7 @@ public class ClientSmartIdSettings {
    * @return relyingPartyUUID
   */
   @Size(max = 512) 
-  @Schema(name = "relying_party_UUID", required = false)
+  @Schema(name = "relying_party_UUID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getRelyingPartyUUID() {
     return relyingPartyUUID;
   }
@@ -58,7 +58,7 @@ public class ClientSmartIdSettings {
    * @return relyingPartyName
   */
   @Size(max = 512) 
-  @Schema(name = "relying_party_name", required = false)
+  @Schema(name = "relying_party_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getRelyingPartyName() {
     return relyingPartyName;
   }
@@ -77,7 +77,7 @@ public class ClientSmartIdSettings {
    * @return shouldUseAdditionalVerificationCodeCheck
   */
   
-  @Schema(name = "should_use_additional_verification_code_check", required = false)
+  @Schema(name = "should_use_additional_verification_code_check", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public Boolean getShouldUseAdditionalVerificationCodeCheck() {
     return shouldUseAdditionalVerificationCodeCheck;
   }

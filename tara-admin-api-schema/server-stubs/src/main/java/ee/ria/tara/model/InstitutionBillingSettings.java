@@ -33,7 +33,7 @@ public class InstitutionBillingSettings {
    * @return email
   */
   @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @Email
-  @Schema(name = "email", required = false)
+  @Schema(name = "email", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getEmail() {
     return email;
   }

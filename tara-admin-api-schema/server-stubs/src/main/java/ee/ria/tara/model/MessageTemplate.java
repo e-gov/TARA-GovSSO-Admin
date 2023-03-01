@@ -36,7 +36,7 @@ public class MessageTemplate {
    * @return message
   */
   @Size(min = 1, max = 255) 
-  @Schema(name = "message", example = "Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00", required = false)
+  @Schema(name = "message", example = "Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getMessage() {
     return message;
   }
@@ -55,7 +55,7 @@ public class MessageTemplate {
    * @return locale
   */
   
-  @Schema(name = "locale", example = "et", required = false)
+  @Schema(name = "locale", example = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getLocale() {
     return locale;
   }

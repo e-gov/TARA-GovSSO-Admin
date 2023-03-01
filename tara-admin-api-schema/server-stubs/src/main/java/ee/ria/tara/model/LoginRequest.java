@@ -36,7 +36,7 @@ public class LoginRequest {
    * @return username
   */
   @NotNull 
-  @Schema(name = "username", required = true)
+  @Schema(name = "username", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getUsername() {
     return username;
   }
@@ -55,7 +55,7 @@ public class LoginRequest {
    * @return password
   */
   @NotNull 
-  @Schema(name = "password", required = true)
+  @Schema(name = "password", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getPassword() {
     return password;
   }

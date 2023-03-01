@@ -33,7 +33,7 @@ public class SsoModeResponse {
    * @return ssoMode
   */
   
-  @Schema(name = "ssoMode", required = false)
+  @Schema(name = "ssoMode", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public Boolean getSsoMode() {
     return ssoMode;
   }

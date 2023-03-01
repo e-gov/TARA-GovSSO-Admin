@@ -62,7 +62,7 @@ public class Alert {
    * @return id
   */
   
-  @Schema(name = "id", example = "1234567", required = false)
+  @Schema(name = "id", example = "1234567", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getId() {
     return id;
   }
@@ -81,7 +81,7 @@ public class Alert {
    * @return title
   */
   @NotNull @Size(max = 255) 
-  @Schema(name = "title", example = "Plaaniline katkestus SK teenustes", required = true)
+  @Schema(name = "title", example = "Plaaniline katkestus SK teenustes", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getTitle() {
     return title;
   }
@@ -100,7 +100,7 @@ public class Alert {
    * @return startTime
   */
   @NotNull @Valid 
-  @Schema(name = "start_time", example = "2019-08-24T14:15:22Z", required = true)
+  @Schema(name = "start_time", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.REQUIRED)
   public OffsetDateTime getStartTime() {
     return startTime;
   }
@@ -119,7 +119,7 @@ public class Alert {
    * @return endTime
   */
   @NotNull @Valid 
-  @Schema(name = "end_time", example = "2019-08-24T14:15:22Z", required = true)
+  @Schema(name = "end_time", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.REQUIRED)
   public OffsetDateTime getEndTime() {
     return endTime;
   }
@@ -138,7 +138,7 @@ public class Alert {
    * @return loginAlert
   */
   @Valid 
-  @Schema(name = "login_alert", required = false)
+  @Schema(name = "login_alert", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public LoginAlert getLoginAlert() {
     return loginAlert;
   }
@@ -157,7 +157,7 @@ public class Alert {
    * @return emailAlert
   */
   @Valid 
-  @Schema(name = "email_alert", required = false)
+  @Schema(name = "email_alert", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public EmailAlert getEmailAlert() {
     return emailAlert;
   }
@@ -176,7 +176,7 @@ public class Alert {
    * @return createdAt
   */
   @Valid 
-  @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", required = false)
+  @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -195,7 +195,7 @@ public class Alert {
    * @return updatedAt
   */
   @Valid 
-  @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", required = false)
+  @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }

@@ -46,7 +46,7 @@ public class EmailAlert {
    * @return enabled
   */
   
-  @Schema(name = "enabled", required = false)
+  @Schema(name = "enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public Boolean getEnabled() {
     return enabled;
   }
@@ -65,7 +65,7 @@ public class EmailAlert {
    * @return sendAt
   */
   @Valid 
-  @Schema(name = "send_at", example = "2019-08-24T14:15:22Z", required = false)
+  @Schema(name = "send_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public OffsetDateTime getSendAt() {
     return sendAt;
   }
@@ -92,7 +92,7 @@ public class EmailAlert {
    * @return messageTemplates
   */
   @Valid 
-  @Schema(name = "message_templates", required = false)
+  @Schema(name = "message_templates", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public List<MessageTemplate> getMessageTemplates() {
     return messageTemplates;
   }

@@ -42,7 +42,7 @@ public class ClientContact {
    * @return name
   */
   
-  @Schema(name = "name", example = "test", required = false)
+  @Schema(name = "name", example = "test", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getName() {
     return name;
   }
@@ -61,7 +61,7 @@ public class ClientContact {
    * @return email
   */
   @Email
-  @Schema(name = "email", example = "test@example.com", required = false)
+  @Schema(name = "email", example = "test@example.com", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getEmail() {
     return email;
   }
@@ -80,7 +80,7 @@ public class ClientContact {
    * @return phone
   */
   
-  @Schema(name = "phone", example = "+3726630200", required = false)
+  @Schema(name = "phone", example = "+3726630200", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getPhone() {
     return phone;
   }
@@ -99,7 +99,7 @@ public class ClientContact {
    * @return department
   */
   
-  @Schema(name = "department", example = "test", required = false)
+  @Schema(name = "department", example = "test", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getDepartment() {
     return department;
   }

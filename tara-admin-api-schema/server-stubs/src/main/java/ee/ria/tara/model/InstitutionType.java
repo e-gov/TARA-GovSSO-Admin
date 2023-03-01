@@ -69,7 +69,7 @@ public class InstitutionType {
    * @return type
   */
   @NotNull 
-  @Schema(name = "type", required = true)
+  @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
   public TypeEnum getType() {
     return type;
   }

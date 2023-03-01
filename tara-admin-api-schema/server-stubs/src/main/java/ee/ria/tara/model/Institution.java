@@ -72,7 +72,7 @@ public class Institution {
    * @return id
   */
   
-  @Schema(name = "id", required = false)
+  @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public String getId() {
     return id;
   }
@@ -91,7 +91,7 @@ public class Institution {
    * @return registryCode
   */
   @NotNull @Pattern(regexp = "\\d{3,}") 
-  @Schema(name = "registry_code", example = "12345678", required = true)
+  @Schema(name = "registry_code", example = "12345678", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getRegistryCode() {
     return registryCode;
   }
@@ -110,7 +110,7 @@ public class Institution {
    * @return name
   */
   @NotNull @Size(min = 3, max = 150) 
-  @Schema(name = "name", example = "Example Institution", required = true)
+  @Schema(name = "name", example = "Example Institution", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getName() {
     return name;
   }
@@ -129,7 +129,7 @@ public class Institution {
    * @return type
   */
   @NotNull @Valid 
-  @Schema(name = "type", required = true)
+  @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
   public InstitutionType getType() {
     return type;
   }
@@ -156,7 +156,7 @@ public class Institution {
    * @return clientIds
   */
   
-  @Schema(name = "client_ids", required = false)
+  @Schema(name = "client_ids", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public List<String> getClientIds() {
     return clientIds;
   }
@@ -175,7 +175,7 @@ public class Institution {
    * @return address
   */
   @NotNull @Size(min = 3, max = 512) 
-  @Schema(name = "address", example = "Test st 123", required = true)
+  @Schema(name = "address", example = "Test st 123", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getAddress() {
     return address;
   }
@@ -194,7 +194,7 @@ public class Institution {
    * @return phone
   */
   @NotNull @Pattern(regexp = "^[0-9\\+]{5,}$") 
-  @Schema(name = "phone", example = "+3726630200", required = true)
+  @Schema(name = "phone", example = "+3726630200", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getPhone() {
     return phone;
   }
@@ -213,7 +213,7 @@ public class Institution {
    * @return email
   */
   @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @Email
-  @Schema(name = "email", example = "info@example.com", required = true)
+  @Schema(name = "email", example = "info@example.com", requiredMode = Schema.RequiredMode.REQUIRED)
   public String getEmail() {
     return email;
   }
@@ -232,7 +232,7 @@ public class Institution {
    * @return billingSettings
   */
   @NotNull @Valid 
-  @Schema(name = "billing_settings", required = true)
+  @Schema(name = "billing_settings", requiredMode = Schema.RequiredMode.REQUIRED)
   public InstitutionBillingSettings getBillingSettings() {
     return billingSettings;
   }
@@ -251,7 +251,7 @@ public class Institution {
    * @return createdAt
   */
   @Valid 
-  @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", required = false)
+  @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -270,7 +270,7 @@ public class Institution {
    * @return updatedAt
   */
   @Valid 
-  @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", required = false)
+  @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }

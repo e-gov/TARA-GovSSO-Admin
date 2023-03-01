@@ -44,7 +44,7 @@ public class LoginAlert {
    * @return enabled
   */
   
-  @Schema(name = "enabled", required = false)
+  @Schema(name = "enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public Boolean getEnabled() {
     return enabled;
   }
@@ -71,7 +71,7 @@ public class LoginAlert {
    * @return messageTemplates
   */
   @Valid 
-  @Schema(name = "message_templates", required = false)
+  @Schema(name = "message_templates", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public List<MessageTemplate> getMessageTemplates() {
     return messageTemplates;
   }
@@ -98,7 +98,7 @@ public class LoginAlert {
    * @return authMethods
   */
   
-  @Schema(name = "auth_methods", required = false)
+  @Schema(name = "auth_methods", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   public List<String> getAuthMethods() {
     return authMethods;
   }
