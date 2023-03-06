@@ -140,8 +140,8 @@ public class ClientsService {
         clientValidator.validateClient(client, institution.getType());
         saveClientEntity(ClientHelper.convertToEntity(client, institution));
 
-        boolean hashSecret = !adminConfigurationProvider.isSsoMode();
-        HydraClient hydraClient = convertToHydraClient(client, hashSecret);
+        boolean ssoMode = adminConfigurationProvider.isSsoMode();
+        HydraClient hydraClient = convertToHydraClient(client, ssoMode);
         oidcService.saveClient(hydraClient, uri, httpMethod);
 
         if (shouldGenerateNewSecret(client)) {
@@ -150,7 +150,7 @@ public class ClientsService {
             client.setSecret(newSecret);
             clientSecretEmailService.sendSigningSecretByEmail(client);
 
-            hydraClient.setClientSecret(hashSecret ? ClientHelper.getDigest(newSecret) : newSecret);
+            hydraClient.setClientSecret(!ssoMode ? ClientHelper.getDigest(newSecret) : newSecret);
             String putRequestUri = String.format("%s/clients/%s", baseUrl, client.getClientId());
             oidcService.saveClient(hydraClient, putRequestUri, HttpMethod.PUT);
         }

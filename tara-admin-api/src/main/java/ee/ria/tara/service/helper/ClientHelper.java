@@ -121,7 +121,7 @@ public class ClientHelper {
         return client;
     }
 
-    public static HydraClient convertToHydraClient(Client client, boolean hashSecret) {
+    public static HydraClient convertToHydraClient(Client client, boolean ssoMode) {
         HydraClientMetadata metadata = new HydraClientMetadata();
         OidcClient oidcClient = new OidcClient();
         HydraClient hydraClient = new HydraClient();
@@ -142,9 +142,12 @@ public class ClientHelper {
         metadata.setOidcClient(oidcClient);
         metadata.setSkipUserConsentClientIds(client.getSkipUserConsentClientIds() != null ? getDistinctSkipUserConsentClientIds(client) : null);
 
+        if (ssoMode) {
+            hydraClient.setGrantTypes(List.of("authorization_code", "refresh_token"));
+        }
         hydraClient.setClientId(client.getClientId());
         // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.
-        hydraClient.setClientSecret(hashSecret ? getDigest(client.getSecret()): client.getSecret());
+        hydraClient.setClientSecret(!ssoMode ? getDigest(client.getSecret()): client.getSecret());
         hydraClient.setClientName(client.getClientName() != null ? client.getClientName().getEt() : null);
 
         hydraClient.setScope(String.join(" ", client.getScope()));
