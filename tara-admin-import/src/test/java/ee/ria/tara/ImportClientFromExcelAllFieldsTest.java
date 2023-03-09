@@ -63,8 +63,8 @@ public class ImportClientFromExcelAllFieldsTest {
                 .withRequestBody(equalToJson("{" +
                         "\"client_id\":\"mock_client_id\"," +
                         "\"client_name\":\"Eestikeelne nimi\"," +
-                        "\"client_secret\":\"2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b\"," +
-                        "\"grant_types\":[\"authorization_code\", \"refresh_token\"]," +
+                        "\"client_secret\":\"3d91b58504a6cc3a159005ee7b16c7ae503ca6ac2a6a3c893837083c236b864a\"," +
+                        "\"grant_types\":[\"authorization_code\"]," +
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
                         "\"post_logout_redirect_uris\": null," +
                         "\"response_types\":[\"code\"]," +
