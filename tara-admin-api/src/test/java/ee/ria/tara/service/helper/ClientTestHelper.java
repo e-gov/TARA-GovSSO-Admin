@@ -68,6 +68,7 @@ public class ClientTestHelper {
         client.setClientUrl("https://localhost:4200");
         client.setInstitutionMetainfo(institutionMetainfo);
         client.setRedirectUris(List.of("https://localhost:4200"));
+        client.setTokenRequestAllowedIpAddresses(List.of("1.1.1.1","1.1.1.10"));
         client.setBackchannelLogoutUri(null);
         client.setPostLogoutRedirectUris(null);
         ClientSecretExportSettings clientSecretExportSettings = new ClientSecretExportSettings();

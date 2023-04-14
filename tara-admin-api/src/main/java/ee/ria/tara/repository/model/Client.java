@@ -40,6 +40,8 @@ public class Client {
     private List<String> infoNotificationEmails;
     @Convert(converter = StringListConverter.class)
     private List<String> slaNotificationEmails;
+    @Convert(converter = StringListConverter.class)
+    private List<String> tokenRequestAllowedIpAddresses;
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY, mappedBy = "client")
     private List<ClientContact> clientContacts;
     @CreationTimestamp

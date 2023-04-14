@@ -170,6 +170,31 @@
         </div>
       </div>
 
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Identsustõendipäringu lubatud IP-aadressid
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="IPv4 või IPv6 aadressid, millelt lubatakse identsustõendipäringuid. Väärtus võib esindada ühte aadressi nagu 1.2.3.4 või 1:2:3:4:5:6:7:8 või alamvõrke nagu 1.2.0.0/16 või 1.*.1-3.1-4 või 1111:222::/64 või 1:2:*:4:5-10:6:7 . Et demokeskkonnas lubada päringuid kõikidelt aadressidelt, määrata väärtusteks 0.0.0.0/0 ja ::/0 .">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-6">
+          <div *ngFor="let item of newData.token_request_allowed_ip_addresses!" class="d-block">
+            <div class="form-group row col-sm-8 d-inline">
+              <a href="{{item}}">{{item}}</a>
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="removeIpAddress(item)">
+                <mat-icon class="ml-1 float-right">close</mat-icon>
+              </button>
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="openEditIpAddressDialog(item)">Muuda
+              </button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button *ngIf="!isInfo()" type="button" class="btn-link ml-0" (click)="openIpAddressDialog()">Lisa IP
+          </button>
+        </div>
+      </div>
+
       <div class="form-group row" *ngIf="authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Väljalogimise tagasisuunamispäring - lubatud URL-id
           <mat-icon inline class="material-icons ml-3" style="font-size: 20px"

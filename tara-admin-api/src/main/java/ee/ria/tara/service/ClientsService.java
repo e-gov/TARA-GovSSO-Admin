@@ -70,6 +70,15 @@ public class ClientsService {
         }
     }
 
+    public Map<String, List<String>> getAllClientsFromClientRepository() {
+            List<ee.ria.tara.repository.model.Client> clientList = new ArrayList<>(clientRepository.findAll());
+            Map<String, List<String>> clientsIps = clientList
+                .stream()
+                .collect(Collectors.toMap(ee.ria.tara.repository.model.Client::getClientId, ee.ria.tara.repository.model.Client::getTokenRequestAllowedIpAddresses));
+
+            return clientsIps;
+    }
+
     public List<Client> getAllInstitutionsClients(String registryCode) throws ApiException {
         Map<String, ee.ria.tara.repository.model.Client> clientMap;
         List<Client> clients = new ArrayList<>();

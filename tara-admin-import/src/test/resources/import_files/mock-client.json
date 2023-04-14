@@ -16,6 +16,9 @@
     "redirect_uris": [
       "https://back.ee"
     ],
+    "token_request_allowed_ip_addresses": [
+      "1.2.3.4"
+    ],
     "scope": [
       "openid",
       "idcard",

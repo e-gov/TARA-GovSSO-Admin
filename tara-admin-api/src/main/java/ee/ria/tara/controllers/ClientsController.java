@@ -42,6 +42,14 @@ public class ClientsController implements ClientsApi {
     }
 
     @Override
+    public ResponseEntity<Map<String, List<String>>> getAllTokenRequestAllowedIpAddresses() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        log.info(String.format("Incoming request: GET %s, with query %s.", request.getRequestURI(), request.getQueryString()));
+        Map<String, List<String>> clientsIps = service.getAllClientsFromClientRepository();
+        return ResponseEntity.ok(clientsIps);
+    }
+
+    @Override
     public ResponseEntity<ClientImportResponse> importClients(@RequestPart("file") MultipartFile fileName) {
         try {
             log.info("Upload file: " + fileName.getOriginalFilename());

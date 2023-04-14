@@ -68,7 +68,7 @@ public class SecurityConfiguration {
                 .authorizeRequests()
                     .antMatchers("/", "/login", "/ssoMode", "/actuator/**")
                         .permitAll()
-                    .antMatchers(HttpMethod.GET, "/alerts")
+                    .antMatchers(HttpMethod.GET, "/alerts", "/clients/tokenrequestallowedipaddresses")
                         .permitAll()
                     .antMatchers("/*.js", "/*.css", "/*.woff2", "/*.woff", "/*.ttf")
                         .permitAll()

@@ -13,3 +13,5 @@ databaseChangeLog:
       file: db/changelog/GSSO-463.yaml
   - include:
       file: db/changelog/AUT-695.yaml
+  - include:
+      file: db/changelog/GSSO-588.yaml

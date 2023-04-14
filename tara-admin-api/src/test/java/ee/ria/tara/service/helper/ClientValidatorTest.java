@@ -9,6 +9,8 @@ import ee.ria.tara.repository.ClientRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -315,5 +317,29 @@ public class ClientValidatorTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> clientValidator.validateClient(client, PRIVATE));
         Assertions.assertTrue(exception.getMessage().contains("Client logo must not be set in TARA mode"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1.2.3.4", "1:2:3:4:5:6:7:8", "1.2.0.0/16", "1.*.1-3.1-4", "1111:222::/64", "1:2:*:4:5-10:6:7"})
+    public void validateClient_taraClientIpAddressValid_successfulValidation(String ipAddress) {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setTokenRequestAllowedIpAddresses(List.of(ipAddress));
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1.1.1.1.1", "1.1.a.1", "1111.1.1.1", "999.1.1.1", "1.1.1.1+1.1.1.1","1:2:3:4:5:6:7", " "})
+    public void validateClient_taraClientIpAddressInvalid_exceptionThrown(String ipAddress) {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setTokenRequestAllowedIpAddresses(List.of(ipAddress));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.tokenRequestAllowedIpAddresses.invalidIp"));
     }
 }

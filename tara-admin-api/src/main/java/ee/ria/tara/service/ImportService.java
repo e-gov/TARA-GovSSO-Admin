@@ -129,6 +129,7 @@ public class ImportService {
             client.setClientContacts(getContacts(row, getNullIfEmpty(getCellValue(row, 12))));
             client.setEidasRequesterId(getCellValue(row, 13));
             client.setDescription(getNullIfEmpty(getCellValue(row, 14)));
+            client.setTokenRequestAllowedIpAddresses(Arrays.asList(getCellValue(row, 15)));
             client.setScope(defaultListOfScopes);
 
             if (clients.containsKey(institution))
@@ -163,9 +164,9 @@ public class ImportService {
     private void assertValidHeader(Row row) {
         List<String> expectedColumnValues = List.of("Institution name", "Institution registry code", "Client ID",
                 "Redirect URI", "Secret", "Return URL (legacy)", "Client name (et)", "Client name (en)", "Client name (ru)",
-                "Client shortname (et)", "Client shortname (en)", "Client shortname (ru)", "Contacts", "eIDAS RequesterID", "Description" );
+                "Client shortname (et)", "Client shortname (en)", "Client shortname (ru)", "Contacts", "eIDAS RequesterID", "Description", "Token request allowed IP addresses");
         List<String> actualColumnValues = new ArrayList<>();
-        for (int i = 0; i < 15; i++) {
+        for (int i = 0; i < 16; i++) {
             actualColumnValues.add(getCellValue(row, i));
         }
 

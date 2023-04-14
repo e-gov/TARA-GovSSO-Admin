@@ -105,7 +105,7 @@ public class ImportServiceIT {
         Exception expectedEx = assertThrows(IllegalArgumentException.class, () -> {
             importService.importFromExcelFile(new FileInputStream("src/test/resources/import_files/invalid_content.xlsx"));
         });
-        assertEquals("Invalid header row. Expecting following header columns: [Institution name, Institution registry code, Client ID, Redirect URI, Secret, Return URL (legacy), Client name (et), Client name (en), Client name (ru), Client shortname (et), Client shortname (en), Client shortname (ru), Contacts, eIDAS RequesterID, Description]", expectedEx.getMessage());
+        assertEquals("Invalid header row. Expecting following header columns: [Institution name, Institution registry code, Client ID, Redirect URI, Secret, Return URL (legacy), Client name (et), Client name (en), Client name (ru), Client shortname (et), Client shortname (en), Client shortname (ru), Contacts, eIDAS RequesterID, Description, Token request allowed IP addresses]", expectedEx.getMessage());
     }
 
     @Test

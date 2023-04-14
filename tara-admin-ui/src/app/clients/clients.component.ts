@@ -118,6 +118,7 @@ export class ClientsComponent implements OnInit {
       client_name: {et: undefined, en: undefined, ru: undefined},
       client_short_name: {et: undefined, en: undefined, ru: undefined},
       redirect_uris: [],
+      token_request_allowed_ip_addresses: [],
       post_logout_redirect_uris: [],
       scope: scopes,
       is_user_consent_required: this.authService.isSsoMode,

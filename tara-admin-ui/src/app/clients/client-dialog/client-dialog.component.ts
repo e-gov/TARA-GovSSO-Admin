@@ -148,6 +148,22 @@ export class ClientDialogComponent implements OnInit {
     });
   }
 
+  openIpAddressDialog(): void {
+    const dialogRef = this.dialog.open(AddValueDialogComponent, {
+      data: {
+        title: "Lubatud IP-aadressi lisamine"
+      },
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result !== "" && result !== undefined) {
+        this.newData.token_request_allowed_ip_addresses.push(result);
+      }
+    });
+  }
+
   openLogoutRedirectUrlDialog(): void {
       const dialogRef = this.dialog.open(AddValueDialogComponent, {
         data: {
@@ -238,6 +254,10 @@ export class ClientDialogComponent implements OnInit {
 
   removeRedirectUri(uri: string) {
     this.newData.redirect_uris.splice(this.newData.redirect_uris.indexOf(uri), 1)
+  }
+
+  removeIpAddress(uri: string) {
+    this.newData.token_request_allowed_ip_addresses.splice(this.newData.token_request_allowed_ip_addresses.indexOf(uri), 1)
   }
 
   removeLogoutRedirectUri(uri: string) {
@@ -442,6 +462,24 @@ export class ClientDialogComponent implements OnInit {
       if (newValue !== "" && newValue !== undefined && oldValue !== "" && oldValue !== undefined) {
         const index = this.newData.redirect_uris.indexOf(oldValue);
         this.newData.redirect_uris[index] = newValue;
+      }
+    });
+  }
+
+  openEditIpAddressDialog(url: string) {
+    const dialogRef = this.dialog.open(EditValueDialogComponent, {
+      data: {
+        title: "Muuda IP-aadressi",
+        value: url
+      },
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe(({newValue, oldValue}) => {
+      if (newValue !== "" && newValue !== undefined && oldValue !== "" && oldValue !== undefined) {
+        const index = this.newData.token_request_allowed_ip_addresses.indexOf(oldValue);
+        this.newData.token_request_allowed_ip_addresses[index] = newValue;
       }
     });
   }

@@ -5,6 +5,8 @@ import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.InstitutionType;
 import ee.ria.tara.repository.ClientRepository;
+import inet.ipaddr.AddressStringException;
+import inet.ipaddr.IPAddressString;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -38,8 +40,22 @@ public class ClientValidator {
         validateRedirectUris(client);
         validateEidasRequesterId(client);
         validateLogo(client.getClientLogo());
+        validateIpAddresses(client.getTokenRequestAllowedIpAddresses());
         if (client.getSkipUserConsentClientIds() != null) {
             validateSkipUserConsentClients(client.getSkipUserConsentClientIds(), client.getClientId());
+        }
+    }
+
+    private void validateIpAddresses(List<String> ipAddresses) {
+        for (String ipAddress: ipAddresses) {
+            if  (ipAddress.isBlank()) {
+                throw new InvalidDataException("Client.tokenRequestAllowedIpAddresses.invalidIp");
+            }
+            try {
+                new IPAddressString(ipAddress).validate();
+            } catch (AddressStringException e) {
+                throw new InvalidDataException("Client.tokenRequestAllowedIpAddresses.invalidIp");
+            }
         }
     }
 

@@ -47,6 +47,7 @@ public class ClientHelper {
             client.setInfoNotificationEmails(entity.getInfoNotificationEmails());
             client.setSlaNotificationEmails(entity.getSlaNotificationEmails());
             client.setClientContacts(getClientContacts(entity));
+            client.setTokenRequestAllowedIpAddresses(entity.getTokenRequestAllowedIpAddresses());
 
             if (!backchannelLogoutHostAndPortMatches(client.getBackchannelLogoutUri(),
                     entity.getBackchannelLogoutHostAndPort())) {
@@ -177,6 +178,7 @@ public class ClientHelper {
         entity.setSlaNotificationEmails(client.getSlaNotificationEmails());
         entity.setClientContacts(getClientContacts(client, entity));
         entity.setBackchannelLogoutHostAndPort(getBackchannelLogoutHostAndPort(client.getBackchannelLogoutUri()));
+        entity.setTokenRequestAllowedIpAddresses(client.getTokenRequestAllowedIpAddresses());
 
         return entity;
     }

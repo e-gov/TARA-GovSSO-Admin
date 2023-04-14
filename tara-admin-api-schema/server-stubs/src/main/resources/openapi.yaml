@@ -168,6 +168,26 @@ paths:
       x-accepts: application/json
       x-tags:
       - tag: clients
+  /clients/tokenrequestallowedipaddresses:
+    get:
+      operationId: getAllTokenRequestAllowedIpAddresses
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                additionalProperties:
+                  items:
+                    type: string
+                  type: array
+                type: object
+          description: Successful operation
+      summary: Get IP configurations of all registered clients
+      tags:
+      - clients
+      x-accepts: application/json
+      x-tags:
+      - tag: clients
   /clients/import:
     post:
       operationId: importClients
@@ -754,36 +774,13 @@ components:
     Client:
       example:
         client_url: https://client.example.com/
-        post_logout_redirect_uris:
-        - https://logout-redirect-uri.test.ee/callback
-        - https://logout-redirect-uri.test.ee/callback
-        institution_metainfo:
-          name: Example Institution
-          type:
-            type: public
-          registry_code: "12345678"
         skip_user_consent_client_ids:
         - openIdDemo
         - openIdDemo
-        smartid_settings:
-          should_use_additional_verification_code_check: true
-          relying_party_name: relying_party_name
-          relying_party_UUID: relying_party_UUID
         description: description
-        sla_notification_emails:
-        - katkestused@test.ee
-        - katkestused@test.ee
         created_at: 2019-08-24T14:15:22Z
-        redirect_uris:
-        - https://redirect-uri.test.ee/callback
-        - https://redirect-uri.test.ee/callback
         secret: secret
         client_id: openIdDemo
-        is_user_consent_required: false
-        eidas_requester_id: urn:uuid:33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f
-        mid_settings:
-          relying_party_name: relying_party_name
-          relying_party_UUID: relying_party_UUID
         client_secret_export_settings:
           recipient_id_code: "60001019906"
           recipient_name_in_ldap: Mari-Liis Männik
@@ -796,6 +793,9 @@ components:
         scope:
         - scope
         - scope
+        token_request_allowed_ip_addresses:
+        - token_request_allowed_ip_addresses
+        - token_request_allowed_ip_addresses
         client_contacts:
         - phone: +3726630200
           name: test
@@ -811,6 +811,29 @@ components:
           ru: ru
           en: en
           et: et
+        post_logout_redirect_uris:
+        - https://logout-redirect-uri.test.ee/callback
+        - https://logout-redirect-uri.test.ee/callback
+        institution_metainfo:
+          name: Example Institution
+          type:
+            type: public
+          registry_code: "12345678"
+        smartid_settings:
+          should_use_additional_verification_code_check: true
+          relying_party_name: relying_party_name
+          relying_party_UUID: relying_party_UUID
+        sla_notification_emails:
+        - katkestused@test.ee
+        - katkestused@test.ee
+        redirect_uris:
+        - https://redirect-uri.test.ee/callback
+        - https://redirect-uri.test.ee/callback
+        is_user_consent_required: false
+        eidas_requester_id: urn:uuid:33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f
+        mid_settings:
+          relying_party_name: relying_party_name
+          relying_party_UUID: relying_party_UUID
         client_logo: client_logo
         info_notification_emails:
         - teavitused@test.ee
@@ -850,6 +873,13 @@ components:
           items:
             maxLength: 200
             minLength: 2
+            type: string
+          minItems: 1
+          type: array
+        token_request_allowed_ip_addresses:
+          items:
+            maxLength: 200
+            minLength: 1
             type: string
           minItems: 1
           type: array
@@ -920,6 +950,7 @@ components:
       - institution_metainfo
       - redirect_uris
       - scope
+      - token_request_allowed_ip_addresses
       type: object
     ClientContact:
       example:

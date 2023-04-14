@@ -1,0 +1,11 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1911794632350-14
+      author: (generated)
+      changes:
+        - addColumn:
+            tableName: client
+            columns:
+              - column:
+                  name: token_request_allowed_ip_addresses
+                  type: VARCHAR(2048)
