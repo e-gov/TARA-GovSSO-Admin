@@ -23,16 +23,13 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class LoginAlert {
 
-  @JsonProperty("enabled")
   private Boolean enabled;
 
-  @JsonProperty("message_templates")
   @Valid
-  private List<MessageTemplate> messageTemplates = null;
+  private List<@Valid MessageTemplate> messageTemplates;
 
-  @JsonProperty("auth_methods")
   @Valid
-  private List<String> authMethods = null;
+  private List<String> authMethods;
 
   public LoginAlert enabled(Boolean enabled) {
     this.enabled = enabled;
@@ -45,6 +42,7 @@ public class LoginAlert {
   */
   
   @Schema(name = "enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("enabled")
   public Boolean getEnabled() {
     return enabled;
   }
@@ -53,7 +51,7 @@ public class LoginAlert {
     this.enabled = enabled;
   }
 
-  public LoginAlert messageTemplates(List<MessageTemplate> messageTemplates) {
+  public LoginAlert messageTemplates(List<@Valid MessageTemplate> messageTemplates) {
     this.messageTemplates = messageTemplates;
     return this;
   }
@@ -72,11 +70,12 @@ public class LoginAlert {
   */
   @Valid 
   @Schema(name = "message_templates", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  public List<MessageTemplate> getMessageTemplates() {
+  @JsonProperty("message_templates")
+  public List<@Valid MessageTemplate> getMessageTemplates() {
     return messageTemplates;
   }
 
-  public void setMessageTemplates(List<MessageTemplate> messageTemplates) {
+  public void setMessageTemplates(List<@Valid MessageTemplate> messageTemplates) {
     this.messageTemplates = messageTemplates;
   }
 
@@ -99,6 +98,7 @@ public class LoginAlert {
   */
   
   @Schema(name = "auth_methods", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("auth_methods")
   public List<String> getAuthMethods() {
     return authMethods;
   }

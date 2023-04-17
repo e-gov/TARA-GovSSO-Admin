@@ -20,16 +20,12 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ClientContact {
 
-  @JsonProperty("name")
   private String name;
 
-  @JsonProperty("email")
   private String email;
 
-  @JsonProperty("phone")
   private String phone;
 
-  @JsonProperty("department")
   private String department;
 
   public ClientContact name(String name) {
@@ -43,6 +39,7 @@ public class ClientContact {
   */
   
   @Schema(name = "name", example = "test", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("name")
   public String getName() {
     return name;
   }
@@ -60,8 +57,9 @@ public class ClientContact {
    * Get email
    * @return email
   */
-  @Email
+  @javax.validation.constraints.Email
   @Schema(name = "email", example = "test@example.com", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("email")
   public String getEmail() {
     return email;
   }
@@ -81,6 +79,7 @@ public class ClientContact {
   */
   
   @Schema(name = "phone", example = "+3726630200", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("phone")
   public String getPhone() {
     return phone;
   }
@@ -100,6 +99,7 @@ public class ClientContact {
   */
   
   @Schema(name = "department", example = "test", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("department")
   public String getDepartment() {
     return department;
   }

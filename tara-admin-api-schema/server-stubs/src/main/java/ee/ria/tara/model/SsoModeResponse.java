@@ -20,7 +20,6 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class SsoModeResponse {
 
-  @JsonProperty("ssoMode")
   private Boolean ssoMode;
 
   public SsoModeResponse ssoMode(Boolean ssoMode) {
@@ -34,6 +33,7 @@ public class SsoModeResponse {
   */
   
   @Schema(name = "ssoMode", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("ssoMode")
   public Boolean getSsoMode() {
     return ssoMode;
   }

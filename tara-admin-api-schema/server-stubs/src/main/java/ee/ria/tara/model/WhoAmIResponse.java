@@ -20,7 +20,6 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class WhoAmIResponse {
 
-  @JsonProperty("username")
   private String username;
 
   public WhoAmIResponse username(String username) {
@@ -34,6 +33,7 @@ public class WhoAmIResponse {
   */
   
   @Schema(name = "username", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("username")
   public String getUsername() {
     return username;
   }

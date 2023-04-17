@@ -26,41 +26,52 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class Institution {
 
-  @JsonProperty("id")
   private String id;
 
-  @JsonProperty("registry_code")
   private String registryCode;
 
-  @JsonProperty("name")
   private String name;
 
-  @JsonProperty("type")
   private InstitutionType type;
 
-  @JsonProperty("client_ids")
   @Valid
-  private List<String> clientIds = null;
+  private List<String> clientIds;
 
-  @JsonProperty("address")
   private String address;
 
-  @JsonProperty("phone")
   private String phone;
 
-  @JsonProperty("email")
   private String email;
 
-  @JsonProperty("billing_settings")
   private InstitutionBillingSettings billingSettings;
 
-  @JsonProperty("created_at")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  @JsonProperty("updated_at")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link Institution#Institution(String, String, InstitutionType, String, String, String, InstitutionBillingSettings)}
+   */
+  @Deprecated
+  public Institution() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public Institution(String registryCode, String name, InstitutionType type, String address, String phone, String email, InstitutionBillingSettings billingSettings) {
+    this.registryCode = registryCode;
+    this.name = name;
+    this.type = type;
+    this.address = address;
+    this.phone = phone;
+    this.email = email;
+    this.billingSettings = billingSettings;
+  }
 
   public Institution id(String id) {
     this.id = id;
@@ -73,6 +84,7 @@ public class Institution {
   */
   
   @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("id")
   public String getId() {
     return id;
   }
@@ -92,6 +104,7 @@ public class Institution {
   */
   @NotNull @Pattern(regexp = "\\d{3,}") 
   @Schema(name = "registry_code", example = "12345678", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("registry_code")
   public String getRegistryCode() {
     return registryCode;
   }
@@ -111,6 +124,7 @@ public class Institution {
   */
   @NotNull @Size(min = 3, max = 150) 
   @Schema(name = "name", example = "Example Institution", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("name")
   public String getName() {
     return name;
   }
@@ -130,6 +144,7 @@ public class Institution {
   */
   @NotNull @Valid 
   @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("type")
   public InstitutionType getType() {
     return type;
   }
@@ -157,6 +172,7 @@ public class Institution {
   */
   
   @Schema(name = "client_ids", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("client_ids")
   public List<String> getClientIds() {
     return clientIds;
   }
@@ -176,6 +192,7 @@ public class Institution {
   */
   @NotNull @Size(min = 3, max = 512) 
   @Schema(name = "address", example = "Test st 123", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("address")
   public String getAddress() {
     return address;
   }
@@ -195,6 +212,7 @@ public class Institution {
   */
   @NotNull @Pattern(regexp = "^[0-9\\+]{5,}$") 
   @Schema(name = "phone", example = "+3726630200", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("phone")
   public String getPhone() {
     return phone;
   }
@@ -212,8 +230,9 @@ public class Institution {
    * Get email
    * @return email
   */
-  @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @Email
+  @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email
   @Schema(name = "email", example = "info@example.com", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("email")
   public String getEmail() {
     return email;
   }
@@ -233,6 +252,7 @@ public class Institution {
   */
   @NotNull @Valid 
   @Schema(name = "billing_settings", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("billing_settings")
   public InstitutionBillingSettings getBillingSettings() {
     return billingSettings;
   }
@@ -252,6 +272,7 @@ public class Institution {
   */
   @Valid 
   @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("created_at")
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -271,6 +292,7 @@ public class Institution {
   */
   @Valid 
   @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("updated_at")
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }

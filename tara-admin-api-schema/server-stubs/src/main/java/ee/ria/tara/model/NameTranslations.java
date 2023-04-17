@@ -20,13 +20,10 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class NameTranslations {
 
-  @JsonProperty("et")
   private String et;
 
-  @JsonProperty("en")
   private String en;
 
-  @JsonProperty("ru")
   private String ru;
 
   public NameTranslations et(String et) {
@@ -40,6 +37,7 @@ public class NameTranslations {
   */
   @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 150) 
   @Schema(name = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("et")
   public String getEt() {
     return et;
   }
@@ -59,6 +57,7 @@ public class NameTranslations {
   */
   @Size(min = 3, max = 150) 
   @Schema(name = "en", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("en")
   public String getEn() {
     return en;
   }
@@ -78,6 +77,7 @@ public class NameTranslations {
   */
   @Size(min = 3, max = 150) 
   @Schema(name = "ru", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("ru")
   public String getRu() {
     return ru;
   }

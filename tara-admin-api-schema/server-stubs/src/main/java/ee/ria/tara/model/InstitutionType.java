@@ -56,8 +56,23 @@ public class InstitutionType {
     }
   }
 
-  @JsonProperty("type")
   private TypeEnum type;
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link InstitutionType#InstitutionType(TypeEnum)}
+   */
+  @Deprecated
+  public InstitutionType() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public InstitutionType(TypeEnum type) {
+    this.type = type;
+  }
 
   public InstitutionType type(TypeEnum type) {
     this.type = type;
@@ -70,6 +85,7 @@ public class InstitutionType {
   */
   @NotNull 
   @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("type")
   public TypeEnum getType() {
     return type;
   }

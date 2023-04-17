@@ -20,10 +20,8 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class MessageTemplate {
 
-  @JsonProperty("message")
   private String message;
 
-  @JsonProperty("locale")
   private String locale;
 
   public MessageTemplate message(String message) {
@@ -37,6 +35,7 @@ public class MessageTemplate {
   */
   @Size(min = 1, max = 255) 
   @Schema(name = "message", example = "Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("message")
   public String getMessage() {
     return message;
   }
@@ -56,6 +55,7 @@ public class MessageTemplate {
   */
   
   @Schema(name = "locale", example = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("locale")
   public String getLocale() {
     return locale;
   }

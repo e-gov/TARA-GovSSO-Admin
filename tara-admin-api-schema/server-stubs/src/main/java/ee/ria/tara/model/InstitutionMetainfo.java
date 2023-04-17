@@ -21,14 +21,29 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class InstitutionMetainfo {
 
-  @JsonProperty("name")
   private String name;
 
-  @JsonProperty("registry_code")
   private String registryCode;
 
-  @JsonProperty("type")
   private InstitutionType type;
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link InstitutionMetainfo#InstitutionMetainfo(String, String, InstitutionType)}
+   */
+  @Deprecated
+  public InstitutionMetainfo() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public InstitutionMetainfo(String name, String registryCode, InstitutionType type) {
+    this.name = name;
+    this.registryCode = registryCode;
+    this.type = type;
+  }
 
   public InstitutionMetainfo name(String name) {
     this.name = name;
@@ -41,6 +56,7 @@ public class InstitutionMetainfo {
   */
   @NotNull 
   @Schema(name = "name", example = "Example Institution", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("name")
   public String getName() {
     return name;
   }
@@ -60,6 +76,7 @@ public class InstitutionMetainfo {
   */
   @NotNull @Pattern(regexp = "\\d{3,}") 
   @Schema(name = "registry_code", example = "12345678", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("registry_code")
   public String getRegistryCode() {
     return registryCode;
   }
@@ -79,6 +96,7 @@ public class InstitutionMetainfo {
   */
   @NotNull @Valid 
   @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("type")
   public InstitutionType getType() {
     return type;
   }

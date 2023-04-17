@@ -20,10 +20,8 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ClientMidSettings {
 
-  @JsonProperty("relying_party_UUID")
   private String relyingPartyUUID;
 
-  @JsonProperty("relying_party_name")
   private String relyingPartyName;
 
   public ClientMidSettings relyingPartyUUID(String relyingPartyUUID) {
@@ -37,6 +35,7 @@ public class ClientMidSettings {
   */
   @Size(max = 512) 
   @Schema(name = "relying_party_UUID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("relying_party_UUID")
   public String getRelyingPartyUUID() {
     return relyingPartyUUID;
   }
@@ -56,6 +55,7 @@ public class ClientMidSettings {
   */
   @Size(max = 512) 
   @Schema(name = "relying_party_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("relying_party_name")
   public String getRelyingPartyName() {
     return relyingPartyName;
   }

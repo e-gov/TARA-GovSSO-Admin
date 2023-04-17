@@ -20,11 +20,26 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class LoginRequest {
 
-  @JsonProperty("username")
   private String username;
 
-  @JsonProperty("password")
   private String password;
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link LoginRequest#LoginRequest(String, String)}
+   */
+  @Deprecated
+  public LoginRequest() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public LoginRequest(String username, String password) {
+    this.username = username;
+    this.password = password;
+  }
 
   public LoginRequest username(String username) {
     this.username = username;
@@ -37,6 +52,7 @@ public class LoginRequest {
   */
   @NotNull 
   @Schema(name = "username", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("username")
   public String getUsername() {
     return username;
   }
@@ -56,6 +72,7 @@ public class LoginRequest {
   */
   @NotNull 
   @Schema(name = "password", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("password")
   public String getPassword() {
     return password;
   }

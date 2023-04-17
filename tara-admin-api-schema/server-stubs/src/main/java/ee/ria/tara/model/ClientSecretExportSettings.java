@@ -20,13 +20,10 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ClientSecretExportSettings {
 
-  @JsonProperty("recipient_id_code")
   private String recipientIdCode;
 
-  @JsonProperty("recipient_name_in_ldap")
   private String recipientNameInLdap;
 
-  @JsonProperty("recipient_email")
   private String recipientEmail;
 
   public ClientSecretExportSettings recipientIdCode(String recipientIdCode) {
@@ -40,6 +37,7 @@ public class ClientSecretExportSettings {
   */
   @Pattern(regexp = "^[0-9]{11,11}$") 
   @Schema(name = "recipient_id_code", example = "60001019906", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("recipient_id_code")
   public String getRecipientIdCode() {
     return recipientIdCode;
   }
@@ -59,6 +57,7 @@ public class ClientSecretExportSettings {
   */
   @Size(min = 5) 
   @Schema(name = "recipient_name_in_ldap", example = "Mari-Liis Männik", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("recipient_name_in_ldap")
   public String getRecipientNameInLdap() {
     return recipientNameInLdap;
   }
@@ -76,8 +75,9 @@ public class ClientSecretExportSettings {
    * Get recipientEmail
    * @return recipientEmail
   */
-  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @Email
+  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email
   @Schema(name = "recipient_email", example = "60001019906@eesti.ee", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("recipient_email")
   public String getRecipientEmail() {
     return recipientEmail;
   }

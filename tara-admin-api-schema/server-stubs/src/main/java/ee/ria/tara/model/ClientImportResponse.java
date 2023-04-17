@@ -22,21 +22,16 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class ClientImportResponse {
 
-  @JsonProperty("status")
   private String status;
 
-  @JsonProperty("clients_count")
   private Integer clientsCount;
 
-  @JsonProperty("clients_import_success_count")
   private Integer clientsImportSuccessCount;
 
-  @JsonProperty("clients_import_failed_count")
   private Integer clientsImportFailedCount;
 
-  @JsonProperty("clients_not_imported")
   @Valid
-  private List<String> clientsNotImported = null;
+  private List<String> clientsNotImported;
 
   public ClientImportResponse status(String status) {
     this.status = status;
@@ -49,6 +44,7 @@ public class ClientImportResponse {
   */
   
   @Schema(name = "status", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("status")
   public String getStatus() {
     return status;
   }
@@ -68,6 +64,7 @@ public class ClientImportResponse {
   */
   
   @Schema(name = "clients_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("clients_count")
   public Integer getClientsCount() {
     return clientsCount;
   }
@@ -87,6 +84,7 @@ public class ClientImportResponse {
   */
   
   @Schema(name = "clients_import_success_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("clients_import_success_count")
   public Integer getClientsImportSuccessCount() {
     return clientsImportSuccessCount;
   }
@@ -106,6 +104,7 @@ public class ClientImportResponse {
   */
   
   @Schema(name = "clients_import_failed_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("clients_import_failed_count")
   public Integer getClientsImportFailedCount() {
     return clientsImportFailedCount;
   }
@@ -133,6 +132,7 @@ public class ClientImportResponse {
   */
   
   @Schema(name = "clients_not_imported", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("clients_not_imported")
   public List<String> getClientsNotImported() {
     return clientsNotImported;
   }

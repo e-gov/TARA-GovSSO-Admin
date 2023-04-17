@@ -24,33 +24,43 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class Alert {
 
-  @JsonProperty("id")
   private String id;
 
-  @JsonProperty("title")
   private String title;
 
-  @JsonProperty("start_time")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime startTime;
 
-  @JsonProperty("end_time")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime endTime;
 
-  @JsonProperty("login_alert")
   private LoginAlert loginAlert;
 
-  @JsonProperty("email_alert")
   private EmailAlert emailAlert;
 
-  @JsonProperty("created_at")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
 
-  @JsonProperty("updated_at")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
+
+  /**
+   * Default constructor
+   * @deprecated Use {@link Alert#Alert(String, OffsetDateTime, OffsetDateTime)}
+   */
+  @Deprecated
+  public Alert() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public Alert(String title, OffsetDateTime startTime, OffsetDateTime endTime) {
+    this.title = title;
+    this.startTime = startTime;
+    this.endTime = endTime;
+  }
 
   public Alert id(String id) {
     this.id = id;
@@ -63,6 +73,7 @@ public class Alert {
   */
   
   @Schema(name = "id", example = "1234567", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("id")
   public String getId() {
     return id;
   }
@@ -82,6 +93,7 @@ public class Alert {
   */
   @NotNull @Size(max = 255) 
   @Schema(name = "title", example = "Plaaniline katkestus SK teenustes", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("title")
   public String getTitle() {
     return title;
   }
@@ -101,6 +113,7 @@ public class Alert {
   */
   @NotNull @Valid 
   @Schema(name = "start_time", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("start_time")
   public OffsetDateTime getStartTime() {
     return startTime;
   }
@@ -120,6 +133,7 @@ public class Alert {
   */
   @NotNull @Valid 
   @Schema(name = "end_time", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.REQUIRED)
+  @JsonProperty("end_time")
   public OffsetDateTime getEndTime() {
     return endTime;
   }
@@ -139,6 +153,7 @@ public class Alert {
   */
   @Valid 
   @Schema(name = "login_alert", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("login_alert")
   public LoginAlert getLoginAlert() {
     return loginAlert;
   }
@@ -158,6 +173,7 @@ public class Alert {
   */
   @Valid 
   @Schema(name = "email_alert", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("email_alert")
   public EmailAlert getEmailAlert() {
     return emailAlert;
   }
@@ -177,6 +193,7 @@ public class Alert {
   */
   @Valid 
   @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("created_at")
   public OffsetDateTime getCreatedAt() {
     return createdAt;
   }
@@ -196,6 +213,7 @@ public class Alert {
   */
   @Valid 
   @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("updated_at")
   public OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }

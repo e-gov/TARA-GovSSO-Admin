@@ -25,16 +25,13 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class EmailAlert {
 
-  @JsonProperty("enabled")
   private Boolean enabled;
 
-  @JsonProperty("send_at")
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime sendAt;
 
-  @JsonProperty("message_templates")
   @Valid
-  private List<MessageTemplate> messageTemplates = null;
+  private List<@Valid MessageTemplate> messageTemplates;
 
   public EmailAlert enabled(Boolean enabled) {
     this.enabled = enabled;
@@ -47,6 +44,7 @@ public class EmailAlert {
   */
   
   @Schema(name = "enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("enabled")
   public Boolean getEnabled() {
     return enabled;
   }
@@ -66,6 +64,7 @@ public class EmailAlert {
   */
   @Valid 
   @Schema(name = "send_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("send_at")
   public OffsetDateTime getSendAt() {
     return sendAt;
   }
@@ -74,7 +73,7 @@ public class EmailAlert {
     this.sendAt = sendAt;
   }
 
-  public EmailAlert messageTemplates(List<MessageTemplate> messageTemplates) {
+  public EmailAlert messageTemplates(List<@Valid MessageTemplate> messageTemplates) {
     this.messageTemplates = messageTemplates;
     return this;
   }
@@ -93,11 +92,12 @@ public class EmailAlert {
   */
   @Valid 
   @Schema(name = "message_templates", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  public List<MessageTemplate> getMessageTemplates() {
+  @JsonProperty("message_templates")
+  public List<@Valid MessageTemplate> getMessageTemplates() {
     return messageTemplates;
   }
 
-  public void setMessageTemplates(List<MessageTemplate> messageTemplates) {
+  public void setMessageTemplates(List<@Valid MessageTemplate> messageTemplates) {
     this.messageTemplates = messageTemplates;
   }
 

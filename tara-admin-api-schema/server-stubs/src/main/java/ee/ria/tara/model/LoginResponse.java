@@ -20,10 +20,8 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class LoginResponse {
 
-  @JsonProperty("error")
   private String error;
 
-  @JsonProperty("username")
   private String username;
 
   public LoginResponse error(String error) {
@@ -37,6 +35,7 @@ public class LoginResponse {
   */
   
   @Schema(name = "error", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("error")
   public String getError() {
     return error;
   }
@@ -56,6 +55,7 @@ public class LoginResponse {
   */
   
   @Schema(name = "username", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("username")
   public String getUsername() {
     return username;
   }

@@ -20,7 +20,6 @@ import javax.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
 public class InstitutionBillingSettings {
 
-  @JsonProperty("email")
   private String email;
 
   public InstitutionBillingSettings email(String email) {
@@ -32,8 +31,9 @@ public class InstitutionBillingSettings {
    * Get email
    * @return email
   */
-  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @Email
+  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email
   @Schema(name = "email", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("email")
   public String getEmail() {
     return email;
   }
