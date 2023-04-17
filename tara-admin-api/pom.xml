@@ -18,7 +18,7 @@
         (see https://issues.apache.org/jira/browse/MNG-4979 ). -->
         <spring-boot.build-image.imageName>tara-admin:latest</spring-boot.build-image.imageName><!-- Use "latest" tag instead of version tag. -->
 
-        <bouncycastle.version>1.72</bouncycastle.version>
+        <bouncycastle.version>1.73</bouncycastle.version>
         <cdoc4j.version>1.4</cdoc4j.version>
         <commons-email.version>1.5</commons-email.version>
         <logstash-logback.version>7.3</logstash-logback.version>
@@ -268,7 +268,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.8</version>
+                <version>0.8.9</version>
                 <executions>
                     <execution>
                         <goals>
@@ -285,10 +285,12 @@
                 </executions>
             </plugin>
             <plugin>
+                <!-- TODO GSSO-534 Replace with io.github.git-commit-id:git-commit-id-maven-plugin and remove
+                      offline=true after upgrading to Spring Boot 3. Starting from 5.0.0 offline=true is default. -->
                 <groupId>pl.project13.maven</groupId>
                 <artifactId>git-commit-id-plugin</artifactId>
                 <configuration>
-                    <offline>true</offline><!-- TODO Remove when >= 5.0.0 is used, there offline=true is default. -->
+                    <offline>true</offline>
                 </configuration>
             </plugin>
         </plugins>

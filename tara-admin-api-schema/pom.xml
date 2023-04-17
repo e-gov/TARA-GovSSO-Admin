@@ -13,7 +13,7 @@
     <version>1.5.7</version>
 
     <properties>
-        <springdoc.version>1.6.15</springdoc.version>
+        <springdoc.version>1.7.0</springdoc.version>
     </properties>
 
     <build>
@@ -61,7 +61,7 @@
                     <plugin>
                         <groupId>org.openapitools</groupId>
                         <artifactId>openapi-generator-maven-plugin</artifactId>
-                        <version>6.4.0</version>
+                        <version>6.5.0</version>
                         <executions>
                             <execution>
                                 <goals>
