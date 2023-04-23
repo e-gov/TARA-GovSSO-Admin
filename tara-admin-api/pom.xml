@@ -21,11 +21,12 @@
         <bouncycastle.version>1.73</bouncycastle.version>
         <cdoc4j.version>1.4</cdoc4j.version>
         <commons-email.version>1.5</commons-email.version>
-        <logstash-logback.version>7.3</logstash-logback.version>
         <greenmail.version>1.6.14</greenmail.version><!-- TODO Upgrade to 2.x after Spring Framework is upgraded to 6.x -->
+        <jacoco-maven-plugin.version>0.8.9</jacoco-maven-plugin.version>
+        <logstash-logback-encoder.version>7.3</logstash-logback-encoder.version>
+        <poi.version>5.2.3</poi.version>
         <tara-admin-api-schema.version>1.5.8</tara-admin-api-schema.version>
         <tara-admin-ui.version>1.5.8</tara-admin-ui.version>
-        <apache.poi.version>5.2.3</apache.poi.version>
 
         <!-- Upgrade Liquibase to get newer bundled Apache Commons Text. TODO Remove when Spring Boot includes Liquibase >= 4.17.1 -->
         <liquibase.version>4.17.1</liquibase.version>
@@ -55,7 +56,7 @@
         <dependency>
             <groupId>net.logstash.logback</groupId>
             <artifactId>logstash-logback-encoder</artifactId>
-            <version>${logstash-logback.version}</version>
+            <version>${logstash-logback-encoder.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.httpcomponents</groupId>
@@ -64,12 +65,12 @@
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi</artifactId>
-            <version>${apache.poi.version}</version>
+            <version>${poi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.apache.poi</groupId>
             <artifactId>poi-ooxml</artifactId>
-            <version>${apache.poi.version}</version>
+            <version>${poi.version}</version>
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
@@ -268,7 +269,7 @@
             <plugin>
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
-                <version>0.8.9</version>
+                <version>${jacoco-maven-plugin.version}</version>
                 <executions>
                     <execution>
                         <goals>

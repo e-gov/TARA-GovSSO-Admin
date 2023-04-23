@@ -13,7 +13,8 @@
     <version>1.5.8</version>
 
     <properties>
-        <springdoc.version>1.7.0</springdoc.version>
+        <openapi-generator-maven-plugin.version>6.5.0</openapi-generator-maven-plugin.version>
+        <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
     </properties>
 
     <build>
@@ -28,7 +29,7 @@
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
-            <version>${springdoc.version}</version>
+            <version>${springdoc-openapi-ui.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -61,7 +62,7 @@
                     <plugin>
                         <groupId>org.openapitools</groupId>
                         <artifactId>openapi-generator-maven-plugin</artifactId>
-                        <version>6.5.0</version>
+                        <version>${openapi-generator-maven-plugin.version}</version>
                         <executions>
                             <execution>
                                 <goals>
