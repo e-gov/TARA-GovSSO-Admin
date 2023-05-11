@@ -5,12 +5,12 @@
     <parent>
         <artifactId>tara-admin-parent</artifactId>
         <groupId>ee.ria.tara-admin</groupId>
-        <version>1.5.9</version>
+        <version>1.6.0</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>tara-admin-api-schema</artifactId>
-    <version>1.5.9</version>
+    <version>1.6.0</version>
 
     <properties>
         <openapi-generator-maven-plugin.version>6.5.0</openapi-generator-maven-plugin.version>
