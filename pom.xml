@@ -31,7 +31,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <!-- TODO GSSO-534 Upgrade to Spring Boot 3.x -->
-        <version>2.7.11</version>
+        <version>2.7.13</version>
     </parent>
 
     <build>
@@ -46,6 +46,33 @@
                     -->
                     <target>${maven.compiler.release}</target>
                 </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <!-- Allow only single edition (currently latest is jdk18on) of Bouncy Castle libraries.
+                                     Other libraries may reference different editions of the same Bouncy Castle library
+                                     (bcprov-jdk15on vs bcprov-jdk18on), but duplicate classes on classpath must be
+                                     avoided. -->
+                                <bannedDependencies>
+                                    <excludes>
+                                        <exclude>org.bouncycastle:*</exclude>
+                                    </excludes>
+                                    <includes>
+                                        <include>org.bouncycastle:*-jdk18on</include>
+                                    </includes>
+                                </bannedDependencies>
+                            </rules>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
