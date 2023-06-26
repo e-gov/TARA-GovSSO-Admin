@@ -74,6 +74,11 @@
         </dependency>
         <dependency>
             <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>${bouncycastle.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
             <artifactId>bcprov-jdk18on</artifactId>
             <version>${bouncycastle.version}</version>
         </dependency>
@@ -89,6 +94,17 @@
             <groupId>org.open-eid.cdoc4j</groupId>
             <artifactId>cdoc4j</artifactId>
             <version>${cdoc4j.version}</version>
+            <exclusions>
+                <!-- bcprov-jdk18on and bcpkix-jdk18on are used instead.-->
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcpkix-jdk15on</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.bouncycastle</groupId>
+                    <artifactId>bcprov-jdk15on</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>org.postgresql</groupId>
