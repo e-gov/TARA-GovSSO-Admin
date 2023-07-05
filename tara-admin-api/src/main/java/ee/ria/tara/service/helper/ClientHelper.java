@@ -111,7 +111,7 @@ public class ClientHelper {
         client.setClientLogo(hydraClient.getMetadata().getOidcClient().getLogo());
         client.setEidasRequesterId(hydraClient.getMetadata().getOidcClient().getEidasRequesterId());
         client.setSkipUserConsentClientIds(hydraClient.getMetadata().getSkipUserConsentClientIds());
-
+        client.setTokenEndpointAuthMethod(Client.TokenEndpointAuthMethodEnum.fromValue(hydraClient.getTokenEndpointAuthMethod()));
         client.setIsUserConsentRequired(hydraClient.getMetadata().getDisplayUserConsent());
         client.setClientUrl(getOidcClientLegacyReturnUrl(hydraClient));
         client.setSmartidSettings(getSmartidSettings(hydraClient));
@@ -150,14 +150,12 @@ public class ClientHelper {
         // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.
         hydraClient.setClientSecret(!ssoMode ? getDigest(client.getSecret()): client.getSecret());
         hydraClient.setClientName(client.getClientName() != null ? client.getClientName().getEt() : null);
-
         hydraClient.setScope(String.join(" ", client.getScope()));
-
         hydraClient.setRedirectUris(client.getRedirectUris());
         hydraClient.setPostLogoutRedirectUris(client.getPostLogoutRedirectUris());
         hydraClient.setMetadata(metadata);
-
         hydraClient.setBackchannelLogoutUri(client.getBackchannelLogoutUri());
+        hydraClient.setTokenEndpointAuthMethod(client.getTokenEndpointAuthMethod().getValue());
 
         hydraOidcClientInstitution.setRegistryCode(client.getInstitutionMetainfo().getRegistryCode());
         hydraOidcClientInstitution.setSector(client.getInstitutionMetainfo().getType().getType().toString());

@@ -195,6 +195,24 @@
         </div>
       </div>
 
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Identsustõendipäringu autentimismeetod
+          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+                    matTooltip="Vaikeväärtus on teenustingimuste järgi client_secret_basic.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8">
+          <mat-form-field class="w-75" panelClass="selection-panel">
+            <mat-label>Vali identsustõendipäringu autentimismeetod</mat-label>
+            <mat-select [disabled]="isInfo()" [(ngModel)]="_token_endpoint_auth_method" [value]="newData.token_endpoint_auth_method">
+              <mat-option value="client_secret_basic">client_secret_basic</mat-option>
+              <mat-option value="client_secret_post">client_secret_post</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+
       <div class="form-group row" *ngIf="authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Väljalogimise tagasisuunamispäring - lubatud URL-id
           <mat-icon inline class="material-icons ml-3 font-size-20"

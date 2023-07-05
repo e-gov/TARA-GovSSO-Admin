@@ -81,6 +81,7 @@ public class ClientTestHelper {
         client.setCreatedAt(OffsetDateTime.now());
         client.setUpdatedAt(OffsetDateTime.now());
         client.setClientLogo(null);
+        client.setTokenEndpointAuthMethod(Client.TokenEndpointAuthMethodEnum.BASIC);
 
         return client;
     }

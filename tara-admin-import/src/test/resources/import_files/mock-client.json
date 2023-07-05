@@ -19,6 +19,7 @@
     "token_request_allowed_ip_addresses": [
       "1.2.3.4"
     ],
+    "token_endpoint_auth_method": "client_secret_basic",
     "scope": [
       "openid",
       "idcard",

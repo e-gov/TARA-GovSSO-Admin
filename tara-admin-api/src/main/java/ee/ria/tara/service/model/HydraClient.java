@@ -57,7 +57,7 @@ public class HydraClient {
     private String subjectType = "public";
 
     @JsonProperty("token_endpoint_auth_method")
-    private String tokenEndpointAuthMethod = "client_secret_basic";
+    private String tokenEndpointAuthMethod;
 
     @JsonProperty("backchannel_logout_uri")
     private String backchannelLogoutUri;

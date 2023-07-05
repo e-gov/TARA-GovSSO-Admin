@@ -130,6 +130,8 @@ public class ImportService {
             client.setEidasRequesterId(getCellValue(row, 13));
             client.setDescription(getNullIfEmpty(getCellValue(row, 14)));
             client.setTokenRequestAllowedIpAddresses(Arrays.asList(getCellValue(row, 15)));
+            String tokenEndpointAuthMethod = getNullIfEmpty(getCellValue(row, 16));
+            client.setTokenEndpointAuthMethod(Client.TokenEndpointAuthMethodEnum.fromValue(tokenEndpointAuthMethod));
             client.setScope(defaultListOfScopes);
 
             if (clients.containsKey(institution))
