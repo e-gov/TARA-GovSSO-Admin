@@ -18,7 +18,7 @@
         (see https://issues.apache.org/jira/browse/MNG-4979 ). -->
         <spring-boot.build-image.imageName>tara-admin:latest</spring-boot.build-image.imageName><!-- Use "latest" tag instead of version tag. -->
 
-        <bouncycastle.version>1.73</bouncycastle.version>
+        <bouncycastle.version>1.74</bouncycastle.version>
         <cdoc4j.version>1.4</cdoc4j.version>
         <commons-email.version>1.5</commons-email.version>
         <greenmail.version>1.6.14</greenmail.version><!-- TODO Upgrade to 2.x after Spring Framework is upgraded to 6.x -->
