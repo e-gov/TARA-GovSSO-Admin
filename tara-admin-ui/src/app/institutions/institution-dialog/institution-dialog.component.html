@@ -4,7 +4,7 @@
       <label class="font-weight-bold" *ngIf="this.data.dialogType === 'ADD'">Asutuse lisamine</label>
       <label class="font-weight-bold" *ngIf="this.data.dialogType === 'UPDATE'">Asutuse muutmine</label>
       <label class="font-weight-bold" *ngIf="this.data.dialogType === 'INFO'">Asutuse info</label>
-      <button class="float-right border-0" style="background: none;" mat-dialog-close type="button">
+      <button class="float-right border-0 background-none" mat-dialog-close type="button">
         <mat-icon class="ml-1 float-right">close</mat-icon>
       </button>
     </div>
@@ -79,7 +79,7 @@
     </div>
   </mat-dialog-content>
   <div mat-dialog-actions class="float-right">
-    <button *ngIf="!isInfo()" mat-button style="background-color: green; color: white" type="submit">
+    <button *ngIf="!isInfo()" mat-button class="submit-btn" type="submit">
       {{data.dialogType === 'UPDATE' ? "Muuda" : "Lisa"}}
     </button>
     <button *ngIf="isInfo()" mat-button (click)="this.data.dialogType = 'UPDATE'" type="button">Muuda</button>

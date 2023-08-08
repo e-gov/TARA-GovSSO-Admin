@@ -137,3 +137,21 @@ change-secret-dialog {
 ::ng-deep .mat-tooltip {
   font-size: 14px !important;
 }
+
+.submit-btn{
+  background-color: green;
+  color: white;
+}
+
+.font-size-20{
+  font-size: 20px;
+}
+
+.margin-left-15{
+  margin-left: 15px;
+}
+
+.preview-img{
+  max-width: 250px;
+  max-height: 250px;
+}

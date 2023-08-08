@@ -1,6 +1,6 @@
 <form [noValidate]="false" #clientForm (ngSubmit)="save()">
   <div mat-dialog-actions class="float-right">
-    <button *ngIf="!isInfo()" mat-button style="background-color: green; color: white" type="submit">
+    <button *ngIf="!isInfo()" mat-button class="submit-btn" type="submit">
       {{data.dialogType === 'UPDATE' ? "Muuda" : "Lisa"}}
     </button>
     <button *ngIf="isInfo()" mat-button (click)="this.data.dialogType = 'UPDATE'" type="button">Muuda</button>
@@ -17,7 +17,7 @@
       <h1><span class="font-weight-bold">Asutus</span></h1>
       <div class="form-group row mt-2">
         <label class="col-sm-4 col-form-label">Asutus
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Klientrakenduse paigalduse eest vastutav asutus">help_outline
           </mat-icon>
         </label>
@@ -40,7 +40,7 @@
       <h1><span class="font-weight-bold">Klientrakendus</span></h1>
       <div class="form-group row mt-2 d-flex">
         <label class="col-sm-4 col-form-label">Klientrakenduse ID
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Klientrakenduse unikaalne identifikaator, mille klient peab esitama autentimispäringus">
             help_outline
           </mat-icon>
@@ -55,7 +55,7 @@
       </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse nimetus
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Klientrakenduse nimetus, mis kuvatakse kasutajale autentimisvalikute lehel. ">
             help_outline
           </mat-icon>
@@ -90,7 +90,7 @@
       </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse lühinimetus
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Klientrakenduse nimetus lühendatud kujul. Kuvatakse kasutajale mobiilseadmega autentimisel. ">
             help_outline
           </mat-icon>
@@ -127,7 +127,7 @@
 
         <div class="form-group row" *ngIf="authService.isSsoMode">
           <label class="col-sm-4 col-form-label" for="client-logo-file">Klientrakenduse logo
-            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+            <mat-icon inline class="material-icons ml-3 font-size-20"
                       matTooltip="Logo peab olema SVG formaadis ja faili suurus ei tohi olla suurem kui 100 KB.">
               help_outline
             </mat-icon>
@@ -140,14 +140,14 @@
               Logo peab olema SVG formaadis ja faili suurus ei tohi olla suurem kui 100 KB.
             </div>
             <div class="preview" *ngIf="clientLogoDataUri">
-              <img [src]="clientLogoDataUri" style="max-width:250px; max-height:250px">
+              <img [src]="clientLogoDataUri" class="preview-img">
             </div>
           </div>
         </div>
 
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Autentimise tagasisuunamispäring - lubatud URL-id
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Lubatud autentimise tagasisuunamispäringu URL-id, millele saadetakse autentimisprotsessi vastus.">
             help_outline
           </mat-icon>
@@ -172,7 +172,7 @@
 
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Identsustõendipäringu lubatud IP-aadressid
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="IPv4 või IPv6 aadressid, millelt lubatakse identsustõendipäringuid. Väärtus võib esindada ühte aadressi nagu 1.2.3.4 või 1:2:3:4:5:6:7:8 või alamvõrke nagu 1.2.0.0/16 või 1.*.1-3.1-4 või 1111:222::/64 või 1:2:*:4:5-10:6:7 . Et demokeskkonnas lubada päringuid kõikidelt aadressidelt, määrata väärtusteks 0.0.0.0/0 ja ::/0 .">
             help_outline
           </mat-icon>
@@ -197,7 +197,7 @@
 
       <div class="form-group row" *ngIf="authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Väljalogimise tagasisuunamispäring - lubatud URL-id
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip='Lubatud väljalogimise tagasisuunamispäringu URL-id, millele saadetakse TARA autentimisprotsessi vastus. Väärtuseks võib olla näiteks klientrakenduse avalehe URL või soovi korral eraldi lehe URL (kus kuvada näiteks "Teid on välja logitud" sarnane teade).'>
             help_outline
           </mat-icon>
@@ -222,7 +222,7 @@
 
       <div class="form-group row" *ngIf="!isInfo()">
         <label *ngIf="this.data.dialogType === 'UPDATE'" class="col-sm-4 col-form-label">Saladus
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Uue saladuse väljastamine. ">help_outline
           </mat-icon>
         </label>
@@ -239,14 +239,13 @@
           </div>
         </div>
         <div>
-          <button *ngIf="this.data.dialogType === 'UPDATE'" type="button" class="btn-link ml-0"
-                  style="margin-left: 15px"
+          <button *ngIf="this.data.dialogType === 'UPDATE'" type="button" class="btn-link ml-0 margin-left-15"
                   (click)="openSecretDialog()">{{this.newData.client_secret_export_settings ? "Muuda adressaat" : "Väljasta uus saladus"}}</button>
         </div>
       </div>
       <div class="form-group row" *ngIf="this.data.dialogType === 'ADD'">
         <label class="col-sm-4 col-form-label">Saladuse adressaat (isikukood)
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Isik, kellele saadetakse krüpteeritud saladus e-mailiga.">help_outline
           </mat-icon>
         </label>
@@ -257,7 +256,7 @@
       </div>
       <div class="form-group row" *ngIf="this.data.dialogType === 'ADD'">
         <label class="col-sm-4 col-form-label">Saladuse adressaadi e-mail
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="E-maili aadress, millele saadetakse krüpteeritud CDOC ümbrik saladus">help_outline
           </mat-icon>
         </label>
@@ -270,7 +269,7 @@
         <div class="form-row">
           <label class="col-sm-4 col-form-label">
             Lubatud scope parameetri väärtused
-            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+            <mat-icon inline class="material-icons ml-3 font-size-20"
                       matTooltip="Klientrakenduse poolt saadetavas autentimispäringus lubatud scope parameetri väärtused.">
               help_outline
             </mat-icon>
@@ -286,7 +285,7 @@
       <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">Kasutajalt küsitakse isikuandmete väljastamiseks nõusolekut
-            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+            <mat-icon inline class="material-icons ml-3 font-size-20"
                       matTooltip="Määrab ära, kas autentimisprotsessi lõpus kuvatakse kasutajale isikuandmete väljastamiseks nõusoleku küsimise lehekülg.">
               help_outline
             </mat-icon>
@@ -302,7 +301,7 @@
 
       <div class="form-group row" *ngIf="authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Klientrakenduste ID-d, mille seansis olemasolu korral nõusolekut mitte küsida
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Klientrakenduse ID-d on saadaval klientrakenduste nimekirjas. Rakendub ainult siis, kui kasutajalt isikuandmete väljastamise nõusoleku küsimine on sisse lülitatud.">
             help_outline
           </mat-icon>
@@ -327,7 +326,7 @@
 
       <div class="form-group row" *ngIf="!authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Klientrakenduse URL
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Tagasiühilduvuse eesmärgil kasutatav URL, mille abil on võimalik rakendusesse tagasi pöörduda. Kasutakse ainult klientide puhul, kes on registreeritud varem kui 2019.">
             help_outline
           </mat-icon>
@@ -339,7 +338,7 @@
       </div>
       <div class="form-group row" *ngIf="authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Taustakanali väljalogimise URL
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Taustakanali väljalogimise otspunkt peab klientrakenduse poolel olema tehtud GovSSO teenuse väljuvale IP-aadressile kättesaadavaks. Kui kasutaja logib välja, sooritab määratud URL-ile päringu GovSSO server taustal (mitte veebisirvik).">
             help_outline
           </mat-icon>
@@ -351,7 +350,7 @@
       </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Tehniliste teavituste e-mailid
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Kontaktaadressid, millele edastatakse üldinfot teenusega seotud uuenduste kohta (versiooniuuendused, protokollimuudatusests jm).">
             help_outline
           </mat-icon>
@@ -372,7 +371,7 @@
       </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Katkestustest teavitamise e-mail(id)
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Kontaktaadressid, millele edastatakse info autentimisteenuse tööd mõjutavate planeeritud ja planeerimata katkestuste kohta.">
             help_outline
           </mat-icon>
@@ -394,7 +393,7 @@
       </div>
       <div class="form-group row" *ngIf="!authService.isSsoMode">
         <label class="col-sm-4 col-form-label">eIDAS RequesterID
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Klientrakenduse unikaalne identifikaator, mis edastatakse EU eID autentimise puhul välisriigi autentimisteenusele.">
             help_outline
           </mat-icon>
@@ -408,7 +407,7 @@
       </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Lisainfo
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Vabas vormis lisainfo klientrakenduse kohta">help_outline
           </mat-icon>
         </label>
@@ -424,7 +423,7 @@
       <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">Kasuta kliendispetsiifilist seadistust
-            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+            <mat-icon inline class="material-icons ml-3 font-size-20"
                       matTooltip="Märgi valituks ainult juhul kui klientrakenduse jaoks on sõlmitud eraldiseisev Smart-ID leping. Mittevalimise korral kasutatakse vaikimisi TARA kesksest seadistusest Smart-ID lepingu väärtusi.">
               help_outline
             </mat-icon>
@@ -442,7 +441,7 @@
 
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse ID
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Smart-ID lepingust klientrakenduse jaoks kasutatav UUID väärtus.">help_outline
           </mat-icon>
         </label>
@@ -457,7 +456,7 @@
       </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse nimi
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Smart-ID lepingust klientrakenduse jaoks kasutatav klientrakenduse nime väärtus.">
             help_outline
           </mat-icon>
@@ -474,7 +473,7 @@
       <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">Teosta kontrollkoodi lisakontroll enne PIN verifitseerimist
-            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+            <mat-icon inline class="material-icons ml-3 font-size-20"
                       matTooltip="Kasutaja käest küsitakse Smart-ID autentimisel lisakontrollina lehel kuvatud kontrollkoodi.">
               help_outline
             </mat-icon>
@@ -496,7 +495,7 @@
       <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">Kasuta kliendispetsiifilist seadistust
-            <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+            <mat-icon inline class="material-icons ml-3 font-size-20"
                       matTooltip="Märgi valituks ainult juhul kui klientrakenduse jaoks on sõlmitud eraldiseisev Mobiil-ID leping. Mittevalimise korral kasutatakse vaikimisi TARA kesksest seadistusest Mobiil-ID lepingu väärtusi.">
               help_outline
             </mat-icon>
@@ -513,7 +512,7 @@
       </form>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse ID
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Mobiil-ID lepingust klientrakenduse jaoks kasutatav klientrakenduse ID väärtus.">
             help_outline
           </mat-icon>
@@ -528,7 +527,7 @@
       </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse nimi
-          <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+          <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="Mobiil-ID lepingust klientrakenduse jaoks kasutatav klientrakenduse nime väärtus.">
             help_outline
           </mat-icon>
@@ -547,7 +546,7 @@
       <h1><span>Kontaktisikud</span></h1>
 
       <label class="col-sm-4 col-form-label">Kontaktisikute nimekiri
-        <mat-icon inline class="material-icons ml-3" style="font-size: 20px"
+        <mat-icon inline class="material-icons ml-3 font-size-20"
                   matTooltip="Klientrakendusega seotud kontaktisikute detailid">help_outline
         </mat-icon>
       </label>
@@ -584,7 +583,7 @@
     </div>
   </mat-dialog-content>
   <div mat-dialog-actions class="float-right">
-    <button *ngIf="!isInfo()" mat-button style="background-color: green; color: white" type="submit">
+    <button *ngIf="!isInfo()" mat-button class="submit-btn" type="submit">
       {{data.dialogType === 'UPDATE' ? "Muuda" : "Lisa"}}
     </button>
     <button *ngIf="isInfo()" mat-button (click)="this.data.dialogType = 'UPDATE'" type="button">Muuda</button>

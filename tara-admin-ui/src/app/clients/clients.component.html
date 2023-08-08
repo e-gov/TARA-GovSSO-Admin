@@ -108,7 +108,7 @@
       <mat-paginator #tablePaginator *ngIf="dataSource.data.length > 0" class="paginator"
                      [length]="this.dataSource.data.length" [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
     </div>
-    <div *ngIf="dataSource.data.length === 0 && !waitingForApiResponse" style="background-color: white" class="mt-1 text-center">
+    <div *ngIf="dataSource.data.length === 0 && !waitingForApiResponse" class="mt-1 text-center background-white">
       No records found
     </div>
 

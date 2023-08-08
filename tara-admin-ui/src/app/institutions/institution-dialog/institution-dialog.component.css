@@ -141,3 +141,12 @@ change-secret-dialog {
 ::ng-deep .mat-checkbox-background {
   background-color: white!important;
 }
+
+.background-none{
+  background: none;
+}
+
+.submit-btn{
+  background-color: green;
+  color: white;
+}

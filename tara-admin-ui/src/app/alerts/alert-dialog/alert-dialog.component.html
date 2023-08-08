@@ -4,7 +4,7 @@
       <label class="font-weight-bold" *ngIf="this.dialogType === 'ADD'">Teavituse lisamine</label>
       <label class="font-weight-bold" *ngIf="this.dialogType === 'UPDATE'">Teavituse muutmine</label>
       <label class="font-weight-bold" *ngIf="this.dialogType === 'INFO'">Teavitus</label>
-      <button class="float-right border-0" style="background: none;" mat-dialog-close type="button">
+      <button class="float-right border-0 background-none" mat-dialog-close type="button">
         <mat-icon class="ml-1 float-right">close</mat-icon>
       </button>
     </div>
@@ -98,7 +98,7 @@
     </div>
   </mat-dialog-content>
   <div mat-dialog-actions class="float-right">
-    <button *ngIf="!isInfo()" mat-button style="background-color: green; color: white" type="submit">
+    <button *ngIf="!isInfo()" mat-button class="submit-btn" type="submit">
       {{dialogType === 'UPDATE' ? "Muuda" : "Lisa"}}
     </button>
     <button *ngIf="isInfo()" mat-button (click)="this.dialogType = 'UPDATE'" type="button">Muuda</button>

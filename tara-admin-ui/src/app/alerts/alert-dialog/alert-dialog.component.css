@@ -75,3 +75,12 @@ change-secret-dialog {
 .keep-line-breaks {
   white-space: pre-line;
 }
+
+.background-none{
+  background: none;
+}
+
+.submit-btn{
+  background-color: green;
+  color: white;
+}
