@@ -46,12 +46,6 @@ public class SecurityConfiguration {
                         .and()
                     .frameOptions().deny()
                     .contentSecurityPolicy(securityConfProperties.getContentSecurityPolicy())
-                         /*
-                         *  Prevents browser from blocking functionality if views do not meet CSP requirements.
-                         *  Problems are still displayed at browser console.
-                         *  TODO: Remove this once given problems are fixed.
-                         */
-                        .reportOnly()
                         .and()
                     .httpStrictTransportSecurity()
                     .maxAgeInSeconds(186 * 24 * 60 * 60)
