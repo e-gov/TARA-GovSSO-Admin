@@ -2,7 +2,7 @@
   box-shadow: none;
 }
 
-.dialog-close-btn{
+.dialog-close-btn {
   background: none;
   z-index: 99999;
   position: static;

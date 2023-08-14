@@ -94,7 +94,7 @@ td.mat-cell {
 }
 
 tr {
-  width: 100%!important;
+  width: 100% !important;
 }
 
 .table-content-new-line {
@@ -111,11 +111,11 @@ th {
 
 .mat-row {
   background-color: lightgray;
-  color: black!important;
+  color: black !important;
 }
 
 .mat-row > td {
-  color: black!important;
+  color: black !important;
 }
 
 .paginator {
@@ -124,11 +124,11 @@ th {
 }
 
 .mat-sort-header-arrow {
-  color: black!important;
+  color: black !important;
 }
 
 ::ng-deep.mat-paginator-page-size {
-  float: left!important;
+  float: left !important;
 }
 
 .search-button {
@@ -138,13 +138,13 @@ th {
 
 
 ::ng-deep.cdk-overlay-pane {
-  background-color: white!important;
-  color: black!important;
+  background-color: white !important;
+  color: black !important;
 }
 
 ::ng-deep.mat-dialog-container {
-  background: white!important;
-  color: black!important;
+  background: white !important;
+  color: black !important;
 }
 
 

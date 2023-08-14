@@ -87,7 +87,7 @@ td.mat-cell {
 }
 
 tr {
-  width: 100%!important;
+  width: 100% !important;
 }
 
 .table-content-new-line {
@@ -104,11 +104,11 @@ th {
 
 .mat-row {
   background-color: lightgray;
-  color: black!important;
+  color: black !important;
 }
 
 .mat-row > td {
-  color: black!important;
+  color: black !important;
 }
 
 .paginator {
@@ -117,11 +117,11 @@ th {
 }
 
 .mat-sort-header-arrow {
-  color: black!important;
+  color: black !important;
 }
 
 ::ng-deep.mat-paginator-page-size {
-  float: left!important;
+  float: left !important;
 }
 
 .search-button {
@@ -131,13 +131,13 @@ th {
 
 
 ::ng-deep.cdk-overlay-pane {
-  background-color: white!important;
-  color: black!important;
+  background-color: white !important;
+  color: black !important;
 }
 
 ::ng-deep.mat-dialog-container {
-  background: white!important;
-  color: black!important;
+  background: white !important;
+  color: black !important;
 }
 
 td {
@@ -146,22 +146,22 @@ td {
 }
 
 .center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    -moz-transform: translateX(-50%) translateY(-50%);
-    -webkit-transform: translateX(-50%) translateY(-50%);
-    transform: translateX(-50%) translateY(-50%);
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  -moz-transform: translateX(-50%) translateY(-50%);
+  -webkit-transform: translateX(-50%) translateY(-50%);
+  transform: translateX(-50%) translateY(-50%);
 }
 
-.overlay{
-  height:100vh;
-  width:100%;
-  background-color:rgba(0, 0, 0, 0.286);
-  z-index:    10;
-  top:        0;
-  left:       0;
-  position:   fixed;
+.overlay {
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.286);
+  z-index: 10;
+  top: 0;
+  left: 0;
+  position: fixed;
 }
 
 .search-input {
@@ -174,6 +174,6 @@ td {
   vertical-align: middle;
 }
 
-.background-white{
+.background-white {
   background-color: white;
 }

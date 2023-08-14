@@ -11,10 +11,10 @@
 }
 
 .message-component {
-  display: inline-flex!important;
+  display: inline-flex !important;
   z-index: 1001;
   border: 1px solid gray;
-  padding-right: 0!important;
+  padding-right: 0 !important;
   border-radius: 5px;
   position: fixed;
   top: 20px;

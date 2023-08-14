@@ -1,7 +1,7 @@
 .btn-link {
-  background: none!important;
+  background: none !important;
   border: none;
-  padding: 0!important;
+  padding: 0 !important;
   /*optional*/
   font-family: arial, sans-serif;
   /*input has OS specific font-family*/
@@ -12,8 +12,8 @@
 }
 
 ::ng-deep .mat-dialog-container {
-  background: white!important;
-  color: black!important;
+  background: white !important;
+  color: black !important;
 }
 
 .mat-dialog-content {
@@ -29,8 +29,8 @@
 }
 
 ::ng-deep.cdk-overlay-pane {
-  background-color: white!important;
-  color: black!important;
+  background-color: white !important;
+  color: black !important;
 }
 
 .cdk-overlay-pane {
@@ -40,8 +40,9 @@
 .col-form-label {
   text-align: left;
 }
+
 ::ng-deep.mat-checkbox-inner-container {
-  border: 1px solid black!important;
+  border: 1px solid black !important;
 }
 
 .material-icons {
@@ -57,7 +58,7 @@
 }
 
 ::ng-deep .mat-tooltip-panel {
-  background-color: transparent!important;
+  background-color: transparent !important;
 }
 
 change-secret-dialog {
@@ -65,22 +66,22 @@ change-secret-dialog {
 }
 
 ::ng-deep .mat-checkbox-label {
-  color: black!important;
+  color: black !important;
 }
 
 ::ng-deep .mat-checkbox-background {
-  background-color: white!important;
+  background-color: white !important;
 }
 
 .keep-line-breaks {
   white-space: pre-line;
 }
 
-.background-none{
+.background-none {
   background: none;
 }
 
-.submit-btn{
+.submit-btn {
   background-color: green;
   color: white;
 }

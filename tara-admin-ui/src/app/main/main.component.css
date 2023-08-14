@@ -14,17 +14,17 @@
 }
 
 .mat-tab-header {
-    display: flex;
-    overflow: hidden;
-    position: relative;
-    background-color: rgb(0 0 0 / 12%);
-    flex-shrink: 0;
+  display: flex;
+  overflow: hidden;
+  position: relative;
+  background-color: rgb(0 0 0 / 12%);
+  flex-shrink: 0;
 }
 
 .mat-tab-label-active {
-    background-color: #f8f9fa !important;
-    opacity: 1;
-    border: 1px solid #000;
+  background-color: #f8f9fa !important;
+  opacity: 1;
+  border: 1px solid #000;
 }
 
 .mat-tab-list {
@@ -36,9 +36,9 @@
 }
 
 .btn-link {
-  background: none!important;
+  background: none !important;
   border: none;
-  padding: 0!important;
+  padding: 0 !important;
   /*optional*/
   font-family: arial, sans-serif;
   /*input has OS specific font-family*/

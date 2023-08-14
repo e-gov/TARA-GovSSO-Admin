@@ -1,7 +1,7 @@
 .btn-link {
-  background: none!important;
+  background: none !important;
   border: none;
-  padding: 0!important;
+  padding: 0 !important;
   /*optional*/
   font-family: arial, sans-serif;
   /*input has OS specific font-family*/
@@ -12,8 +12,8 @@
 }
 
 ::ng-deep.mat-dialog-container {
-  background: white!important;
-  color: black!important;
+  background: white !important;
+  color: black !important;
 }
 
 .mat-dialog-content {
@@ -21,8 +21,8 @@
 }
 
 ::ng-deep.cdk-overlay-pane {
-  background-color: white!important;
-  color: black!important;
+  background-color: white !important;
+  color: black !important;
 }
 
 .cdk-overlay-pane {
@@ -32,8 +32,9 @@
 .col-form-label {
   text-align: left;
 }
+
 ::ng-deep.mat-checkbox-inner-container {
-  border: 1px solid black!important;
+  border: 1px solid black !important;
 }
 
 legend {
@@ -49,18 +50,18 @@ legend {
   margin: 1em 2px;
 }
 
-.mat-dialog-container-content>h1 {
+.mat-dialog-container-content > h1 {
   font: 1em normal;
   margin: -1em -0.5em 0;
 }
 
-.mat-dialog-container-content>h1>span {
+.mat-dialog-container-content > h1 > span {
   float: left;
   font-family: Arial;
   font-size: 12px;
 }
 
-.mat-dialog-container-content>h1:before {
+.mat-dialog-container-content > h1:before {
   border-top: 2px solid black;
   content: ' ';
   float: left;
@@ -68,7 +69,7 @@ legend {
   width: 0.75em;
 }
 
-.mat-dialog-container-content>h1:after {
+.mat-dialog-container-content > h1:after {
   border-top: 2px solid black;
   content: ' ';
   display: block;
@@ -93,12 +94,13 @@ legend {
 }
 
 ::ng-deep .mat-tooltip-panel {
-  background-color: transparent!important;
+  background-color: transparent !important;
 }
 
 change-secret-dialog {
   width: 100%;
 }
+
 .selection-panel {
   background-color: red;
 }
@@ -121,7 +123,7 @@ change-secret-dialog {
 
 ::ng-deep .mat-select-value-text {
   margin-left: 5px;
-  color: black!important;
+  color: black !important;
 }
 
 ::ng-deep .mat-form-field-underline {
@@ -134,19 +136,19 @@ change-secret-dialog {
 }
 
 ::ng-deep mat-option {
-  background-color: white!important;
-  color: black!important;
+  background-color: white !important;
+  color: black !important;
 }
 
 ::ng-deep .mat-checkbox-background {
-  background-color: white!important;
+  background-color: white !important;
 }
 
-.background-none{
+.background-none {
   background: none;
 }
 
-.submit-btn{
+.submit-btn {
   background-color: green;
   color: white;
 }
