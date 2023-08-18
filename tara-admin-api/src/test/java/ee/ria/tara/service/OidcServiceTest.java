@@ -1,5 +1,6 @@
 package ee.ria.tara.service;
 
+import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.controllers.exception.RecordDoesNotExistException;
@@ -10,33 +11,33 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.ArgumentCaptor;
-import org.mockito.Captor;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
+import static org.mockito.ArgumentMatchers.nullable;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.eq;
-import static org.mockito.Mockito.nullable;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -46,36 +47,41 @@ public class OidcServiceTest {
 
     private Client client;
 
-    @Captor
-    private ArgumentCaptor<ee.ria.tara.repository.model.Client> clientEntityCaptor;
-
-    @Mock
-    private ee.ria.tara.repository.model.Client entity;
     @Mock
     private RestTemplate restTemplate;
+    @Mock
+    private TaraOidcConfigurationProvider taraOidcConfigurationProvider;
     @InjectMocks
     private OidcService oidcService;
 
     @BeforeEach
     public void setUp() {
         client = validTARAClient();
-
-        ReflectionTestUtils.setField(oidcService, "baseUrl", "http://");
     }
 
     @Test
     public void testGetAllClients() throws ApiException {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
-        hydraClient.setCreatedAt(OffsetDateTime.now().toString());
-        hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
+        List<HydraClient> hydraClients = IntStream.rangeClosed(1, 15)
+                .mapToObj(i -> ClientHelper.convertToHydraClient(validTARAClient(i), false))
+                .collect(Collectors.toList());
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
+        doReturn(5).when(taraOidcConfigurationProvider).getPageSize();
+        HttpHeaders headersPage1 = new HttpHeaders();
+        headersPage1.set(HttpHeaders.LINK, "</admin/clients?page_size=5&page_token=pageToken2>; rel=\"next\",</admin/clients?page_size=5&page_token=pageToken3>; rel=\"last\"");
+        doReturn(ResponseEntity.ok().headers(headersPage1).body(hydraClients.subList(0, 5)))
+                .when(restTemplate).exchange(eq("http://hydra/admin/clients?page_size=5&page_token=1"), any(HttpMethod.class), any(), any(ParameterizedTypeReference.class));
+        HttpHeaders headersPage2 = new HttpHeaders();
+        headersPage2.set(HttpHeaders.LINK, "</admin/clients?page_size=2&page_token=pageToken1>; rel=\"first\",</admin/clients?page_size=2&page_token=pageToken3>; rel=\"next\",</admin/clients?page_size=2&page_token=pageToken1>; rel=\"prev\",</admin/clients?page_size=2&page_token=pageToken3>; rel=\"last\"");
+        doReturn(ResponseEntity.ok().headers(headersPage2).body(hydraClients.subList(5, 10)))
+                .when(restTemplate).exchange(eq("http://hydra/admin/clients?page_size=5&page_token=pageToken2"), any(HttpMethod.class), any(), any(ParameterizedTypeReference.class));
+        HttpHeaders headersPage3 = new HttpHeaders();
+        headersPage3.set(HttpHeaders.LINK, "</admin/clients?page_size=2&page_token=pageToken1>; rel=\"first\",</admin/clients?page_size=2&page_token=pageToken2>; rel=\"prev\"");
+        doReturn(ResponseEntity.ok().headers(headersPage3).body(hydraClients.subList(10, 15)))
+                .when(restTemplate).exchange(eq("http://hydra/admin/clients?page_size=5&page_token=pageToken3"), any(HttpMethod.class), any(), any(ParameterizedTypeReference.class));
 
-        doReturn(ResponseEntity.ok(List.of(hydraClient)))
-                .when(restTemplate).exchange(anyString(), any(HttpMethod.class), any(), any(ParameterizedTypeReference.class));
+        List<HydraClient> resultList = oidcService.getAllClients(null);
 
-        List<HydraClient> clientList = oidcService.getAllClients(null);
-
-        Assertions.assertEquals(1, clientList.size());
-        Assertions.assertEquals(clientList.get(0), hydraClient);
+        Assertions.assertIterableEquals(hydraClients, resultList);
     }
 
     @Test

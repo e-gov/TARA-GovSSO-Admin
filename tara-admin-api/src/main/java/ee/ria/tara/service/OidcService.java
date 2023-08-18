@@ -1,12 +1,14 @@
 package ee.ria.tara.service;
 
+import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.controllers.exception.RecordDoesNotExistException;
+import ee.ria.tara.service.helper.PaginationHelper;
 import ee.ria.tara.service.model.HydraClient;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -18,22 +20,16 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static net.logstash.logback.argument.StructuredArguments.value;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class OidcService {
-    private static final int LIMIT = 500;
-
     private final RestTemplate restTemplate;
-
-    @Value("${tara-oidc.url}")
-    private String baseUrl;
-
-    public OidcService(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
+    private final TaraOidcConfigurationProvider taraOidcConfigurationProvider;
 
     public List<HydraClient> getAllClients(String clientId) throws FatalApiException {
         if (clientId != null) {
@@ -45,7 +41,7 @@ public class OidcService {
     }
 
     private HydraClient getClientByClientId(String clientId) throws FatalApiException {
-        String uri = String.format("%s/clients/%s", baseUrl, clientId);
+        String uri = String.format("%s/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
 
         log.info("Sending " + HttpMethod.GET.name() + " request to OIDC service.", value("url.full", uri));
         try {
@@ -67,7 +63,7 @@ public class OidcService {
     }
 
     public void deleteClient(String clientId) throws ApiException {
-        String uri = String.format("%s/clients/%s", baseUrl, clientId);
+        String uri = String.format("%s/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
 
         try {
             log.info("Sending " + HttpMethod.DELETE.name() + " request to OIDC service.", value("url.full", uri));
@@ -89,23 +85,19 @@ public class OidcService {
     }
 
     private List<HydraClient> getAllHydraClients() throws FatalApiException {
-        String uri = String.format("%s/clients", baseUrl);
+        String uri = String.format("%s/clients", taraOidcConfigurationProvider.getUrl());
         List<HydraClient> clients = new ArrayList<>();
-
-        while (true) {
+        Optional<String> nextPageTokenEncoded = Optional.of(PaginationHelper.INITIAL_PAGE_TOKEN);
+        while (nextPageTokenEncoded.isPresent()) {
             try {
-                String queryString = String.format("?offset=%s&limit=%s", clients.size(), LIMIT);
+                String queryString = String.format("%s?page_size=%s&page_token=%s", uri, taraOidcConfigurationProvider.getPageSize(), nextPageTokenEncoded.get());
+                log.info("Sending " + HttpMethod.GET.name() + " request to OIDC service.", value("url.full", queryString));
 
-                log.info("Sending " + HttpMethod.GET.name() + " request to OIDC service.", value("url.full", uri + queryString));
-
-                List<HydraClient> response = restTemplate.exchange(uri + queryString, HttpMethod.GET,
-                        null, new ParameterizedTypeReference<List<HydraClient>>() {
-                        }).getBody();
-                clients.addAll(response);
-
-                if (response.size() < LIMIT) {
-                    break;
-                }
+                ResponseEntity<List<HydraClient>> response = restTemplate.exchange(queryString, HttpMethod.GET, null,
+                        new ParameterizedTypeReference<>() {
+                        });
+                clients.addAll(response.getBody());
+                nextPageTokenEncoded = PaginationHelper.getNextPageToken(response.getHeaders());
             } catch (HttpServerErrorException ex) {
                 log.error(String.format("Hydra request: %s failed.", uri), ex);
                 throw new FatalApiException("Oidc.serverError");

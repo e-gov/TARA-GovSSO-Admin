@@ -1,6 +1,7 @@
 package ee.ria.tara.service;
 
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
+import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
@@ -17,7 +18,6 @@ import ee.ria.tara.service.helper.SecureRandomAlphaNumericStringGenerator;
 import ee.ria.tara.service.model.HydraClient;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -44,9 +44,7 @@ public class ClientsService {
     private final AdminConfigurationProvider adminConfigurationProvider;
     private final ClientValidator clientValidator;
     private final ScopeFilter scopeFilter;
-
-    @Value("${tara-oidc.url}")
-    private String baseUrl;
+    private final TaraOidcConfigurationProvider taraOidcConfigurationProvider;
 
     public List<Client> getAllClients(String clientId) throws FatalApiException {
         List<HydraClient> hydraClients = this.oidcService.getAllClients(clientId);
@@ -97,7 +95,7 @@ public class ClientsService {
 
     @Transactional(rollbackFor = Exception.class)
     public void addClientToInstitution(String registryCode, Client client) throws ApiException {
-        String uri = String.format("%s/clients", baseUrl);
+        String uri = String.format("%s/clients", taraOidcConfigurationProvider.getUrl());
         this.saveClient(client, registryCode, uri, HttpMethod.POST);
 
         log.info(String.format("Added client with client_id %s.", client.getClientId()));
@@ -105,7 +103,7 @@ public class ClientsService {
 
     @Transactional(rollbackFor = Exception.class)
     public void updateClient(String registryCode, String clientId, Client client) throws ApiException {
-        String uri = String.format("%s/clients/%s", baseUrl, clientId);
+        String uri = String.format("%s/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
         this.saveClient(client, registryCode, uri, HttpMethod.PUT);
 
         log.info(String.format("Updated client with client_id %s.", client.getClientId()));
@@ -160,7 +158,7 @@ public class ClientsService {
             clientSecretEmailService.sendSigningSecretByEmail(client);
 
             hydraClient.setClientSecret(!ssoMode ? ClientHelper.getDigest(newSecret) : newSecret);
-            String putRequestUri = String.format("%s/clients/%s", baseUrl, client.getClientId());
+            String putRequestUri = String.format("%s/clients/%s", taraOidcConfigurationProvider.getUrl(), client.getClientId());
             oidcService.saveClient(hydraClient, putRequestUri, HttpMethod.PUT);
         }
     }

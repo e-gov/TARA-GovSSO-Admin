@@ -47,6 +47,10 @@ public class ClientTestHelper {
     }
 
     public static Client validTARAClient() {
+        return validTARAClient(1);
+    }
+
+    public static Client validTARAClient(int id) {
         Client client = new Client();
         NameTranslations nameTranslations = new NameTranslations();
         ShortNameTranslations shortNameTranslations = new ShortNameTranslations();
@@ -62,13 +66,13 @@ public class ClientTestHelper {
         nameTranslations.setEt("Nimi");
         shortNameTranslations.setEt("Nimi");
 
-        client.setClientId("ClientID");
+        client.setClientId("ClientID-" + id);
         client.setClientName(nameTranslations);
         client.setClientShortName(shortNameTranslations);
         client.setClientUrl("https://localhost:4200");
         client.setInstitutionMetainfo(institutionMetainfo);
         client.setRedirectUris(List.of("https://localhost:4200"));
-        client.setTokenRequestAllowedIpAddresses(List.of("1.1.1.1","1.1.1.10"));
+        client.setTokenRequestAllowedIpAddresses(List.of("1.1.1.1", "1.1.1.10"));
         client.setBackchannelLogoutUri(null);
         client.setPostLogoutRedirectUris(null);
         ClientSecretExportSettings clientSecretExportSettings = new ClientSecretExportSettings();

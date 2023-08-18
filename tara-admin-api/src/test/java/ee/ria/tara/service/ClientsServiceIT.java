@@ -2,6 +2,7 @@ package ee.ria.tara.service;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
@@ -25,7 +26,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.util.ReflectionTestUtils;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.badRequest;
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
@@ -54,18 +54,15 @@ public class ClientsServiceIT {
     @Autowired
     private InstitutionRepository institutionRepository;
     @Autowired
-    private OidcService oidcService;
-    @Autowired
     private ClientsService service;
+    @Autowired
+    private TaraOidcConfigurationProvider taraOidcConfigurationProvider;
 
     private Client client;
 
     @BeforeEach
     public void setUp() {
         client = validTARAClient();
-
-        ReflectionTestUtils.setField(service, "baseUrl", wireMockServer.baseUrl());
-        ReflectionTestUtils.setField(oidcService, "baseUrl", wireMockServer.baseUrl());
     }
 
     @BeforeAll
@@ -90,6 +87,7 @@ public class ClientsServiceIT {
     @Sql({"classpath:fixtures/ADD_institution_9999.sql"})
     public void addInstitutionToDatabase() {
         Assertions.assertNotNull(institutionRepository.findInstitutionByRegistryCode(registryCode));
+        taraOidcConfigurationProvider.setUrl(wireMockServer.baseUrl());
     }
 
     @Test

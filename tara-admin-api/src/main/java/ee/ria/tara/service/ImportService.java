@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
 import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientContact;
 import ee.ria.tara.model.InstitutionMetainfo;
@@ -28,7 +29,6 @@ import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
@@ -53,14 +53,13 @@ import static ee.ria.tara.service.helper.ClientHelper.convertToHydraClient;
 @Service
 @RequiredArgsConstructor
 public class ImportService {
-
-    @Value("${tara-oidc.url}")
-    private String baseUrl;
     private final ClientRepository clientRepository;
     private final InstitutionRepository institutionRepository;
     private final ClientValidator clientValidator;
     private final ScopeFilter scopeFilter;
     private final RestTemplate restTemplate;
+    private final TaraOidcConfigurationProvider taraOidcConfigurationProvider;
+
     private final static ObjectMapper mapper = JsonMapper.builder()
             .addModule(new JavaTimeModule())
             .build();
@@ -183,7 +182,7 @@ public class ImportService {
     public void saveClient(ee.ria.tara.model.Institution institution, Client client) {
 
         log.info("Importing client: " + mapper.writer().writeValueAsString(client));
-        String uri = String.format("%s/clients", baseUrl);
+        String uri = String.format("%s/clients", taraOidcConfigurationProvider.getUrl());
 
         client.setScope(scopeFilter.filterInstitutionClientScopes(client.getScope(), institution.getType().getType()));
         clientValidator.validateClient(client, institution.getType().getType());

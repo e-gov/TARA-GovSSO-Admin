@@ -2,6 +2,7 @@ package ee.ria.tara.service;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
+import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientContact;
 import ee.ria.tara.model.Institution;
@@ -24,7 +25,6 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.jdbc.Sql;
-import org.springframework.test.util.ReflectionTestUtils;
 import wiremock.org.apache.commons.io.IOUtils;
 
 import java.io.FileInputStream;
@@ -59,13 +59,15 @@ public class ImportServiceIT {
     private InstitutionRepository institutionRepository;
     @Autowired
     private ImportService importService;
+    @Autowired
+    private TaraOidcConfigurationProvider taraOidcConfigurationProvider;
 
     private Client client;
 
     @BeforeEach
     public void setUp() {
         client = validTARAClient();
-        ReflectionTestUtils.setField(importService, "baseUrl", wireMockServer.baseUrl());
+        taraOidcConfigurationProvider.setUrl(wireMockServer.baseUrl());
     }
 
     @BeforeAll

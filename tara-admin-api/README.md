@@ -38,6 +38,7 @@ The backend application is built on top of classes generated from the API specif
 | Parameter                    | Required | Description                       | Example                                              |
 | ---------------------------- | -------- | --------------------------------- | ---------------------------------------------------- |
 | tara-oidc.url                | Y        | TARA/GovSSO OIDC service's admin url     | https://example.com:4445              |
+| tara-oidc.page-size          | N        | OIDC Admin API pagination page size parameter with allowed range 1-500 | 500 |
 
 
 <a href="tls_conf"></a>

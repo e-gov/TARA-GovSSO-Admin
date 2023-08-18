@@ -1,6 +1,7 @@
 package ee.ria.tara.service;
 
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
+import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
@@ -25,8 +26,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.util.ReflectionTestUtils;
-import org.springframework.web.client.RestTemplate;
 
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -53,9 +52,6 @@ public class ClientsServiceTest {
     @Captor
     private ArgumentCaptor<ee.ria.tara.repository.model.Client> clientEntityCaptor;
 
-    @Captor
-    private ArgumentCaptor<HydraClient> hydraClientEntityCaptor;
-
     @Mock
     private ee.ria.tara.repository.model.Client entity;
 
@@ -69,18 +65,22 @@ public class ClientsServiceTest {
     private ClientSecretEmailService clientSecretEmailService;
 
     @Mock
-    private RestTemplate restTemplate;
+    private ClientRepository repository;
 
     @Mock
-    private ClientRepository repository;
-    @Mock
     private InstitutionRepository institutionRepository;
+
     @Mock
     private AdminConfigurationProvider adminConfigurationProvider;
+
     @Mock
     private ClientValidator clientValidator;
+
     @Mock
     private ScopeFilter scopeFilter;
+
+    @Mock
+    private TaraOidcConfigurationProvider taraOidcConfigurationProvider;
 
     @InjectMocks
     private ClientsService clientsService;
@@ -88,8 +88,6 @@ public class ClientsServiceTest {
     @BeforeEach
     public void setUp() {
         client = validTARAClient();
-
-        ReflectionTestUtils.setField(clientsService, "baseUrl", "http://");
     }
 
     @Test
@@ -159,6 +157,7 @@ public class ClientsServiceTest {
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
         doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
         doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         clientsService.addClientToInstitution(registryCode, client);
@@ -175,6 +174,7 @@ public class ClientsServiceTest {
         String registryCode = "1";
         String errorMessage = "Oops.";
         doThrow(new ApiException(errorMessage)).when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
         doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         ApiException exception = assertThrows(ApiException.class,
@@ -226,6 +226,7 @@ public class ClientsServiceTest {
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
         doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
         doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         clientsService.addClientToInstitution(registryCode, client);
@@ -251,6 +252,7 @@ public class ClientsServiceTest {
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
         doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
         doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         clientsService.addClientToInstitution(registryCode, client);
@@ -268,6 +270,7 @@ public class ClientsServiceTest {
         String registryCode = "1";
         String errorMessage = "Oops.";
         doThrow(new InvalidDataException(errorMessage)).when(clientValidator).validateClient(client, PRIVATE);
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
         doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -285,6 +288,7 @@ public class ClientsServiceTest {
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
         doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
         doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         clientsService.updateClient(registryCode, "10101010005", client);
@@ -309,6 +313,7 @@ public class ClientsServiceTest {
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
         doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
         doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         clientsService.updateClient(registryCode, "10101010005", client);
@@ -326,6 +331,7 @@ public class ClientsServiceTest {
         String errorMessage = "Oops.";
         doThrow(new ApiException(errorMessage))
                 .when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
         doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         ApiException exception = assertThrows(ApiException.class,
@@ -341,6 +347,7 @@ public class ClientsServiceTest {
         String registryCode = "1";
         String errorMessage = "Oops.";
         doThrow(new InvalidDataException(errorMessage)).when(clientValidator).validateClient(client, PRIVATE);
+        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
         doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
