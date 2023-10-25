@@ -13,6 +13,7 @@
     <version>1.6.2</version>
 
     <properties>
+        <!-- If you change this version or src/main/resources/swagger.yaml file content, then delete server-stubs folder and run `mvn clean install -P regenerate-swagger` -->
         <openapi-generator-maven-plugin.version>7.0.1</openapi-generator-maven-plugin.version>
         <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
     </properties>

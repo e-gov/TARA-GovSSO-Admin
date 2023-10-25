@@ -888,6 +888,7 @@ components:
           enum:
           - client_secret_basic
           - client_secret_post
+          example: client_secret_basic
           type: string
         secret:
           type: string
