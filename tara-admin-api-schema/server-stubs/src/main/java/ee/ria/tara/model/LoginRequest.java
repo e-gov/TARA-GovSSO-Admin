@@ -24,11 +24,6 @@ public class LoginRequest {
 
   private String password;
 
-  /**
-   * Default constructor
-   * @deprecated Use {@link LoginRequest#LoginRequest(String, String)}
-   */
-  @Deprecated
   public LoginRequest() {
     super();
   }

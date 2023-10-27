@@ -53,9 +53,6 @@ public class Client {
   @Valid
   private List<String> scope = new ArrayList<>();
 
-  @Valid
-  private List<String> tokenRequestAllowedIpAddresses = new ArrayList<>();
-
   private String secret;
 
   private String eidasRequesterId;
@@ -92,11 +89,6 @@ public class Client {
 
   private byte[] clientLogo;
 
-  /**
-   * Default constructor
-   * @deprecated Use {@link Client#Client(String, InstitutionMetainfo, List<String>, List<String>, List<String>)}
-   */
-  @Deprecated
   public Client() {
     super();
   }
@@ -104,12 +96,11 @@ public class Client {
   /**
    * Constructor with only required parameters
    */
-  public Client(String clientId, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<String> scope, List<String> tokenRequestAllowedIpAddresses) {
+  public Client(String clientId, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<String> scope) {
     this.clientId = clientId;
     this.institutionMetainfo = institutionMetainfo;
     this.redirectUris = redirectUris;
     this.scope = scope;
-    this.tokenRequestAllowedIpAddresses = tokenRequestAllowedIpAddresses;
   }
 
   public Client id(String id) {
@@ -314,34 +305,6 @@ public class Client {
 
   public void setScope(List<String> scope) {
     this.scope = scope;
-  }
-
-  public Client tokenRequestAllowedIpAddresses(List<String> tokenRequestAllowedIpAddresses) {
-    this.tokenRequestAllowedIpAddresses = tokenRequestAllowedIpAddresses;
-    return this;
-  }
-
-  public Client addTokenRequestAllowedIpAddressesItem(String tokenRequestAllowedIpAddressesItem) {
-    if (this.tokenRequestAllowedIpAddresses == null) {
-      this.tokenRequestAllowedIpAddresses = new ArrayList<>();
-    }
-    this.tokenRequestAllowedIpAddresses.add(tokenRequestAllowedIpAddressesItem);
-    return this;
-  }
-
-  /**
-   * Get tokenRequestAllowedIpAddresses
-   * @return tokenRequestAllowedIpAddresses
-  */
-  @NotNull @Size(min = 1) 
-  @Schema(name = "token_request_allowed_ip_addresses", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("token_request_allowed_ip_addresses")
-  public List<String> getTokenRequestAllowedIpAddresses() {
-    return tokenRequestAllowedIpAddresses;
-  }
-
-  public void setTokenRequestAllowedIpAddresses(List<String> tokenRequestAllowedIpAddresses) {
-    this.tokenRequestAllowedIpAddresses = tokenRequestAllowedIpAddresses;
   }
 
   public Client secret(String secret) {
@@ -694,7 +657,6 @@ public class Client {
         Objects.equals(this.redirectUris, client.redirectUris) &&
         Objects.equals(this.postLogoutRedirectUris, client.postLogoutRedirectUris) &&
         Objects.equals(this.scope, client.scope) &&
-        Objects.equals(this.tokenRequestAllowedIpAddresses, client.tokenRequestAllowedIpAddresses) &&
         Objects.equals(this.secret, client.secret) &&
         Objects.equals(this.eidasRequesterId, client.eidasRequesterId) &&
         Objects.equals(this.description, client.description) &&
@@ -714,7 +676,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -730,7 +692,6 @@ public class Client {
     sb.append("    redirectUris: ").append(toIndentedString(redirectUris)).append("\n");
     sb.append("    postLogoutRedirectUris: ").append(toIndentedString(postLogoutRedirectUris)).append("\n");
     sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
-    sb.append("    tokenRequestAllowedIpAddresses: ").append(toIndentedString(tokenRequestAllowedIpAddresses)).append("\n");
     sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
     sb.append("    eidasRequesterId: ").append(toIndentedString(eidasRequesterId)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");

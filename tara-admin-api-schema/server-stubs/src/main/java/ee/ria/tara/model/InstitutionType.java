@@ -58,11 +58,6 @@ public class InstitutionType {
 
   private TypeEnum type;
 
-  /**
-   * Default constructor
-   * @deprecated Use {@link InstitutionType#InstitutionType(TypeEnum)}
-   */
-  @Deprecated
   public InstitutionType() {
     super();
   }
