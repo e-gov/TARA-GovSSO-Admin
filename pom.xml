@@ -5,7 +5,7 @@
 
     <groupId>ee.ria.tara-admin</groupId>
     <artifactId>tara-admin-parent</artifactId>
-    <version>1.5.10</version>
+    <version>1.5.11</version>
     <packaging>pom</packaging>
     <licenses>
         <license>
