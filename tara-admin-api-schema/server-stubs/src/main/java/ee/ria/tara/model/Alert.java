@@ -44,11 +44,6 @@ public class Alert {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  /**
-   * Default constructor
-   * @deprecated Use {@link Alert#Alert(String, OffsetDateTime, OffsetDateTime)}
-   */
-  @Deprecated
   public Alert() {
     super();
   }

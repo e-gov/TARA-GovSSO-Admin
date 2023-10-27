@@ -89,11 +89,6 @@ public class Client {
 
   private byte[] clientLogo;
 
-  /**
-   * Default constructor
-   * @deprecated Use {@link Client#Client(String, InstitutionMetainfo, List<String>, List<String>)}
-   */
-  @Deprecated
   public Client() {
     super();
   }

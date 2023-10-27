@@ -7,6 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import ee.ria.tara.model.MessageTemplate;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.OffsetDateTime;
