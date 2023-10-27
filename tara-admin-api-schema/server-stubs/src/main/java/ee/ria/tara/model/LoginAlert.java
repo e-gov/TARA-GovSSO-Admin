@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import ee.ria.tara.model.MessageTemplate;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.time.OffsetDateTime;
 import javax.validation.Valid;

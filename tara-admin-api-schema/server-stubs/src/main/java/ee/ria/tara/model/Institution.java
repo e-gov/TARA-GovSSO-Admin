@@ -8,6 +8,7 @@ import ee.ria.tara.model.InstitutionBillingSettings;
 import ee.ria.tara.model.InstitutionType;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
 import java.time.OffsetDateTime;
@@ -51,11 +52,6 @@ public class Institution {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime updatedAt;
 
-  /**
-   * Default constructor
-   * @deprecated Use {@link Institution#Institution(String, String, InstitutionType, String, String, String, InstitutionBillingSettings)}
-   */
-  @Deprecated
   public Institution() {
     super();
   }

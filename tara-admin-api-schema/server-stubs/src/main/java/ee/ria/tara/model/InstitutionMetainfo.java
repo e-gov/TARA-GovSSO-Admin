@@ -27,11 +27,6 @@ public class InstitutionMetainfo {
 
   private InstitutionType type;
 
-  /**
-   * Default constructor
-   * @deprecated Use {@link InstitutionMetainfo#InstitutionMetainfo(String, String, InstitutionType)}
-   */
-  @Deprecated
   public InstitutionMetainfo() {
     super();
   }

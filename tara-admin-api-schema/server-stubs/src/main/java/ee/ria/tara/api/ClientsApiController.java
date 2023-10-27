@@ -2,6 +2,7 @@ package ee.ria.tara.api;
 
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientImportResponse;
+import java.util.Map;
 
 
 import org.springframework.beans.factory.annotation.Autowired;

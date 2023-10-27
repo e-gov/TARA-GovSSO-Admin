@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonValue;
 import ee.ria.tara.model.ClientContact;
 import ee.ria.tara.model.ClientMidSettings;
 import ee.ria.tara.model.ClientSecretExportSettings;
@@ -57,43 +56,6 @@ public class Client {
   @Valid
   private List<String> tokenRequestAllowedIpAddresses = new ArrayList<>();
 
-  /**
-   * Gets or Sets tokenEndpointAuthMethod
-   */
-  public enum TokenEndpointAuthMethodEnum {
-    BASIC("client_secret_basic"),
-    
-    POST("client_secret_post");
-
-    private String value;
-
-    TokenEndpointAuthMethodEnum(String value) {
-      this.value = value;
-    }
-
-    @JsonValue
-    public String getValue() {
-      return value;
-    }
-
-    @Override
-    public String toString() {
-      return String.valueOf(value);
-    }
-
-    @JsonCreator
-    public static TokenEndpointAuthMethodEnum fromValue(String value) {
-      for (TokenEndpointAuthMethodEnum b : TokenEndpointAuthMethodEnum.values()) {
-        if (b.value.equals(value)) {
-          return b;
-        }
-      }
-      throw new IllegalArgumentException("Unexpected value '" + value + "'");
-    }
-  }
-
-  private TokenEndpointAuthMethodEnum tokenEndpointAuthMethod;
-
   private String secret;
 
   private String eidasRequesterId;
@@ -130,11 +92,6 @@ public class Client {
 
   private byte[] clientLogo;
 
-  /**
-   * Default constructor
-   * @deprecated Use {@link Client#Client(String, InstitutionMetainfo, List<String>, List<String>, List<String>, TokenEndpointAuthMethodEnum)}
-   */
-  @Deprecated
   public Client() {
     super();
   }
@@ -142,13 +99,12 @@ public class Client {
   /**
    * Constructor with only required parameters
    */
-  public Client(String clientId, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<String> scope, List<String> tokenRequestAllowedIpAddresses, TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
+  public Client(String clientId, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<String> scope, List<String> tokenRequestAllowedIpAddresses) {
     this.clientId = clientId;
     this.institutionMetainfo = institutionMetainfo;
     this.redirectUris = redirectUris;
     this.scope = scope;
     this.tokenRequestAllowedIpAddresses = tokenRequestAllowedIpAddresses;
-    this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
   }
 
   public Client id(String id) {
@@ -381,26 +337,6 @@ public class Client {
 
   public void setTokenRequestAllowedIpAddresses(List<String> tokenRequestAllowedIpAddresses) {
     this.tokenRequestAllowedIpAddresses = tokenRequestAllowedIpAddresses;
-  }
-
-  public Client tokenEndpointAuthMethod(TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
-    this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
-    return this;
-  }
-
-  /**
-   * Get tokenEndpointAuthMethod
-   * @return tokenEndpointAuthMethod
-  */
-  @NotNull 
-  @Schema(name = "token_endpoint_auth_method", requiredMode = Schema.RequiredMode.REQUIRED)
-  @JsonProperty("token_endpoint_auth_method")
-  public TokenEndpointAuthMethodEnum getTokenEndpointAuthMethod() {
-    return tokenEndpointAuthMethod;
-  }
-
-  public void setTokenEndpointAuthMethod(TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
-    this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
   }
 
   public Client secret(String secret) {
@@ -754,7 +690,6 @@ public class Client {
         Objects.equals(this.postLogoutRedirectUris, client.postLogoutRedirectUris) &&
         Objects.equals(this.scope, client.scope) &&
         Objects.equals(this.tokenRequestAllowedIpAddresses, client.tokenRequestAllowedIpAddresses) &&
-        Objects.equals(this.tokenEndpointAuthMethod, client.tokenEndpointAuthMethod) &&
         Objects.equals(this.secret, client.secret) &&
         Objects.equals(this.eidasRequesterId, client.eidasRequesterId) &&
         Objects.equals(this.description, client.description) &&
@@ -774,7 +709,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -791,7 +726,6 @@ public class Client {
     sb.append("    postLogoutRedirectUris: ").append(toIndentedString(postLogoutRedirectUris)).append("\n");
     sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
     sb.append("    tokenRequestAllowedIpAddresses: ").append(toIndentedString(tokenRequestAllowedIpAddresses)).append("\n");
-    sb.append("    tokenEndpointAuthMethod: ").append(toIndentedString(tokenEndpointAuthMethod)).append("\n");
     sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
     sb.append("    eidasRequesterId: ").append(toIndentedString(eidasRequesterId)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
