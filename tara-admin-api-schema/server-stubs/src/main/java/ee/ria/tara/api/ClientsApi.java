@@ -7,6 +7,7 @@ package ee.ria.tara.api;
 
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientImportResponse;
+import java.util.Map;
 import io.swagger.v3.oas.annotations.ExternalDocumentation;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
