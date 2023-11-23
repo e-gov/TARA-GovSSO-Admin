@@ -64,7 +64,7 @@ public class OidcServiceTest {
         List<HydraClient> hydraClients = IntStream.rangeClosed(1, 15)
                 .mapToObj(i -> ClientHelper.convertToHydraClient(validTARAClient(i), false))
                 .collect(Collectors.toList());
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
+        doReturn("http://hydra").when(taraOidcConfigurationProvider).getUrl();
         doReturn(5).when(taraOidcConfigurationProvider).getPageSize();
         HttpHeaders headersPage1 = new HttpHeaders();
         headersPage1.set(HttpHeaders.LINK, "</admin/clients?page_size=5&page_token=pageToken2>; rel=\"next\",</admin/clients?page_size=5&page_token=pageToken3>; rel=\"last\"");

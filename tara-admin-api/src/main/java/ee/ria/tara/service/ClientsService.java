@@ -95,7 +95,7 @@ public class ClientsService {
 
     @Transactional(rollbackFor = Exception.class)
     public void addClientToInstitution(String registryCode, Client client) throws ApiException {
-        String uri = String.format("%s/clients", taraOidcConfigurationProvider.getUrl());
+        String uri = String.format("%s/admin/clients", taraOidcConfigurationProvider.getUrl());
         this.saveClient(client, registryCode, uri, HttpMethod.POST);
 
         log.info(String.format("Added client with client_id %s.", client.getClientId()));
@@ -103,7 +103,7 @@ public class ClientsService {
 
     @Transactional(rollbackFor = Exception.class)
     public void updateClient(String registryCode, String clientId, Client client) throws ApiException {
-        String uri = String.format("%s/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
+        String uri = String.format("%s/admin/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
         this.saveClient(client, registryCode, uri, HttpMethod.PUT);
 
         log.info(String.format("Updated client with client_id %s.", client.getClientId()));
@@ -158,7 +158,7 @@ public class ClientsService {
             clientSecretEmailService.sendSigningSecretByEmail(client);
 
             hydraClient.setClientSecret(!ssoMode ? ClientHelper.getDigest(newSecret) : newSecret);
-            String putRequestUri = String.format("%s/clients/%s", taraOidcConfigurationProvider.getUrl(), client.getClientId());
+            String putRequestUri = String.format("%s/admin/clients/%s", taraOidcConfigurationProvider.getUrl(), client.getClientId());
             oidcService.saveClient(hydraClient, putRequestUri, HttpMethod.PUT);
         }
     }

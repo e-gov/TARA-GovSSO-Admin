@@ -57,8 +57,8 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
         Assertions.assertEquals(1, clients.size());
         Assertions.assertEquals("mock_client_id", clients.get(0).getClientId());
         Assertions.assertEquals("Example Institution", clients.get(0).getInstitution().getName());
-        wireMockServer.verify(getRequestedFor(urlEqualTo("/clients/mock_client_id")));
-        wireMockServer.verify(putRequestedFor(urlEqualTo("/clients/mock_client_id"))
+        wireMockServer.verify(getRequestedFor(urlEqualTo("/admin/clients/mock_client_id")));
+        wireMockServer.verify(putRequestedFor(urlEqualTo("/admin/clients/mock_client_id"))
                 .withHeader("Content-Type", equalTo("application/json"))
                 .withRequestBody(equalToJson("{" +
                         "\"client_id\":\"mock_client_id\"," +
@@ -112,15 +112,15 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
             });
 
             wireMockServer.stubFor(
-                    WireMock.post("/clients")
+                    WireMock.post("/admin/clients")
                             .willReturn(WireMock.aResponse())
             );
             wireMockServer.stubFor(
-                    WireMock.get("/clients/mock_client_id")
+                    WireMock.get("/admin/clients/mock_client_id")
                             .willReturn(WireMock.aResponse())
             );
             wireMockServer.stubFor(
-                    WireMock.put("/clients/mock_client_id")
+                    WireMock.put("/admin/clients/mock_client_id")
                             .willReturn(WireMock.aResponse())
             );
         }

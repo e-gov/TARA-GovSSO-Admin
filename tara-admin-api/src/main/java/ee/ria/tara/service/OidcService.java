@@ -41,7 +41,7 @@ public class OidcService {
     }
 
     private HydraClient getClientByClientId(String clientId) throws FatalApiException {
-        String uri = String.format("%s/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
+        String uri = String.format("%s/admin/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
 
         log.info("Sending " + HttpMethod.GET.name() + " request to OIDC service.", value("url.full", uri));
         try {
@@ -63,7 +63,7 @@ public class OidcService {
     }
 
     public void deleteClient(String clientId) throws ApiException {
-        String uri = String.format("%s/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
+        String uri = String.format("%s/admin/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
 
         try {
             log.info("Sending " + HttpMethod.DELETE.name() + " request to OIDC service.", value("url.full", uri));
@@ -85,7 +85,7 @@ public class OidcService {
     }
 
     private List<HydraClient> getAllHydraClients() throws FatalApiException {
-        String uri = String.format("%s/clients", taraOidcConfigurationProvider.getUrl());
+        String uri = String.format("%s/admin/clients", taraOidcConfigurationProvider.getUrl());
         List<HydraClient> clients = new ArrayList<>();
         Optional<String> nextPageTokenEncoded = Optional.of(PaginationHelper.INITIAL_PAGE_TOKEN);
         while (nextPageTokenEncoded.isPresent()) {

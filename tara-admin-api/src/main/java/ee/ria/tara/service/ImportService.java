@@ -182,7 +182,7 @@ public class ImportService {
     public void saveClient(ee.ria.tara.model.Institution institution, Client client) {
 
         log.info("Importing client: " + mapper.writer().writeValueAsString(client));
-        String uri = String.format("%s/clients", taraOidcConfigurationProvider.getUrl());
+        String uri = String.format("%s/admin/clients", taraOidcConfigurationProvider.getUrl());
 
         client.setScope(scopeFilter.filterInstitutionClientScopes(client.getScope(), institution.getType().getType()));
         clientValidator.validateClient(client, institution.getType().getType());
