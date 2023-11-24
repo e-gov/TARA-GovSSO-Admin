@@ -675,7 +675,7 @@ components:
         billing_settings:
           email: email
         updated_at: 2019-08-24T14:15:22Z
-        phone: +3726630200
+        phone: "+3726630200"
         name: Example Institution
         created_at: 2019-08-24T14:15:22Z
         id: id
@@ -711,7 +711,7 @@ components:
           minLength: 3
           type: string
         phone:
-          example: +3726630200
+          example: "+3726630200"
           pattern: "^[0-9\\+]{5,}$"
           type: string
         email:
@@ -798,11 +798,11 @@ components:
         - token_request_allowed_ip_addresses
         - token_request_allowed_ip_addresses
         client_contacts:
-        - phone: +3726630200
+        - phone: "+3726630200"
           name: test
           department: test
           email: test@example.com
-        - phone: +3726630200
+        - phone: "+3726630200"
           name: test
           department: test
           email: test@example.com
@@ -962,7 +962,7 @@ components:
       type: object
     ClientContact:
       example:
-        phone: +3726630200
+        phone: "+3726630200"
         name: test
         department: test
         email: test@example.com
@@ -975,7 +975,7 @@ components:
           format: email
           type: string
         phone:
-          example: +3726630200
+          example: "+3726630200"
           format: phone
           type: string
         department:
