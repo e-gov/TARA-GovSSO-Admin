@@ -12,7 +12,7 @@ An additional subproject also provides tools to export/import TARA clients.
 
 ## Requirements:
 
-Java (JDK 11+) runtime and Node.js version 14 is required to build and run the webapp.
+Java (JDK 17+) runtime and Node.js version 14 is required to build and run the webapp.
 
 [Maven](https://maven.apache.org/) is used to build and test the software.
 
