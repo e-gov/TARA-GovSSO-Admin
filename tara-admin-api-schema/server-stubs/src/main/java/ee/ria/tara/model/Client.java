@@ -52,10 +52,10 @@ public class Client {
   private List<String> postLogoutRedirectUris;
 
   @Valid
-  private List<String> scope = new ArrayList<>();
+  private List<@Size(min = 2, max = 200)String> scope = new ArrayList<>();
 
   @Valid
-  private List<String> tokenRequestAllowedIpAddresses = new ArrayList<>();
+  private List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses = new ArrayList<>();
 
   /**
    * Gets or Sets tokenEndpointAuthMethod
@@ -101,10 +101,10 @@ public class Client {
   private String description;
 
   @Valid
-  private List<String> infoNotificationEmails;
+  private List<@Email String> infoNotificationEmails;
 
   @Valid
-  private List<String> slaNotificationEmails;
+  private List<@Email String> slaNotificationEmails;
 
   private Boolean isUserConsentRequired;
 
@@ -137,7 +137,7 @@ public class Client {
   /**
    * Constructor with only required parameters
    */
-  public Client(String clientId, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<String> scope, List<String> tokenRequestAllowedIpAddresses, TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
+  public Client(String clientId, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<@Size(min = 2, max = 200)String> scope, List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses, TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
     this.clientId = clientId;
     this.institutionMetainfo = institutionMetainfo;
     this.redirectUris = redirectUris;
@@ -322,7 +322,7 @@ public class Client {
     this.postLogoutRedirectUris = postLogoutRedirectUris;
   }
 
-  public Client scope(List<String> scope) {
+  public Client scope(List<@Size(min = 2, max = 200)String> scope) {
     this.scope = scope;
     return this;
   }
@@ -342,15 +342,15 @@ public class Client {
   @NotNull @Size(min = 1) 
   @Schema(name = "scope", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("scope")
-  public List<String> getScope() {
+  public List<@Size(min = 2, max = 200)String> getScope() {
     return scope;
   }
 
-  public void setScope(List<String> scope) {
+  public void setScope(List<@Size(min = 2, max = 200)String> scope) {
     this.scope = scope;
   }
 
-  public Client tokenRequestAllowedIpAddresses(List<String> tokenRequestAllowedIpAddresses) {
+  public Client tokenRequestAllowedIpAddresses(List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses) {
     this.tokenRequestAllowedIpAddresses = tokenRequestAllowedIpAddresses;
     return this;
   }
@@ -370,11 +370,11 @@ public class Client {
   @NotNull @Size(min = 1) 
   @Schema(name = "token_request_allowed_ip_addresses", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("token_request_allowed_ip_addresses")
-  public List<String> getTokenRequestAllowedIpAddresses() {
+  public List<@Size(min = 1, max = 200)String> getTokenRequestAllowedIpAddresses() {
     return tokenRequestAllowedIpAddresses;
   }
 
-  public void setTokenRequestAllowedIpAddresses(List<String> tokenRequestAllowedIpAddresses) {
+  public void setTokenRequestAllowedIpAddresses(List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses) {
     this.tokenRequestAllowedIpAddresses = tokenRequestAllowedIpAddresses;
   }
 
@@ -458,7 +458,7 @@ public class Client {
     this.description = description;
   }
 
-  public Client infoNotificationEmails(List<String> infoNotificationEmails) {
+  public Client infoNotificationEmails(List<@Email String> infoNotificationEmails) {
     this.infoNotificationEmails = infoNotificationEmails;
     return this;
   }
@@ -478,15 +478,15 @@ public class Client {
   
   @Schema(name = "info_notification_emails", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("info_notification_emails")
-  public List<String> getInfoNotificationEmails() {
+  public List<@Email String> getInfoNotificationEmails() {
     return infoNotificationEmails;
   }
 
-  public void setInfoNotificationEmails(List<String> infoNotificationEmails) {
+  public void setInfoNotificationEmails(List<@Email String> infoNotificationEmails) {
     this.infoNotificationEmails = infoNotificationEmails;
   }
 
-  public Client slaNotificationEmails(List<String> slaNotificationEmails) {
+  public Client slaNotificationEmails(List<@Email String> slaNotificationEmails) {
     this.slaNotificationEmails = slaNotificationEmails;
     return this;
   }
@@ -506,11 +506,11 @@ public class Client {
   
   @Schema(name = "sla_notification_emails", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("sla_notification_emails")
-  public List<String> getSlaNotificationEmails() {
+  public List<@Email String> getSlaNotificationEmails() {
     return slaNotificationEmails;
   }
 
-  public void setSlaNotificationEmails(List<String> slaNotificationEmails) {
+  public void setSlaNotificationEmails(List<@Email String> slaNotificationEmails) {
     this.slaNotificationEmails = slaNotificationEmails;
   }
 

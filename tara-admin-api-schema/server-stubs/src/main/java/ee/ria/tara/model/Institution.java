@@ -226,7 +226,7 @@ public class Institution {
    * Get email
    * @return email
   */
-  @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email
+  @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @javax.validation.constraints.Email 
   @Schema(name = "email", example = "info@example.com", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("email")
   public String getEmail() {

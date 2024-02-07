@@ -57,7 +57,7 @@ public class ClientContact {
    * Get email
    * @return email
   */
-  @javax.validation.constraints.Email
+  @javax.validation.constraints.Email 
   @Schema(name = "email", example = "test@example.com", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("email")
   public String getEmail() {
