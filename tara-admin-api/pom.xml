@@ -32,7 +32,7 @@
         <!-- Upgrade Liquibase to get newer bundled Apache Commons Text. TODO Remove when Spring Boot includes Liquibase >= 4.17.1 -->
         <liquibase.version>4.17.1</liquibase.version>
 
-        <!-- TODO H2 2.x requires a more specific constraint definition at https://github.com/e-gov/TARA2-Admin/blob/v1.4.3/tara-admin-api/src/main/resources/db/changelog/TARA2-132-init.yaml#L31
+        <!-- TODO H2 2.x requires a more specific constraint definition at https://github.com/e-gov/TARA-GovSSO-Admin/blob/v1.4.3/tara-admin-api/src/main/resources/db/changelog/TARA2-132-init.yaml#L31
               but existing Liquibase changesets should not be modified (error "Validation Failed: 1 change sets check
               sum"). H2 is used only during tests. PostgreSQL usage is not affected. -->
         <h2.version>1.4.200</h2.version>
