@@ -35,6 +35,12 @@ public class HydraClient {
         return "[non-null value]";
     }
 
+    @JsonProperty("access_token_strategy")
+    private String accessTokenStrategy;
+
+    @JsonProperty("audience")
+    private List<String> audience;
+
     @JsonProperty("grant_types")
     @Size(min=1)
     private List<String> grantTypes = List.of("authorization_code");

@@ -663,6 +663,12 @@ components:
           $ref: '#/components/schemas/ClientSecretExportSettings'
         institution_metainfo:
           $ref: '#/components/schemas/InstitutionMetainfo'
+        access_token_audience_uris:
+          type: array
+          items:
+            type: string
+            format: url
+            example: 'https://jwt-service-uri.test.ee'
         redirect_uris:
           type: array
           minItems: 1
@@ -727,6 +733,9 @@ components:
             minLength: 5
             pattern: (^.*@.*\..*$)
             example: katkestused@test.ee
+        access_token_jwt_enabled:
+          type: boolean
+          default: false
         is_user_consent_required:
           type: boolean
           example: false

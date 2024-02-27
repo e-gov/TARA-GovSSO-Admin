@@ -64,6 +64,8 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                         "\"client_id\":\"mock_client_id\"," +
                         "\"client_name\":null," +
                         "\"client_secret\":\"3d91b58504a6cc3a159005ee7b16c7ae503ca6ac2a6a3c893837083c236b864a\"," +
+                        "\"access_token_strategy\": null," +
+                        "\"audience\": null," +
                         "\"grant_types\":[\"authorization_code\"]," +
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
                         "\"post_logout_redirect_uris\": null," +

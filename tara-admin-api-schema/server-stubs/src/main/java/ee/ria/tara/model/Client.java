@@ -46,6 +46,9 @@ public class Client {
   private InstitutionMetainfo institutionMetainfo;
 
   @Valid
+  private List<String> accessTokenAudienceUris;
+
+  @Valid
   private List<String> redirectUris = new ArrayList<>();
 
   @Valid
@@ -105,6 +108,8 @@ public class Client {
 
   @Valid
   private List<@Email String> slaNotificationEmails;
+
+  private Boolean accessTokenJwtEnabled = false;
 
   private Boolean isUserConsentRequired;
 
@@ -264,6 +269,34 @@ public class Client {
 
   public void setInstitutionMetainfo(InstitutionMetainfo institutionMetainfo) {
     this.institutionMetainfo = institutionMetainfo;
+  }
+
+  public Client accessTokenAudienceUris(List<String> accessTokenAudienceUris) {
+    this.accessTokenAudienceUris = accessTokenAudienceUris;
+    return this;
+  }
+
+  public Client addAccessTokenAudienceUrisItem(String accessTokenAudienceUrisItem) {
+    if (this.accessTokenAudienceUris == null) {
+      this.accessTokenAudienceUris = new ArrayList<>();
+    }
+    this.accessTokenAudienceUris.add(accessTokenAudienceUrisItem);
+    return this;
+  }
+
+  /**
+   * Get accessTokenAudienceUris
+   * @return accessTokenAudienceUris
+  */
+  
+  @Schema(name = "access_token_audience_uris", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("access_token_audience_uris")
+  public List<String> getAccessTokenAudienceUris() {
+    return accessTokenAudienceUris;
+  }
+
+  public void setAccessTokenAudienceUris(List<String> accessTokenAudienceUris) {
+    this.accessTokenAudienceUris = accessTokenAudienceUris;
   }
 
   public Client redirectUris(List<String> redirectUris) {
@@ -514,6 +547,26 @@ public class Client {
     this.slaNotificationEmails = slaNotificationEmails;
   }
 
+  public Client accessTokenJwtEnabled(Boolean accessTokenJwtEnabled) {
+    this.accessTokenJwtEnabled = accessTokenJwtEnabled;
+    return this;
+  }
+
+  /**
+   * Get accessTokenJwtEnabled
+   * @return accessTokenJwtEnabled
+  */
+  
+  @Schema(name = "access_token_jwt_enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("access_token_jwt_enabled")
+  public Boolean getAccessTokenJwtEnabled() {
+    return accessTokenJwtEnabled;
+  }
+
+  public void setAccessTokenJwtEnabled(Boolean accessTokenJwtEnabled) {
+    this.accessTokenJwtEnabled = accessTokenJwtEnabled;
+  }
+
   public Client isUserConsentRequired(Boolean isUserConsentRequired) {
     this.isUserConsentRequired = isUserConsentRequired;
     return this;
@@ -745,6 +798,7 @@ public class Client {
         Objects.equals(this.clientShortName, client.clientShortName) &&
         Objects.equals(this.clientSecretExportSettings, client.clientSecretExportSettings) &&
         Objects.equals(this.institutionMetainfo, client.institutionMetainfo) &&
+        Objects.equals(this.accessTokenAudienceUris, client.accessTokenAudienceUris) &&
         Objects.equals(this.redirectUris, client.redirectUris) &&
         Objects.equals(this.postLogoutRedirectUris, client.postLogoutRedirectUris) &&
         Objects.equals(this.scope, client.scope) &&
@@ -755,6 +809,7 @@ public class Client {
         Objects.equals(this.description, client.description) &&
         Objects.equals(this.infoNotificationEmails, client.infoNotificationEmails) &&
         Objects.equals(this.slaNotificationEmails, client.slaNotificationEmails) &&
+        Objects.equals(this.accessTokenJwtEnabled, client.accessTokenJwtEnabled) &&
         Objects.equals(this.isUserConsentRequired, client.isUserConsentRequired) &&
         Objects.equals(this.skipUserConsentClientIds, client.skipUserConsentClientIds) &&
         Objects.equals(this.clientUrl, client.clientUrl) &&
@@ -769,7 +824,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -782,6 +837,7 @@ public class Client {
     sb.append("    clientShortName: ").append(toIndentedString(clientShortName)).append("\n");
     sb.append("    clientSecretExportSettings: ").append(toIndentedString(clientSecretExportSettings)).append("\n");
     sb.append("    institutionMetainfo: ").append(toIndentedString(institutionMetainfo)).append("\n");
+    sb.append("    accessTokenAudienceUris: ").append(toIndentedString(accessTokenAudienceUris)).append("\n");
     sb.append("    redirectUris: ").append(toIndentedString(redirectUris)).append("\n");
     sb.append("    postLogoutRedirectUris: ").append(toIndentedString(postLogoutRedirectUris)).append("\n");
     sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
@@ -792,6 +848,7 @@ public class Client {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    infoNotificationEmails: ").append(toIndentedString(infoNotificationEmails)).append("\n");
     sb.append("    slaNotificationEmails: ").append(toIndentedString(slaNotificationEmails)).append("\n");
+    sb.append("    accessTokenJwtEnabled: ").append(toIndentedString(accessTokenJwtEnabled)).append("\n");
     sb.append("    isUserConsentRequired: ").append(toIndentedString(isUserConsentRequired)).append("\n");
     sb.append("    skipUserConsentClientIds: ").append(toIndentedString(skipUserConsentClientIds)).append("\n");
     sb.append("    clientUrl: ").append(toIndentedString(clientUrl)).append("\n");

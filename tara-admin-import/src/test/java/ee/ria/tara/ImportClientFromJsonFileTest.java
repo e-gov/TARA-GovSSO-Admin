@@ -64,6 +64,8 @@ public class ImportClientFromJsonFileTest {
                         "  \"client_id\" : \"mock_client_id\",\n" +
                         "  \"client_name\" : \"name_et\",\n" +
                         "  \"client_secret\" : \"3d91b58504a6cc3a159005ee7b16c7ae503ca6ac2a6a3c893837083c236b864a\",\n" +
+                        "  \"access_token_strategy\": null," +
+                        "  \"audience\": null," +
                         "  \"grant_types\" : [ \"authorization_code\" ],\n" +
                         "  \"redirect_uris\" : [ \"https://back.ee\" ],\n" +
                         "  \"post_logout_redirect_uris\": null," +

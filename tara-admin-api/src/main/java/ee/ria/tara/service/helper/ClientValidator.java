@@ -41,6 +41,7 @@ public class ClientValidator {
         validateEidasRequesterId(client);
         validateLogo(client.getClientLogo());
         validateIpAddresses(client.getTokenRequestAllowedIpAddresses());
+        validateAccessTokenAudienceUris(client);
         if (client.getSkipUserConsentClientIds() != null) {
             validateSkipUserConsentClients(client.getSkipUserConsentClientIds(), client.getClientId());
         }
@@ -131,6 +132,21 @@ public class ClientValidator {
         validateBackchannelLogoutUri(client);
         validatePostLogoutRedirectUris(client);
         client.getRedirectUris().forEach(uri -> validateUri(uri, "Client.redirectUri.missing"));
+    }
+
+    private void validateAccessTokenAudienceUris(Client client) {
+        if (adminConfProvider.isSsoMode()) {
+            if (client.getAccessTokenJwtEnabled()) {
+                if (CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
+                    throw new InvalidDataException("Client.accessTokenAudienceUri.missing");
+                }
+                client.getAccessTokenAudienceUris().forEach(uri -> validateUri(uri, "Client.accessTokenAudienceUri.missing"));
+            }
+        } else {
+            if (!CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
+                throw new IllegalStateException("JWT service uris must not be set in TARA mode");
+            }
+        }
     }
 
     private void validateBackchannelLogoutUri(Client client) {

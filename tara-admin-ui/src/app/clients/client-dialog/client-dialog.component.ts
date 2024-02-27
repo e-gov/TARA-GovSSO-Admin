@@ -134,6 +134,22 @@ export class ClientDialogComponent implements OnInit {
       }
   }
 
+  openAccessTokenAudienceUriDialog(): void {
+    const dialogRef = this.dialog.open(AddValueDialogComponent, {
+      data: {
+        title: "Pääsutõendi rakenduse URL-i lisamine"
+      },
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result !== "" && result !== undefined) {
+        this.newData.access_token_audience_uris.push(result);
+      }
+    });
+  }
+
   openRedirectUrlDialog(): void {
     const dialogRef = this.dialog.open(AddValueDialogComponent, {
       data: {
@@ -252,6 +268,10 @@ export class ClientDialogComponent implements OnInit {
     } else {
       return environment.clientScopes;
     }
+  }
+
+  removeAccessTokenAudienceUri(uri: string) {
+    this.newData.access_token_audience_uris.splice(this.newData.access_token_audience_uris.indexOf(uri), 1)
   }
 
   removeRedirectUri(uri: string) {
@@ -440,6 +460,10 @@ export class ClientDialogComponent implements OnInit {
       newClient.client_contacts = [];
     }
 
+    if (newClient.access_token_audience_uris == undefined) {
+      newClient.access_token_audience_uris = [];
+    }
+
     return newClient;
   }
 
@@ -449,6 +473,24 @@ export class ClientDialogComponent implements OnInit {
 
   cancel() {
     this.mainDialog.close();
+  }
+
+  openEditAccessTokenAudienceUriDialog(url: string) {
+    const dialogRef = this.dialog.open(EditValueDialogComponent, {
+      data: {
+        title: "Muuda pääsutõendi rakenduse URL-i",
+        value: url
+      },
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe(({newValue, oldValue}) => {
+      if (newValue !== "" && newValue !== undefined && oldValue !== "" && oldValue !== undefined) {
+        const index = this.newData.access_token_audience_uris.indexOf(oldValue);
+        this.newData.access_token_audience_uris[index] = newValue;
+      }
+    });
   }
 
   openEditRedirectUrlDialog(url: string) {

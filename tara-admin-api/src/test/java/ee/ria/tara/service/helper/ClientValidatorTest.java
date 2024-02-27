@@ -342,4 +342,63 @@ public class ClientValidatorTest {
                 () -> clientValidator.validateClient(client, PUBLIC));
         Assertions.assertTrue(exception.getMessage().contains("Client.tokenRequestAllowedIpAddresses.invalidIp"));
     }
+
+    @Test
+    public void validateClient_usingJwtAccessTokenStrategyWithAccessTokenAudienceUris_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAccessTokenJwtEnabled(true);
+        client.setAccessTokenAudienceUris(List.of("https://test"));
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"test", "https://user:password@example.com", "https://test#fragment"})
+    public void validateClient_usingJwtAccessTokenStrategyWithInvalidAccessTokenAudienceUris_exceptionThrown(String uri) {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAccessTokenJwtEnabled(true);
+        client.setAccessTokenAudienceUris(List.of(uri));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.accessTokenAudienceUri.missing"));
+    }
+
+    @Test
+    public void validateClient_usingJwtAccessTokenStrategyWithoutAccessTokenAudienceUris_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAccessTokenJwtEnabled(true);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.accessTokenAudienceUri.missing"));
+    }
+
+    @Test
+    public void validateClient_notUsingJwtAccessTokenStrategyWithoutJwtServiceUris_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAccessTokenJwtEnabled(false);
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    public void validateClient_withJwtServiceUris_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setAccessTokenAudienceUris(List.of("https://test"));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("JWT service uris must not be set in TARA mode"));
+    }
 }

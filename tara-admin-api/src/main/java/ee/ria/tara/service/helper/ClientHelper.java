@@ -34,6 +34,8 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ClientHelper {
 
+    private static final String ACCESS_TOKEN_STRATEGY_JWT = "jwt";
+
     public static Client convertToClient(HydraClient hydraClient, ee.ria.tara.repository.model.Client entity) {
         Client client = convertToClient(hydraClient);
 
@@ -118,6 +120,12 @@ public class ClientHelper {
         client.setMidSettings(getMobileIdSettings(hydraClient));
         client.setCreatedAt(OffsetDateTime.parse(hydraClient.getCreatedAt()));
         client.setUpdatedAt(OffsetDateTime.parse(hydraClient.getUpdatedAt()));
+        if (hydraClient.getAccessTokenStrategy() != null && hydraClient.getAccessTokenStrategy().equals("jwt")) {
+            client.setAccessTokenJwtEnabled(true);
+        }
+        if (hydraClient.getAudience() != null) {
+            client.setAccessTokenAudienceUris(hydraClient.getAudience());
+        }
 
         return client;
     }
@@ -145,6 +153,10 @@ public class ClientHelper {
 
         if (ssoMode) {
             hydraClient.setGrantTypes(List.of("authorization_code", "refresh_token"));
+        }
+        if (client.getAccessTokenJwtEnabled()) {
+            hydraClient.setAccessTokenStrategy(ACCESS_TOKEN_STRATEGY_JWT);
+            hydraClient.setAudience(client.getAccessTokenAudienceUris());
         }
         hydraClient.setClientId(client.getClientId());
         // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.

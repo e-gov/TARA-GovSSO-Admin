@@ -560,6 +560,52 @@
       </div>
     </div>
 
+    <div class="mat-dialog-container-content" *ngIf="authService.isSsoMode">
+      <h1><span>Pääsutõend</span></h1>
+
+      <form>
+        <div class="form-row">
+          <label class="col-sm-4 col-form-label">JWT väljastamine
+            <mat-icon inline class="material-icons ml-3 font-size-20"
+                      matTooltip="Märgi valituks ainult juhul, kui klientrakenduse omanik on avaldanud soovi pääsutõendi väljastamiseks JWT kujul ning edastanud pääsutõendile soovitud rakenduste URL-id.">
+              help_outline
+            </mat-icon>
+          </label>
+          <div class="col-sm-4 m-2">
+            <div class="form-row">
+              <mat-checkbox [disabled]="isInfo()" [checked]="newData.access_token_jwt_enabled"
+                            (change)="newData.access_token_jwt_enabled = !newData.access_token_jwt_enabled"></mat-checkbox>
+            </div>
+          </div>
+        </div>
+      </form>
+
+      <div class="form-group row" *ngIf="newData.access_token_jwt_enabled">
+        <label class="col-sm-4 col-form-label">Rakenduste URL-id
+          <mat-icon inline class="material-icons ml-3 font-size-20"
+                    matTooltip="Rakenduste URL-id, mille suhtes väljastatud pääsutõend kehtib. Peab sisaldama kõiki rakendusi, mille back-end teenused soovivad valideerida käesolevale klientrakendusele väljastatud pääsutõendit (käesolev klientrakendus võib pääsutõendit edastada teistele rakendustele, mis ei pea olema GovSSO kliendid). Ei pea sisaldama käesoleva klientrakenduse URL-i kui käesolev klientrakendus enda back-end päringute jaoks pääsutõendit ei kasuta.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-6">
+          <div *ngFor="let item of newData.access_token_audience_uris!" class="d-block">
+            <div class="form-group row col-sm-8 d-inline">
+              <a href="{{item}}">{{item}}</a>
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="removeAccessTokenAudienceUri(item)">
+                <mat-icon class="ml-1 float-right">close</mat-icon>
+              </button>
+              <button *ngIf="!isInfo()" type="button" class="float-right btn-link" (click)="openEditAccessTokenAudienceUriDialog(item)">Muuda
+              </button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button *ngIf="!isInfo()" type="button" class="btn-link ml-0" (click)="openAccessTokenAudienceUriDialog()">Lisa URL
+          </button>
+        </div>
+      </div>
+    </div>
+
     <div class="mat-dialog-container-content">
       <h1><span>Kontaktisikud</span></h1>
 

@@ -773,6 +773,9 @@ components:
       - type
     Client:
       example:
+        access_token_audience_uris:
+        - https://jwt-service-uri.test.ee
+        - https://jwt-service-uri.test.ee
         client_url: https://client.example.com/
         skip_user_consent_client_ids:
         - openIdDemo
@@ -835,6 +838,7 @@ components:
         mid_settings:
           relying_party_name: relying_party_name
           relying_party_UUID: relying_party_UUID
+        access_token_jwt_enabled: false
         client_logo: client_logo
         info_notification_emails:
         - teavitused@test.ee
@@ -856,6 +860,12 @@ components:
           $ref: '#/components/schemas/ClientSecretExportSettings'
         institution_metainfo:
           $ref: '#/components/schemas/InstitutionMetainfo'
+        access_token_audience_uris:
+          items:
+            example: https://jwt-service-uri.test.ee
+            format: url
+            type: string
+          type: array
         redirect_uris:
           items:
             example: https://redirect-uri.test.ee/callback
@@ -917,6 +927,9 @@ components:
             pattern: (^.*@.*\..*$)
             type: string
           type: array
+        access_token_jwt_enabled:
+          default: false
+          type: boolean
         is_user_consent_required:
           example: false
           type: boolean

@@ -10,6 +10,8 @@ export type Client = {
   post_logout_redirect_uris: string[],
   scope: string[],
   is_user_consent_required: boolean,
+  access_token_jwt_enabled: boolean,
+  access_token_audience_uris: string[],
   client_url: string | undefined,
   info_notification_emails: string[],
   sla_notification_emails: string[],
