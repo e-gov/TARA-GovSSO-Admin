@@ -89,7 +89,8 @@ public class ImportClientFromExcelAllFieldsTest {
                                 "\"mid_settings\":null," +
                                 "\"smartid_settings\":null," +
                                 "\"logo\" : null\n" +
-                            "}" +
+                            "}," +
+                        "   \"paasuke_parameters\" : null" +
                         "}," +
                         "\"created_at\":null," +
                         "\"updated_at\":null}"))

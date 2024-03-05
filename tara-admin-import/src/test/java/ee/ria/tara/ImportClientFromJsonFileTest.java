@@ -104,7 +104,8 @@ public class ImportClientFromJsonFileTest {
                         "        \"should_use_additional_verification_code_check\" : true\n" +
                         "      },\n" +
                         "      \"logo\" : null\n" +
-                        "    }\n" +
+                        "    },\n" +
+                        "  \"paasuke_parameters\" : null" +
                         "  },\n" +
                         "  \"created_at\" : null,\n" +
                         "  \"updated_at\" : null\n" +

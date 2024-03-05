@@ -120,6 +120,8 @@ public class Client {
 
   private String backchannelLogoutUri;
 
+  private String paasukeParameters;
+
   private ClientMidSettings midSettings;
 
   private ClientSmartIdSettings smartidSettings;
@@ -655,6 +657,26 @@ public class Client {
     this.backchannelLogoutUri = backchannelLogoutUri;
   }
 
+  public Client paasukeParameters(String paasukeParameters) {
+    this.paasukeParameters = paasukeParameters;
+    return this;
+  }
+
+  /**
+   * Get paasukeParameters
+   * @return paasukeParameters
+  */
+  
+  @Schema(name = "paasuke_parameters", example = "ns=A&role=B", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("paasuke_parameters")
+  public String getPaasukeParameters() {
+    return paasukeParameters;
+  }
+
+  public void setPaasukeParameters(String paasukeParameters) {
+    this.paasukeParameters = paasukeParameters;
+  }
+
   public Client midSettings(ClientMidSettings midSettings) {
     this.midSettings = midSettings;
     return this;
@@ -814,6 +836,7 @@ public class Client {
         Objects.equals(this.skipUserConsentClientIds, client.skipUserConsentClientIds) &&
         Objects.equals(this.clientUrl, client.clientUrl) &&
         Objects.equals(this.backchannelLogoutUri, client.backchannelLogoutUri) &&
+        Objects.equals(this.paasukeParameters, client.paasukeParameters) &&
         Objects.equals(this.midSettings, client.midSettings) &&
         Objects.equals(this.smartidSettings, client.smartidSettings) &&
         Objects.equals(this.clientContacts, client.clientContacts) &&
@@ -824,7 +847,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -853,6 +876,7 @@ public class Client {
     sb.append("    skipUserConsentClientIds: ").append(toIndentedString(skipUserConsentClientIds)).append("\n");
     sb.append("    clientUrl: ").append(toIndentedString(clientUrl)).append("\n");
     sb.append("    backchannelLogoutUri: ").append(toIndentedString(backchannelLogoutUri)).append("\n");
+    sb.append("    paasukeParameters: ").append(toIndentedString(paasukeParameters)).append("\n");
     sb.append("    midSettings: ").append(toIndentedString(midSettings)).append("\n");
     sb.append("    smartidSettings: ").append(toIndentedString(smartidSettings)).append("\n");
     sb.append("    clientContacts: ").append(toIndentedString(clientContacts)).append("\n");

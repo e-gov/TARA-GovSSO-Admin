@@ -785,6 +785,7 @@ components:
         secret: secret
         client_id: openIdDemo
         token_endpoint_auth_method: client_secret_basic
+        paasuke_parameters: ns=A&role=B
         client_secret_export_settings:
           recipient_id_code: "60001019906"
           recipient_name_in_ldap: Mari-Liis Männik
@@ -945,6 +946,9 @@ components:
         backchannel_logout_uri:
           example: https://example.com/
           format: url
+          type: string
+        paasuke_parameters:
+          example: ns=A&role=B
           type: string
         mid_settings:
           $ref: '#/components/schemas/ClientMidSettings'

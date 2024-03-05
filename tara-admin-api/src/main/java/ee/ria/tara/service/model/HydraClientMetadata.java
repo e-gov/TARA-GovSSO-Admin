@@ -25,5 +25,9 @@ public class HydraClientMetadata   {
   @JsonProperty("oidc_client")
   @NotNull
   private OidcClient oidcClient;
+
+  @JsonProperty("paasuke_parameters")
+  @NotNull
+  private String paasukeParameters;
 }
 

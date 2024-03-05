@@ -752,6 +752,9 @@ components:
           type: string
           format: url
           example: 'https://example.com/'
+        paasuke_parameters:
+          type: string
+          example: 'ns=A&role=B'
         mid_settings:
           $ref: '#/components/schemas/ClientMidSettings'
         smartid_settings:
