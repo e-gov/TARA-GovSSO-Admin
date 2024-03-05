@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.NullAndEmptySource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -30,6 +31,9 @@ import static org.mockito.Mockito.doReturn;
 @ActiveProfiles("test")
 @ExtendWith(MockitoExtension.class)
 public class ClientValidatorTest {
+
+    private final static String ALLOWED_CHARS = "-%_!:.~'()*abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private final static String ALLOWED_PARAM = ALLOWED_CHARS + "=" + ALLOWED_CHARS;
 
     @Mock
     private ClientRepository clientRepository;
@@ -381,17 +385,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_notUsingJwtAccessTokenStrategyWithoutJwtServiceUris_successfulValidation() {
-        doReturn(true).when(adminConfigurationProvider).isSsoMode();
-
-        Client client = validSSOClient();
-        client.setAccessTokenJwtEnabled(false);
-
-        clientValidator.validateClient(client, PUBLIC);
-    }
-
-    @Test
-    public void validateClient_withJwtServiceUris_exceptionThrown() {
+    public void validateClient_withJwtServiceUrisWithoutSsoMode_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -400,5 +394,84 @@ public class ClientValidatorTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
         Assertions.assertTrue(exception.getMessage().contains("JWT service uris must not be set in TARA mode"));
+    }
+
+    @Test
+    public void validateClient_usingJwtAccessTokenStrategyWithoutSsoMode_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setAccessTokenJwtEnabled(true);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Access token JWT enabled must not be set to true in TARA mode"));
+    }
+
+    @Test
+    public void validateClient_withJwtServiceUrisWhenAccessTokenJwtIsNotEnabled_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAccessTokenAudienceUris(List.of("https://test"));
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Access token audience uris must not be set if access token JWT strategy is not enabled"));
+    }
+
+    @Test
+    public void validateClient_withPaasukeParametersWithoutSsoMode_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setPaasukeParameters("ns=A");
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Paasuke parameters must not be set in TARA mode"));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {"=", "a&", "&a", "a==", "a=a=a", "a&&a", "a\n",
+            "\0", "\b", "\t", "\n", "\f", "\r", " ", "\"", "#", "$", "&", "+", ",", "/", ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "`", "{", "|", "}", "õ"
+    })
+    public void validateClient_withPaasukeParameters_exceptionThrown(String queryParameters) {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setScope(List.of("representee"));
+        client.setPaasukeParameters(queryParameters);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.paasukeParameters.invalid"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"a", "a=", "a=a", "a=a&a", "a=a&a=", "a&a=a", "a=a&a=a", "a&a",
+            "a&a&a", "a&a&a=", "a&a&a=a",
+            ALLOWED_PARAM + "&" +  ALLOWED_PARAM + "&" + ALLOWED_PARAM})
+    public void validateClient_withPaasukeParameters_successfulValidation(String queryParameters) {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setScope(List.of("representee"));
+        client.setPaasukeParameters(queryParameters);
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    public void validateClient_withPaasukeParametersWithoutRepresenteeScope_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setPaasukeParameters("a=a");
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Paasuke parameters must not be set without representee scope"));
     }
 }

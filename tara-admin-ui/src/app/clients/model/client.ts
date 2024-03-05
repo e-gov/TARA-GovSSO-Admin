@@ -25,6 +25,7 @@ export type Client = {
   description: string | undefined,
   client_logo: string | undefined,
   backchannel_logout_uri: string | undefined
+  paasuke_parameters: string | undefined
 }
 
 export type ClientContact = {

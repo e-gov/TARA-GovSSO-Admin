@@ -19,6 +19,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ee.ria.tara.service.helper.ClientHelper.SCOPE_REPRESENTEE;
+
 @Service
 @RequiredArgsConstructor
 public class ClientValidator {
@@ -27,6 +29,8 @@ public class ClientValidator {
     private static final int MAX_SHORT_NAME_LENGTH = 40;
     private static final int MAX_SHORT_NAME_GSM7_LENGTH = 20;
     private static final String GSM_7_CHARACTERS = "@£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞ^{}[~]|€ÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà \r\n\\";
+    private static final String VALID_QUERY_PARAM_VALUE = "[\\w-%!:.~'()*]";
+    private static final String VALID_PAASUKE_PARAMS_PATTERN = "^"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?(&"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?)*?$";
 
     private final AdminConfigurationProvider adminConfProvider;
     private final ClientRepository clientRepository;
@@ -36,15 +40,17 @@ public class ClientValidator {
             throw new InvalidDataException("Client.sso.privateInstitution");
         }
         validateName(client);
-        validateScopes(client);
-        validateRedirectUris(client);
-        validateEidasRequesterId(client);
         validateLogo(client.getClientLogo());
         validateIpAddresses(client.getTokenRequestAllowedIpAddresses());
-        validateAccessTokenAudienceUris(client);
+        validateRedirectUris(client);
+        validateScopes(client);
         if (client.getSkipUserConsentClientIds() != null) {
             validateSkipUserConsentClients(client.getSkipUserConsentClientIds(), client.getClientId());
         }
+        validateEidasRequesterId(client);
+        validatePaasukeQueryParameters(client);
+        validateAccessTokenJwtEnabled(client);
+        validateAccessTokenAudienceUris(client);
     }
 
     private void validateIpAddresses(List<String> ipAddresses) {
@@ -134,21 +140,6 @@ public class ClientValidator {
         client.getRedirectUris().forEach(uri -> validateUri(uri, "Client.redirectUri.missing"));
     }
 
-    private void validateAccessTokenAudienceUris(Client client) {
-        if (adminConfProvider.isSsoMode()) {
-            if (client.getAccessTokenJwtEnabled()) {
-                if (CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
-                    throw new InvalidDataException("Client.accessTokenAudienceUri.missing");
-                }
-                client.getAccessTokenAudienceUris().forEach(uri -> validateUri(uri, "Client.accessTokenAudienceUri.missing"));
-            }
-        } else {
-            if (!CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
-                throw new IllegalStateException("JWT service uris must not be set in TARA mode");
-            }
-        }
-    }
-
     private void validateBackchannelLogoutUri(Client client) {
         if (adminConfProvider.isSsoMode()) {
             validateUri(client.getBackchannelLogoutUri(), "Client.backchannelUri.missing");
@@ -214,7 +205,6 @@ public class ClientValidator {
             throw new InvalidDataException("Client.eidasRequesterId.exists");
         }
     }
-
     private void validateLogo(byte[] logo) {
         if (adminConfProvider.isSsoMode()) {
             if (logo != null && logo.length > LOGO_ALLOWED_MAX_SIZE_IN_BYTES) {
@@ -223,6 +213,41 @@ public class ClientValidator {
         } else {
             if (logo != null) {
                 throw new IllegalStateException("Client logo must not be set in TARA mode");
+            }
+        }
+    }
+
+    private void validatePaasukeQueryParameters(Client client) {
+        if (adminConfProvider.isSsoMode()) {
+            if (client.getScope().contains("representee") && (client.getPaasukeParameters() == null || !client.getPaasukeParameters().matches(VALID_PAASUKE_PARAMS_PATTERN))) {
+                throw new InvalidDataException("Client.paasukeParameters.invalid");
+            } else if (!client.getScope().contains("representee") && client.getPaasukeParameters() != null) {
+                throw new IllegalStateException("Paasuke parameters must not be set without representee scope");
+            }
+        } else if (StringUtils.isNotBlank(client.getPaasukeParameters())) {
+            throw new IllegalStateException("Paasuke parameters must not be set in TARA mode");
+        }
+
+    }
+    private void validateAccessTokenJwtEnabled(Client client) {
+        if (!adminConfProvider.isSsoMode() && client.getAccessTokenJwtEnabled()) {
+            throw new IllegalStateException("Access token JWT enabled must not be set to true in TARA mode");
+        }
+    }
+
+    private void validateAccessTokenAudienceUris(Client client) {
+        if (adminConfProvider.isSsoMode()) {
+            if (client.getAccessTokenJwtEnabled()) {
+                if (CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
+                    throw new InvalidDataException("Client.accessTokenAudienceUri.missing");
+                }
+                client.getAccessTokenAudienceUris().forEach(uri -> validateUri(uri, "Client.accessTokenAudienceUri.missing"));
+            } else if (!CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
+                throw new IllegalStateException("Access token audience uris must not be set if access token JWT strategy is not enabled");
+            }
+        } else {
+            if (!CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
+                throw new IllegalStateException("JWT service uris must not be set in TARA mode");
             }
         }
     }

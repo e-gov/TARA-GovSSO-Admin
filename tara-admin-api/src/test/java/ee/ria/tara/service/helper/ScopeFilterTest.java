@@ -44,11 +44,11 @@ public class ScopeFilterTest {
 
         List<String> clientScopes = List.of(
                 "openid", "eidas", "eidasonly", "eidas:country:*", "idcard", "mid",
-                "smartid", "email", "phone", "legalperson", "invalid_value", "unknown_value");
+                "smartid", "email", "phone", "legalperson", "invalid_value", "unknown_value", "representee");
 
         List<String> filteredScopes = scopeFilter.filterInstitutionClientScopes(clientScopes, PUBLIC);
 
-        assertEquals(List.of("openid", "email", "phone"), filteredScopes);
+        assertEquals(List.of("openid", "email", "phone", "representee"), filteredScopes);
     }
 
     @Test

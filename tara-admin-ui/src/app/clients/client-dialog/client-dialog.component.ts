@@ -41,6 +41,7 @@ export class ClientDialogComponent implements OnInit {
   _use_specific_smartid_configuration: boolean;
   _client_logo?: string;
   _backchannel_logout_uri: string;
+  _paasuke_parameters: string;
   _token_endpoint_auth_method: string;
 
   clientLogoDataUri?: SafeUrl;
@@ -68,6 +69,7 @@ export class ClientDialogComponent implements OnInit {
     this._mid_settings = this.newData.mid_settings;
     this._client_logo = this.newData.client_logo;
     this._backchannel_logout_uri = this.newData.backchannel_logout_uri;
+    this._paasuke_parameters = this.newData.paasuke_parameters;
     this._token_endpoint_auth_method = this.newData.token_endpoint_auth_method;
 
     if (this._client_logo !== undefined) {
@@ -321,6 +323,16 @@ export class ClientDialogComponent implements OnInit {
         relying_party_UUID: undefined,
         relying_party_name: undefined
       };
+    }
+
+    if (this.newData.scope.includes("representee")) {
+      this.newData.paasuke_parameters = this._paasuke_parameters!;
+    } else {
+      this.newData.paasuke_parameters = undefined;
+    }
+
+    if (!this.newData.access_token_jwt_enabled) {
+      this.newData.access_token_audience_uris = undefined;
     }
 
     let requestBody = JSON.parse(JSON.stringify(this.newData), (key, value) => {

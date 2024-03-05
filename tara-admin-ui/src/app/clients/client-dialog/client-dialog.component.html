@@ -560,6 +560,24 @@
       </div>
     </div>
 
+    <div class="mat-dialog-container-content" *ngIf="newData.scope.includes('representee') && authService.isSsoMode">
+      <h1><span>Esindatava valiku seadistus</span></h1>
+
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Pääsukese päringu parameetrid
+          <mat-icon inline class="material-icons ml-3 font-size-20"
+                    matTooltip="Pääsukese päringutes rakendatavad parameetrid, millega kitsendada nimeruume, rolle, esindatavate tüüpe või muud. Peavad olema URL päringuparameetrite formaadis. Parameetrite nimedes ja väärtustes lubatud erimärgid on -%_!.~'()*: ning teised erimärgid peavad olema URL-kodeeritud. Näide: ns=erim%C3%A4rgiga_nimi&ns=TEINE_NIMI">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8" *ngIf="!isInfo()">
+          <input required type="text" class="form-control w-75" name="paasuke_parameters" [(ngModel)]="_paasuke_parameters" [value]="newData.paasuke_parameters">
+        </div>
+        <label *ngIf="isInfo()">{{newData.paasuke_parameters}}</label>
+      </div>
+
+    </div>
+
     <div class="mat-dialog-container-content" *ngIf="authService.isSsoMode">
       <h1><span>Pääsutõend</span></h1>
 

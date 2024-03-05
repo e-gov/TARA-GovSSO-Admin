@@ -127,6 +127,7 @@ export class ClientsComponent implements OnInit {
       access_token_audience_uris: [],
       client_url: undefined,
       backchannel_logout_uri: undefined,
+      paasuke_parameters: undefined,
       info_notification_emails: [],
       sla_notification_emails: [],
       created_at: undefined,
