@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
 public class ClientHelper {
 
     private static final String ACCESS_TOKEN_STRATEGY_JWT = "jwt";
-    public static final String SCOPE_REPRESENTEE = "representee";
+    public static final String SCOPE_REPRESENTEE = "representee.*";
 
     public static Client convertToClient(HydraClient hydraClient, ee.ria.tara.repository.model.Client entity) {
         Client client = convertToClient(hydraClient);
