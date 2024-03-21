@@ -219,10 +219,10 @@ public class ClientValidator {
 
     private void validatePaasukeQueryParameters(Client client) {
         if (adminConfProvider.isSsoMode()) {
-            if (client.getScope().contains("representee") && (client.getPaasukeParameters() == null || !client.getPaasukeParameters().matches(VALID_PAASUKE_PARAMS_PATTERN))) {
+            if (client.getScope().contains(SCOPE_REPRESENTEE) && (client.getPaasukeParameters() == null || !client.getPaasukeParameters().matches(VALID_PAASUKE_PARAMS_PATTERN))) {
                 throw new InvalidDataException("Client.paasukeParameters.invalid");
-            } else if (!client.getScope().contains("representee") && client.getPaasukeParameters() != null) {
-                throw new IllegalStateException("Paasuke parameters must not be set without representee scope");
+            } else if (!client.getScope().contains(SCOPE_REPRESENTEE) && client.getPaasukeParameters() != null) {
+                throw new IllegalStateException("Paasuke parameters must not be set without representee.* scope");
             }
         } else if (StringUtils.isNotBlank(client.getPaasukeParameters())) {
             throw new IllegalStateException("Paasuke parameters must not be set in TARA mode");

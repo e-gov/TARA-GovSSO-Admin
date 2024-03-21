@@ -22,7 +22,7 @@ public class ScopeFilter {
 
     private static final List<String> PRIVATE_SSO_INSTITUTION_CLIENT_ALLOWED_SCOPES = List.of();
     private static final List<String> PUBLIC_SSO_INSTITUTION_CLIENT_ALLOWED_SCOPES =
-            Arrays.asList("openid", "email", "phone", "representee");
+            Arrays.asList("openid", "email", "phone", "representee.*");
 
     public List<String> filterInstitutionClientScopes(List<String> clientScopes, InstitutionType.TypeEnum institutionType) {
         List<String> allowedScopes = adminConfProvider.isSsoMode() ?

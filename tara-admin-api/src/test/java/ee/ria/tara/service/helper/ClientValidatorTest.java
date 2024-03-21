@@ -441,7 +441,7 @@ public class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
-        client.setScope(List.of("representee"));
+        client.setScope(List.of("representee.*"));
         client.setPaasukeParameters(queryParameters);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -457,7 +457,7 @@ public class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
-        client.setScope(List.of("representee"));
+        client.setScope(List.of("representee.*"));
         client.setPaasukeParameters(queryParameters);
 
         clientValidator.validateClient(client, PUBLIC);
@@ -472,6 +472,6 @@ public class ClientValidatorTest {
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
-        Assertions.assertTrue(exception.getMessage().contains("Paasuke parameters must not be set without representee scope"));
+        Assertions.assertTrue(exception.getMessage().contains("Paasuke parameters must not be set without representee.* scope"));
     }
 }
