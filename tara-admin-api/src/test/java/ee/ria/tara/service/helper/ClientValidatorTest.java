@@ -32,7 +32,7 @@ import static org.mockito.Mockito.doReturn;
 @ExtendWith(MockitoExtension.class)
 public class ClientValidatorTest {
 
-    private final static String ALLOWED_CHARS = "-%_!.~'()*abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private final static String ALLOWED_CHARS = "-%_!:.~'()*abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
     private final static String ALLOWED_PARAM = ALLOWED_CHARS + "=" + ALLOWED_CHARS;
 
     @Mock
@@ -435,7 +435,7 @@ public class ClientValidatorTest {
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"=", "a&", "&a", "a==", "a=a=a", "a&&a", "a\n",
-            "\0", "\b", "\t", "\n", "\f", "\r", " ", "\"", "#", "$", "&", "+", ",", "/", ":", ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "`", "{", "|", "}", "õ"
+            "\0", "\b", "\t", "\n", "\f", "\r", " ", "\"", "#", "$", "&", "+", ",", "/", ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "`", "{", "|", "}", "õ"
     })
     public void validateClient_withPaasukeParameters_exceptionThrown(String queryParameters) {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
