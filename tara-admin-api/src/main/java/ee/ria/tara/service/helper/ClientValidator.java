@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import static ee.ria.tara.service.helper.ClientHelper.SCOPE_REPRESENTEE;
+import static ee.ria.tara.service.helper.ClientHelper.SCOPE_REPRESENTEE_LIST;
 
 @Service
 @RequiredArgsConstructor
@@ -218,11 +219,13 @@ public class ClientValidator {
     }
 
     private void validatePaasukeQueryParameters(Client client) {
+        List<String> scope = client.getScope();
+        boolean containsRepresenteeScope = scope.contains(SCOPE_REPRESENTEE) || scope.contains(SCOPE_REPRESENTEE_LIST);
         if (adminConfProvider.isSsoMode()) {
-            if (client.getScope().contains(SCOPE_REPRESENTEE) && (client.getPaasukeParameters() == null || !client.getPaasukeParameters().matches(VALID_PAASUKE_PARAMS_PATTERN))) {
+            if (containsRepresenteeScope && (client.getPaasukeParameters() == null || !client.getPaasukeParameters().matches(VALID_PAASUKE_PARAMS_PATTERN))) {
                 throw new InvalidDataException("Client.paasukeParameters.invalid");
-            } else if (!client.getScope().contains(SCOPE_REPRESENTEE) && client.getPaasukeParameters() != null) {
-                throw new IllegalStateException("Paasuke parameters must not be set without representee.* scope");
+            } else if (!containsRepresenteeScope && client.getPaasukeParameters() != null) {
+                throw new IllegalStateException("Paasuke parameters must not be set without representee.* or representee_list scope");
             }
         } else if (StringUtils.isNotBlank(client.getPaasukeParameters())) {
             throw new IllegalStateException("Paasuke parameters must not be set in TARA mode");

@@ -325,7 +325,7 @@ export class ClientDialogComponent implements OnInit {
       };
     }
 
-    if (this.newData.scope.includes("representee.*")) {
+    if (this.newData.scope.includes("representee.*") || this.newData.scope.includes("representee_list") ) {
       this.newData.paasuke_parameters = this._paasuke_parameters!;
     } else {
       this.newData.paasuke_parameters = undefined;
