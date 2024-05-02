@@ -24,7 +24,7 @@ import javax.annotation.Generated;
  * Institution
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 public class Institution {
 
   private String id;
@@ -36,7 +36,7 @@ public class Institution {
   private InstitutionType type;
 
   @Valid
-  private List<String> clientIds;
+  private List<String> clientIds = new ArrayList<>();
 
   private String address;
 

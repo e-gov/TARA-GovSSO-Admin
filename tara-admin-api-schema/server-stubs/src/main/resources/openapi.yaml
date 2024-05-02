@@ -56,7 +56,8 @@ paths:
       summary: Get list of all institutions
       tags:
       - institutions
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: institutions
     post:
@@ -77,7 +78,8 @@ paths:
       tags:
       - institutions
       x-content-type: application/json
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: institutions
   /institutions/{registry_code}:
@@ -102,7 +104,8 @@ paths:
       summary: Deletes an existing institution
       tags:
       - institutions
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: institutions
     put:
@@ -134,7 +137,8 @@ paths:
       tags:
       - institutions
       x-content-type: application/json
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: institutions
   /clients:
@@ -165,7 +169,8 @@ paths:
       summary: Get all registered clients
       tags:
       - clients
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: clients
   /clients/tokenrequestallowedipaddresses:
@@ -185,7 +190,8 @@ paths:
       summary: Get IP configurations of all registered clients
       tags:
       - clients
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: clients
   /clients/import:
@@ -211,7 +217,8 @@ paths:
       tags:
       - clients
       x-content-type: multipart/form-data
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: clients
   /institutions/metainfo:
@@ -233,7 +240,8 @@ paths:
       summary: Get list of existing institutions and their types.
       tags:
       - institutions
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: institutions
   /institutions/{registry_code}/clients:
@@ -264,7 +272,8 @@ paths:
       summary: Get all registered clients for existing institution
       tags:
       - clients
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: clients
     post:
@@ -291,7 +300,8 @@ paths:
       tags:
       - clients
       x-content-type: application/json
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: clients
   /institutions/{registry_code}/clients/{client_id}:
@@ -324,7 +334,8 @@ paths:
       summary: Delete existing client for given institution
       tags:
       - clients
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: clients
     put:
@@ -363,7 +374,8 @@ paths:
       tags:
       - clients
       x-content-type: application/json
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: clients
   /alerts:
@@ -383,7 +395,8 @@ paths:
       summary: Get all registered alerts
       tags:
       - alerts
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: alerts
     post:
@@ -405,7 +418,8 @@ paths:
       tags:
       - alerts
       x-content-type: application/json
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: alerts
   /alerts/{alert_id}:
@@ -430,7 +444,8 @@ paths:
       summary: Delete existing alert
       tags:
       - alerts
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: alerts
     put:
@@ -461,7 +476,8 @@ paths:
       tags:
       - alerts
       x-content-type: application/json
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: alerts
   /login:
@@ -504,7 +520,8 @@ paths:
       tags:
       - user
       x-content-type: application/json
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: user
   /logout:
@@ -516,7 +533,8 @@ paths:
       summary: Logs out current logged in user session
       tags:
       - user
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: user
   /whoami:
@@ -533,7 +551,8 @@ paths:
       summary: Check if user is already logged in
       tags:
       - user
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: user
   /ssoMode:
@@ -551,7 +570,8 @@ paths:
       summary: Check what mode the application is running in
       tags:
       - application
-      x-accepts: application/json
+      x-accepts:
+      - application/json
       x-tags:
       - tag: application
 components:

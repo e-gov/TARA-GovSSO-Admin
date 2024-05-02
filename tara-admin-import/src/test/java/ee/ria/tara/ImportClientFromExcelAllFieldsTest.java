@@ -66,7 +66,7 @@ public class ImportClientFromExcelAllFieldsTest {
                         "\"client_secret\":\"3d91b58504a6cc3a159005ee7b16c7ae503ca6ac2a6a3c893837083c236b864a\"," +
                         "\"grant_types\":[\"authorization_code\"]," +
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
-                        "\"post_logout_redirect_uris\": null," +
+                        "\"post_logout_redirect_uris\": [ ]," +
                         "\"response_types\":[\"code\"]," +
                         "\"scope\":\"openid eidas eidasonly eidas:country:* idcard mid smartid email phone\"," +
                         "\"subject_type\":\"public\"," +
@@ -75,7 +75,7 @@ public class ImportClientFromExcelAllFieldsTest {
                         "\"backchannel_logout_session_required\" : true,\n" +
                         "\"metadata\":{" +
                             "\"display_user_consent\":null," +
-                            "\"skip_user_consent_client_ids\" : null,\n" +
+                            "\"skip_user_consent_client_ids\" : [ ],\n" +
                             "\"oidc_client\":{" +
                                 "\"name\":\"Eestikeelne nimi\"," +
                                 "\"name_translations\":{\"et\":\"Eestikeelne nimi\",\"en\":\"English name\",\"ru\":\"Русское имя\"}," +
