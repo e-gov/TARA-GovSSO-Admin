@@ -28,7 +28,7 @@ import java.util.Map;
 import java.util.Optional;
 import javax.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 @Controller
 @RequestMapping("${openapi.tARAGovSSOAdmin.base-path:/edurdo/admin/1.0.0}")
 public class InstitutionsApiController implements InstitutionsApi {

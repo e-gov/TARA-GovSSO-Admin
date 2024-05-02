@@ -14,8 +14,9 @@
 
     <properties>
         <!-- If you change this version or src/main/resources/swagger.yaml file content, then delete server-stubs folder and run `mvn clean install -P regenerate-swagger` -->
-        <openapi-generator-maven-plugin.version>7.3.0</openapi-generator-maven-plugin.version>
-        <springdoc-openapi-ui.version>1.7.0</springdoc-openapi-ui.version>
+        <openapi-generator-maven-plugin.version>7.5.0</openapi-generator-maven-plugin.version>
+        <!-- TODO AUT-1643 Upgrade to springdoc-openapi 2.x when Spring Boot is upgraded to 3.x. Artifact name changes to springdoc-openapi-starter-webmvc-ui. -->
+        <springdoc-openapi-ui.version>1.8.0</springdoc-openapi-ui.version>
     </properties>
 
     <build>

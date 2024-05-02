@@ -20,7 +20,7 @@ import javax.annotation.Generated;
  * ClientImportResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 public class ClientImportResponse {
 
   private String status;
@@ -32,7 +32,7 @@ public class ClientImportResponse {
   private Integer clientsImportFailedCount;
 
   @Valid
-  private List<String> clientsNotImported;
+  private List<String> clientsNotImported = new ArrayList<>();
 
   public ClientImportResponse status(String status) {
     this.status = status;

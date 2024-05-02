@@ -30,7 +30,7 @@ import javax.annotation.Generated;
  * Client
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 public class Client {
 
   private String id;
@@ -46,13 +46,13 @@ public class Client {
   private InstitutionMetainfo institutionMetainfo;
 
   @Valid
-  private List<String> accessTokenAudienceUris;
+  private List<String> accessTokenAudienceUris = new ArrayList<>();
 
   @Valid
   private List<String> redirectUris = new ArrayList<>();
 
   @Valid
-  private List<String> postLogoutRedirectUris;
+  private List<String> postLogoutRedirectUris = new ArrayList<>();
 
   @Valid
   private List<@Size(min = 2, max = 200)String> scope = new ArrayList<>();
@@ -104,17 +104,17 @@ public class Client {
   private String description;
 
   @Valid
-  private List<@Email String> infoNotificationEmails;
+  private List<@Email String> infoNotificationEmails = new ArrayList<>();
 
   @Valid
-  private List<@Email String> slaNotificationEmails;
+  private List<@Email String> slaNotificationEmails = new ArrayList<>();
 
   private Boolean accessTokenJwtEnabled = false;
 
   private Boolean isUserConsentRequired;
 
   @Valid
-  private List<String> skipUserConsentClientIds;
+  private List<String> skipUserConsentClientIds = new ArrayList<>();
 
   private String clientUrl;
 
@@ -127,7 +127,7 @@ public class Client {
   private ClientSmartIdSettings smartidSettings;
 
   @Valid
-  private List<@Valid ClientContact> clientContacts;
+  private List<@Valid ClientContact> clientContacts = new ArrayList<>();
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;

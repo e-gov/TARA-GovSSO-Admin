@@ -65,10 +65,10 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                         "\"client_name\":null," +
                         "\"client_secret\":\"3d91b58504a6cc3a159005ee7b16c7ae503ca6ac2a6a3c893837083c236b864a\"," +
                         "\"access_token_strategy\": null," +
-                        "\"audience\": null," +
+                        "\"audience\": [ ]," +
                         "\"grant_types\":[\"authorization_code\"]," +
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
-                        "\"post_logout_redirect_uris\": null," +
+                        "\"post_logout_redirect_uris\": [ ]," +
                         "\"response_types\":[\"code\"]," +
                         "\"scope\":\"openid eidas eidasonly eidas:country:* idcard mid smartid email phone\"," +
                         "\"subject_type\":\"public\"," +
@@ -77,7 +77,7 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                         "\"backchannel_logout_session_required\" : true,\n" +
                         "\"metadata\":{" +
                             "\"display_user_consent\":null," +
-                            "\"skip_user_consent_client_ids\" : null,\n" +
+                            "\"skip_user_consent_client_ids\" : [ ],\n" +
                             "\"oidc_client\":{" +
                                 "\"name\":null," +
                                 "\"name_translations\":{\"et\":null,\"en\":null,\"ru\":null}," +
