@@ -579,7 +579,7 @@
     </div>
 
     <div class="mat-dialog-container-content" *ngIf="authService.isSsoMode">
-      <h1><span>Pääsutõend</span></h1>
+      <h1><span class="font-weight-bold">Pääsutõend</span></h1>
 
       <form>
         <div class="form-row">
@@ -621,6 +621,18 @@
           <button *ngIf="!isInfo()" type="button" class="btn-link ml-0" (click)="openAccessTokenAudienceUriDialog()">Lisa URL
           </button>
         </div>
+      </div>
+
+      <div class="form-group row" *ngIf="newData.access_token_jwt_enabled">
+        <label class="col-sm-4 col-form-label">JWT kehtivus
+          <mat-icon inline class="material-icons ml-3 font-size-20"
+                    matTooltip="Pääsutõendi kehtivusaeg">help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8" *ngIf="!isInfo()">
+          <input type="text" class="form-control w-75" name="access_token_lifespan" [(ngModel)]="_access_token_lifespan" [value]="newData.access_token_lifespan">
+        </div>
+        <label *ngIf="isInfo()">{{newData.access_token_lifespan}}</label>
       </div>
     </div>
 

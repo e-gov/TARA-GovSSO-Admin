@@ -43,6 +43,7 @@ export class ClientDialogComponent implements OnInit {
   _backchannel_logout_uri: string;
   _paasuke_parameters: string;
   _token_endpoint_auth_method: string;
+  _access_token_lifespan: string;
 
   clientLogoDataUri?: SafeUrl;
   newData: Client;
@@ -71,6 +72,7 @@ export class ClientDialogComponent implements OnInit {
     this._backchannel_logout_uri = this.newData.backchannel_logout_uri;
     this._paasuke_parameters = this.newData.paasuke_parameters;
     this._token_endpoint_auth_method = this.newData.token_endpoint_auth_method;
+    this._access_token_lifespan = this.newData.access_token_lifespan;
 
     if (this._client_logo !== undefined) {
       var unsafeDataUri = "data:image/svg+xml;base64," + this._client_logo;
@@ -305,6 +307,7 @@ export class ClientDialogComponent implements OnInit {
     this.newData.client_logo = this._client_logo!;
     this.newData.backchannel_logout_uri = this._backchannel_logout_uri!;
     this.newData.token_endpoint_auth_method = this._token_endpoint_auth_method!;
+    this.newData.access_token_lifespan = this._access_token_lifespan!;
 
     if (this.newData.scope.includes("smartid") && this._use_specific_smartid_configuration) {
       this.newData.smartid_settings = this._smartid_settings!

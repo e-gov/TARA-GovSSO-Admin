@@ -66,6 +66,8 @@ public class ImportClientFromExcelAllFieldsTest {
                         "\"client_secret\":\"3d91b58504a6cc3a159005ee7b16c7ae503ca6ac2a6a3c893837083c236b864a\"," +
                         "\"access_token_strategy\": null," +
                         "\"audience\": [ ]," +
+                        "\"authorization_code_grant_access_token_lifespan\" : null,\n" +
+                        "\"refresh_token_grant_access_token_lifespan\" : null,\n" +
                         "\"grant_types\":[\"authorization_code\"]," +
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
                         "\"post_logout_redirect_uris\": [ ]," +

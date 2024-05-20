@@ -859,6 +859,7 @@ components:
         mid_settings:
           relying_party_name: relying_party_name
           relying_party_UUID: relying_party_UUID
+        access_token_lifespan: 15m
         access_token_jwt_enabled: false
         client_logo: client_logo
         info_notification_emails:
@@ -887,6 +888,10 @@ components:
             format: url
             type: string
           type: array
+        access_token_lifespan:
+          example: 15m
+          pattern: "^([0-9]+(s|m))*$"
+          type: string
         redirect_uris:
           items:
             example: https://redirect-uri.test.ee/callback

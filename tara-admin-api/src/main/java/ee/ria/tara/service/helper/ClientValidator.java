@@ -15,6 +15,7 @@ import org.springframework.util.CollectionUtils;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -32,6 +33,7 @@ public class ClientValidator {
     private static final String GSM_7_CHARACTERS = "@£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞ^{}[~]|€ÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà \r\n\\";
     private static final String VALID_QUERY_PARAM_VALUE = "[\\w-%!:.~'()*]";
     private static final String VALID_PAASUKE_PARAMS_PATTERN = "^"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?(&"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?)*?$";
+    private static final Duration MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN = Duration.ofSeconds(1);
 
     private final AdminConfigurationProvider adminConfProvider;
     private final ClientRepository clientRepository;
@@ -52,6 +54,7 @@ public class ClientValidator {
         validatePaasukeQueryParameters(client);
         validateAccessTokenJwtEnabled(client);
         validateAccessTokenAudienceUris(client);
+        validateAccessTokenLifespan(client);
     }
 
     private void validateIpAddresses(List<String> ipAddresses) {
@@ -252,6 +255,38 @@ public class ClientValidator {
             if (!CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
                 throw new IllegalStateException("JWT service uris must not be set in TARA mode");
             }
+        }
+    }
+
+    private void validateAccessTokenLifespan(Client client) {
+        if (client.getAccessTokenLifespan() == null) {
+            return;
+        }
+        if (!adminConfProvider.isSsoMode()) {
+            throw new IllegalStateException("JWT access token lifespan must not be set in TARA mode");
+        }
+        if (!client.getAccessTokenJwtEnabled()) {
+            throw new IllegalStateException("JWT access token lifespan must not be set if access token JWT strategy is not enabled");
+        }
+        validateAccessTokenLifespanLimits(client.getAccessTokenLifespan());
+    }
+
+    private void validateAccessTokenLifespanLimits(String accessTokenLifespan) {
+        Duration duration = HydraDurationHelper.toDuration(accessTokenLifespan);
+
+        if (duration.compareTo(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN) < 0) {
+            throw new InvalidDataException(
+                "Client.accessTokenLifespan.subceedsMinAllowedDuration",
+                HydraDurationHelper.format(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN)
+            );
+        }
+
+        Duration maxDuration = adminConfProvider.getMaxAccessTokenLifespan();
+        if (duration.compareTo(maxDuration) > 0) {
+            throw new InvalidDataException(
+                "Client.accessTokenLifespan.exceedsMaxAllowedDuration",
+                HydraDurationHelper.format(maxDuration)
+            );
         }
     }
 }

@@ -669,6 +669,10 @@ components:
             type: string
             format: url
             example: 'https://jwt-service-uri.test.ee'
+        access_token_lifespan:
+          type: string
+          pattern: ^([0-9]+(s|m))*$
+          example: 15m
         redirect_uris:
           type: array
           minItems: 1

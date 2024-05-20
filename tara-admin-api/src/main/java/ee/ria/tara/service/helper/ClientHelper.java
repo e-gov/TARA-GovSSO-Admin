@@ -126,6 +126,7 @@ public class ClientHelper {
             client.setAccessTokenJwtEnabled(true);
         }
         client.setAccessTokenAudienceUris(hydraClient.getAudience());
+        client.setAccessTokenLifespan(hydraClient.getAuthorizationCodeGrantAccessTokenLifespan());
         client.setPaasukeParameters(hydraClient.getMetadata().getPaasukeParameters());
 
         return client;
@@ -160,6 +161,8 @@ public class ClientHelper {
             hydraClient.setAccessTokenStrategy(ACCESS_TOKEN_STRATEGY_JWT);
         }
         hydraClient.setAudience(client.getAccessTokenAudienceUris());
+        hydraClient.setAuthorizationCodeGrantAccessTokenLifespan(client.getAccessTokenLifespan());
+        hydraClient.setRefreshTokenGrantAccessTokenLifespan(client.getAccessTokenLifespan());
         hydraClient.setClientId(client.getClientId());
         // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.
         hydraClient.setClientSecret(!ssoMode ? getDigest(client.getSecret()): client.getSecret());

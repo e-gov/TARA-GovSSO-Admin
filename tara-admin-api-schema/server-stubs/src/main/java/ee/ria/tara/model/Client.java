@@ -48,6 +48,8 @@ public class Client {
   @Valid
   private List<String> accessTokenAudienceUris = new ArrayList<>();
 
+  private String accessTokenLifespan;
+
   @Valid
   private List<String> redirectUris = new ArrayList<>();
 
@@ -299,6 +301,26 @@ public class Client {
 
   public void setAccessTokenAudienceUris(List<String> accessTokenAudienceUris) {
     this.accessTokenAudienceUris = accessTokenAudienceUris;
+  }
+
+  public Client accessTokenLifespan(String accessTokenLifespan) {
+    this.accessTokenLifespan = accessTokenLifespan;
+    return this;
+  }
+
+  /**
+   * Get accessTokenLifespan
+   * @return accessTokenLifespan
+  */
+  @Pattern(regexp = "^([0-9]+(s|m))*$") 
+  @Schema(name = "access_token_lifespan", example = "15m", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("access_token_lifespan")
+  public String getAccessTokenLifespan() {
+    return accessTokenLifespan;
+  }
+
+  public void setAccessTokenLifespan(String accessTokenLifespan) {
+    this.accessTokenLifespan = accessTokenLifespan;
   }
 
   public Client redirectUris(List<String> redirectUris) {
@@ -821,6 +843,7 @@ public class Client {
         Objects.equals(this.clientSecretExportSettings, client.clientSecretExportSettings) &&
         Objects.equals(this.institutionMetainfo, client.institutionMetainfo) &&
         Objects.equals(this.accessTokenAudienceUris, client.accessTokenAudienceUris) &&
+        Objects.equals(this.accessTokenLifespan, client.accessTokenLifespan) &&
         Objects.equals(this.redirectUris, client.redirectUris) &&
         Objects.equals(this.postLogoutRedirectUris, client.postLogoutRedirectUris) &&
         Objects.equals(this.scope, client.scope) &&
@@ -847,7 +870,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -861,6 +884,7 @@ public class Client {
     sb.append("    clientSecretExportSettings: ").append(toIndentedString(clientSecretExportSettings)).append("\n");
     sb.append("    institutionMetainfo: ").append(toIndentedString(institutionMetainfo)).append("\n");
     sb.append("    accessTokenAudienceUris: ").append(toIndentedString(accessTokenAudienceUris)).append("\n");
+    sb.append("    accessTokenLifespan: ").append(toIndentedString(accessTokenLifespan)).append("\n");
     sb.append("    redirectUris: ").append(toIndentedString(redirectUris)).append("\n");
     sb.append("    postLogoutRedirectUris: ").append(toIndentedString(postLogoutRedirectUris)).append("\n");
     sb.append("    scope: ").append(toIndentedString(scope)).append("\n");

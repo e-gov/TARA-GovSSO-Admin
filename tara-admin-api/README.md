@@ -32,6 +32,7 @@ The backend application is built on top of classes generated from the API specif
 | Parameter                    | Required | Description                       | Example                                              |
 | ---------------------------- | -------- | --------------------------------- | ---------------------------------------------------- |
 | tara.admin.sso-mode           | N        | Toggle between GovSSO mode when true and TARA mode when false, false by default  | false                                                 |
+| tara.admin.max-access-token-lifespan  | N | Max allowed value for JWT access token lifespan. Default value is PT15M (15 minutes). | PT14M |
 
 <a href="oidc_conf"></a>
 ### Integration with TARA/GovSSO OIDC service

@@ -125,6 +125,7 @@ export class ClientsComponent implements OnInit {
       is_user_consent_required: this.authService.isSsoMode,
       access_token_jwt_enabled: false,
       access_token_audience_uris: [],
+      access_token_lifespan: undefined,
       client_url: undefined,
       backchannel_logout_uri: undefined,
       paasuke_parameters: undefined,
