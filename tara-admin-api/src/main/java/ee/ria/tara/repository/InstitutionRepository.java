@@ -3,7 +3,7 @@ package ee.ria.tara.repository;
 import ee.ria.tara.repository.model.Institution;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import javax.transaction.Transactional;
+import jakarta.transaction.Transactional;
 import java.util.List;
 
 @Transactional

@@ -2,11 +2,11 @@ package ee.ria.tara.service.helper;
 
 import com.icegreen.greenmail.util.GreenMail;
 import com.icegreen.greenmail.util.ServerSetup;
+import jakarta.mail.internet.MimeMessage;
 import org.junit.jupiter.api.extension.AfterEachCallback;
 import org.junit.jupiter.api.extension.BeforeEachCallback;
 import org.junit.jupiter.api.extension.ExtensionContext;
 
-import javax.mail.internet.MimeMessage;
 
 public class SmtpServerExtension implements BeforeEachCallback, AfterEachCallback {
 

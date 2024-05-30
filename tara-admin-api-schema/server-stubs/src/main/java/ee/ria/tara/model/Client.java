@@ -1,28 +1,36 @@
 package ee.ria.tara.model;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.net.URI;
+import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.springframework.format.annotation.DateTimeFormat;
-
-import javax.annotation.Generated;
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import ee.ria.tara.model.ClientContact;
+import ee.ria.tara.model.ClientMidSettings;
+import ee.ria.tara.model.ClientSecretExportSettings;
+import ee.ria.tara.model.ClientSmartIdSettings;
+import ee.ria.tara.model.InstitutionMetainfo;
+import ee.ria.tara.model.NameTranslations;
+import ee.ria.tara.model.ShortNameTranslations;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
+import org.springframework.format.annotation.DateTimeFormat;
+import java.time.OffsetDateTime;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.*;
+import io.swagger.v3.oas.annotations.media.Schema;
+
+
+import java.util.*;
+import jakarta.annotation.Generated;
 
 /**
  * Client
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
 public class Client {
 
   private String id;

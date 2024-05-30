@@ -21,7 +21,7 @@ import org.springframework.security.ldap.userdetails.LdapUserDetailsImpl;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @Slf4j
