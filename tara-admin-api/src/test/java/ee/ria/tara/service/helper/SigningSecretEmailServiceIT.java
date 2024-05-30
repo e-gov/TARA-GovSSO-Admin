@@ -4,7 +4,7 @@ import ee.ria.tara.configuration.providers.ClientSecretEmailConfigurationProvide
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientSecretExportSettings;
 import ee.ria.tara.service.ClientSecretEmailService;
-import org.apache.commons.mail.util.MimeMessageParser;
+import org.apache.commons.mail2.jakarta.util.MimeMessageParser;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
