@@ -38,30 +38,35 @@ public class ErrorHandler {
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<String> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        log.warn("Error handling request", e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(formatBindingErrors(e));
     }
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<String> handleValidationException(ValidationException e) {
+        log.warn("Error handling request", e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(e.getMessage());
     }
 
     @ExceptionHandler({ InvalidDataException.class, RecordDoesNotExistException.class })
     public ResponseEntity<String> handleUserErrors(ApiException e) {
+        log.warn("Error handling request", e);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                 .body(formatError(e, e.getArgs()));
     }
 
     @ExceptionHandler(FatalApiException.class)
     public ResponseEntity<String> handleFatalApiException(FatalApiException e) {
+        log.error("Error handling request", e);
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                 .body(formatError(e));
     }
 
     @ExceptionHandler(AuthenticationException.class)
     public ResponseEntity<String> handleAuthenticationException(AuthenticationException e) {
+        log.warn("Authentication error", e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(formatError(e));
     }
