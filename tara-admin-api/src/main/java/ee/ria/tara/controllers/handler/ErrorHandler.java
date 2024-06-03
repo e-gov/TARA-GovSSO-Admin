@@ -51,7 +51,7 @@ public class ErrorHandler {
     @ExceptionHandler({ InvalidDataException.class, RecordDoesNotExistException.class })
     public ResponseEntity<String> handleUserErrors(ApiException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(formatError(e));
+                .body(formatError(e, e.getArgs()));
     }
 
     @ExceptionHandler(FatalApiException.class)
@@ -90,9 +90,9 @@ public class ErrorHandler {
         return join(" ", errors);
     }
 
-    private String formatError(Exception exception) {
+    private String formatError(Exception exception, Object... args) {
         Locale locale = LocaleContextHolder.getLocale();
-        String error = format("%s", messageSource.getMessage(exception.getMessage(), null, locale));
+        String error = format("%s", messageSource.getMessage(exception.getMessage(), args, locale));
 
         log.info("Error: " + error);
 

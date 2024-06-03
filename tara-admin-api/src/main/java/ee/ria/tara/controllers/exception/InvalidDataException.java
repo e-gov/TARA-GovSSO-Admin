@@ -5,6 +5,10 @@ public class InvalidDataException extends ApiException {
         super(message);
     }
 
+    public InvalidDataException(String message, Object... args) {
+        super(message, args);
+    }
+
     public InvalidDataException(Exception exception) {
         super(exception);
     }

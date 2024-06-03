@@ -18,7 +18,7 @@ import javax.annotation.Generated;
  * InstitutionType
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 public class InstitutionType {
 
   /**

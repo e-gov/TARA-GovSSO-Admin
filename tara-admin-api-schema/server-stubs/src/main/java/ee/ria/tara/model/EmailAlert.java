@@ -23,7 +23,7 @@ import javax.annotation.Generated;
  * EmailAlert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 public class EmailAlert {
 
   private Boolean enabled;
@@ -32,7 +32,7 @@ public class EmailAlert {
   private OffsetDateTime sendAt;
 
   @Valid
-  private List<@Valid MessageTemplate> messageTemplates;
+  private List<@Valid MessageTemplate> messageTemplates = new ArrayList<>();
 
   public EmailAlert enabled(Boolean enabled) {
     this.enabled = enabled;

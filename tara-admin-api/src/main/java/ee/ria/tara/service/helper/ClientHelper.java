@@ -34,6 +34,10 @@ import java.util.stream.Collectors;
 @Slf4j
 public class ClientHelper {
 
+    private static final String ACCESS_TOKEN_STRATEGY_JWT = "jwt";
+    public static final String SCOPE_REPRESENTEE = "representee.*";
+    public static final String SCOPE_REPRESENTEE_LIST = "representee_list";
+
     public static Client convertToClient(HydraClient hydraClient, ee.ria.tara.repository.model.Client entity) {
         Client client = convertToClient(hydraClient);
 
@@ -118,6 +122,12 @@ public class ClientHelper {
         client.setMidSettings(getMobileIdSettings(hydraClient));
         client.setCreatedAt(OffsetDateTime.parse(hydraClient.getCreatedAt()));
         client.setUpdatedAt(OffsetDateTime.parse(hydraClient.getUpdatedAt()));
+        if (hydraClient.getAccessTokenStrategy() != null && hydraClient.getAccessTokenStrategy().equals(ACCESS_TOKEN_STRATEGY_JWT)) {
+            client.setAccessTokenJwtEnabled(true);
+        }
+        client.setAccessTokenAudienceUris(hydraClient.getAudience());
+        client.setAccessTokenLifespan(hydraClient.getAuthorizationCodeGrantAccessTokenLifespan());
+        client.setPaasukeParameters(hydraClient.getMetadata().getPaasukeParameters());
 
         return client;
     }
@@ -142,10 +152,17 @@ public class ClientHelper {
         metadata.setDisplayUserConsent(client.getIsUserConsentRequired());
         metadata.setOidcClient(oidcClient);
         metadata.setSkipUserConsentClientIds(client.getSkipUserConsentClientIds() != null ? getDistinctSkipUserConsentClientIds(client) : null);
+        metadata.setPaasukeParameters(client.getPaasukeParameters());
 
         if (ssoMode) {
             hydraClient.setGrantTypes(List.of("authorization_code", "refresh_token"));
         }
+        if (client.getAccessTokenJwtEnabled()) {
+            hydraClient.setAccessTokenStrategy(ACCESS_TOKEN_STRATEGY_JWT);
+        }
+        hydraClient.setAudience(client.getAccessTokenAudienceUris());
+        hydraClient.setAuthorizationCodeGrantAccessTokenLifespan(client.getAccessTokenLifespan());
+        hydraClient.setRefreshTokenGrantAccessTokenLifespan(client.getAccessTokenLifespan());
         hydraClient.setClientId(client.getClientId());
         // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.
         hydraClient.setClientSecret(!ssoMode ? getDigest(client.getSecret()): client.getSecret());

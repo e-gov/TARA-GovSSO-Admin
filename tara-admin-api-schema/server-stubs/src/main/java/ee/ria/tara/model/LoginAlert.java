@@ -21,16 +21,16 @@ import javax.annotation.Generated;
  * LoginAlert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 public class LoginAlert {
 
   private Boolean enabled;
 
   @Valid
-  private List<@Valid MessageTemplate> messageTemplates;
+  private List<@Valid MessageTemplate> messageTemplates = new ArrayList<>();
 
   @Valid
-  private List<String> authMethods;
+  private List<String> authMethods = new ArrayList<>();
 
   public LoginAlert enabled(Boolean enabled) {
     this.enabled = enabled;

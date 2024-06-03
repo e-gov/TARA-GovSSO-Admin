@@ -41,7 +41,9 @@ export class ClientDialogComponent implements OnInit {
   _use_specific_smartid_configuration: boolean;
   _client_logo?: string;
   _backchannel_logout_uri: string;
+  _paasuke_parameters: string;
   _token_endpoint_auth_method: string;
+  _access_token_lifespan: string;
 
   clientLogoDataUri?: SafeUrl;
   newData: Client;
@@ -68,7 +70,9 @@ export class ClientDialogComponent implements OnInit {
     this._mid_settings = this.newData.mid_settings;
     this._client_logo = this.newData.client_logo;
     this._backchannel_logout_uri = this.newData.backchannel_logout_uri;
+    this._paasuke_parameters = this.newData.paasuke_parameters;
     this._token_endpoint_auth_method = this.newData.token_endpoint_auth_method;
+    this._access_token_lifespan = this.newData.access_token_lifespan;
 
     if (this._client_logo !== undefined) {
       var unsafeDataUri = "data:image/svg+xml;base64," + this._client_logo;
@@ -132,6 +136,22 @@ export class ClientDialogComponent implements OnInit {
 
         };
       }
+  }
+
+  openAccessTokenAudienceUriDialog(): void {
+    const dialogRef = this.dialog.open(AddValueDialogComponent, {
+      data: {
+        title: "Pääsutõendi rakenduse URL-i lisamine"
+      },
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe((result: any) => {
+      if (result !== "" && result !== undefined) {
+        this.newData.access_token_audience_uris.push(result);
+      }
+    });
   }
 
   openRedirectUrlDialog(): void {
@@ -254,6 +274,10 @@ export class ClientDialogComponent implements OnInit {
     }
   }
 
+  removeAccessTokenAudienceUri(uri: string) {
+    this.newData.access_token_audience_uris.splice(this.newData.access_token_audience_uris.indexOf(uri), 1)
+  }
+
   removeRedirectUri(uri: string) {
     this.newData.redirect_uris.splice(this.newData.redirect_uris.indexOf(uri), 1)
   }
@@ -283,6 +307,7 @@ export class ClientDialogComponent implements OnInit {
     this.newData.client_logo = this._client_logo!;
     this.newData.backchannel_logout_uri = this._backchannel_logout_uri!;
     this.newData.token_endpoint_auth_method = this._token_endpoint_auth_method!;
+    this.newData.access_token_lifespan = this._access_token_lifespan!;
 
     if (this.newData.scope.includes("smartid") && this._use_specific_smartid_configuration) {
       this.newData.smartid_settings = this._smartid_settings!
@@ -301,6 +326,16 @@ export class ClientDialogComponent implements OnInit {
         relying_party_UUID: undefined,
         relying_party_name: undefined
       };
+    }
+
+    if (this.newData.scope.includes("representee.*") || this.newData.scope.includes("representee_list") ) {
+      this.newData.paasuke_parameters = this._paasuke_parameters!;
+    } else {
+      this.newData.paasuke_parameters = undefined;
+    }
+
+    if (!this.newData.access_token_jwt_enabled) {
+      this.newData.access_token_audience_uris = undefined;
     }
 
     let requestBody = JSON.parse(JSON.stringify(this.newData), (key, value) => {
@@ -440,6 +475,10 @@ export class ClientDialogComponent implements OnInit {
       newClient.client_contacts = [];
     }
 
+    if (newClient.access_token_audience_uris == undefined) {
+      newClient.access_token_audience_uris = [];
+    }
+
     return newClient;
   }
 
@@ -449,6 +488,24 @@ export class ClientDialogComponent implements OnInit {
 
   cancel() {
     this.mainDialog.close();
+  }
+
+  openEditAccessTokenAudienceUriDialog(url: string) {
+    const dialogRef = this.dialog.open(EditValueDialogComponent, {
+      data: {
+        title: "Muuda pääsutõendi rakenduse URL-i",
+        value: url
+      },
+      backdropClass: 'cdk-overlay-transparent-backdrop',
+      hasBackdrop: true,
+    });
+
+    dialogRef.afterClosed().subscribe(({newValue, oldValue}) => {
+      if (newValue !== "" && newValue !== undefined && oldValue !== "" && oldValue !== undefined) {
+        const index = this.newData.access_token_audience_uris.indexOf(oldValue);
+        this.newData.access_token_audience_uris[index] = newValue;
+      }
+    });
   }
 
   openEditRedirectUrlDialog(url: string) {

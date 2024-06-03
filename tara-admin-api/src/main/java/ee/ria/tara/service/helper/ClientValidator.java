@@ -15,9 +15,13 @@ import org.springframework.util.CollectionUtils;
 import java.net.MalformedURLException;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.time.Duration;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static ee.ria.tara.service.helper.ClientHelper.SCOPE_REPRESENTEE;
+import static ee.ria.tara.service.helper.ClientHelper.SCOPE_REPRESENTEE_LIST;
 
 @Service
 @RequiredArgsConstructor
@@ -27,6 +31,9 @@ public class ClientValidator {
     private static final int MAX_SHORT_NAME_LENGTH = 40;
     private static final int MAX_SHORT_NAME_GSM7_LENGTH = 20;
     private static final String GSM_7_CHARACTERS = "@£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞ^{}[~]|€ÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà \r\n\\";
+    private static final String VALID_QUERY_PARAM_VALUE = "[\\w-%!:.~'()*]";
+    private static final String VALID_PAASUKE_PARAMS_PATTERN = "^"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?(&"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?)*?$";
+    private static final Duration MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN = Duration.ofSeconds(1);
 
     private final AdminConfigurationProvider adminConfProvider;
     private final ClientRepository clientRepository;
@@ -36,14 +43,18 @@ public class ClientValidator {
             throw new InvalidDataException("Client.sso.privateInstitution");
         }
         validateName(client);
-        validateScopes(client);
-        validateRedirectUris(client);
-        validateEidasRequesterId(client);
         validateLogo(client.getClientLogo());
         validateIpAddresses(client.getTokenRequestAllowedIpAddresses());
+        validateRedirectUris(client);
+        validateScopes(client);
         if (client.getSkipUserConsentClientIds() != null) {
             validateSkipUserConsentClients(client.getSkipUserConsentClientIds(), client.getClientId());
         }
+        validateEidasRequesterId(client);
+        validatePaasukeQueryParameters(client);
+        validateAccessTokenJwtEnabled(client);
+        validateAccessTokenAudienceUris(client);
+        validateAccessTokenLifespan(client);
     }
 
     private void validateIpAddresses(List<String> ipAddresses) {
@@ -198,7 +209,6 @@ public class ClientValidator {
             throw new InvalidDataException("Client.eidasRequesterId.exists");
         }
     }
-
     private void validateLogo(byte[] logo) {
         if (adminConfProvider.isSsoMode()) {
             if (logo != null && logo.length > LOGO_ALLOWED_MAX_SIZE_IN_BYTES) {
@@ -208,6 +218,75 @@ public class ClientValidator {
             if (logo != null) {
                 throw new IllegalStateException("Client logo must not be set in TARA mode");
             }
+        }
+    }
+
+    private void validatePaasukeQueryParameters(Client client) {
+        List<String> scope = client.getScope();
+        boolean containsRepresenteeScope = scope.contains(SCOPE_REPRESENTEE) || scope.contains(SCOPE_REPRESENTEE_LIST);
+        if (adminConfProvider.isSsoMode()) {
+            if (containsRepresenteeScope && (client.getPaasukeParameters() == null || !client.getPaasukeParameters().matches(VALID_PAASUKE_PARAMS_PATTERN))) {
+                throw new InvalidDataException("Client.paasukeParameters.invalid");
+            } else if (!containsRepresenteeScope && client.getPaasukeParameters() != null) {
+                throw new IllegalStateException("Paasuke parameters must not be set without representee.* or representee_list scope");
+            }
+        } else if (StringUtils.isNotBlank(client.getPaasukeParameters())) {
+            throw new IllegalStateException("Paasuke parameters must not be set in TARA mode");
+        }
+
+    }
+    private void validateAccessTokenJwtEnabled(Client client) {
+        if (!adminConfProvider.isSsoMode() && client.getAccessTokenJwtEnabled()) {
+            throw new IllegalStateException("Access token JWT enabled must not be set to true in TARA mode");
+        }
+    }
+
+    private void validateAccessTokenAudienceUris(Client client) {
+        if (adminConfProvider.isSsoMode()) {
+            if (client.getAccessTokenJwtEnabled()) {
+                if (CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
+                    throw new InvalidDataException("Client.accessTokenAudienceUri.missing");
+                }
+                client.getAccessTokenAudienceUris().forEach(uri -> validateUri(uri, "Client.accessTokenAudienceUri.missing"));
+            } else if (!CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
+                throw new IllegalStateException("Access token audience uris must not be set if access token JWT strategy is not enabled");
+            }
+        } else {
+            if (!CollectionUtils.isEmpty(client.getAccessTokenAudienceUris())) {
+                throw new IllegalStateException("JWT service uris must not be set in TARA mode");
+            }
+        }
+    }
+
+    private void validateAccessTokenLifespan(Client client) {
+        if (client.getAccessTokenLifespan() == null) {
+            return;
+        }
+        if (!adminConfProvider.isSsoMode()) {
+            throw new IllegalStateException("JWT access token lifespan must not be set in TARA mode");
+        }
+        if (!client.getAccessTokenJwtEnabled()) {
+            throw new IllegalStateException("JWT access token lifespan must not be set if access token JWT strategy is not enabled");
+        }
+        validateAccessTokenLifespanLimits(client.getAccessTokenLifespan());
+    }
+
+    private void validateAccessTokenLifespanLimits(String accessTokenLifespan) {
+        Duration duration = HydraDurationHelper.toDuration(accessTokenLifespan);
+
+        if (duration.compareTo(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN) < 0) {
+            throw new InvalidDataException(
+                "Client.accessTokenLifespan.subceedsMinAllowedDuration",
+                HydraDurationHelper.format(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN)
+            );
+        }
+
+        Duration maxDuration = adminConfProvider.getMaxAccessTokenLifespan();
+        if (duration.compareTo(maxDuration) > 0) {
+            throw new InvalidDataException(
+                "Client.accessTokenLifespan.exceedsMaxAllowedDuration",
+                HydraDurationHelper.format(maxDuration)
+            );
         }
     }
 }

@@ -8,17 +8,17 @@
     <targetEnvironment>dev-local</targetEnvironment>
     <targetNpmRegistry>https://registry.npmjs.org</targetNpmRegistry>
 
-    <exec-maven-plugin.version>3.1.1</exec-maven-plugin.version>
+    <exec-maven-plugin.version>3.2.0</exec-maven-plugin.version>
   </properties>
 
   <parent>
     <artifactId>tara-admin-parent</artifactId>
     <groupId>ee.ria.tara-admin</groupId>
-    <version>1.8.0</version>
+    <version>1.9.0</version>
   </parent>
 
   <artifactId>tara-admin-ui</artifactId>
-  <version>1.8.0</version>
+  <version>1.9.0</version>
   <packaging>war</packaging>
 
   <build>

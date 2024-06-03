@@ -35,6 +35,20 @@ public class HydraClient {
         return "[non-null value]";
     }
 
+    @JsonProperty("access_token_strategy")
+    private String accessTokenStrategy;
+
+    @JsonProperty("audience")
+    private List<String> audience;
+
+    @JsonProperty("authorization_code_grant_access_token_lifespan")
+    @Pattern(regexp="^([0-9]+(ns|us|ms|s|m|h))*$")
+    private String authorizationCodeGrantAccessTokenLifespan;
+
+    @JsonProperty("refresh_token_grant_access_token_lifespan")
+    @Pattern(regexp="^([0-9]+(ns|us|ms|s|m|h))*$")
+    private String refreshTokenGrantAccessTokenLifespan;
+
     @JsonProperty("grant_types")
     @Size(min=1)
     private List<String> grantTypes = List.of("authorization_code");

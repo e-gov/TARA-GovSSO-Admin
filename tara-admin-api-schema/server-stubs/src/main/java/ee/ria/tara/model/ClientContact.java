@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * ClientContact
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 public class ClientContact {
 
   private String name;
@@ -57,7 +57,7 @@ public class ClientContact {
    * Get email
    * @return email
   */
-  @javax.validation.constraints.Email
+  @javax.validation.constraints.Email 
   @Schema(name = "email", example = "test@example.com", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("email")
   public String getEmail() {

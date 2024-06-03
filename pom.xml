@@ -5,7 +5,7 @@
 
     <groupId>ee.ria.tara-admin</groupId>
     <artifactId>tara-admin-parent</artifactId>
-    <version>1.8.0</version>
+    <version>1.9.0</version>
     <packaging>pom</packaging>
     <licenses>
         <license>
@@ -24,7 +24,7 @@
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
-        <wiremock.version>2.35.1</wiremock.version> <!-- TODO Upgrade to >=3.0.1 after Spring Boot is upgraded to 3.x which includes jetty >= 11.0.12 -->
+        <wiremock.version>2.35.2</wiremock.version> <!-- TODO Upgrade to >=3.0.1 after Spring Boot is upgraded to 3.x which includes jetty >= 11.0.12 -->
     </properties>
 
     <parent>

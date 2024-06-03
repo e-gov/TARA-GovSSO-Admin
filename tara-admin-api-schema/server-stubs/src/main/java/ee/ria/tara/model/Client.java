@@ -30,7 +30,7 @@ import javax.annotation.Generated;
  * Client
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 public class Client {
 
   private String id;
@@ -46,16 +46,21 @@ public class Client {
   private InstitutionMetainfo institutionMetainfo;
 
   @Valid
+  private List<String> accessTokenAudienceUris = new ArrayList<>();
+
+  private String accessTokenLifespan;
+
+  @Valid
   private List<String> redirectUris = new ArrayList<>();
 
   @Valid
-  private List<String> postLogoutRedirectUris;
+  private List<String> postLogoutRedirectUris = new ArrayList<>();
 
   @Valid
-  private List<String> scope = new ArrayList<>();
+  private List<@Size(min = 2, max = 200)String> scope = new ArrayList<>();
 
   @Valid
-  private List<String> tokenRequestAllowedIpAddresses = new ArrayList<>();
+  private List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses = new ArrayList<>();
 
   /**
    * Gets or Sets tokenEndpointAuthMethod
@@ -101,26 +106,30 @@ public class Client {
   private String description;
 
   @Valid
-  private List<String> infoNotificationEmails;
+  private List<@Email String> infoNotificationEmails = new ArrayList<>();
 
   @Valid
-  private List<String> slaNotificationEmails;
+  private List<@Email String> slaNotificationEmails = new ArrayList<>();
+
+  private Boolean accessTokenJwtEnabled = false;
 
   private Boolean isUserConsentRequired;
 
   @Valid
-  private List<String> skipUserConsentClientIds;
+  private List<String> skipUserConsentClientIds = new ArrayList<>();
 
   private String clientUrl;
 
   private String backchannelLogoutUri;
+
+  private String paasukeParameters;
 
   private ClientMidSettings midSettings;
 
   private ClientSmartIdSettings smartidSettings;
 
   @Valid
-  private List<@Valid ClientContact> clientContacts;
+  private List<@Valid ClientContact> clientContacts = new ArrayList<>();
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;
@@ -137,7 +146,7 @@ public class Client {
   /**
    * Constructor with only required parameters
    */
-  public Client(String clientId, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<String> scope, List<String> tokenRequestAllowedIpAddresses, TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
+  public Client(String clientId, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<@Size(min = 2, max = 200)String> scope, List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses, TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
     this.clientId = clientId;
     this.institutionMetainfo = institutionMetainfo;
     this.redirectUris = redirectUris;
@@ -266,6 +275,54 @@ public class Client {
     this.institutionMetainfo = institutionMetainfo;
   }
 
+  public Client accessTokenAudienceUris(List<String> accessTokenAudienceUris) {
+    this.accessTokenAudienceUris = accessTokenAudienceUris;
+    return this;
+  }
+
+  public Client addAccessTokenAudienceUrisItem(String accessTokenAudienceUrisItem) {
+    if (this.accessTokenAudienceUris == null) {
+      this.accessTokenAudienceUris = new ArrayList<>();
+    }
+    this.accessTokenAudienceUris.add(accessTokenAudienceUrisItem);
+    return this;
+  }
+
+  /**
+   * Get accessTokenAudienceUris
+   * @return accessTokenAudienceUris
+  */
+  
+  @Schema(name = "access_token_audience_uris", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("access_token_audience_uris")
+  public List<String> getAccessTokenAudienceUris() {
+    return accessTokenAudienceUris;
+  }
+
+  public void setAccessTokenAudienceUris(List<String> accessTokenAudienceUris) {
+    this.accessTokenAudienceUris = accessTokenAudienceUris;
+  }
+
+  public Client accessTokenLifespan(String accessTokenLifespan) {
+    this.accessTokenLifespan = accessTokenLifespan;
+    return this;
+  }
+
+  /**
+   * Get accessTokenLifespan
+   * @return accessTokenLifespan
+  */
+  @Pattern(regexp = "^([0-9]+(s|m))*$") 
+  @Schema(name = "access_token_lifespan", example = "15m", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("access_token_lifespan")
+  public String getAccessTokenLifespan() {
+    return accessTokenLifespan;
+  }
+
+  public void setAccessTokenLifespan(String accessTokenLifespan) {
+    this.accessTokenLifespan = accessTokenLifespan;
+  }
+
   public Client redirectUris(List<String> redirectUris) {
     this.redirectUris = redirectUris;
     return this;
@@ -322,7 +379,7 @@ public class Client {
     this.postLogoutRedirectUris = postLogoutRedirectUris;
   }
 
-  public Client scope(List<String> scope) {
+  public Client scope(List<@Size(min = 2, max = 200)String> scope) {
     this.scope = scope;
     return this;
   }
@@ -342,15 +399,15 @@ public class Client {
   @NotNull @Size(min = 1) 
   @Schema(name = "scope", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("scope")
-  public List<String> getScope() {
+  public List<@Size(min = 2, max = 200)String> getScope() {
     return scope;
   }
 
-  public void setScope(List<String> scope) {
+  public void setScope(List<@Size(min = 2, max = 200)String> scope) {
     this.scope = scope;
   }
 
-  public Client tokenRequestAllowedIpAddresses(List<String> tokenRequestAllowedIpAddresses) {
+  public Client tokenRequestAllowedIpAddresses(List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses) {
     this.tokenRequestAllowedIpAddresses = tokenRequestAllowedIpAddresses;
     return this;
   }
@@ -370,11 +427,11 @@ public class Client {
   @NotNull @Size(min = 1) 
   @Schema(name = "token_request_allowed_ip_addresses", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("token_request_allowed_ip_addresses")
-  public List<String> getTokenRequestAllowedIpAddresses() {
+  public List<@Size(min = 1, max = 200)String> getTokenRequestAllowedIpAddresses() {
     return tokenRequestAllowedIpAddresses;
   }
 
-  public void setTokenRequestAllowedIpAddresses(List<String> tokenRequestAllowedIpAddresses) {
+  public void setTokenRequestAllowedIpAddresses(List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses) {
     this.tokenRequestAllowedIpAddresses = tokenRequestAllowedIpAddresses;
   }
 
@@ -458,7 +515,7 @@ public class Client {
     this.description = description;
   }
 
-  public Client infoNotificationEmails(List<String> infoNotificationEmails) {
+  public Client infoNotificationEmails(List<@Email String> infoNotificationEmails) {
     this.infoNotificationEmails = infoNotificationEmails;
     return this;
   }
@@ -478,15 +535,15 @@ public class Client {
   
   @Schema(name = "info_notification_emails", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("info_notification_emails")
-  public List<String> getInfoNotificationEmails() {
+  public List<@Email String> getInfoNotificationEmails() {
     return infoNotificationEmails;
   }
 
-  public void setInfoNotificationEmails(List<String> infoNotificationEmails) {
+  public void setInfoNotificationEmails(List<@Email String> infoNotificationEmails) {
     this.infoNotificationEmails = infoNotificationEmails;
   }
 
-  public Client slaNotificationEmails(List<String> slaNotificationEmails) {
+  public Client slaNotificationEmails(List<@Email String> slaNotificationEmails) {
     this.slaNotificationEmails = slaNotificationEmails;
     return this;
   }
@@ -506,12 +563,32 @@ public class Client {
   
   @Schema(name = "sla_notification_emails", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("sla_notification_emails")
-  public List<String> getSlaNotificationEmails() {
+  public List<@Email String> getSlaNotificationEmails() {
     return slaNotificationEmails;
   }
 
-  public void setSlaNotificationEmails(List<String> slaNotificationEmails) {
+  public void setSlaNotificationEmails(List<@Email String> slaNotificationEmails) {
     this.slaNotificationEmails = slaNotificationEmails;
+  }
+
+  public Client accessTokenJwtEnabled(Boolean accessTokenJwtEnabled) {
+    this.accessTokenJwtEnabled = accessTokenJwtEnabled;
+    return this;
+  }
+
+  /**
+   * Get accessTokenJwtEnabled
+   * @return accessTokenJwtEnabled
+  */
+  
+  @Schema(name = "access_token_jwt_enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("access_token_jwt_enabled")
+  public Boolean getAccessTokenJwtEnabled() {
+    return accessTokenJwtEnabled;
+  }
+
+  public void setAccessTokenJwtEnabled(Boolean accessTokenJwtEnabled) {
+    this.accessTokenJwtEnabled = accessTokenJwtEnabled;
   }
 
   public Client isUserConsentRequired(Boolean isUserConsentRequired) {
@@ -600,6 +677,26 @@ public class Client {
 
   public void setBackchannelLogoutUri(String backchannelLogoutUri) {
     this.backchannelLogoutUri = backchannelLogoutUri;
+  }
+
+  public Client paasukeParameters(String paasukeParameters) {
+    this.paasukeParameters = paasukeParameters;
+    return this;
+  }
+
+  /**
+   * Get paasukeParameters
+   * @return paasukeParameters
+  */
+  
+  @Schema(name = "paasuke_parameters", example = "ns=A&role=B", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("paasuke_parameters")
+  public String getPaasukeParameters() {
+    return paasukeParameters;
+  }
+
+  public void setPaasukeParameters(String paasukeParameters) {
+    this.paasukeParameters = paasukeParameters;
   }
 
   public Client midSettings(ClientMidSettings midSettings) {
@@ -745,6 +842,8 @@ public class Client {
         Objects.equals(this.clientShortName, client.clientShortName) &&
         Objects.equals(this.clientSecretExportSettings, client.clientSecretExportSettings) &&
         Objects.equals(this.institutionMetainfo, client.institutionMetainfo) &&
+        Objects.equals(this.accessTokenAudienceUris, client.accessTokenAudienceUris) &&
+        Objects.equals(this.accessTokenLifespan, client.accessTokenLifespan) &&
         Objects.equals(this.redirectUris, client.redirectUris) &&
         Objects.equals(this.postLogoutRedirectUris, client.postLogoutRedirectUris) &&
         Objects.equals(this.scope, client.scope) &&
@@ -755,10 +854,12 @@ public class Client {
         Objects.equals(this.description, client.description) &&
         Objects.equals(this.infoNotificationEmails, client.infoNotificationEmails) &&
         Objects.equals(this.slaNotificationEmails, client.slaNotificationEmails) &&
+        Objects.equals(this.accessTokenJwtEnabled, client.accessTokenJwtEnabled) &&
         Objects.equals(this.isUserConsentRequired, client.isUserConsentRequired) &&
         Objects.equals(this.skipUserConsentClientIds, client.skipUserConsentClientIds) &&
         Objects.equals(this.clientUrl, client.clientUrl) &&
         Objects.equals(this.backchannelLogoutUri, client.backchannelLogoutUri) &&
+        Objects.equals(this.paasukeParameters, client.paasukeParameters) &&
         Objects.equals(this.midSettings, client.midSettings) &&
         Objects.equals(this.smartidSettings, client.smartidSettings) &&
         Objects.equals(this.clientContacts, client.clientContacts) &&
@@ -769,7 +870,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -782,6 +883,8 @@ public class Client {
     sb.append("    clientShortName: ").append(toIndentedString(clientShortName)).append("\n");
     sb.append("    clientSecretExportSettings: ").append(toIndentedString(clientSecretExportSettings)).append("\n");
     sb.append("    institutionMetainfo: ").append(toIndentedString(institutionMetainfo)).append("\n");
+    sb.append("    accessTokenAudienceUris: ").append(toIndentedString(accessTokenAudienceUris)).append("\n");
+    sb.append("    accessTokenLifespan: ").append(toIndentedString(accessTokenLifespan)).append("\n");
     sb.append("    redirectUris: ").append(toIndentedString(redirectUris)).append("\n");
     sb.append("    postLogoutRedirectUris: ").append(toIndentedString(postLogoutRedirectUris)).append("\n");
     sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
@@ -792,10 +895,12 @@ public class Client {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    infoNotificationEmails: ").append(toIndentedString(infoNotificationEmails)).append("\n");
     sb.append("    slaNotificationEmails: ").append(toIndentedString(slaNotificationEmails)).append("\n");
+    sb.append("    accessTokenJwtEnabled: ").append(toIndentedString(accessTokenJwtEnabled)).append("\n");
     sb.append("    isUserConsentRequired: ").append(toIndentedString(isUserConsentRequired)).append("\n");
     sb.append("    skipUserConsentClientIds: ").append(toIndentedString(skipUserConsentClientIds)).append("\n");
     sb.append("    clientUrl: ").append(toIndentedString(clientUrl)).append("\n");
     sb.append("    backchannelLogoutUri: ").append(toIndentedString(backchannelLogoutUri)).append("\n");
+    sb.append("    paasukeParameters: ").append(toIndentedString(paasukeParameters)).append("\n");
     sb.append("    midSettings: ").append(toIndentedString(midSettings)).append("\n");
     sb.append("    smartidSettings: ").append(toIndentedString(smartidSettings)).append("\n");
     sb.append("    clientContacts: ").append(toIndentedString(clientContacts)).append("\n");

@@ -17,7 +17,7 @@ import javax.annotation.Generated;
  * ClientMidSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.5.0")
 public class ClientMidSettings {
 
   private String relyingPartyUUID;

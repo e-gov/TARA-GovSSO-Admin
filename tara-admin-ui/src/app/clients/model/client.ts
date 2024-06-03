@@ -10,6 +10,9 @@ export type Client = {
   post_logout_redirect_uris: string[],
   scope: string[],
   is_user_consent_required: boolean,
+  access_token_jwt_enabled: boolean,
+  access_token_audience_uris: string[],
+  access_token_lifespan: string | undefined,
   client_url: string | undefined,
   info_notification_emails: string[],
   sla_notification_emails: string[],
@@ -23,6 +26,7 @@ export type Client = {
   description: string | undefined,
   client_logo: string | undefined,
   backchannel_logout_uri: string | undefined
+  paasuke_parameters: string | undefined
 }
 
 export type ClientContact = {

@@ -64,9 +64,13 @@ public class ImportClientFromJsonFileTest {
                         "  \"client_id\" : \"mock_client_id\",\n" +
                         "  \"client_name\" : \"name_et\",\n" +
                         "  \"client_secret\" : \"3d91b58504a6cc3a159005ee7b16c7ae503ca6ac2a6a3c893837083c236b864a\",\n" +
+                        "  \"access_token_strategy\": null," +
+                        "  \"audience\": [ ]," +
+                        "  \"authorization_code_grant_access_token_lifespan\" : null,\n" +
+                        "  \"refresh_token_grant_access_token_lifespan\" : null,\n" +
                         "  \"grant_types\" : [ \"authorization_code\" ],\n" +
                         "  \"redirect_uris\" : [ \"https://back.ee\" ],\n" +
-                        "  \"post_logout_redirect_uris\": null," +
+                        "  \"post_logout_redirect_uris\": [ ]," +
                         "  \"response_types\" : [ \"code\" ],\n" +
                         "  \"scope\" : \"openid eidas eidasonly eidas:country:* idcard mid smartid email phone\",\n" +
                         "  \"subject_type\" : \"public\",\n" +
@@ -75,7 +79,7 @@ public class ImportClientFromJsonFileTest {
                         "  \"backchannel_logout_session_required\" : true,\n" +
                         "  \"metadata\" : {\n" +
                         "    \"display_user_consent\" : false,\n" +
-                        "    \"skip_user_consent_client_ids\" : null,\n" +
+                        "    \"skip_user_consent_client_ids\" : [ ],\n" +
                         "    \"oidc_client\" : {\n" +
                         "      \"name\" : \"name_et\",\n" +
                         "      \"name_translations\" : {\n" +
@@ -102,7 +106,8 @@ public class ImportClientFromJsonFileTest {
                         "        \"should_use_additional_verification_code_check\" : true\n" +
                         "      },\n" +
                         "      \"logo\" : null\n" +
-                        "    }\n" +
+                        "    },\n" +
+                        "  \"paasuke_parameters\" : null" +
                         "  },\n" +
                         "  \"created_at\" : null,\n" +
                         "  \"updated_at\" : null\n" +
