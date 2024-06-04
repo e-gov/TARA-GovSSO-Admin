@@ -276,7 +276,7 @@ public class ClientValidator {
 
         if (duration.compareTo(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN) < 0) {
             throw new InvalidDataException(
-                "Client.accessTokenLifespan.subceedsMinAllowedDuration",
+                "Client.accessTokenLifespan.tooShort",
                 HydraDurationHelper.format(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN)
             );
         }
@@ -284,7 +284,7 @@ public class ClientValidator {
         Duration maxDuration = adminConfProvider.getMaxAccessTokenLifespan();
         if (duration.compareTo(maxDuration) > 0) {
             throw new InvalidDataException(
-                "Client.accessTokenLifespan.exceedsMaxAllowedDuration",
+                "Client.accessTokenLifespan.tooLong",
                 HydraDurationHelper.format(maxDuration)
             );
         }

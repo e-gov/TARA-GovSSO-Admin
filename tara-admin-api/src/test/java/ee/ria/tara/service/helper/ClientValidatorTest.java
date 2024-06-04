@@ -367,7 +367,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_whenAccessTokenLifespanExceedsMaxAllowedValue_exceptionThrown() {
+    public void validateClient_whenAccessTokenLifespanTooLong_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
         doReturn(Duration.ofMinutes(15)).when(adminConfigurationProvider).getMaxAccessTokenLifespan();
 
@@ -380,8 +380,26 @@ public class ClientValidatorTest {
             () -> clientValidator.validateClient(client, PUBLIC));
 
         assertAll(
-            () -> assertThat(exception.getMessage()).isEqualTo("Client.accessTokenLifespan.exceedsMaxAllowedDuration"),
+            () -> assertThat(exception.getMessage()).isEqualTo("Client.accessTokenLifespan.tooLong"),
             () -> assertThat(exception.getArgs()).containsExactly("15m")
+        );
+    }
+
+    @Test
+    public void validateClient_whenAccessTokenLifespanTooShort_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAccessTokenJwtEnabled(true);
+        client.setAccessTokenAudienceUris(List.of("https://test"));
+        client.setAccessTokenLifespan("0m");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+            () -> clientValidator.validateClient(client, PUBLIC));
+
+        assertAll(
+            () -> assertThat(exception.getMessage()).isEqualTo("Client.accessTokenLifespan.tooShort"),
+            () -> assertThat(exception.getArgs()).containsExactly("1s")
         );
     }
 
