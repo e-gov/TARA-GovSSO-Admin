@@ -32,7 +32,7 @@ public class EmailAlert {
   private OffsetDateTime sendAt;
 
   @Valid
-  private List<@Valid MessageTemplate> messageTemplates = new ArrayList<>();
+  private List<@Valid MessageTemplate> messageTemplates;
 
   public EmailAlert enabled(Boolean enabled) {
     this.enabled = enabled;

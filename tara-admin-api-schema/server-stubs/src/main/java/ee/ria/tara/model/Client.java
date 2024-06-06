@@ -1,30 +1,22 @@
 package ee.ria.tara.model;
 
-import java.net.URI;
-import java.util.Objects;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonValue;
-import ee.ria.tara.model.ClientContact;
-import ee.ria.tara.model.ClientMidSettings;
-import ee.ria.tara.model.ClientSecretExportSettings;
-import ee.ria.tara.model.ClientSmartIdSettings;
-import ee.ria.tara.model.InstitutionMetainfo;
-import ee.ria.tara.model.NameTranslations;
-import ee.ria.tara.model.ShortNameTranslations;
+import io.swagger.v3.oas.annotations.media.Schema;
+import org.springframework.format.annotation.DateTimeFormat;
+
+import javax.annotation.Generated;
+import javax.validation.Valid;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
+import javax.validation.constraints.Size;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import org.springframework.format.annotation.DateTimeFormat;
-import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
-import io.swagger.v3.oas.annotations.media.Schema;
-
-
-import java.util.*;
-import javax.annotation.Generated;
+import java.util.Objects;
 
 /**
  * Client
@@ -46,16 +38,16 @@ public class Client {
   private InstitutionMetainfo institutionMetainfo;
 
   @Valid
-  private List<String> redirectUris = new ArrayList<>();
+  private List<String> redirectUris;
 
   @Valid
-  private List<String> postLogoutRedirectUris = new ArrayList<>();
+  private List<String> postLogoutRedirectUris;
 
   @Valid
-  private List<@Size(min = 2, max = 200)String> scope = new ArrayList<>();
+  private List<@Size(min = 2, max = 200)String> scope;
 
   @Valid
-  private List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses = new ArrayList<>();
+  private List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses;
 
   /**
    * Gets or Sets tokenEndpointAuthMethod
@@ -101,15 +93,15 @@ public class Client {
   private String description;
 
   @Valid
-  private List<@Email String> infoNotificationEmails = new ArrayList<>();
+  private List<@Email String> infoNotificationEmails;
 
   @Valid
-  private List<@Email String> slaNotificationEmails = new ArrayList<>();
+  private List<@Email String> slaNotificationEmails;
 
   private Boolean isUserConsentRequired;
 
   @Valid
-  private List<String> skipUserConsentClientIds = new ArrayList<>();
+  private List<String> skipUserConsentClientIds;
 
   private String clientUrl;
 
@@ -120,7 +112,7 @@ public class Client {
   private ClientSmartIdSettings smartidSettings;
 
   @Valid
-  private List<@Valid ClientContact> clientContacts = new ArrayList<>();
+  private List<@Valid ClientContact> clientContacts;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime createdAt;

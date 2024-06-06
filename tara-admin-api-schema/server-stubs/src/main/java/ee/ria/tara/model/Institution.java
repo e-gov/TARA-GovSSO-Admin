@@ -36,7 +36,7 @@ public class Institution {
   private InstitutionType type;
 
   @Valid
-  private List<String> clientIds = new ArrayList<>();
+  private List<String> clientIds;
 
   private String address;
 

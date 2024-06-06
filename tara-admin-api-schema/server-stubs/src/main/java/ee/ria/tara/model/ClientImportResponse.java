@@ -1,20 +1,13 @@
 package ee.ria.tara.model;
 
-import java.net.URI;
-import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.annotation.JsonCreator;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.time.OffsetDateTime;
-import javax.validation.Valid;
-import javax.validation.constraints.*;
 import io.swagger.v3.oas.annotations.media.Schema;
 
-
-import java.util.*;
 import javax.annotation.Generated;
+import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 /**
  * ClientImportResponse
@@ -32,7 +25,7 @@ public class ClientImportResponse {
   private Integer clientsImportFailedCount;
 
   @Valid
-  private List<String> clientsNotImported = new ArrayList<>();
+  private List<String> clientsNotImported;
 
   public ClientImportResponse status(String status) {
     this.status = status;
