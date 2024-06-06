@@ -27,10 +27,10 @@ public class LoginAlert {
   private Boolean enabled;
 
   @Valid
-  private List<@Valid MessageTemplate> messageTemplates = new ArrayList<>();
+  private List<@Valid MessageTemplate> messageTemplates;
 
   @Valid
-  private List<String> authMethods = new ArrayList<>();
+  private List<String> authMethods;
 
   public LoginAlert enabled(Boolean enabled) {
     this.enabled = enabled;
