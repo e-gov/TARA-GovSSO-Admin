@@ -29,6 +29,7 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 public class InMemoryLoginControllerRestAssuredTest {
 
     private static final String MOCK_CSRF_TOKEN = "d1341bfc-052d-448b-90f0-d7a7a9e4b842";
+    private static final String XORED_CSRF_TOKEN = "QpqbVSMb7BVoy0xy0VFU9Cb9QnmhGelsZxrQz17ElikbjqpOJquoYRJ5inZF-3lAtXxgwB6fb0CRf9lBAy2x-D_98x15tp58";
 
     @LocalServerPort
     private int port;
@@ -49,7 +50,7 @@ public class InMemoryLoginControllerRestAssuredTest {
 
         ExtractableResponse<Response> response = given()
                 .cookie(COOKIE_NAME_XSRF_TOKEN, MOCK_CSRF_TOKEN)
-                .queryParam("_csrf", MOCK_CSRF_TOKEN)
+                .queryParam("_csrf", XORED_CSRF_TOKEN)
                 .contentType(ContentType.JSON)
                 .body(loginRequest)
                 .when()
@@ -71,7 +72,7 @@ public class InMemoryLoginControllerRestAssuredTest {
 
         ExtractableResponse<Response> response = given()
                 .cookie(COOKIE_NAME_XSRF_TOKEN, MOCK_CSRF_TOKEN)
-                .queryParam("_csrf", MOCK_CSRF_TOKEN)
+                .queryParam("_csrf", XORED_CSRF_TOKEN)
                 .contentType(ContentType.JSON)
                 .body(loginRequest)
                 .when()
