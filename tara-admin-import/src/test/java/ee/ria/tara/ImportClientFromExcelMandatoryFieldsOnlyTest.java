@@ -65,12 +65,12 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                         "\"client_name\":null," +
                         "\"client_secret\":\"3d91b58504a6cc3a159005ee7b16c7ae503ca6ac2a6a3c893837083c236b864a\"," +
                         "\"access_token_strategy\": null," +
-                        "\"audience\": [ ]," +
+                        "\"audience\": null," +
                         "\"authorization_code_grant_access_token_lifespan\" : null,\n" +
                         "\"refresh_token_grant_access_token_lifespan\" : null,\n" +
                         "\"grant_types\":[\"authorization_code\"]," +
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
-                        "\"post_logout_redirect_uris\": [ ]," +
+                        "\"post_logout_redirect_uris\": null," +
                         "\"response_types\":[\"code\"]," +
                         "\"scope\":\"openid eidas eidasonly eidas:country:* idcard mid smartid email phone\"," +
                         "\"subject_type\":\"public\"," +
@@ -79,7 +79,7 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                         "\"backchannel_logout_session_required\" : true,\n" +
                         "\"metadata\":{" +
                             "\"display_user_consent\":null," +
-                            "\"skip_user_consent_client_ids\" : [ ],\n" +
+                            "\"skip_user_consent_client_ids\" : null,\n" +
                             "\"oidc_client\":{" +
                                 "\"name\":null," +
                                 "\"name_translations\":{\"et\":null,\"en\":null,\"ru\":null}," +
