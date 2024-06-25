@@ -336,6 +336,7 @@ export class ClientDialogComponent implements OnInit {
 
     if (!this.newData.access_token_jwt_enabled) {
       this.newData.access_token_audience_uris = undefined;
+      this.newData.access_token_lifespan = undefined;
     }
 
     let requestBody = JSON.parse(JSON.stringify(this.newData), (key, value) => {
