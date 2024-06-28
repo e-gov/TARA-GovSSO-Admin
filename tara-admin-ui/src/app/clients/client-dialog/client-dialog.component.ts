@@ -101,6 +101,14 @@ export class ClientDialogComponent implements OnInit {
     return !['ADD', 'UPDATE'].includes(this.data.dialogType);
   }
 
+  sidSettingsAvailable(): boolean {
+    return this.newData.scope.includes('sid') || this.authService.isSsoMode;
+  }
+
+  midSettingsAvailable(): boolean {
+    return this.newData.scope.includes('mid') || this.authService.isSsoMode;
+  }
+
   removeImage(): void {
     this.clientLogoDataUri = null;
     this._client_logo = null;
@@ -284,17 +292,18 @@ export class ClientDialogComponent implements OnInit {
     this.newData.backchannel_logout_uri = this._backchannel_logout_uri!;
     this.newData.token_endpoint_auth_method = this._token_endpoint_auth_method!;
 
-    if (this.newData.scope.includes("smartid") && this._use_specific_smartid_configuration) {
+    if (this.sidSettingsAvailable() && this._use_specific_smartid_configuration) {
       this.newData.smartid_settings = this._smartid_settings!
     } else {
       this.newData.smartid_settings = {
         relying_party_UUID: undefined,
         relying_party_name: undefined,
+        // TODO (AUT-1757): Review the following line
         should_use_additional_verification_code_check: this._smartid_settings!.should_use_additional_verification_code_check
       };
     }
 
-    if (this.newData.scope.includes("mid") && this._use_specific_mid_configuration) {
+    if (this.midSettingsAvailable() && this._use_specific_mid_configuration) {
       this.newData.mid_settings = this._mid_settings!;
     } else {
       this.newData.mid_settings = {
