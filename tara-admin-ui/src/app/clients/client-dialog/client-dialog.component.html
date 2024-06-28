@@ -436,7 +436,7 @@
         <div *ngIf="isInfo()">{{newData.description}}</div>
       </div>
     </div>
-    <div *ngIf="newData.scope.includes('smartid') && !authService.isSsoMode" class="mat-dialog-container-content">
+    <div *ngIf="sidSettingsAvailable()" class="mat-dialog-container-content">
       <h1><span>Smart-ID seadistus</span></h1>
       <form>
         <div class="form-row">
@@ -508,7 +508,7 @@
       </form>
     </div>
 
-    <div *ngIf="newData.scope.includes('mid') && !authService.isSsoMode" class="mat-dialog-container-content">
+    <div *ngIf="midSettingsAvailable()" class="mat-dialog-container-content">
       <h1><span>Mobiil-ID seadistus</span></h1>
       <form>
         <div class="form-row">
