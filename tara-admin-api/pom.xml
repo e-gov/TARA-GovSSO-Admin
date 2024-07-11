@@ -11,7 +11,6 @@
 
     <artifactId>tara-admin-api</artifactId>
     <version>1.9.1</version>
-    <packaging>war</packaging>
 
     <properties>
         <!-- Property values here can be overridden from command line, but plugin <configuration> values below can't be
@@ -142,11 +141,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
