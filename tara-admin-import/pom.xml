@@ -11,8 +11,6 @@
 
     <artifactId>tara-admin-import</artifactId>
 
-    <packaging>jar</packaging>
-
     <properties>
         <tara-admin-api.version>1.9.1</tara-admin-api.version>
     </properties>
