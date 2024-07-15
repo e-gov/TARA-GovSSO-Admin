@@ -20,7 +20,7 @@
         <bouncycastle.version>1.78.1</bouncycastle.version>
         <cdoc4j.version>1.4</cdoc4j.version>
         <ipaddress.version>5.5.0</ipaddress.version>
-        <commons-email.version>2.0.0-M1-SNAPSHOT</commons-email.version>
+        <commons-email.version>2.0.0-M1</commons-email.version>
         <greenmail.version>2.0.1</greenmail.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
