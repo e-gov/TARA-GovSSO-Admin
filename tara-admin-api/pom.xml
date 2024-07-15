@@ -11,7 +11,7 @@
 
     <artifactId>tara-admin-api</artifactId>
     <version>1.9.2</version>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <!-- Property values here can be overridden from command line, but plugin <configuration> values below can't be
@@ -21,7 +21,7 @@
         <bouncycastle.version>1.78.1</bouncycastle.version>
         <cdoc4j.version>1.5</cdoc4j.version>
         <ipaddress.version>5.5.0</ipaddress.version>
-        <commons-email.version>2.0.0-M1-SNAPSHOT</commons-email.version>
+        <commons-email.version>2.0.0-M1</commons-email.version>
         <greenmail.version>2.0.1</greenmail.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <logstash-logback-encoder.version>7.4</logstash-logback-encoder.version>
@@ -54,7 +54,6 @@
             <groupId>ee.ria.tara-admin</groupId>
             <artifactId>tara-admin-ui</artifactId>
             <version>${tara-admin-ui.version}</version>
-            <type>war</type>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -142,11 +141,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-security</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-tomcat</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -247,10 +241,18 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-war-plugin</artifactId>
-                <configuration>
-                    <attachClasses>true</attachClasses>
-                </configuration>
+                <artifactId>maven-jar-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>jar</goal>
+                        </goals>
+                        <configuration>
+                            <classifier>classes</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
