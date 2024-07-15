@@ -24,7 +24,6 @@
             <groupId>ee.ria.tara-admin</groupId>
             <artifactId>tara-admin-api</artifactId>
             <version>${tara-admin-api.version}</version>
-            <classifier>classes</classifier>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
