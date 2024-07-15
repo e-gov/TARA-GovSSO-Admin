@@ -241,7 +241,7 @@
                 </configuration>
             </plugin>
             <plugin>
-                <artifactId>maven-war-plugin</artifactId>
+                <artifactId>maven-jar-plugin</artifactId>
                 <configuration>
                     <attachClasses>true</attachClasses>
                 </configuration>
