@@ -106,7 +106,7 @@ export class ClientDialogComponent implements OnInit {
   }
 
   sidSettingsAvailable(): boolean {
-    return this.newData.scope.includes('sid') || this.authService.isSsoMode;
+    return this.newData.scope.includes('smartid') || this.authService.isSsoMode;
   }
 
   midSettingsAvailable(): boolean {
