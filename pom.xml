@@ -24,13 +24,13 @@
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
-        <wiremock.version>3.6.0</wiremock.version>
+        <wiremock.version>3.9.1</wiremock.version>
     </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.0</version>
+        <version>3.3.4</version>
     </parent>
 
     <build>
