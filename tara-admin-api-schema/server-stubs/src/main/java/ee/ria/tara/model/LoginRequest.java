@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * LoginRequest
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class LoginRequest {
 
   private String username;
@@ -44,7 +44,7 @@ public class LoginRequest {
   /**
    * Get username
    * @return username
-  */
+   */
   @NotNull 
   @Schema(name = "username", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("username")
@@ -64,7 +64,7 @@ public class LoginRequest {
   /**
    * Get password
    * @return password
-  */
+   */
   @NotNull 
   @Schema(name = "password", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("password")

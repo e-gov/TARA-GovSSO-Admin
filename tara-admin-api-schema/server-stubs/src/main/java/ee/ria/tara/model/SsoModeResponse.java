@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * SsoModeResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class SsoModeResponse {
 
   private Boolean ssoMode;
@@ -30,7 +30,7 @@ public class SsoModeResponse {
   /**
    * Get ssoMode
    * @return ssoMode
-  */
+   */
   
   @Schema(name = "ssoMode", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("ssoMode")

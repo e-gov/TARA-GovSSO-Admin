@@ -24,7 +24,7 @@ import jakarta.annotation.Generated;
  * Institution
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class Institution {
 
   private String id;
@@ -77,7 +77,7 @@ public class Institution {
   /**
    * Get id
    * @return id
-  */
+   */
   
   @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("id")
@@ -97,7 +97,7 @@ public class Institution {
   /**
    * Get registryCode
    * @return registryCode
-  */
+   */
   @NotNull @Pattern(regexp = "\\d{3,}") 
   @Schema(name = "registry_code", example = "12345678", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("registry_code")
@@ -117,7 +117,7 @@ public class Institution {
   /**
    * Get name
    * @return name
-  */
+   */
   @NotNull @Size(min = 3, max = 150) 
   @Schema(name = "name", example = "Example Institution", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
@@ -137,7 +137,7 @@ public class Institution {
   /**
    * Get type
    * @return type
-  */
+   */
   @NotNull @Valid 
   @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("type")
@@ -165,7 +165,7 @@ public class Institution {
   /**
    * Get clientIds
    * @return clientIds
-  */
+   */
   
   @Schema(name = "client_ids", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_ids")
@@ -185,7 +185,7 @@ public class Institution {
   /**
    * Get address
    * @return address
-  */
+   */
   @NotNull @Size(min = 3, max = 512) 
   @Schema(name = "address", example = "Test st 123", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("address")
@@ -205,7 +205,7 @@ public class Institution {
   /**
    * Get phone
    * @return phone
-  */
+   */
   @NotNull @Pattern(regexp = "^[0-9\\+]{5,}$") 
   @Schema(name = "phone", example = "+3726630200", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("phone")
@@ -225,7 +225,7 @@ public class Institution {
   /**
    * Get email
    * @return email
-  */
+   */
   @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @jakarta.validation.constraints.Email 
   @Schema(name = "email", example = "info@example.com", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("email")
@@ -245,7 +245,7 @@ public class Institution {
   /**
    * Get billingSettings
    * @return billingSettings
-  */
+   */
   @NotNull @Valid 
   @Schema(name = "billing_settings", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("billing_settings")
@@ -265,7 +265,7 @@ public class Institution {
   /**
    * Get createdAt
    * @return createdAt
-  */
+   */
   @Valid 
   @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("created_at")
@@ -285,7 +285,7 @@ public class Institution {
   /**
    * Get updatedAt
    * @return updatedAt
-  */
+   */
   @Valid 
   @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("updated_at")

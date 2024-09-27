@@ -23,7 +23,7 @@ import jakarta.annotation.Generated;
  * EmailAlert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class EmailAlert {
 
   private Boolean enabled;
@@ -42,7 +42,7 @@ public class EmailAlert {
   /**
    * Get enabled
    * @return enabled
-  */
+   */
   
   @Schema(name = "enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("enabled")
@@ -62,7 +62,7 @@ public class EmailAlert {
   /**
    * Get sendAt
    * @return sendAt
-  */
+   */
   @Valid 
   @Schema(name = "send_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("send_at")
@@ -90,7 +90,7 @@ public class EmailAlert {
   /**
    * Get messageTemplates
    * @return messageTemplates
-  */
+   */
   @Valid 
   @Schema(name = "message_templates", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("message_templates")

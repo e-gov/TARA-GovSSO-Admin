@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * ShortNameTranslations
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class ShortNameTranslations {
 
   private String et;
@@ -34,7 +34,7 @@ public class ShortNameTranslations {
   /**
    * Get et
    * @return et
-  */
+   */
   @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 40) 
   @Schema(name = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("et")
@@ -54,7 +54,7 @@ public class ShortNameTranslations {
   /**
    * Get en
    * @return en
-  */
+   */
   @Size(min = 3, max = 40) 
   @Schema(name = "en", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("en")
@@ -74,7 +74,7 @@ public class ShortNameTranslations {
   /**
    * Get ru
    * @return ru
-  */
+   */
   @Size(min = 3, max = 40) 
   @Schema(name = "ru", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("ru")

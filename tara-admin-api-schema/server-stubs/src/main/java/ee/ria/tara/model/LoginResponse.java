@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * LoginResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class LoginResponse {
 
   private String error;
@@ -32,7 +32,7 @@ public class LoginResponse {
   /**
    * Get error
    * @return error
-  */
+   */
   
   @Schema(name = "error", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("error")
@@ -52,7 +52,7 @@ public class LoginResponse {
   /**
    * Get username
    * @return username
-  */
+   */
   
   @Schema(name = "username", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("username")

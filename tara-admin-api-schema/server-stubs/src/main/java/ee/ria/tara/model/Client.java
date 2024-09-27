@@ -30,7 +30,7 @@ import jakarta.annotation.Generated;
  * Client
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class Client {
 
   private String id;
@@ -163,7 +163,7 @@ public class Client {
   /**
    * Get id
    * @return id
-  */
+   */
   
   @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("id")
@@ -183,7 +183,7 @@ public class Client {
   /**
    * Get clientId
    * @return clientId
-  */
+   */
   @NotNull @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 255) 
   @Schema(name = "client_id", example = "openIdDemo", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("client_id")
@@ -203,7 +203,7 @@ public class Client {
   /**
    * Get clientName
    * @return clientName
-  */
+   */
   @Valid 
   @Schema(name = "client_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_name")
@@ -223,7 +223,7 @@ public class Client {
   /**
    * Get clientShortName
    * @return clientShortName
-  */
+   */
   @Valid 
   @Schema(name = "client_short_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_short_name")
@@ -243,7 +243,7 @@ public class Client {
   /**
    * Get clientSecretExportSettings
    * @return clientSecretExportSettings
-  */
+   */
   @Valid 
   @Schema(name = "client_secret_export_settings", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_secret_export_settings")
@@ -263,7 +263,7 @@ public class Client {
   /**
    * Get institutionMetainfo
    * @return institutionMetainfo
-  */
+   */
   @NotNull @Valid 
   @Schema(name = "institution_metainfo", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("institution_metainfo")
@@ -291,7 +291,7 @@ public class Client {
   /**
    * Get accessTokenAudienceUris
    * @return accessTokenAudienceUris
-  */
+   */
   
   @Schema(name = "access_token_audience_uris", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("access_token_audience_uris")
@@ -311,7 +311,7 @@ public class Client {
   /**
    * Get accessTokenLifespan
    * @return accessTokenLifespan
-  */
+   */
   @Pattern(regexp = "^([0-9]+(s|m))*$") 
   @Schema(name = "access_token_lifespan", example = "15m", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("access_token_lifespan")
@@ -339,7 +339,7 @@ public class Client {
   /**
    * Get redirectUris
    * @return redirectUris
-  */
+   */
   @NotNull @Size(min = 1) 
   @Schema(name = "redirect_uris", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("redirect_uris")
@@ -367,7 +367,7 @@ public class Client {
   /**
    * Get postLogoutRedirectUris
    * @return postLogoutRedirectUris
-  */
+   */
   @Size(min = 1) 
   @Schema(name = "post_logout_redirect_uris", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("post_logout_redirect_uris")
@@ -395,7 +395,7 @@ public class Client {
   /**
    * Get scope
    * @return scope
-  */
+   */
   @NotNull @Size(min = 1) 
   @Schema(name = "scope", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("scope")
@@ -423,7 +423,7 @@ public class Client {
   /**
    * Get tokenRequestAllowedIpAddresses
    * @return tokenRequestAllowedIpAddresses
-  */
+   */
   @NotNull @Size(min = 1) 
   @Schema(name = "token_request_allowed_ip_addresses", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("token_request_allowed_ip_addresses")
@@ -443,7 +443,7 @@ public class Client {
   /**
    * Get tokenEndpointAuthMethod
    * @return tokenEndpointAuthMethod
-  */
+   */
   @NotNull 
   @Schema(name = "token_endpoint_auth_method", example = "client_secret_basic", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("token_endpoint_auth_method")
@@ -463,7 +463,7 @@ public class Client {
   /**
    * Get secret
    * @return secret
-  */
+   */
   
   @Schema(name = "secret", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("secret")
@@ -483,7 +483,7 @@ public class Client {
   /**
    * Get eidasRequesterId
    * @return eidasRequesterId
-  */
+   */
   @Pattern(regexp = "^((?!urn:uuid:)[a-zA-Z][a-zA-Z0-9+.-]*:.*|urn:uuid:[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$") @Size(max = 1024) 
   @Schema(name = "eidas_requester_id", example = "urn:uuid:33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("eidas_requester_id")
@@ -503,7 +503,7 @@ public class Client {
   /**
    * Get description
    * @return description
-  */
+   */
   @Size(min = 3, max = 4000) 
   @Schema(name = "description", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("description")
@@ -531,7 +531,7 @@ public class Client {
   /**
    * Get infoNotificationEmails
    * @return infoNotificationEmails
-  */
+   */
   
   @Schema(name = "info_notification_emails", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("info_notification_emails")
@@ -559,7 +559,7 @@ public class Client {
   /**
    * Get slaNotificationEmails
    * @return slaNotificationEmails
-  */
+   */
   
   @Schema(name = "sla_notification_emails", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("sla_notification_emails")
@@ -579,7 +579,7 @@ public class Client {
   /**
    * Get accessTokenJwtEnabled
    * @return accessTokenJwtEnabled
-  */
+   */
   
   @Schema(name = "access_token_jwt_enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("access_token_jwt_enabled")
@@ -599,7 +599,7 @@ public class Client {
   /**
    * Get isUserConsentRequired
    * @return isUserConsentRequired
-  */
+   */
   
   @Schema(name = "is_user_consent_required", example = "false", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("is_user_consent_required")
@@ -627,7 +627,7 @@ public class Client {
   /**
    * Get skipUserConsentClientIds
    * @return skipUserConsentClientIds
-  */
+   */
   
   @Schema(name = "skip_user_consent_client_ids", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("skip_user_consent_client_ids")
@@ -647,7 +647,7 @@ public class Client {
   /**
    * Get clientUrl
    * @return clientUrl
-  */
+   */
   
   @Schema(name = "client_url", example = "https://client.example.com/", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_url")
@@ -667,7 +667,7 @@ public class Client {
   /**
    * Get backchannelLogoutUri
    * @return backchannelLogoutUri
-  */
+   */
   
   @Schema(name = "backchannel_logout_uri", example = "https://example.com/", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("backchannel_logout_uri")
@@ -687,7 +687,7 @@ public class Client {
   /**
    * Get paasukeParameters
    * @return paasukeParameters
-  */
+   */
   
   @Schema(name = "paasuke_parameters", example = "ns=A&role=B", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("paasuke_parameters")
@@ -707,7 +707,7 @@ public class Client {
   /**
    * Get midSettings
    * @return midSettings
-  */
+   */
   @Valid 
   @Schema(name = "mid_settings", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("mid_settings")
@@ -727,7 +727,7 @@ public class Client {
   /**
    * Get smartidSettings
    * @return smartidSettings
-  */
+   */
   @Valid 
   @Schema(name = "smartid_settings", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("smartid_settings")
@@ -755,7 +755,7 @@ public class Client {
   /**
    * Get clientContacts
    * @return clientContacts
-  */
+   */
   @Valid 
   @Schema(name = "client_contacts", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_contacts")
@@ -775,7 +775,7 @@ public class Client {
   /**
    * Get createdAt
    * @return createdAt
-  */
+   */
   @Valid 
   @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("created_at")
@@ -795,7 +795,7 @@ public class Client {
   /**
    * Get updatedAt
    * @return updatedAt
-  */
+   */
   @Valid 
   @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("updated_at")
@@ -815,7 +815,7 @@ public class Client {
   /**
    * Get clientLogo
    * @return clientLogo
-  */
+   */
   
   @Schema(name = "client_logo", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_logo")

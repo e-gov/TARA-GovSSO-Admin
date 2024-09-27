@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * InstitutionBillingSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class InstitutionBillingSettings {
 
   private String email;
@@ -30,7 +30,7 @@ public class InstitutionBillingSettings {
   /**
    * Get email
    * @return email
-  */
+   */
   @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @jakarta.validation.constraints.Email 
   @Schema(name = "email", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("email")

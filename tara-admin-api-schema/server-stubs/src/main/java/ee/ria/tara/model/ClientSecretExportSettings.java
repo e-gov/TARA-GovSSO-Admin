@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * ClientSecretExportSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class ClientSecretExportSettings {
 
   private String recipientIdCode;
@@ -34,7 +34,7 @@ public class ClientSecretExportSettings {
   /**
    * Get recipientIdCode
    * @return recipientIdCode
-  */
+   */
   @Pattern(regexp = "^[0-9]{11,11}$") 
   @Schema(name = "recipient_id_code", example = "60001019906", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("recipient_id_code")
@@ -54,7 +54,7 @@ public class ClientSecretExportSettings {
   /**
    * Get recipientNameInLdap
    * @return recipientNameInLdap
-  */
+   */
   @Size(min = 5) 
   @Schema(name = "recipient_name_in_ldap", example = "Mari-Liis Männik", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("recipient_name_in_ldap")
@@ -74,7 +74,7 @@ public class ClientSecretExportSettings {
   /**
    * Get recipientEmail
    * @return recipientEmail
-  */
+   */
   @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @jakarta.validation.constraints.Email 
   @Schema(name = "recipient_email", example = "60001019906@eesti.ee", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("recipient_email")

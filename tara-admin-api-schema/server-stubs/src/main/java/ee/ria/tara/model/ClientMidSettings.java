@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * ClientMidSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class ClientMidSettings {
 
   private String relyingPartyUUID;
@@ -32,7 +32,7 @@ public class ClientMidSettings {
   /**
    * Get relyingPartyUUID
    * @return relyingPartyUUID
-  */
+   */
   @Size(max = 512) 
   @Schema(name = "relying_party_UUID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("relying_party_UUID")
@@ -52,7 +52,7 @@ public class ClientMidSettings {
   /**
    * Get relyingPartyName
    * @return relyingPartyName
-  */
+   */
   @Size(max = 512) 
   @Schema(name = "relying_party_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("relying_party_name")

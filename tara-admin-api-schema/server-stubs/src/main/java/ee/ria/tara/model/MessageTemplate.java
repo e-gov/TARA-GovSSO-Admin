@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * MessageTemplate
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class MessageTemplate {
 
   private String message;
@@ -32,7 +32,7 @@ public class MessageTemplate {
   /**
    * Get message
    * @return message
-  */
+   */
   @Size(min = 1, max = 255) 
   @Schema(name = "message", example = "Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("message")
@@ -52,7 +52,7 @@ public class MessageTemplate {
   /**
    * Get locale
    * @return locale
-  */
+   */
   
   @Schema(name = "locale", example = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("locale")

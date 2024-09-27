@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * ClientContact
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class ClientContact {
 
   private String name;
@@ -36,7 +36,7 @@ public class ClientContact {
   /**
    * Get name
    * @return name
-  */
+   */
   
   @Schema(name = "name", example = "test", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("name")
@@ -56,7 +56,7 @@ public class ClientContact {
   /**
    * Get email
    * @return email
-  */
+   */
   @jakarta.validation.constraints.Email 
   @Schema(name = "email", example = "test@example.com", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("email")
@@ -76,7 +76,7 @@ public class ClientContact {
   /**
    * Get phone
    * @return phone
-  */
+   */
   
   @Schema(name = "phone", example = "+3726630200", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("phone")
@@ -96,7 +96,7 @@ public class ClientContact {
   /**
    * Get department
    * @return department
-  */
+   */
   
   @Schema(name = "department", example = "test", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("department")

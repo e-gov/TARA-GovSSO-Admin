@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  * LoginAlert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class LoginAlert {
 
   private Boolean enabled;
@@ -40,7 +40,7 @@ public class LoginAlert {
   /**
    * Get enabled
    * @return enabled
-  */
+   */
   
   @Schema(name = "enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("enabled")
@@ -68,7 +68,7 @@ public class LoginAlert {
   /**
    * Get messageTemplates
    * @return messageTemplates
-  */
+   */
   @Valid 
   @Schema(name = "message_templates", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("message_templates")
@@ -96,7 +96,7 @@ public class LoginAlert {
   /**
    * Get authMethods
    * @return authMethods
-  */
+   */
   
   @Schema(name = "auth_methods", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("auth_methods")

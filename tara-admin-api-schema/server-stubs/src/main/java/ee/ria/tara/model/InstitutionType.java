@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * InstitutionType
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class InstitutionType {
 
   /**
@@ -77,7 +77,7 @@ public class InstitutionType {
   /**
    * Get type
    * @return type
-  */
+   */
   @NotNull 
   @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("type")

@@ -17,7 +17,7 @@ import jakarta.annotation.Generated;
  * WhoAmIResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class WhoAmIResponse {
 
   private String username;
@@ -30,7 +30,7 @@ public class WhoAmIResponse {
   /**
    * Get username
    * @return username
-  */
+   */
   
   @Schema(name = "username", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("username")

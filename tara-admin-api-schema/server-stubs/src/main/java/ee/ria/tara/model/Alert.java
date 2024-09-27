@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  * Alert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class Alert {
 
   private String id;
@@ -65,7 +65,7 @@ public class Alert {
   /**
    * Get id
    * @return id
-  */
+   */
   
   @Schema(name = "id", example = "1234567", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("id")
@@ -85,7 +85,7 @@ public class Alert {
   /**
    * Get title
    * @return title
-  */
+   */
   @NotNull @Size(max = 255) 
   @Schema(name = "title", example = "Plaaniline katkestus SK teenustes", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("title")
@@ -105,7 +105,7 @@ public class Alert {
   /**
    * Get startTime
    * @return startTime
-  */
+   */
   @NotNull @Valid 
   @Schema(name = "start_time", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("start_time")
@@ -125,7 +125,7 @@ public class Alert {
   /**
    * Get endTime
    * @return endTime
-  */
+   */
   @NotNull @Valid 
   @Schema(name = "end_time", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("end_time")
@@ -145,7 +145,7 @@ public class Alert {
   /**
    * Get loginAlert
    * @return loginAlert
-  */
+   */
   @Valid 
   @Schema(name = "login_alert", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("login_alert")
@@ -165,7 +165,7 @@ public class Alert {
   /**
    * Get emailAlert
    * @return emailAlert
-  */
+   */
   @Valid 
   @Schema(name = "email_alert", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("email_alert")
@@ -185,7 +185,7 @@ public class Alert {
   /**
    * Get createdAt
    * @return createdAt
-  */
+   */
   @Valid 
   @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("created_at")
@@ -205,7 +205,7 @@ public class Alert {
   /**
    * Get updatedAt
    * @return updatedAt
-  */
+   */
   @Valid 
   @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("updated_at")

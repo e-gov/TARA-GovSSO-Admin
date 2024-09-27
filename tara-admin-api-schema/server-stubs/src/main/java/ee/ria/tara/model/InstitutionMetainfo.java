@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * InstitutionMetainfo
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class InstitutionMetainfo {
 
   private String name;
@@ -48,7 +48,7 @@ public class InstitutionMetainfo {
   /**
    * Get name
    * @return name
-  */
+   */
   @NotNull 
   @Schema(name = "name", example = "Example Institution", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("name")
@@ -68,7 +68,7 @@ public class InstitutionMetainfo {
   /**
    * Get registryCode
    * @return registryCode
-  */
+   */
   @NotNull @Pattern(regexp = "\\d{3,}") 
   @Schema(name = "registry_code", example = "12345678", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("registry_code")
@@ -88,7 +88,7 @@ public class InstitutionMetainfo {
   /**
    * Get type
    * @return type
-  */
+   */
   @NotNull @Valid 
   @Schema(name = "type", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("type")

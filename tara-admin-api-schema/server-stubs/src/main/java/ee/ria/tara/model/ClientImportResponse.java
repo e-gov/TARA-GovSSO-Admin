@@ -20,7 +20,7 @@ import jakarta.annotation.Generated;
  * ClientImportResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.6.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
 public class ClientImportResponse {
 
   private String status;
@@ -42,7 +42,7 @@ public class ClientImportResponse {
   /**
    * Get status
    * @return status
-  */
+   */
   
   @Schema(name = "status", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("status")
@@ -62,7 +62,7 @@ public class ClientImportResponse {
   /**
    * Get clientsCount
    * @return clientsCount
-  */
+   */
   
   @Schema(name = "clients_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("clients_count")
@@ -82,7 +82,7 @@ public class ClientImportResponse {
   /**
    * Get clientsImportSuccessCount
    * @return clientsImportSuccessCount
-  */
+   */
   
   @Schema(name = "clients_import_success_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("clients_import_success_count")
@@ -102,7 +102,7 @@ public class ClientImportResponse {
   /**
    * Get clientsImportFailedCount
    * @return clientsImportFailedCount
-  */
+   */
   
   @Schema(name = "clients_import_failed_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("clients_import_failed_count")
@@ -130,7 +130,7 @@ public class ClientImportResponse {
   /**
    * Get clientsNotImported
    * @return clientsNotImported
-  */
+   */
   
   @Schema(name = "clients_not_imported", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("clients_not_imported")
