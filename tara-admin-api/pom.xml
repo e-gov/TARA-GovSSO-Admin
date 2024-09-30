@@ -218,7 +218,7 @@
     </dependencies>
 
     <build>
-        <finalName>${project.artifactId}</finalName>
+        <finalName>tara-govsso-admin</finalName>
 
         <plugins>
             <plugin>
