@@ -15,6 +15,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.context.MessageSource;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -25,6 +26,7 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doCallRealMethod;
@@ -92,5 +94,18 @@ public class ClientsControllerTest {
 
         Assertions.assertEquals(500, response.getStatus());
         verify(service, times(1)).getAllClients(null);
+    }
+
+    @Test
+    public void testNonExistingEndpointReturns404() throws Exception {
+        doCallRealMethod().when(errorHandler).handleNoResourceException(any());
+        doThrow(new NoResourceFoundException(HttpMethod.GET, "")).when(service).getAllClients(nullable(String.class));
+
+        MockHttpServletResponse response = mvc.perform(
+                get("/non-existing-endpoint")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        Assertions.assertEquals(404, response.getStatus());
     }
 }

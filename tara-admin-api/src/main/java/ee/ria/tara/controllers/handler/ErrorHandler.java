@@ -24,6 +24,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import org.springframework.web.servlet.NoHandlerFoundException;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import static java.lang.String.format;
 import static java.lang.String.join;
@@ -69,6 +71,12 @@ public class ErrorHandler {
         log.warn("Authentication error", e);
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(formatError(e));
+    }
+
+    @ExceptionHandler({NoResourceFoundException.class, NoHandlerFoundException.class})
+    public ResponseEntity<String> handleNoResourceException(Exception e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+            .body("Otsitavat lehte ei leitud.");
     }
 
     @ExceptionHandler(Exception.class)
