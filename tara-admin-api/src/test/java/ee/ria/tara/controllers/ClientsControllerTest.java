@@ -99,7 +99,6 @@ public class ClientsControllerTest {
     @Test
     public void testNonExistingEndpointReturns404() throws Exception {
         doCallRealMethod().when(errorHandler).handleNoResourceException(any());
-        doThrow(new NoResourceFoundException(HttpMethod.GET, "")).when(service).getAllClients(nullable(String.class));
 
         MockHttpServletResponse response = mvc.perform(
                 get("/non-existing-endpoint")
@@ -107,5 +106,6 @@ public class ClientsControllerTest {
                 .andReturn().getResponse();
 
         Assertions.assertEquals(404, response.getStatus());
+        Assertions.assertEquals("Otsitavat lehte ei leitud.", response.getContentAsString());
     }
 }
