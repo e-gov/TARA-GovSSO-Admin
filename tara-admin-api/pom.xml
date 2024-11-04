@@ -20,6 +20,7 @@
 
         <bouncycastle.version>1.78.1</bouncycastle.version>
         <cdoc4j.version>1.5</cdoc4j.version>
+        <elastic-apm.version>1.52.0</elastic-apm.version>
         <ipaddress.version>5.5.1</ipaddress.version>
         <commons-email.version>2.0.0-M1</commons-email.version>
         <greenmail.version>2.0.1</greenmail.version>
@@ -36,6 +37,16 @@
     </properties>
 
     <dependencies><!-- Ordered by scope, groupId, artifactId. -->
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-agent-api</artifactId>
+            <version>${elastic-apm.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>co.elastic.apm</groupId>
+            <artifactId>apm-agent-attach</artifactId>
+            <version>${elastic-apm.version}</version>
+        </dependency>
         <dependency>
             <groupId>com.github.seancfoley</groupId>
             <artifactId>ipaddress</artifactId>
@@ -232,6 +243,9 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <environmentVariables>
+                        <ELASTIC_APM_ENABLED>false</ELASTIC_APM_ENABLED>
+                    </environmentVariables>
                     <excludes>
                         <exclude>
                             <groupId>org.projectlombok</groupId>
