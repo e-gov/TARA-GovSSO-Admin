@@ -18,12 +18,12 @@
         (see https://issues.apache.org/jira/browse/MNG-4979 ). -->
         <spring-boot.build-image.imageName>tara-admin:latest</spring-boot.build-image.imageName><!-- Use "latest" tag instead of version tag. -->
 
-        <bouncycastle.version>1.78.1</bouncycastle.version>
+        <bouncycastle.version>1.79</bouncycastle.version>
         <cdoc4j.version>1.5</cdoc4j.version>
         <elastic-apm.version>1.52.0</elastic-apm.version>
         <ipaddress.version>5.5.1</ipaddress.version>
         <commons-email.version>2.0.0-M1</commons-email.version>
-        <greenmail.version>2.0.1</greenmail.version>
+        <greenmail.version>2.1.1</greenmail.version>
         <jacoco-maven-plugin.version>0.8.12</jacoco-maven-plugin.version>
         <logstash-logback-encoder.version>8.0</logstash-logback-encoder.version>
         <poi.version>5.3.0</poi.version>
