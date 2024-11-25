@@ -1,4 +1,4 @@
-<img src="doc/img/eu_regional_development_fund_horizontal.jpg" width="350" height="200">
+<img src="doc/img/eu_regional_development_fund_horizontal.jpg" width="354" height="205" alt="European Union European Regional Development Fund logo">
 
 # TARA/GovSSO admin application
 
