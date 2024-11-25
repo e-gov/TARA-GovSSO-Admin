@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  * Alert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0")
 public class Alert {
 
   private String id;

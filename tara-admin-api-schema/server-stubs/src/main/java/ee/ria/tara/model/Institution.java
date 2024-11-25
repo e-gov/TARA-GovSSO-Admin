@@ -24,7 +24,7 @@ import jakarta.annotation.Generated;
  * Institution
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.8.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0")
 public class Institution {
 
   private String id;

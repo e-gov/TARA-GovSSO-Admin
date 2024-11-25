@@ -7,6 +7,7 @@
         <groupId>ee.ria.tara-admin</groupId>
         <version>1.10.0</version>
     </parent>
+
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>tara-admin-api-schema</artifactId>
@@ -15,7 +16,7 @@
     <properties>
         <!-- If you change this version or src/main/resources/swagger.yaml file content, then delete server-stubs folder and run `mvn clean install -P regenerate-swagger` -->
         <openapi-generator-maven-plugin.version>7.10.0</openapi-generator-maven-plugin.version>
-        <springdoc-openapi-ui.version>2.7.0</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>2.6.0</springdoc-openapi-ui.version>
     </properties>
 
     <build>
