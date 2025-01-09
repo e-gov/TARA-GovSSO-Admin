@@ -102,19 +102,19 @@ export class ClientsComponent implements OnInit {
     });
   }
 
-  createNewClient() {
-    var scopes = ["openid", "idcard", "mid", "smartid", "eidas", "eidasonly", "eidas:country:*", "email", "phone"];
+  createNewClient(): void {
+    let scopes = ["openid", "idcard", "mid", "smartid", "eidas", "eidasonly", "eidas:country:*", "email", "phone"];
     if (this.authService.isSsoMode) {
       scopes = ["openid", "email", "phone"];
     }
 
-    let data: Client = {
+    const data: Client = {
       institution_metainfo: {
         name: undefined,
         registry_code: undefined,
-        type: {type: "private"}
+        type: { type: "private" }
         },
-      client_id: this.authService.isSsoMode ? crypto.randomUUID() : undefined,
+      client_id: crypto.randomUUID(),
       client_name: {et: undefined, en: undefined, ru: undefined},
       client_short_name: {et: undefined, en: undefined, ru: undefined},
       redirect_uris: [],
@@ -146,7 +146,7 @@ export class ClientsComponent implements OnInit {
       eidas_requester_id: this.authService.isSsoMode ? undefined : "urn:uuid:" + crypto.randomUUID(),
       description: undefined,
       client_logo: undefined,
-      skip_user_consent_client_ids: undefined
+      skip_user_consent_client_ids: []
     };
 
     this.openClientDialog(data, "ADD");

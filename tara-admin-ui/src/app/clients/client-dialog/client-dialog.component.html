@@ -46,7 +46,7 @@
           </mat-icon>
         </label>
         <div class="col-sm-8" *ngIf="!isInfo()">
-          <input name="client_id" type="text" [disabled]="data.dialogType === 'UPDATE'" class="form-control w-75"
+          <input name="client_id" type="text" disabled class="form-control w-75"
                  [(ngModel)]="_client_id" required/>
         </div>
         <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
