@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -30,31 +31,31 @@ import jakarta.annotation.Generated;
  * Client
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
 public class Client {
 
-  private String id;
+  private @Nullable String id;
 
   private String clientId;
 
-  private NameTranslations clientName;
+  private @Nullable NameTranslations clientName;
 
-  private ShortNameTranslations clientShortName;
+  private @Nullable ShortNameTranslations clientShortName;
 
-  private ClientSecretExportSettings clientSecretExportSettings;
+  private @Nullable ClientSecretExportSettings clientSecretExportSettings;
 
   private InstitutionMetainfo institutionMetainfo;
 
   @Valid
-  private List<String> accessTokenAudienceUris;
+  private @Nullable List<String> accessTokenAudienceUris;
 
-  private String accessTokenLifespan;
+  private @Nullable String accessTokenLifespan;
 
   @Valid
   private List<String> redirectUris;
 
   @Valid
-  private List<String> postLogoutRedirectUris;
+  private @Nullable List<String> postLogoutRedirectUris;
 
   @Valid
   private List<@Size(min = 2, max = 200)String> scope;
@@ -66,9 +67,9 @@ public class Client {
    * Gets or Sets tokenEndpointAuthMethod
    */
   public enum TokenEndpointAuthMethodEnum {
-    BASIC("client_secret_basic"),
+    CLIENT_SECRET_BASIC("client_secret_basic"),
     
-    POST("client_secret_post");
+    CLIENT_SECRET_POST("client_secret_post");
 
     private String value;
 
@@ -99,45 +100,45 @@ public class Client {
 
   private TokenEndpointAuthMethodEnum tokenEndpointAuthMethod;
 
-  private String secret;
+  private @Nullable String secret;
 
-  private String eidasRequesterId;
+  private @Nullable String eidasRequesterId;
 
-  private String description;
-
-  @Valid
-  private List<@Email String> infoNotificationEmails;
+  private @Nullable String description;
 
   @Valid
-  private List<@Email String> slaNotificationEmails;
+  private @Nullable List<@Email String> infoNotificationEmails;
+
+  @Valid
+  private @Nullable List<@Email String> slaNotificationEmails;
 
   private Boolean accessTokenJwtEnabled = false;
 
-  private Boolean isUserConsentRequired;
+  private @Nullable Boolean isUserConsentRequired;
 
   @Valid
-  private List<String> skipUserConsentClientIds;
+  private @Nullable List<String> skipUserConsentClientIds;
 
-  private String clientUrl;
+  private @Nullable String clientUrl;
 
-  private String backchannelLogoutUri;
+  private @Nullable String backchannelLogoutUri;
 
-  private String paasukeParameters;
+  private @Nullable String paasukeParameters;
 
-  private ClientMidSettings midSettings;
+  private @Nullable ClientMidSettings midSettings;
 
-  private ClientSmartIdSettings smartidSettings;
+  private @Nullable ClientSmartIdSettings smartidSettings;
 
   @Valid
-  private List<@Valid ClientContact> clientContacts;
+  private @Nullable List<@Valid ClientContact> clientContacts;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime createdAt;
+  private @Nullable OffsetDateTime createdAt;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime updatedAt;
+  private @Nullable OffsetDateTime updatedAt;
 
-  private byte[] clientLogo;
+  private @Nullable byte[] clientLogo;
 
   public Client() {
     super();

@@ -1,6 +1,7 @@
 package ee.ria.tara.service.helper;
 
 import ee.ria.tara.model.Client;
+import ee.ria.tara.model.Client.TokenEndpointAuthMethodEnum;
 import ee.ria.tara.model.ClientMidSettings;
 import ee.ria.tara.model.ClientSecretExportSettings;
 import ee.ria.tara.model.ClientSmartIdSettings;
@@ -87,7 +88,7 @@ public class ClientTestHelper {
         client.setCreatedAt(OffsetDateTime.now());
         client.setUpdatedAt(OffsetDateTime.now());
         client.setClientLogo(null);
-        client.setTokenEndpointAuthMethod(Client.TokenEndpointAuthMethodEnum.BASIC);
+        client.setTokenEndpointAuthMethod(TokenEndpointAuthMethodEnum.CLIENT_SECRET_BASIC);
 
         return client;
     }

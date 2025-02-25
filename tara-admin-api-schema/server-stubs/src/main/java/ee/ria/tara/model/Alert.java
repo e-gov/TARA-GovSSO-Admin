@@ -8,6 +8,7 @@ import ee.ria.tara.model.EmailAlert;
 import ee.ria.tara.model.LoginAlert;
 import java.time.OffsetDateTime;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -21,10 +22,10 @@ import jakarta.annotation.Generated;
  * Alert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
 public class Alert {
 
-  private String id;
+  private @Nullable String id;
 
   private String title;
 
@@ -34,15 +35,15 @@ public class Alert {
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
   private OffsetDateTime endTime;
 
-  private LoginAlert loginAlert;
+  private @Nullable LoginAlert loginAlert;
 
-  private EmailAlert emailAlert;
-
-  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime createdAt;
+  private @Nullable EmailAlert emailAlert;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime updatedAt;
+  private @Nullable OffsetDateTime createdAt;
+
+  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+  private @Nullable OffsetDateTime updatedAt;
 
   public Alert() {
     super();

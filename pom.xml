@@ -24,13 +24,14 @@
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
-        <wiremock.version>3.9.2</wiremock.version>
+        <wiremock.version>3.12.0</wiremock.version>
+        <logback.version>1.5.12</logback.version> <!-- TODO AUT-2145 Newer Logback version requires resolving "Invalid [pattern]" error regarding "#asLong{%property{PID}}" logback-spring.xml configuration and resolving https://logback.qos.ch/manual/filters.html#JaninoEventEvaluator -->
     </properties>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.3.6</version>
+        <version>3.3.9</version>
     </parent>
 
     <build>

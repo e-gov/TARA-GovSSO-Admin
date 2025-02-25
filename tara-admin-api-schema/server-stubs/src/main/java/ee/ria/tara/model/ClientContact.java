@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -17,16 +18,16 @@ import jakarta.annotation.Generated;
  * ClientContact
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
 public class ClientContact {
 
-  private String name;
+  private @Nullable String name;
 
-  private String email;
+  private @Nullable String email;
 
-  private String phone;
+  private @Nullable String phone;
 
-  private String department;
+  private @Nullable String department;
 
   public ClientContact name(String name) {
     this.name = name;

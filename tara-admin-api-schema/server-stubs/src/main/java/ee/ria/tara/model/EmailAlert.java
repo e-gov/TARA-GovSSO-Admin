@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -23,16 +24,16 @@ import jakarta.annotation.Generated;
  * EmailAlert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
 public class EmailAlert {
 
-  private Boolean enabled;
+  private @Nullable Boolean enabled;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime sendAt;
+  private @Nullable OffsetDateTime sendAt;
 
   @Valid
-  private List<@Valid MessageTemplate> messageTemplates;
+  private @Nullable List<@Valid MessageTemplate> messageTemplates;
 
   public EmailAlert enabled(Boolean enabled) {
     this.enabled = enabled;

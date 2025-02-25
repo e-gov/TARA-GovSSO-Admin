@@ -8,6 +8,7 @@ import ee.ria.tara.model.MessageTemplate;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -21,16 +22,16 @@ import jakarta.annotation.Generated;
  * LoginAlert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
 public class LoginAlert {
 
-  private Boolean enabled;
+  private @Nullable Boolean enabled;
 
   @Valid
-  private List<@Valid MessageTemplate> messageTemplates;
+  private @Nullable List<@Valid MessageTemplate> messageTemplates;
 
   @Valid
-  private List<String> authMethods;
+  private @Nullable List<String> authMethods;
 
   public LoginAlert enabled(Boolean enabled) {
     this.enabled = enabled;

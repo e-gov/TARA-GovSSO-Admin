@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -24,10 +25,10 @@ import jakarta.annotation.Generated;
  * Institution
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
 public class Institution {
 
-  private String id;
+  private @Nullable String id;
 
   private String registryCode;
 
@@ -36,7 +37,7 @@ public class Institution {
   private InstitutionType type;
 
   @Valid
-  private List<String> clientIds;
+  private @Nullable List<String> clientIds;
 
   private String address;
 
@@ -47,10 +48,10 @@ public class Institution {
   private InstitutionBillingSettings billingSettings;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime createdAt;
+  private @Nullable OffsetDateTime createdAt;
 
   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
-  private OffsetDateTime updatedAt;
+  private @Nullable OffsetDateTime updatedAt;
 
   public Institution() {
     super();

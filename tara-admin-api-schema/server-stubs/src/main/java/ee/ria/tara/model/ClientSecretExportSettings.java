@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
+import org.springframework.lang.Nullable;
 import java.time.OffsetDateTime;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.*;
@@ -17,14 +18,14 @@ import jakarta.annotation.Generated;
  * ClientSecretExportSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.10.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
 public class ClientSecretExportSettings {
 
-  private String recipientIdCode;
+  private @Nullable String recipientIdCode;
 
-  private String recipientNameInLdap;
+  private @Nullable String recipientNameInLdap;
 
-  private String recipientEmail;
+  private @Nullable String recipientEmail;
 
   public ClientSecretExportSettings recipientIdCode(String recipientIdCode) {
     this.recipientIdCode = recipientIdCode;
