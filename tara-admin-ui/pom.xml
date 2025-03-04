@@ -15,11 +15,11 @@
   <parent>
     <artifactId>tara-admin-parent</artifactId>
     <groupId>ee.ria.tara-admin</groupId>
-    <version>1.10.1</version>
+    <version>1.10.2</version>
   </parent>
 
   <artifactId>tara-admin-ui</artifactId>
-  <version>1.10.1</version>
+  <version>1.10.2</version>
 
   <build>
     <plugins>

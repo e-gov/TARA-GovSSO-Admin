@@ -5,13 +5,13 @@
     <parent>
         <artifactId>tara-admin-parent</artifactId>
         <groupId>ee.ria.tara-admin</groupId>
-        <version>1.10.1</version>
+        <version>1.10.2</version>
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>tara-admin-api-schema</artifactId>
-    <version>1.10.1</version>
+    <version>1.10.2</version>
 
     <properties>
         <!-- If you change this version or src/main/resources/swagger.yaml file content, then delete server-stubs folder and run `mvn clean install -P regenerate-swagger` -->
