@@ -16,8 +16,7 @@
     <properties>
         <!-- If you change this version or src/main/resources/swagger.yaml file content, then delete server-stubs folder and run `mvn clean install -P regenerate-swagger` -->
         <openapi-generator-maven-plugin.version>7.11.0</openapi-generator-maven-plugin.version>
-        <!-- TODO update to newer version when updating Spring boot to 3.4+ https://springdoc.org/#what-is-the-compatibility-matrix-of-springdoc-openapi-with-spring-boot -->
-        <springdoc-openapi-ui.version>2.6.0</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>2.8.5</springdoc-openapi-ui.version>
     </properties>
 
     <build>
