@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * ClientMidSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class ClientMidSettings {
 
   private @Nullable String relyingPartyUUID;

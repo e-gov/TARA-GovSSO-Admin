@@ -24,7 +24,7 @@ import jakarta.annotation.Generated;
  * EmailAlert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class EmailAlert {
 
   private @Nullable Boolean enabled;

@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * NameTranslations
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.11.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
 public class NameTranslations {
 
   private @Nullable String et;
