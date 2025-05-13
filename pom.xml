@@ -24,7 +24,7 @@
 
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
-        <wiremock.version>3.12.1</wiremock.version>
+        <wiremock.version>3.13.0</wiremock.version>
     </properties>
 
     <parent>
