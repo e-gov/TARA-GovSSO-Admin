@@ -26,7 +26,7 @@ import java.util.Map;
 import java.util.Optional;
 import jakarta.annotation.Generated;
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
 @Controller
 @RequestMapping("${openapi.tARAGovSSOAdmin.base-path:/edurdo/admin/1.0.0}")
 public class SsoModeApiController implements SsoModeApi {

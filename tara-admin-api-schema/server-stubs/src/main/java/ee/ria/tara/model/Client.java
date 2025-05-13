@@ -31,7 +31,7 @@ import jakarta.annotation.Generated;
  * Client
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
 public class Client {
 
   private @Nullable String id;
@@ -71,7 +71,7 @@ public class Client {
     
     CLIENT_SECRET_POST("client_secret_post");
 
-    private String value;
+    private final String value;
 
     TokenEndpointAuthMethodEnum(String value) {
       this.value = value;

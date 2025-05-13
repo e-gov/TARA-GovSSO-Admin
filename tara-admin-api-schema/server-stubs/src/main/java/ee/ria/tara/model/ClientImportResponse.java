@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  * ClientImportResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
 public class ClientImportResponse {
 
   private @Nullable String status;

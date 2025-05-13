@@ -19,7 +19,7 @@ import jakarta.annotation.Generated;
  * InstitutionType
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.12.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
 public class InstitutionType {
 
   /**
@@ -30,7 +30,7 @@ public class InstitutionType {
     
     PRIVATE("private");
 
-    private String value;
+    private final String value;
 
     TypeEnum(String value) {
       this.value = value;
