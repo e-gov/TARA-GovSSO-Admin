@@ -7,6 +7,7 @@ export type Client = {
   redirect_uris: string[],
   token_request_allowed_ip_addresses: string[],
   token_endpoint_auth_method: string,
+  minimum_acr_value: string | undefined,
   post_logout_redirect_uris: string[],
   scope: string[],
   is_user_consent_required: boolean,

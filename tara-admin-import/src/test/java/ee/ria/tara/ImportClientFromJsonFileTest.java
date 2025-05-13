@@ -107,7 +107,8 @@ public class ImportClientFromJsonFileTest {
                         "      },\n" +
                         "      \"logo\" : null\n" +
                         "    },\n" +
-                        "  \"paasuke_parameters\" : null" +
+                        "  \"paasuke_parameters\" : null," +
+                        "  \"minimum_acr_value\" : null" +
                         "  },\n" +
                         "  \"created_at\" : null,\n" +
                         "  \"updated_at\" : null\n" +

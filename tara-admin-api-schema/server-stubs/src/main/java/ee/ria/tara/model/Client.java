@@ -100,6 +100,45 @@ public class Client {
 
   private TokenEndpointAuthMethodEnum tokenEndpointAuthMethod;
 
+  /**
+   * Gets or Sets minimumAcrValue
+   */
+  public enum MinimumAcrValueEnum {
+    LOW("low"),
+    
+    SUBSTANTIAL("substantial"),
+    
+    HIGH("high");
+
+    private String value;
+
+    MinimumAcrValueEnum(String value) {
+      this.value = value;
+    }
+
+    @JsonValue
+    public String getValue() {
+      return value;
+    }
+
+    @Override
+    public String toString() {
+      return String.valueOf(value);
+    }
+
+    @JsonCreator
+    public static MinimumAcrValueEnum fromValue(String value) {
+      for (MinimumAcrValueEnum b : MinimumAcrValueEnum.values()) {
+        if (b.value.equals(value)) {
+          return b;
+        }
+      }
+      throw new IllegalArgumentException("Unexpected value '" + value + "'");
+    }
+  }
+
+  private @Nullable MinimumAcrValueEnum minimumAcrValue;
+
   private @Nullable String secret;
 
   private @Nullable String eidasRequesterId;
@@ -454,6 +493,26 @@ public class Client {
 
   public void setTokenEndpointAuthMethod(TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
     this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
+  }
+
+  public Client minimumAcrValue(MinimumAcrValueEnum minimumAcrValue) {
+    this.minimumAcrValue = minimumAcrValue;
+    return this;
+  }
+
+  /**
+   * Get minimumAcrValue
+   * @return minimumAcrValue
+   */
+  
+  @Schema(name = "minimum_acr_value", example = "high", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("minimum_acr_value")
+  public MinimumAcrValueEnum getMinimumAcrValue() {
+    return minimumAcrValue;
+  }
+
+  public void setMinimumAcrValue(MinimumAcrValueEnum minimumAcrValue) {
+    this.minimumAcrValue = minimumAcrValue;
   }
 
   public Client secret(String secret) {
@@ -850,6 +909,7 @@ public class Client {
         Objects.equals(this.scope, client.scope) &&
         Objects.equals(this.tokenRequestAllowedIpAddresses, client.tokenRequestAllowedIpAddresses) &&
         Objects.equals(this.tokenEndpointAuthMethod, client.tokenEndpointAuthMethod) &&
+        Objects.equals(this.minimumAcrValue, client.minimumAcrValue) &&
         Objects.equals(this.secret, client.secret) &&
         Objects.equals(this.eidasRequesterId, client.eidasRequesterId) &&
         Objects.equals(this.description, client.description) &&
@@ -871,7 +931,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -891,6 +951,7 @@ public class Client {
     sb.append("    scope: ").append(toIndentedString(scope)).append("\n");
     sb.append("    tokenRequestAllowedIpAddresses: ").append(toIndentedString(tokenRequestAllowedIpAddresses)).append("\n");
     sb.append("    tokenEndpointAuthMethod: ").append(toIndentedString(tokenEndpointAuthMethod)).append("\n");
+    sb.append("    minimumAcrValue: ").append(toIndentedString(minimumAcrValue)).append("\n");
     sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
     sb.append("    eidasRequesterId: ").append(toIndentedString(eidasRequesterId)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");

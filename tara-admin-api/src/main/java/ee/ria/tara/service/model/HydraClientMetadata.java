@@ -1,6 +1,7 @@
 package ee.ria.tara.service.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ee.ria.tara.model.Client;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -29,5 +30,8 @@ public class HydraClientMetadata   {
   @JsonProperty("paasuke_parameters")
   @NotNull
   private String paasukeParameters;
+
+  @JsonProperty("minimum_acr_value")
+  private Client.MinimumAcrValueEnum minimumAcrValue;
 }
 

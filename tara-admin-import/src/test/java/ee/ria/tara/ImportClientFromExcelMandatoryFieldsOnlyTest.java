@@ -91,7 +91,8 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                                 "\"smartid_settings\":null," +
                                 "\"logo\" : null\n" +
                             "}," +
-                        "   \"paasuke_parameters\" : null" +
+                        "   \"paasuke_parameters\" : null," +
+                        "   \"minimum_acr_value\" : null" +
                         "}," +
                         "\"created_at\":null," +
                         "\"updated_at\":null}"))

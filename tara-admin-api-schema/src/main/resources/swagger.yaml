@@ -707,6 +707,13 @@ components:
             - client_secret_basic
             - client_secret_post
           example: client_secret_basic
+        minimum_acr_value:
+          type: string
+          enum:
+            - low
+            - substantial
+            - high
+          example: high
         secret:
           type: string
         eidas_requester_id:

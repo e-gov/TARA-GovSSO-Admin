@@ -302,6 +302,28 @@
       </form>
       <form>
         <div class="form-row">
+          <label class="col-sm-4 col-form-label">
+            Minimaalne autentimistase
+            <mat-icon inline class="material-icons ml-3 font-size-20"
+                      matTooltip="TODO">
+              help_outline
+            </mat-icon>
+          </label>
+          <div class="col-sm-8" *ngIf="!isInfo()">
+            <mat-form-field class="w-75" panelClass="selection-panel">
+              <mat-label>Minimaalne autentimistase</mat-label>
+              <mat-select [disabled]="isInfo()" [(ngModel)]="_minimum_acr_value" [value]="newData.minimum_acr_value" required>
+                <mat-option value="undefinedAcr">määramata (päringuparameetrist juhitav)</mat-option>
+                <mat-option value="low">low</mat-option>
+                <mat-option value="substantial">substantial</mat-option>
+                <mat-option value="high">high</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
+      <form>
+        <div class="form-row">
           <label class="col-sm-4 col-form-label">Kasutajalt küsitakse isikuandmete väljastamiseks nõusolekut
             <mat-icon inline class="material-icons ml-3 font-size-20"
                       matTooltip="Määrab ära, kas autentimisprotsessi lõpus kuvatakse kasutajale isikuandmete väljastamiseks nõusoleku küsimise lehekülg.">

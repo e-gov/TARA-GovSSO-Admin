@@ -122,6 +122,7 @@ public class ClientHelper {
         client.setMidSettings(getMobileIdSettings(hydraClient));
         client.setCreatedAt(OffsetDateTime.parse(hydraClient.getCreatedAt()));
         client.setUpdatedAt(OffsetDateTime.parse(hydraClient.getUpdatedAt()));
+        client.setMinimumAcrValue(hydraClient.getMetadata().getMinimumAcrValue());
         if (hydraClient.getAccessTokenStrategy() != null && hydraClient.getAccessTokenStrategy().equals(ACCESS_TOKEN_STRATEGY_JWT)) {
             client.setAccessTokenJwtEnabled(true);
         }
@@ -153,6 +154,7 @@ public class ClientHelper {
         metadata.setOidcClient(oidcClient);
         metadata.setSkipUserConsentClientIds(client.getSkipUserConsentClientIds() != null ? getDistinctSkipUserConsentClientIds(client) : null);
         metadata.setPaasukeParameters(client.getPaasukeParameters());
+        metadata.setMinimumAcrValue(client.getMinimumAcrValue());
 
         if (ssoMode) {
             hydraClient.setGrantTypes(List.of("authorization_code", "refresh_token"));

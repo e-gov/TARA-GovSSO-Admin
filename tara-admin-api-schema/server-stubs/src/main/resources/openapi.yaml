@@ -797,6 +797,7 @@ components:
         - https://jwt-service-uri.test.ee
         - https://jwt-service-uri.test.ee
         client_url: https://client.example.com/
+        minimum_acr_value: high
         skip_user_consent_client_ids:
         - openIdDemo
         - openIdDemo
@@ -925,6 +926,13 @@ components:
           - client_secret_basic
           - client_secret_post
           example: client_secret_basic
+          type: string
+        minimum_acr_value:
+          enum:
+          - low
+          - substantial
+          - high
+          example: high
           type: string
         secret:
           type: string

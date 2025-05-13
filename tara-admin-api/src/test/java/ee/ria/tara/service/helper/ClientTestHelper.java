@@ -78,6 +78,7 @@ public class ClientTestHelper {
         client.setAccessTokenAudienceUris(null);
         client.setBackchannelLogoutUri(null);
         client.setPostLogoutRedirectUris(null);
+        client.setMinimumAcrValue(Client.MinimumAcrValueEnum.HIGH);
         ClientSecretExportSettings clientSecretExportSettings = new ClientSecretExportSettings();
         clientSecretExportSettings.setRecipientIdCode("10101010005");
         client.setClientSecretExportSettings(clientSecretExportSettings);

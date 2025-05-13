@@ -43,6 +43,7 @@ export class ClientDialogComponent implements OnInit {
   _backchannel_logout_uri: string;
   _paasuke_parameters: string;
   _token_endpoint_auth_method: string;
+  _minimum_acr_value: string;
   _access_token_lifespan: string;
 
   clientLogoDataUri?: SafeUrl;
@@ -72,6 +73,7 @@ export class ClientDialogComponent implements OnInit {
     this._backchannel_logout_uri = this.newData.backchannel_logout_uri;
     this._paasuke_parameters = this.newData.paasuke_parameters;
     this._token_endpoint_auth_method = this.newData.token_endpoint_auth_method;
+    this._minimum_acr_value = this.newData.minimum_acr_value;
     this._access_token_lifespan = this.newData.access_token_lifespan;
 
     if (this._client_logo !== undefined) {
@@ -317,6 +319,12 @@ export class ClientDialogComponent implements OnInit {
     this.newData.token_endpoint_auth_method = this._token_endpoint_auth_method!;
     this.newData.access_token_lifespan = this._access_token_lifespan!;
 
+    if (this._minimum_acr_value !== "undefinedAcr") {
+      this.newData.minimum_acr_value = this._minimum_acr_value;
+    } else {
+      this.newData.minimum_acr_value = undefined;
+    }
+
     if (this.sidSettingsAvailable() && this._use_specific_smartid_configuration) {
       this.newData.smartid_settings = this._smartid_settings!
     } else {
@@ -487,6 +495,10 @@ export class ClientDialogComponent implements OnInit {
 
     if (newClient.access_token_audience_uris == undefined) {
       newClient.access_token_audience_uris = [];
+    }
+
+    if (newClient.minimum_acr_value == undefined) {
+      newClient.minimum_acr_value = "undefinedAcr";
     }
 
     return newClient;
