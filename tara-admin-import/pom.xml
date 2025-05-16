@@ -5,7 +5,7 @@
     <parent>
         <artifactId>tara-admin-parent</artifactId>
         <groupId>ee.ria.tara-admin</groupId>
-        <version>1.10.3</version>
+        <version>1.10.4</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -14,7 +14,7 @@
     <packaging>jar</packaging>
 
     <properties>
-        <tara-admin-api.version>1.10.3</tara-admin-api.version>
+        <tara-admin-api.version>1.10.4</tara-admin-api.version>
     </properties>
 
     <dependencies><!-- Ordered by scope, groupId, artifactId. -->
