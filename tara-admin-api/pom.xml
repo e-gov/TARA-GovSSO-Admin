@@ -16,7 +16,8 @@
     <properties>
         <!-- Property values here can be overridden from command line, but plugin <configuration> values below can't be
         (see https://issues.apache.org/jira/browse/MNG-4979 ). -->
-        <spring-boot.build-image.imageName>tara-admin:latest</spring-boot.build-image.imageName><!-- Use "latest" tag instead of version tag. -->
+        <imageName>tara-admin:latest</imageName>
+        <githubMirror>https://github.com</githubMirror>
 
         <bouncycastle.version>1.81</bouncycastle.version>
         <cdoc4j.version>1.5</cdoc4j.version>
@@ -243,6 +244,20 @@
                     </execution>
                 </executions>
                 <configuration>
+                    <image>
+                        <name>${imageName}</name>
+                        <env>
+                            <!-- Avoid excessive downloads in build environments with restricted internet access -->
+                            <BP_SPRING_CLOUD_BINDINGS_DISABLED>true</BP_SPRING_CLOUD_BINDINGS_DISABLED>
+                            <!-- Enable overriding GitHub mirror -->
+                            <BP_DEPENDENCY_MIRROR_GITHUB_COM>${githubMirror}</BP_DEPENDENCY_MIRROR_GITHUB_COM>
+                            <!-- Some mirrors might respond too slowly to handle the default timeout (5s) -->
+                            <BP_RESPONSE_HEADER_TIMEOUT>60</BP_RESPONSE_HEADER_TIMEOUT>
+                        </env>
+                    </image>
+                    <layers>
+                        <configuration>${project.basedir}/layers.xml</configuration>
+                    </layers>
                     <environmentVariables>
                         <ELASTIC_APM_ENABLED>false</ELASTIC_APM_ENABLED>
                     </environmentVariables>

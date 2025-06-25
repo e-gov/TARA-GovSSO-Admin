@@ -1,0 +1,32 @@
+<!-- This file is based on the example at
+     https://docs.spring.io/spring-boot/3.4/maven-plugin/packaging.html#packaging.layers.configuration ,
+     but the other modules of this application have been moved from dependencies layer to application layer. -->
+<layers xmlns="http://www.springframework.org/schema/boot/layers"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.springframework.org/schema/boot/layers
+                          https://www.springframework.org/schema/boot/layers/layers-3.4.xsd">
+    <application>
+        <into layer="spring-boot-loader">
+            <include>org/springframework/boot/loader/**</include>
+        </into>
+        <into layer="application" />
+    </application>
+    <dependencies>
+        <into layer="application">
+            <include>ee.ria.tara-admin:*</include>
+        </into>
+        <into layer="application">
+            <includeModuleDependencies />
+        </into>
+        <into layer="snapshot-dependencies">
+            <include>*:*:*SNAPSHOT</include>
+        </into>
+        <into layer="dependencies" />
+    </dependencies>
+    <layerOrder>
+        <layer>dependencies</layer>
+        <layer>spring-boot-loader</layer>
+        <layer>snapshot-dependencies</layer>
+        <layer>application</layer>
+    </layerOrder>
+</layers>
