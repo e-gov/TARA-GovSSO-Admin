@@ -1,24 +1,6 @@
-# Import/export command line utility
+# Clients' import command line utility
 
-A command line application for:
-   * exporting clients from TARA-Server (CAS) database to Excel format file.
-   * importing clients from file (Excel or json) to tara-admin database and hydra.
-
-## Export clients from CAS to an Excel file
-
-Execute the following command:
-````
-java -Dspring.profiles.active=exportFromCas \         
-        -Dcas-export.db-url=jdbc:postgresql://cas-service-db:5432/cas \
-        -Dcas-export.user=cas \
-        -Dcas-export.password=cas \        
-        -jar tara-admin-import/target/client-utils.jar
-````
-
-An Excel file with the name 'clients.xlsx' is written to the current directory when the export is successful.
-
-
-## Importing from a file
+A command line application for importing clients from file (Excel or json) to tara-admin database and hydra.
 
 Note that if the import file contains a client with a client_id that already exists, it will be removed and recreated.
 
@@ -40,8 +22,7 @@ Clients can be imported from:
 Use the following command to import from a file:
 
 ````
-java -Dspring.profiles.active=importFromFile \ 
-    -Dfile-import.file-name=clients.xslx \
+java -Dfile-import.file-name=clients.xslx \
     -Dtara-oidc.url=https://oidc-service-backend:4445 \
     -Dauth.tls-truststore-path=/etc/tara/secrets/tls/truststore.p12 \
     -Dauth.tls-truststore-password=changeit \ 

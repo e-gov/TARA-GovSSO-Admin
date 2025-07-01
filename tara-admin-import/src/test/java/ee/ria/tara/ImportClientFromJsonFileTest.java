@@ -29,7 +29,6 @@ import static org.springframework.boot.test.context.SpringBootTest.WebEnvironmen
 @ContextConfiguration(initializers = {ImportClientFromJsonFileTest.MockOidcServiceInitializer.class})
 @TestPropertySource(
         properties = {
-                "spring.profiles.active=importFromFile",
                 "file-import.file-name=src/test/resources/import_files/mock-client.json",
                 "tara-oidc.url=http://localhost:3779",
                 "auth.tls-truststore-path=file:../tara-admin-api/src/main/resources/tls-truststore.p12",

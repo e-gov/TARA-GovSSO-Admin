@@ -7,7 +7,7 @@ TARA/GovSSO admin project's main goal is to provide a web application that allow
 * manage OIDC client registrations
 * manage alerts that are to be displayed on the TARA/GovSSO login page
 
-An additional subproject also provides tools to export/import TARA clients. 
+An additional subproject also provides a tool to import TARA clients. 
 
 
 ## Requirements:
@@ -26,7 +26,7 @@ Execute the following command in the projects root directory to build the TARA/G
 
 This will produce the war package for the webapp at `tara-admin-api/target/*.war` which can then be deployed to a standalone Tomcat web server. See further details [here](tara-admin-api/README.md)
 
-In addition, the executable jar file can be found at `tara-admin-import/target/client-utils.jar` which can be used to export/import OIDC clients from the command line. See further details [here](tara-admin-import/README.md)
+In addition, the executable jar file can be found at `tara-admin-import/target/client-utils.jar` which can be used to import OIDC clients from the command line. See further details [here](tara-admin-import/README.md)
 
 ## Building and Running in Docker
 
