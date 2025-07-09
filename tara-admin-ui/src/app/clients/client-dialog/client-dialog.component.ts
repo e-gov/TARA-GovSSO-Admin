@@ -21,6 +21,8 @@ import {DateHelper} from "../../helper/datehelper";
 import {AuthService} from "../../auth/auth.service";
 import {EditValueDialogComponent} from "./edit-value-dialog/edit-value-dialog.component";
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
+import {NgForm} from '@angular/forms';
+import {MessageService} from '../../main/message/message.service';
 
 
 @Component({
@@ -58,6 +60,7 @@ export class ClientDialogComponent implements OnInit {
               public mainDialog: MatDialogRef<ClientDialogComponent>,
               public dialog: MatDialog,
               public authService: AuthService,
+              public messageService: MessageService,
               private domSanitizer: DomSanitizer) {
     this.newData = this.validateAndGetNewClient(this.data.obj)
 
@@ -308,7 +311,12 @@ export class ClientDialogComponent implements OnInit {
    this.newData.client_contacts.splice(this.newData.client_contacts.indexOf(contact), 1)
   }
 
-  save() {
+  save(form: NgForm) {
+    const minimumAcrErrors = form.form.controls.minimum_acr_value.errors;
+    if (minimumAcrErrors != null && minimumAcrErrors.required === true) {
+      this.messageService.showMessage('Minimaalne autentimistase on valimata', 'ERROR', environment.errorMessageDurationInMills);
+      return;
+    }
     this.newData.client_name = this._client_name!;
     this.newData.client_short_name = this._client_short_name!;
     this.newData.description = this._description!;
@@ -319,11 +327,7 @@ export class ClientDialogComponent implements OnInit {
     this.newData.token_endpoint_auth_method = this._token_endpoint_auth_method!;
     this.newData.access_token_lifespan = this._access_token_lifespan!;
 
-    if (this._minimum_acr_value !== "undefinedAcr") {
-      this.newData.minimum_acr_value = this._minimum_acr_value;
-    } else {
-      this.newData.minimum_acr_value = undefined;
-    }
+    this.newData.minimum_acr_value = this._minimum_acr_value === 'undefinedAcr' ? undefined : this._minimum_acr_value;
 
     if (this.sidSettingsAvailable() && this._use_specific_smartid_configuration) {
       this.newData.smartid_settings = this._smartid_settings!
@@ -497,7 +501,7 @@ export class ClientDialogComponent implements OnInit {
       newClient.access_token_audience_uris = [];
     }
 
-    if (newClient.minimum_acr_value == undefined) {
+    if (newClient.minimum_acr_value == undefined && this.data.dialogType !== 'ADD') {
       newClient.minimum_acr_value = "undefinedAcr";
     }
 

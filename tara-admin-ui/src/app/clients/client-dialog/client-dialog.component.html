@@ -1,4 +1,4 @@
-<form [noValidate]="false" #clientForm (ngSubmit)="save()">
+<form #form="ngForm" (ngSubmit)="save(form)">
   <div mat-dialog-actions class="float-right">
     <button *ngIf="!isInfo()" mat-button class="submit-btn" type="submit">
       {{data.dialogType === 'UPDATE' ? "Muuda" : "Lisa"}}
@@ -31,7 +31,7 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+        <div class="col-sm-8 d-flex" *ngIf="isInfo()">
           <label>{{newData.institution_metainfo.registry_code}}</label>
         </div>
       </div>
@@ -49,7 +49,7 @@
           <input name="client_id" type="text" disabled class="form-control w-75"
                  [(ngModel)]="_client_id" required/>
         </div>
-        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+        <div class="col-sm-8 d-flex" *ngIf="isInfo()">
           <label>{{newData.client_id}}</label>
         </div>
       </div>
@@ -65,7 +65,7 @@
           <button class="btn-link float-right" type="button" (click)="addTranslation(newData.client_name)">Lisa tõlge
           </button>
         </div>
-        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+        <div class="col-sm-8 d-flex" *ngIf="isInfo()">
           <label>{{newData.client_name.et}}</label>
         </div>
       </div>
@@ -101,7 +101,7 @@
             tõlge
           </button>
         </div>
-        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+        <div class="col-sm-8 d-flex" *ngIf="isInfo()">
           <label>{{newData.client_short_name.et}}</label>
         </div>
       </div>
@@ -283,7 +283,6 @@
                  [(ngModel)]="this.newData.client_secret_export_settings.recipient_email" required/>
         </div>
       </div>
-      <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">
             Lubatud scope parameetri väärtused
@@ -299,8 +298,6 @@
             </div>
           </div>
         </div>
-      </form>
-      <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">
             Minimaalne autentimistase
@@ -309,10 +306,10 @@
               help_outline
             </mat-icon>
           </label>
-          <div class="col-sm-8" *ngIf="!isInfo()">
+          <div class="col-sm-8">
             <mat-form-field class="w-75" panelClass="selection-panel">
               <mat-label>Minimaalne autentimistase</mat-label>
-              <mat-select [disabled]="isInfo()" [(ngModel)]="_minimum_acr_value" [value]="newData.minimum_acr_value" required>
+              <mat-select name="minimum_acr_value" [disabled]="isInfo()" [(ngModel)]="_minimum_acr_value" [value]="newData.minimum_acr_value" required>
                 <mat-option value="undefinedAcr">määramata (päringuparameetrist juhitav)</mat-option>
                 <mat-option value="low">low</mat-option>
                 <mat-option value="substantial">substantial</mat-option>
@@ -321,8 +318,6 @@
             </mat-form-field>
           </div>
         </div>
-      </form>
-      <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">Kasutajalt küsitakse isikuandmete väljastamiseks nõusolekut
             <mat-icon inline class="material-icons ml-3 font-size-20"
@@ -337,7 +332,6 @@
             </div>
           </div>
         </div>
-      </form>
 
       <div class="form-group row" *ngIf="authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Klientrakenduste ID-d, mille seansis olemasolu korral nõusolekut mitte küsida
@@ -441,7 +435,7 @@
         <div class="col-sm-8" *ngIf="!isInfo()">
           <input type="text" class="form-control w-75" name="eidas_requester_id" [(ngModel)]="newData.eidas_requester_id">
         </div>
-        <div class="col-sm-8 d-flex" *ngIf="['INFO'].includes(data.dialogType)">
+        <div class="col-sm-8 d-flex" *ngIf="isInfo()">
           <label>{{newData.eidas_requester_id}}</label>
         </div>
       </div>
@@ -460,7 +454,6 @@
     </div>
     <div *ngIf="sidSettingsAvailable()" class="mat-dialog-container-content">
       <h1><span>Smart-ID seadistus</span></h1>
-      <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">Kasuta kliendispetsiifilist seadistust
             <mat-icon inline class="material-icons ml-3 font-size-20"
@@ -477,7 +470,6 @@
             </div>
           </div>
         </div>
-      </form>
 
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse ID
@@ -510,7 +502,6 @@
           </label>
         </div>
       </div>
-      <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">Teosta kontrollkoodi lisakontroll enne PIN verifitseerimist
             <mat-icon inline class="material-icons ml-3 font-size-20"
@@ -527,12 +518,10 @@
             </div>
           </div>
         </div>
-      </form>
     </div>
 
     <div *ngIf="midSettingsAvailable()" class="mat-dialog-container-content">
       <h1><span>Mobiil-ID seadistus</span></h1>
-      <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">Kasuta kliendispetsiifilist seadistust
             <mat-icon inline class="material-icons ml-3 font-size-20"
@@ -549,7 +538,6 @@
             </div>
           </div>
         </div>
-      </form>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse ID
           <mat-icon inline class="material-icons ml-3 font-size-20"
@@ -603,7 +591,6 @@
     <div class="mat-dialog-container-content" *ngIf="authService.isSsoMode">
       <h1><span class="font-weight-bold">Pääsutõend</span></h1>
 
-      <form>
         <div class="form-row">
           <label class="col-sm-4 col-form-label">JWT väljastamine
             <mat-icon inline class="material-icons ml-3 font-size-20"
@@ -618,7 +605,6 @@
             </div>
           </div>
         </div>
-      </form>
 
       <div class="form-group row" *ngIf="newData.access_token_jwt_enabled">
         <label class="col-sm-4 col-form-label">Rakenduste URL-id
