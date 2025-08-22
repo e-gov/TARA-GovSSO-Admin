@@ -18,19 +18,29 @@ Java (JDK 17+) runtime and Node.js version 14 is required to build and run the w
 
 ## Building the project
 
-Execute the following command in the projects root directory to build the TARA/GovSSO admin webapp and additional command line tools:
+Execute the following commands, starting in the project's root directory, to build the TARA/GovSSO admin webapp and additional command line tools:
 
 ```shell
+cd tara-admin-ui
+npm install
+npm run build
+cd ..
 ./mvnw clean package
 ```
 
-This will produce the war package for the webapp at `tara-admin-api/target/*.war` which can then be deployed to a standalone Tomcat web server. See further details [here](tara-admin-api/README.md)
+This will produce an executable JAR file for the webapp with embedded Tomcat at `tara-admin-api/target/*.jar` which can then be run as a web server. See further details [here](tara-admin-api/README.md)
 
-In addition, the executable jar file can be found at `tara-admin-import/target/client-utils.jar` which can be used to import OIDC clients from the command line. See further details [here](tara-admin-import/README.md)
+In addition, another executable JAR file can be found at `tara-admin-import/target/client-utils.jar` which can be used to import OIDC clients from the command line. See further details [here](tara-admin-import/README.md)
 
 ## Building and Running in Docker
 
+Execute the following commands, starting in the project's root directory, to build and run Docker image for TARA/GovSSO admin webapp:
+
 ```shell
+cd tara-admin-ui
+npm install
+npm run build
+cd ..
 ./mvnw clean install
 ./mvnw --projects tara-admin-api -DskipTests -Djacoco.skip=true spring-boot:build-image
 docker run --rm -p 17080:8080 tara-admin:latest

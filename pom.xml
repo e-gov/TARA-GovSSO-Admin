@@ -16,7 +16,6 @@
     </licenses>
 
     <modules>
-        <module>tara-admin-ui</module>
         <module>tara-admin-api</module>
         <module>tara-admin-api-schema</module>
         <module>tara-admin-import</module>

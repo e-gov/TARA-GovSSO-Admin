@@ -29,7 +29,6 @@
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version>
         <poi.version>5.4.1</poi.version>
         <tara-admin-api-schema.version>1.11.0</tara-admin-api-schema.version>
-        <tara-admin-ui.version>1.11.0</tara-admin-ui.version>
 
         <!-- TODO H2 2.x requires a more specific constraint definition at https://github.com/e-gov/TARA-GovSSO-Admin/blob/v1.4.3/tara-admin-api/src/main/resources/db/changelog/TARA2-132-init.yaml#L31
               but existing Liquibase changesets should not be modified (error "Validation Failed: 1 change sets check
@@ -61,11 +60,6 @@
             <groupId>ee.ria.tara-admin</groupId>
             <artifactId>tara-admin-api-schema</artifactId>
             <version>${tara-admin-api-schema.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>ee.ria.tara-admin</groupId>
-            <artifactId>tara-admin-ui</artifactId>
-            <version>${tara-admin-ui.version}</version>
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>
@@ -279,6 +273,53 @@
                         </goals>
                         <configuration>
                             <classifier>classes</classifier>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Fail fast if the frontend build output is missing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-enforcer-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>check-frontend-build</id>
+                        <phase>validate</phase>
+                        <goals>
+                            <goal>enforce</goal>
+                        </goals>
+                        <configuration>
+                            <rules>
+                                <requireFilesExist>
+                                    <message>Directory "tara-admin-ui/dist/" not found. Run "npm install" and "npm run build" in tara-admin-ui.</message>
+                                    <files>
+                                        <file>${project.parent.basedir}/tara-admin-ui/dist/tara-admin-ui/index.html</file>
+                                    </files>
+                                </requireFilesExist>
+                            </rules>
+                            <fail>true</fail>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- Copy the built frontend files into target/classes/static -->
+            <plugin>
+                <artifactId>maven-resources-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>copy-frontend</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>copy-resources</goal>
+                        </goals>
+                        <configuration>
+                            <outputDirectory>${project.build.outputDirectory}/static</outputDirectory>
+                            <resources>
+                                <resource>
+                                    <directory>${project.parent.basedir}/tara-admin-ui/dist/tara-admin-ui</directory>
+                                    <filtering>false</filtering>
+                                </resource>
+                            </resources>
                         </configuration>
                     </execution>
                 </executions>
