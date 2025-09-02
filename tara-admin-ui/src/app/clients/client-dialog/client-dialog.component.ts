@@ -55,7 +55,7 @@ export class ClientDialogComponent implements OnInit {
                 dialogType: "ADD" | "UPDATE" | "INFO"
                 obj: Client,
                 institutions: Observable<InstitutionMetainfo[]>,
-                onTypeAction: (type: any, client: Client) => Promise<any>;
+                onAction: (client: Client) => Promise<any>;
               },
               public mainDialog: MatDialogRef<ClientDialogComponent>,
               public dialog: MatDialog,
@@ -366,7 +366,7 @@ export class ClientDialogComponent implements OnInit {
        return value;
     });
 
-    this.data.onTypeAction(this.data.dialogType, requestBody).then(() => {
+    this.data.onAction(requestBody).then(() => {
       this.mainDialog.close();
     });
   }
@@ -447,7 +447,7 @@ export class ClientDialogComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result === true) {
-        this.data.onTypeAction(this.data.dialogType, this.data.obj).then(() => {
+        this.data.onAction(this.data.obj).then(() => {
           this.mainDialog.close();
         });
       }

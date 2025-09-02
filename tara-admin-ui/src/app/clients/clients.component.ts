@@ -68,7 +68,7 @@ export class ClientsComponent implements OnInit {
     }
   }
 
-  openClientDialog(data: Client, dialogType: "ADD" | "UPDATE" | "INFO") {
+  openClientDialog(data: Client, dialogType: 'ADD' | 'UPDATE' | 'INFO') {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;
@@ -76,7 +76,7 @@ export class ClientsComponent implements OnInit {
       obj: data,
       institutions: this.getInstitutionMetainfo(),
       dialogType: dialogType,
-      onTypeAction: (type: any, client: Client) => this.getTypeAction(type, client)
+      onAction: this.getTypeAction(dialogType)
     };
     dialogConfig.width = "100%";
     dialogConfig.height = "100%";
@@ -222,14 +222,17 @@ export class ClientsComponent implements OnInit {
       });
   }
 
-  getTypeAction(dialogType: "ADD" | "UPDATE" | "INFO", client: Client) {
-    if (dialogType === "ADD")
-      return this.addClient(client);
-
-    if (dialogType === "UPDATE")
-      return this.updateClient(client);
-
-    return this.deleteClient(client);
+  getTypeAction(dialogType: 'ADD' | 'UPDATE' | 'INFO'): (client: Client) => Promise<any> {
+    if (dialogType === 'ADD') {
+      return (client: Client) => this.addClient(client);
+    }
+    if (dialogType === 'UPDATE') {
+      return (client: Client) => this.updateClient(client);
+    }
+    if (dialogType === 'INFO') {
+      return (client: Client) => this.deleteClient(client);
+    }
+    throw new Error('Invalid dialog type ' + JSON.stringify(dialogType));
   }
 
   getDisplayableDateTime(dateTime: string) {

@@ -2,7 +2,6 @@ package ee.ria.tara.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
@@ -15,27 +14,25 @@ import ee.ria.tara.service.ClientsService;
 import ee.ria.tara.service.InstitutionsService;
 import ee.ria.tara.service.helper.ClientTestHelper;
 import ee.ria.tara.service.helper.InstitutionTestHelper;
+import jakarta.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.context.MessageSource;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
-import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
-import jakarta.servlet.http.HttpServletRequest;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
@@ -49,33 +46,33 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 
+/* TODO: This is some kind of a mix between a unit test and an integration test. If the aim is to unit test
+*   `InstitutionsController`, then we should call the methods directly and not use `MockMvc`. If the aim is to
+*   integration test the endpoints, then it doesn't make much sense to create a `MockMvc` with only the one controller
+*   and to mock the services directly called by it.
+*/
+@Slf4j
 @ExtendWith(MockitoExtension.class)
 public class InstitutionsControllerTest {
     private MockMvc mvc;
     private ObjectMapper objectMapper;
+    @SuppressWarnings("unused") // Initialized by `JacksonTester#initFields`
     private JacksonTester<Client> jsonClient;
+    @SuppressWarnings("unused") // Initialized by `JacksonTester#initFields`
     private JacksonTester<Institution> jsonInstitution;
     private Client client;
     private Institution institution;
     @Mock
     private MessageSource messageSource;
     @Mock
-    private ErrorHandler errorHandler;
-    @Mock
     private HttpServletRequest request;
     @Mock
     private ClientsService clientsService;
     @Mock
     private InstitutionsService institutionsService;
-    @Mock
-    private AdminConfigurationProvider adminConfigurationProvider;
-    @InjectMocks
-    private InstitutionsController controller;
 
     @BeforeEach
     public void setup() {
-        ReflectionTestUtils.setField(errorHandler, "messageSource", messageSource);
-
         objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
 
@@ -84,6 +81,12 @@ public class InstitutionsControllerTest {
 
         JacksonTester.initFields(this, objectMapper);
 
+        InstitutionsController controller = new InstitutionsController(
+                request,
+                institutionsService,
+                clientsService
+        );
+        ErrorHandler errorHandler = new ErrorHandler(messageSource);
         mvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(errorHandler)
                 .build();
@@ -93,7 +96,7 @@ public class InstitutionsControllerTest {
     public void testGetAllInstitutionClients() throws Exception {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
 
-        doReturn(List.of()).when(clientsService).getAllInstitutionsClients(registryCode);
+        doReturn(List.of()).when(clientsService).getClientsByInstitution(registryCode);
 
         MockHttpServletResponse response = mvc.perform(
                 get(String.format("/institutions/%s/clients", registryCode))
@@ -101,7 +104,7 @@ public class InstitutionsControllerTest {
                 .andReturn().getResponse();
 
         Assertions.assertEquals(200, response.getStatus());
-        verify(clientsService, times(1)).getAllInstitutionsClients(registryCode);
+        verify(clientsService, times(1)).getClientsByInstitution(registryCode);
     }
 
     @Test
@@ -148,8 +151,6 @@ public class InstitutionsControllerTest {
 
         MockHttpServletResponse response = mvc.perform(
                 delete(String.format("/institutions/%s/clients/%s", registryCode, clientId))
-                        .content(jsonClient.write(client).getJson())
-                        .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
@@ -161,8 +162,7 @@ public class InstitutionsControllerTest {
     public void testGetAllInstitutionClientsWhenFatalApiExceptionThrown() throws Exception {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
 
-        doCallRealMethod().when(errorHandler).handleFatalApiException(any());
-        doThrow(new FatalApiException("")).when(clientsService).getAllInstitutionsClients(registryCode);
+        doThrow(new FatalApiException("")).when(clientsService).getClientsByInstitution(registryCode);
 
         MockHttpServletResponse response = mvc.perform(
                 get(String.format("/institutions/%s/clients", registryCode))
@@ -176,8 +176,7 @@ public class InstitutionsControllerTest {
     public void testGetAllInstitutionClientsWhenRandomExceptionThrown() throws Exception {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
 
-        doCallRealMethod().when(errorHandler).handleException(any());
-        doThrow(new RuntimeException("")).when(clientsService).getAllInstitutionsClients(registryCode);
+        doThrow(new RuntimeException("")).when(clientsService).getClientsByInstitution(registryCode);
 
         MockHttpServletResponse response = mvc.perform(
                 get(String.format("/institutions/%s/clients", registryCode))
@@ -191,7 +190,6 @@ public class InstitutionsControllerTest {
     public void testAddClientWhenApiExceptionThrown() throws Exception {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
 
-        doCallRealMethod().when(errorHandler).handleException(any());
         doThrow(new ApiException("Server.error")).when(clientsService).addClientToInstitution(eq(registryCode), any(Client.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -208,7 +206,6 @@ public class InstitutionsControllerTest {
     public void testAddClientWhenRandomExceptionThrown() throws Exception {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
 
-        doCallRealMethod().when(errorHandler).handleException(any());
         doThrow(new RuntimeException("")).when(clientsService).addClientToInstitution(eq(registryCode), any(Client.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -226,7 +223,6 @@ public class InstitutionsControllerTest {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
         String clientId = client.getClientId();
 
-        doCallRealMethod().when(errorHandler).handleUserErrors(any());
         doThrow(new RecordDoesNotExistException("")).when(clientsService).updateClient(anyString(), anyString(), any(Client.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -244,7 +240,6 @@ public class InstitutionsControllerTest {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
         String clientId = client.getClientId();
 
-        doCallRealMethod().when(errorHandler).handleUserErrors(any());
         doThrow(new InvalidDataException("")).when(clientsService).updateClient(anyString(), anyString(), any(Client.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -262,7 +257,6 @@ public class InstitutionsControllerTest {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
         String clientId = client.getClientId();
 
-        doCallRealMethod().when(errorHandler).handleException(any());
         doThrow(new ApiException("")).when(clientsService).updateClient(anyString(), anyString(), any(Client.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -280,7 +274,6 @@ public class InstitutionsControllerTest {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
         String clientId = client.getClientId();
 
-        doCallRealMethod().when(errorHandler).handleException(any());
         doThrow(new ApiException("")).when(clientsService).deleteClient(registryCode, clientId);
 
         MockHttpServletResponse response = mvc.perform(
@@ -298,7 +291,6 @@ public class InstitutionsControllerTest {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
         String clientId = client.getClientId();
 
-        doCallRealMethod().when(errorHandler).handleUserErrors(any());
         doThrow(new RecordDoesNotExistException("")).when(clientsService).deleteClient(registryCode, clientId);
 
         MockHttpServletResponse response = mvc.perform(
@@ -374,7 +366,6 @@ public class InstitutionsControllerTest {
 
     @Test
     public void testAddInstitutionWhenApiExceptionThrow() throws Exception {
-        doCallRealMethod().when(errorHandler).handleException(any());
         doThrow(new ApiException("")).when(institutionsService).addInstitution(any(Institution.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -389,7 +380,6 @@ public class InstitutionsControllerTest {
 
     @Test
     public void testAddInstitutionWhenInvalidDataExceptionThrow() throws Exception {
-        doCallRealMethod().when(errorHandler).handleUserErrors(any());
         doThrow(new InvalidDataException("")).when(institutionsService).addInstitution(any(Institution.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -419,7 +409,6 @@ public class InstitutionsControllerTest {
 
     @Test
     public void testUpdateInstitutionWhenApiExceptionThrow() throws Exception {
-        doCallRealMethod().when(errorHandler).handleException(any());
         doThrow(new ApiException("")).when(institutionsService).updateInstitution(any(Institution.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -434,7 +423,6 @@ public class InstitutionsControllerTest {
 
     @Test
     public void testUpdateInstitutionWhenInvalidDataExceptionThrow() throws Exception {
-        doCallRealMethod().when(errorHandler).handleUserErrors(any());
         doThrow(new InvalidDataException("")).when(institutionsService).updateInstitution(any(Institution.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -449,7 +437,6 @@ public class InstitutionsControllerTest {
 
     @Test
     public void testUpdateInstitutionWhenRecordDoesNotExistExceptionThrow() throws Exception {
-        doCallRealMethod().when(errorHandler).handleUserErrors(any());
         doThrow(new RecordDoesNotExistException("")).when(institutionsService).updateInstitution(any(Institution.class));
 
         MockHttpServletResponse response = mvc.perform(
@@ -479,7 +466,6 @@ public class InstitutionsControllerTest {
 
     @Test
     public void testDeleteInstitutionWhenApiExceptionThrow() throws Exception {
-        doCallRealMethod().when(errorHandler).handleException(any());
         doThrow(new ApiException("")).when(institutionsService).deleteInstitution(anyString());
 
         MockHttpServletResponse response = mvc.perform(
@@ -494,7 +480,6 @@ public class InstitutionsControllerTest {
 
     @Test
     public void testDeleteInstitutionWhenRecordDoesNotExistExceptionThrow() throws Exception {
-        doCallRealMethod().when(errorHandler).handleUserErrors(any());
         doThrow(new RecordDoesNotExistException("")).when(institutionsService).deleteInstitution(anyString());
 
         MockHttpServletResponse response = mvc.perform(

@@ -1,45 +1,43 @@
 package ee.ria.tara.service;
 
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
-import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientSecretExportSettings;
-import ee.ria.tara.model.InstitutionType;
+import ee.ria.tara.model.InstitutionMetainfo;
 import ee.ria.tara.repository.ClientRepository;
 import ee.ria.tara.repository.InstitutionRepository;
 import ee.ria.tara.repository.model.Institution;
 import ee.ria.tara.service.helper.ClientHelper;
 import ee.ria.tara.service.helper.ClientValidator;
 import ee.ria.tara.service.helper.ScopeFilter;
+import ee.ria.tara.service.helper.SecureRandomAlphaNumericStringGenerator;
 import ee.ria.tara.service.model.HydraClient;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.http.HttpMethod;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
-import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 import static ee.ria.tara.service.helper.ClientTestHelper.compareClientWithHydraClient;
 import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.nullable;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
@@ -48,15 +46,13 @@ import static org.mockito.Mockito.verify;
 public class ClientsServiceTest {
 
     private Client client;
+    private Institution institution;
 
     @Captor
     private ArgumentCaptor<ee.ria.tara.repository.model.Client> clientEntityCaptor;
 
-    @Mock
-    private ee.ria.tara.repository.model.Client entity;
-
-    @Mock
-    private Institution institution;
+    @Captor
+    private ArgumentCaptor<HydraClient> hydraClientCaptor;
 
     @Mock
     private OidcService oidcService;
@@ -65,13 +61,12 @@ public class ClientsServiceTest {
     private ClientSecretEmailService clientSecretEmailService;
 
     @Mock
-    private ClientRepository repository;
+    private ClientRepository clientRepository;
 
     @Mock
     private InstitutionRepository institutionRepository;
 
-    @Mock
-    private AdminConfigurationProvider adminConfigurationProvider;
+    private final AdminConfigurationProvider adminConfigurationProvider = new AdminConfigurationProvider();
 
     @Mock
     private ClientValidator clientValidator;
@@ -80,285 +75,304 @@ public class ClientsServiceTest {
     private ScopeFilter scopeFilter;
 
     @Mock
-    private TaraOidcConfigurationProvider taraOidcConfigurationProvider;
+    private SecureRandomAlphaNumericStringGenerator secureRandomAlphaNumericStringGenerator;
 
-    @InjectMocks
     private ClientsService clientsService;
 
     @BeforeEach
     public void setUp() {
+        clientsService = new ClientsService(
+                clientRepository,
+                institutionRepository,
+                clientSecretEmailService,
+                oidcService,
+                adminConfigurationProvider,
+                clientValidator,
+                scopeFilter,
+                secureRandomAlphaNumericStringGenerator
+        );
+        adminConfigurationProvider.setSsoMode(false);
         client = validTARAClient();
+        institution = institution(client.getInstitutionMetainfo());
     }
 
     @Test
-    public void testGetAllClients() throws ApiException {
+    public void getAllClients_allClientsReturned() {
         HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
-        doReturn(List.of()).when(repository).findAll();
-        doReturn(List.of(hydraClient)).when(oidcService).getAllClients(nullable(String.class));
+        doReturn(List.of()).when(clientRepository).findAll();
+        doReturn(List.of(hydraClient)).when(oidcService).getAllClients();
 
-        List<Client> clientList = clientsService.getAllClients(null);
+        List<Client> clientList = clientsService.getAllClients();
 
-        Assertions.assertEquals(1, clientList.size());
-        verify(repository, times(1)).findAll();
-        verify(repository, times(0)).findByClientId(anyString());
-        compareClientWithHydraClient(clientList.get(0), hydraClient);
+        assertEquals(1, clientList.size());
+        verify(clientRepository, times(1)).findAll();
+        verify(clientRepository, times(0)).findByClientId(anyString());
+        compareClientWithHydraClient(hydraClient, clientList.get(0));
     }
 
     @Test
-    public void testGetAllClientsWhenHydraRequestFails() throws FatalApiException {
+    public void getAllClients_whenOidcServiceFails_exceptionRethrown() {
         String errorMessage = "Oops";
-        doThrow(new FatalApiException(errorMessage)).when(oidcService).getAllClients(nullable(String.class));
+        doThrow(new FatalApiException(errorMessage)).when(oidcService).getAllClients();
 
         FatalApiException exception = assertThrows(FatalApiException.class,
-                () -> clientsService.getAllClients(null));
+                () -> clientsService.getAllClients());
 
-        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
-        verify(repository, times(0)).save(any());
+        assertTrue(exception.getMessage().contains(errorMessage));
+        verify(clientRepository, times(0)).save(any());
     }
 
     @Test
-    public void testGetAllClientsWithFilter() throws ApiException {
+    public void getClient_clientReturned(){
         HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
-        doReturn(institution).when(entity).getInstitution();
-        doReturn(entity).when(repository).findByClientId(client.getClientId());
-        doReturn(List.of(hydraClient)).when(oidcService).getAllClients(nullable(String.class));
+        ee.ria.tara.repository.model.Client entity = ClientHelper.convertToEntity(client, institution);
+        entity.setId(7L);
 
-        List<Client> clientList = clientsService.getAllClients(client.getClientId());
+        doReturn(entity).when(clientRepository).findByClientId(client.getClientId());
+        doReturn(hydraClient).when(oidcService).getClient(eq(client.getClientId()));
 
-        Assertions.assertEquals(1, clientList.size());
-        verify(repository, times(0)).findAll();
-        verify(repository, times(1)).findByClientId(client.getClientId());
-        compareClientWithHydraClient(clientList.get(0), hydraClient);
+        Client actual = clientsService.getClient(client.getClientId());
+
+        verify(clientRepository, times(0)).findAll();
+        verify(clientRepository, times(1)).findByClientId(client.getClientId());
+        compareClientWithHydraClient(hydraClient, actual);
     }
 
     @Test
-    public void testGetClientsWithFilterWhenHydraRequestFails() throws FatalApiException {
+    public void getClient_whenOidcServiceFails_exceptionRethrown() {
         String errorMessage = "Oops.";
-        doThrow(new FatalApiException(errorMessage))
-                .when(oidcService).getAllClients(anyString());
+        doThrow(new ApiException(errorMessage))
+                .when(oidcService).getClient(eq("clientId"));
 
-        FatalApiException exception = assertThrows(FatalApiException.class,
-                () -> clientsService.getAllClients("clientId"));
+        ApiException exception = assertThrows(ApiException.class,
+                () -> clientsService.getClient("clientId"));
 
-        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
 
     @Test
-    public void testAddClientToInstitution() throws ApiException {
-        String registryCode = "10101010005";
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(client, false);
-        hydraClient.setCreatedAt(OffsetDateTime.now().toString());
-        hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
+    public void addClientToInstitution_whenSecretRecipientNotSet_clientAddedAndSecretNotEmailed() {
+        String registryCode = client.getInstitutionMetainfo().getRegistryCode();
+        client.setClientSecretExportSettings(null);
 
-        doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
-        doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
+        doNothing().when(oidcService).createClient(any(HydraClient.class));
+        doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         clientsService.addClientToInstitution(registryCode, client);
 
-        verify(repository, times(1)).save(clientEntityCaptor.capture());
+        verify(oidcService, times(1)).createClient(hydraClientCaptor.capture());
+        verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
         verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
 
-        compareClientWithHydraClient(ClientHelper.convertToClient(hydraClient), hydraClient);
+        HydraClient savedHydraClient = hydraClientCaptor.getValue();
+        ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
+
+        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
+        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
     }
 
     @Test
-    public void testAddClientToInstitutionWhenHydraRequestFails() throws ApiException {
+    public void addClientToInstitution_whenOidcServiceFails_apiExceptionThrowAndSecretNotEmailed() {
         String registryCode = "1";
         String errorMessage = "Oops.";
-        doThrow(new ApiException(errorMessage)).when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
-        doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
+        doThrow(new ApiException(errorMessage)).when(oidcService).createClient(any(HydraClient.class));
+        doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         ApiException exception = assertThrows(ApiException.class,
                 () -> clientsService.addClientToInstitution(registryCode, client));
 
-        Assertions.assertTrue(exception.getMessage()
+        assertTrue(exception.getMessage()
                 .contains(errorMessage));
+
         verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
     }
 
     @Test
-    public void testGetAllInstitutionsClients() throws ApiException {
+    public void getClientsByInstitution_clientsReturned() {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
         HydraClient hydraClient = ClientHelper.convertToHydraClient(client, false);
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
-        doReturn(registryCode).when(institution).getRegistryCode();
-        doReturn(institution).when(entity).getInstitution();
-        doReturn(client.getClientId()).when(entity).getClientId();
-        doReturn(List.of(entity)).when(repository).findAllByInstitution_RegistryCode(registryCode);
-        doReturn(List.of(hydraClient)).when(oidcService).getAllClients(nullable(String.class));
+        ee.ria.tara.repository.model.Client entity = ClientHelper.convertToEntity(client, institution);
+        entity.setId(7L);
 
-        List<Client> clientList = clientsService.getAllInstitutionsClients(registryCode);
+        doReturn(List.of(entity)).when(clientRepository).findAllByInstitution_RegistryCode(registryCode);
+        doReturn(List.of(hydraClient)).when(oidcService).getAllClients();
 
-        Assertions.assertEquals(1, clientList.size());
-        verify(repository, times(1)).findAllByInstitution_RegistryCode(registryCode);
-        compareClientWithHydraClient(clientList.get(0), hydraClient);
+        List<Client> clientList = clientsService.getClientsByInstitution(registryCode);
+
+        assertEquals(1, clientList.size());
+        verify(clientRepository, times(1)).findAllByInstitution_RegistryCode(registryCode);
+        compareClientWithHydraClient(hydraClient, clientList.get(0));
     }
 
     @Test
-    public void testGetAllInstitutionsClientsWhenHydraRequestFails() throws FatalApiException {
+    public void getClientsByInstitution_whenOidcServiceFails_exceptionRethrown() {
         String errorMessage = "Oops.";
-        doThrow(new FatalApiException(errorMessage)).when(oidcService).getAllClients(nullable(String.class));
+        doThrow(new ApiException(errorMessage)).when(oidcService).getAllClients();
 
-        FatalApiException exception = assertThrows(FatalApiException.class,
-                () -> clientsService.getAllInstitutionsClients("1"));
+        ApiException exception = assertThrows(ApiException.class,
+                () -> clientsService.getClientsByInstitution("1"));
 
-        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
 
     @Test
-    public void testAddClientToInstitutionWithoutNewSecretGeneration() throws ApiException {
+    public void addClientToInstitution_whenSecretRecipientNotDefined_secretNotEmailed() {
         String registryCode = "10101010005";
         client.setClientSecretExportSettings(null);
 
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(client, false);
-        hydraClient.setCreatedAt(OffsetDateTime.now().toString());
-        hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
-
-        doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
-        doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
+        doNothing().when(oidcService).createClient(any(HydraClient.class));
+        doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         clientsService.addClientToInstitution(registryCode, client);
 
-        verify(repository, times(1)).save(clientEntityCaptor.capture());
+        verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
         verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
-        verify(oidcService, times(1)).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
+        verify(oidcService, times(1)).createClient(hydraClientCaptor.capture());
 
-        compareClientWithHydraClient(ClientHelper.convertToClient(hydraClient), hydraClient);
+        HydraClient savedHydraClient = hydraClientCaptor.getValue();
+        ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
+
+        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
+        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
     }
 
     @Test
-    public void testAddClientToInstitutionAndSendSingingSecretEmail() throws ApiException {
+    public void addClientToInstitution_whenSecretRecipientSet_secretEmailedAndClientUpdatedAfterEmailSent() {
+        String secret = "a".repeat(ClientsService.SIGNING_SECRET_LENGTH);
         String registryCode = "10101010005";
         ClientSecretExportSettings secretExportSettings = new ClientSecretExportSettings();
         secretExportSettings.setRecipientEmail("email");
         secretExportSettings.setRecipientIdCode(registryCode);
         client.setClientSecretExportSettings(secretExportSettings);
 
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(client, false);
-        hydraClient.setCreatedAt(OffsetDateTime.now().toString());
-        hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
-
-        doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
-        doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
+        doReturn(secret).when(secureRandomAlphaNumericStringGenerator).generate(ClientsService.SIGNING_SECRET_LENGTH);
+        doNothing().when(oidcService).createClient(any(HydraClient.class));
+        doNothing().when(oidcService).updateClient(eq(client.getClientId()), any(HydraClient.class));
+        doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         clientsService.addClientToInstitution(registryCode, client);
 
-        verify(repository, times(1)).save(clientEntityCaptor.capture());
+        verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
-        verify(clientSecretEmailService, times(1)).sendSigningSecretByEmail(any(Client.class));
-        verify(oidcService, times(2)).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
+        verify(clientSecretEmailService, times(1)).sendSigningSecretByEmail(eq(client));
+        verify(oidcService, times(1)).createClient(hydraClientCaptor.capture());
+        verify(oidcService, times(1)).updateClient(eq(client.getClientId()), any(HydraClient.class));
 
-        compareClientWithHydraClient(ClientHelper.convertToClient(hydraClient), hydraClient);
+        HydraClient savedHydraClient = hydraClientCaptor.getValue();
+        ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
+
+        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
+        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
     }
 
     @Test
-    public void testAddClientToInstitutionWhenValidationFails() throws ApiException {
-        String registryCode = "1";
+    public void addClientToInstitution_whenClientValidationFails_invalidDataExceptionThrown() {
         String errorMessage = "Oops.";
-        doThrow(new InvalidDataException(errorMessage)).when(clientValidator).validateClient(client, PRIVATE);
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
-        doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
+        doThrow(new InvalidDataException(errorMessage)).when(clientValidator).validateClient(client, institution.getType());
+        doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(institution.getRegistryCode());
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
-                () -> clientsService.addClientToInstitution(registryCode, client));
+                () -> clientsService.addClientToInstitution(institution.getRegistryCode(), client));
 
-        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
-        verify(clientValidator, times(1)).validateClient(client, PRIVATE);
+        assertTrue(exception.getMessage().contains(errorMessage));
+        verify(clientValidator, times(1)).validateClient(client, institution.getType());
     }
 
     @Test
-    public void testUpdateClient() throws ApiException {
+    public void updateClient_whenSecretRecipientNotSet_secretNotEmailedAndClientUpdatedOnce() {
         String registryCode = "1";
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(client, false);
-        hydraClient.setCreatedAt(OffsetDateTime.now().toString());
-        hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
+        String clientId = "10101010005";
+        client.setClientSecretExportSettings(null);
 
-        doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
-        doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
+        doNothing().when(oidcService).updateClient(eq(clientId), any(HydraClient.class));
+        doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
-        clientsService.updateClient(registryCode, "10101010005", client);
+        clientsService.updateClient(registryCode, clientId, client);
 
-        verify(repository, times(1)).save(clientEntityCaptor.capture());
+        verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
         verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
+        verify(oidcService, times(1)).updateClient(eq(clientId), hydraClientCaptor.capture());
 
-        compareClientWithHydraClient(ClientHelper.convertToClient(hydraClient), hydraClient);
+        HydraClient savedHydraClient = hydraClientCaptor.getValue();
+        ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
+
+        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
+        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
     }
 
     @Test
-    public void testUpdateClientAndSendSigningSecretEmail() throws ApiException {
+    public void updateClient_whenSecretRecipientSet_newSecretEmailedAndClientUpdated() {
+        String secret = "a".repeat(ClientsService.SIGNING_SECRET_LENGTH);
         String registryCode = "10101010005";
+        String clientId = client.getClientId();
         ClientSecretExportSettings secretExportSettings = new ClientSecretExportSettings();
         secretExportSettings.setRecipientEmail("email");
         secretExportSettings.setRecipientIdCode("10101010005");
         client.setClientSecretExportSettings(secretExportSettings);
 
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(client, false);
-        hydraClient.setCreatedAt(OffsetDateTime.now().toString());
-        hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
+        doReturn(secret).when(secureRandomAlphaNumericStringGenerator).generate(ClientsService.SIGNING_SECRET_LENGTH);
+        doNothing().when(oidcService).updateClient(eq(clientId), any(HydraClient.class));
+        doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
-        doNothing().when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
-        doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
+        clientsService.updateClient(registryCode, clientId, client);
 
-        clientsService.updateClient(registryCode, "10101010005", client);
-
-        verify(repository, times(1)).save(clientEntityCaptor.capture());
+        verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
         verify(clientSecretEmailService, times(1)).sendSigningSecretByEmail(any(Client.class));
+        verify(oidcService, times(2)).updateClient(eq(clientId), hydraClientCaptor.capture());
 
-        compareClientWithHydraClient(ClientHelper.convertToClient(hydraClient), hydraClient);
+        // First save is done without updating the secret, meaning the secret is set to `null`, which does not match the
+        // input client, so lets compare the value from the second save.
+        HydraClient savedHydraClient = hydraClientCaptor.getAllValues().get(1);
+        ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
+
+        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
+        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
     }
 
     @Test
-    public void testUpdateClientWhenHydraRequestFails() throws ApiException {
+    public void updateClient_whenClientServiceFails_exceptionRethrown() {
         String registryCode = "1";
+        String clientId = "10101010005";
         String errorMessage = "Oops.";
         doThrow(new ApiException(errorMessage))
-                .when(oidcService).saveClient(any(HydraClient.class), anyString(), any(HttpMethod.class));
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
-        doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
+                .when(oidcService).updateClient(eq(clientId), any(HydraClient.class));
+        doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         ApiException exception = assertThrows(ApiException.class,
-                () -> clientsService.updateClient(registryCode, "10101010005", client));
+                () -> clientsService.updateClient(registryCode, clientId, client));
 
-        Assertions.assertTrue(exception.getMessage()
-                .contains(errorMessage));
+        assertTrue(exception.getMessage().contains(errorMessage));
         verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
     }
 
     @Test
-    public void testUpdateClientWhenValidationFails() throws ApiException {
-        String registryCode = "1";
+    public void updateClient_whenClientValidationFails_invalidDataExceptionThrown() {
         String errorMessage = "Oops.";
-        doThrow(new InvalidDataException(errorMessage)).when(clientValidator).validateClient(client, PRIVATE);
-        doReturn("http://hydra/admin").when(taraOidcConfigurationProvider).getUrl();
-        doReturn(privateInstitution()).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
+        doThrow(new InvalidDataException(errorMessage)).when(clientValidator).validateClient(client, institution.getType());
+        doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(institution.getRegistryCode());
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
-                () -> clientsService.updateClient(registryCode, "10101010005", client));
+                () -> clientsService.updateClient(institution.getRegistryCode(), client.getClientId(), client));
 
-        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
-        verify(clientValidator, times(1)).validateClient(client, PRIVATE);
+        assertTrue(exception.getMessage().contains(errorMessage));
+        verify(clientValidator, times(1)).validateClient(client, institution.getType());
     }
 
     @Test
-    public void testDeleteClient() throws ApiException {
+    public void deleteClient_clientDeleted() {
         String clientId = "1";
         String registryCode = "1";
 
@@ -366,23 +380,26 @@ public class ClientsServiceTest {
 
         clientsService.deleteClient(registryCode, clientId);
 
-        verify(repository, times(1)).deleteByClientIdAndInstitution_RegistryCode(clientId, registryCode);
+        verify(clientRepository, times(1)).deleteByClientIdAndInstitution_RegistryCode(clientId, registryCode);
     }
 
     @Test
-    public void testDeleteClientWhenHydraRequestFails() throws ApiException {
+    public void deleteClient_whenOidcServiceFails_exceptionRethrown() {
         String errorMessage = "Oops.";
         doThrow(new ApiException(errorMessage)).when(oidcService).deleteClient(anyString());
 
         ApiException exception = assertThrows(ApiException.class,
                 () -> clientsService.deleteClient("1", "1"));
 
-        Assertions.assertTrue(exception.getMessage().contains(errorMessage));
+        assertTrue(exception.getMessage().contains(errorMessage));
     }
 
-    private Institution privateInstitution() {
+    private Institution institution(InstitutionMetainfo metainfo) {
         Institution institution = new Institution();
-        institution.setType(InstitutionType.TypeEnum.PRIVATE);
+        institution.setName(metainfo.getName());
+        institution.setRegistryCode(metainfo.getRegistryCode());
+        institution.setType(metainfo.getType().getType());
         return institution;
     }
+
 }

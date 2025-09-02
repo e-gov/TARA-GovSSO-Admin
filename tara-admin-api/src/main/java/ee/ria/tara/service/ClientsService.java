@@ -1,7 +1,6 @@
 package ee.ria.tara.service;
 
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
-import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
@@ -16,10 +15,10 @@ import ee.ria.tara.service.helper.NationalIdCodeValidator;
 import ee.ria.tara.service.helper.ScopeFilter;
 import ee.ria.tara.service.helper.SecureRandomAlphaNumericStringGenerator;
 import ee.ria.tara.service.model.HydraClient;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,12 +29,14 @@ import java.util.stream.Collectors;
 
 import static ee.ria.tara.service.helper.ClientHelper.convertToClient;
 import static ee.ria.tara.service.helper.ClientHelper.convertToHydraClient;
+import static java.util.function.Function.identity;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class ClientsService {
-    private static final int SIGNING_SECRET_LENGTH = 32;
+
+    static final int SIGNING_SECRET_LENGTH = 32;
 
     private final ClientRepository clientRepository;
     private final InstitutionRepository institutionRepository;
@@ -44,48 +45,46 @@ public class ClientsService {
     private final AdminConfigurationProvider adminConfigurationProvider;
     private final ClientValidator clientValidator;
     private final ScopeFilter scopeFilter;
-    private final TaraOidcConfigurationProvider taraOidcConfigurationProvider;
+    private final SecureRandomAlphaNumericStringGenerator secureRandomAlphaNumericStringGenerator;
 
-    public List<Client> getAllClients(String clientId) throws FatalApiException {
-        List<HydraClient> hydraClients = this.oidcService.getAllClients(clientId);
+    public Client getClient(@NonNull String clientId) throws FatalApiException {
+        HydraClient hydraClient = this.oidcService.getClient(clientId);
+        ee.ria.tara.repository.model.Client entity = clientRepository.findByClientId(clientId);
+        return convertToClient(hydraClient, entity);
+    }
 
-        if (clientId != null) {
-            ee.ria.tara.repository.model.Client entity = clientRepository.findByClientId(clientId);
+    public List<Client> getAllClients() throws FatalApiException {
+        List<HydraClient> hydraClients = this.oidcService.getAllClients();
 
-            return hydraClients.stream()
-                    .map(hydraClient -> convertToClient(hydraClient, entity))
-                    .collect(Collectors.toList());
-        } else {
-            List<Client> clients = new ArrayList<>();
-            Map<String, ee.ria.tara.repository.model.Client> clientMap = clientRepository.findAll()
-                    .stream()
-                    .collect(Collectors.toMap(entity -> entity.getClientId(), entity -> entity));
+        List<Client> clients = new ArrayList<>();
+        Map<String, ee.ria.tara.repository.model.Client> clientMap = clientRepository.findAll()
+                .stream()
+                .collect(Collectors.toMap(entity -> entity.getClientId(), identity()));
 
-            hydraClients.forEach(hydraClient ->
-                    clients.add(convertToClient(hydraClient, clientMap.get(hydraClient.getClientId()))));
+        hydraClients.forEach(hydraClient ->
+                clients.add(convertToClient(hydraClient, clientMap.get(hydraClient.getClientId()))));
 
-            return clients;
-        }
+        return clients;
     }
 
     public Map<String, List<String>> getAllClientsFromClientRepository() {
             List<ee.ria.tara.repository.model.Client> clientList = new ArrayList<>(clientRepository.findAll());
             Map<String, List<String>> clientsIps = clientList
                 .stream()
-                .collect(Collectors.toMap(ee.ria.tara.repository.model.Client::getClientId, ee.ria.tara.repository.model.Client::getTokenRequestAllowedIpAddresses));
+                .collect(Collectors.toMap(client -> client.getClientId(), client -> client.getTokenRequestAllowedIpAddresses()));
 
             return clientsIps;
     }
 
-    public List<Client> getAllInstitutionsClients(String registryCode) throws ApiException {
+    public List<Client> getClientsByInstitution(String registryCode) throws ApiException {
         Map<String, ee.ria.tara.repository.model.Client> clientMap;
         List<Client> clients = new ArrayList<>();
 
         clientMap = clientRepository.findAllByInstitution_RegistryCode(registryCode)
                 .stream()
-                .collect(Collectors.toMap(entity -> entity.getClientId(), entity -> entity));
+                .collect(Collectors.toMap(entity -> entity.getClientId(), identity()));
 
-        oidcService.getAllClients(null)
+        oidcService.getAllClients()
                 .stream()
                 .filter(hydraClient -> clientMap.containsKey(hydraClient.getClientId()))
                 .forEach(hydraClient -> clients.add(convertToClient(hydraClient, clientMap.get(hydraClient.getClientId()))));
@@ -95,16 +94,14 @@ public class ClientsService {
 
     @Transactional(rollbackFor = Exception.class)
     public void addClientToInstitution(String registryCode, Client client) throws ApiException {
-        String uri = String.format("%s/admin/clients", taraOidcConfigurationProvider.getUrl());
-        this.saveClient(client, registryCode, uri, HttpMethod.POST);
+        this.saveClient(client, registryCode, null);
 
         log.info(String.format("Added client with client_id %s.", client.getClientId()));
     }
 
     @Transactional(rollbackFor = Exception.class)
     public void updateClient(String registryCode, String clientId, Client client) throws ApiException {
-        String uri = String.format("%s/admin/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
-        this.saveClient(client, registryCode, uri, HttpMethod.PUT);
+        this.saveClient(client, registryCode, clientId);
 
         log.info(String.format("Updated client with client_id %s.", client.getClientId()));
     }
@@ -141,7 +138,10 @@ public class ClientsService {
       And no premature e-mails will be sent if saving client to Hydra fails due to invalid
       values other than the secret.
      */
-    private void saveClient(Client client, String registryCode, String uri, HttpMethod httpMethod) {
+    //TODO: checking if `clientId` is null is not the correct way to check if we are creating a new client or updating
+    // an existing one. We are also not checking if `clientId` equals `client.getClientId()`, a mismatch there could
+    // lead to odd behaviour.
+    private void saveClient(Client client, String registryCode, String clientId) {
         Institution institution = institutionRepository.findInstitutionByRegistryCode(registryCode);
         client.setScope(scopeFilter.filterInstitutionClientScopes(client.getScope(), institution.getType()));
         clientValidator.validateClient(client, institution.getType());
@@ -149,18 +149,25 @@ public class ClientsService {
 
         boolean ssoMode = adminConfigurationProvider.isSsoMode();
         HydraClient hydraClient = convertToHydraClient(client, ssoMode);
-        oidcService.saveClient(hydraClient, uri, httpMethod);
+        if (clientId == null) {
+            oidcService.createClient(hydraClient);
+        } else {
+            oidcService.updateClient(clientId, hydraClient);
+        }
 
         if (shouldGenerateNewSecret(client)) {
-            assertValidIdCode(client.getClientSecretExportSettings());
-            String newSecret = SecureRandomAlphaNumericStringGenerator.INSTANCE.generate(SIGNING_SECRET_LENGTH);
-            client.setSecret(newSecret);
-            clientSecretEmailService.sendSigningSecretByEmail(client);
-
-            hydraClient.setClientSecret(!ssoMode ? ClientHelper.getDigest(newSecret) : newSecret);
-            String putRequestUri = String.format("%s/admin/clients/%s", taraOidcConfigurationProvider.getUrl(), client.getClientId());
-            oidcService.saveClient(hydraClient, putRequestUri, HttpMethod.PUT);
+            resetSecret(client.getClientId(), client, hydraClient, ssoMode);
         }
+    }
+
+    private void resetSecret(String clientId, Client client, HydraClient hydraClient, boolean ssoMode) {
+        assertValidIdCode(client.getClientSecretExportSettings());
+        String newSecret = secureRandomAlphaNumericStringGenerator.generate(SIGNING_SECRET_LENGTH);
+        client.setSecret(newSecret);
+        clientSecretEmailService.sendSigningSecretByEmail(client);
+
+        hydraClient.setClientSecret(!ssoMode ? ClientHelper.getDigest(newSecret) : newSecret);
+        oidcService.updateClient(clientId, hydraClient);
     }
 
     private void assertValidIdCode(ClientSecretExportSettings clientSecretExportSettings) throws InvalidDataException {

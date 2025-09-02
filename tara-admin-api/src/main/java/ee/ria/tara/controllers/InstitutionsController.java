@@ -27,7 +27,7 @@ public class InstitutionsController implements InstitutionsApi {
     @Override
     public ResponseEntity<List<Client>> getAllInstitutionClients(String registryCode) {
         log.info(String.format("Incoming request: GET %s.", request.getRequestURI()));
-        return ResponseEntity.ok(clientsService.getAllInstitutionsClients(registryCode));
+        return ResponseEntity.ok(clientsService.getClientsByInstitution(registryCode));
     }
 
     @Override

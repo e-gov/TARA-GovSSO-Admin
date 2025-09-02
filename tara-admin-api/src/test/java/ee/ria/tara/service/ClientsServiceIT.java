@@ -36,7 +36,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.reset;
 import static com.github.tomakehurst.wiremock.client.WireMock.serverError;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
@@ -46,7 +45,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ClientsServiceIT {
-    private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
+    private static WireMockServer hydraWireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
     private final String registryCode = "testcode";
 
     @Autowired
@@ -63,17 +62,18 @@ public class ClientsServiceIT {
     @BeforeEach
     public void setUp() {
         client = validTARAClient();
+        client.setClientSecretExportSettings(null);
     }
 
     @BeforeAll
     public static void genericSetUp() {
-        wireMockServer.start();
-        configureFor("localhost", wireMockServer.port());
+        hydraWireMockServer.start();
+        configureFor("localhost", hydraWireMockServer.port());
     }
 
     @AfterAll
     public static void genericTearDown() {
-        wireMockServer.stop();
+        hydraWireMockServer.stop();
     }
 
     @AfterEach
@@ -87,7 +87,7 @@ public class ClientsServiceIT {
     @Sql({"classpath:fixtures/ADD_institution_9999.sql"})
     public void addInstitutionToDatabase() {
         Assertions.assertNotNull(institutionRepository.findInstitutionByRegistryCode(registryCode));
-        taraOidcConfigurationProvider.setUrl(wireMockServer.baseUrl());
+        taraOidcConfigurationProvider.setUrl(hydraWireMockServer.baseUrl());
     }
 
     @Test
@@ -95,8 +95,8 @@ public class ClientsServiceIT {
     public void testAddClient() throws ApiException {
         Assertions.assertEquals(0, clientRepository.findAll().size());
 
-        stubFor(
-                post("/clients")
+        hydraWireMockServer.stubFor(
+                post("/admin/clients")
                         .willReturn(ok())
         );
 
@@ -123,8 +123,8 @@ public class ClientsServiceIT {
     public void testNotAddClientWhenHydraRequestFailsClientError400() {
         Assertions.assertEquals(0, clientRepository.findAll().size());
 
-        stubFor(
-                post("/clients")
+        hydraWireMockServer.stubFor(
+                post("/admin/clients")
                         .willReturn(badRequest()
                                 .withBody("Oops, something went wrong."))
         );
@@ -141,8 +141,8 @@ public class ClientsServiceIT {
     public void testNotAddClientWhenHydraRequestFailsClientError409() {
         Assertions.assertEquals(0, clientRepository.findAll().size());
 
-        stubFor(
-                post("/clients")
+        hydraWireMockServer.stubFor(
+                post("/admin/clients")
                         .willReturn(status(409)
                                 .withBody("Oops, something went wrong."))
         );
@@ -159,8 +159,8 @@ public class ClientsServiceIT {
     public void testNotAddClientWhenHydraRequestFailsServerError() {
         Assertions.assertEquals(0, clientRepository.findAll().size());
 
-        stubFor(
-                post("/clients")
+        hydraWireMockServer.stubFor(
+                post("/admin/clients")
                         .willReturn(serverError()
                                 .withBody("Oops, something went wrong."))
         );
@@ -178,8 +178,8 @@ public class ClientsServiceIT {
     public void testUpdateClient() throws ApiException {
         Assertions.assertEquals(0, clientRepository.findAll().size());
 
-        stubFor(
-                put("/clients/" + client.getClientId())
+        hydraWireMockServer.stubFor(
+                put("/admin/clients/" + client.getClientId())
                         .willReturn(ok())
         );
 
@@ -193,8 +193,8 @@ public class ClientsServiceIT {
     public void testNotUpdateClientWhenHydraRequestFailsServerError() {
         Assertions.assertEquals(0, clientRepository.findAll().size());
 
-        stubFor(
-                put("/clients/" + client.getClientId())
+        hydraWireMockServer.stubFor(
+                put("/admin/clients/" + client.getClientId())
                         .willReturn(serverError()
                                 .withBody("Oops, something went wrong."))
         );
@@ -215,8 +215,8 @@ public class ClientsServiceIT {
         clientRepository.save(ClientHelper.convertToEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode)));
         Assertions.assertEquals(1, clientRepository.findAll().size());
 
-        stubFor(
-                delete("/clients/" + client.getClientId())
+        hydraWireMockServer.stubFor(
+                delete("/admin/clients/" + client.getClientId())
                         .willReturn(ok())
         );
 
@@ -230,8 +230,8 @@ public class ClientsServiceIT {
     public void testDeleteClientWhenNotExists() throws ApiException {
         Assertions.assertEquals(0, clientRepository.findAll().size());
 
-        stubFor(
-                delete("/clients/" + client.getClientId())
+        hydraWireMockServer.stubFor(
+                delete("/admin/clients/" + client.getClientId())
                         .willReturn(ok())
         );
 
@@ -247,8 +247,8 @@ public class ClientsServiceIT {
         clientRepository.save(ClientHelper.convertToEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode)));
         Assertions.assertEquals(1, clientRepository.findAll().size());
 
-        stubFor(
-                delete("/clients/" + client.getClientId())
+        hydraWireMockServer.stubFor(
+                delete("/admin/clients/" + client.getClientId())
                         .willReturn(badRequest()
                                 .withBody("Oops, something went wrong."))
         );
@@ -268,8 +268,8 @@ public class ClientsServiceIT {
         clientRepository.save(ClientHelper.convertToEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode)));
         Assertions.assertEquals(1, clientRepository.findAll().size());
 
-        stubFor(
-                delete("/clients/" + client.getClientId())
+        hydraWireMockServer.stubFor(
+                delete("/admin/clients/" + client.getClientId())
                         .willReturn(serverError()
                                 .withBody("Oops, something went wrong."))
         );

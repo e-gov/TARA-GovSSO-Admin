@@ -35,10 +35,12 @@ public class ClientsController implements ClientsApi {
 
     @SneakyThrows
     @Override
-    public ResponseEntity<List<Client>> getAllClients(@Valid String filterBy) {
+    public ResponseEntity<List<Client>> getAllClients(@Valid String clientId) {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         log.info(String.format("Incoming request: GET %s, with query %s.", request.getRequestURI(), request.getQueryString()));
-        return ResponseEntity.ok(service.getAllClients(filterBy));
+        return clientId != null ?
+                ResponseEntity.ok(List.of(service.getClient(clientId))) :
+                ResponseEntity.ok(service.getAllClients());
     }
 
     @Override

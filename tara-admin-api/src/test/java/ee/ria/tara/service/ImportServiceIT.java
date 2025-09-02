@@ -38,7 +38,6 @@ import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.put;
 import static com.github.tomakehurst.wiremock.client.WireMock.reset;
-import static com.github.tomakehurst.wiremock.client.WireMock.stubFor;
 import static ee.ria.tara.service.helper.ClientTestHelper.createValidPrivateInstitution;
 import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -50,7 +49,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ImportServiceIT {
-    private static WireMockServer wireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
+    private static WireMockServer hydraWireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
     private final String registryCode = "testcode";
 
     @Autowired
@@ -67,18 +66,18 @@ public class ImportServiceIT {
     @BeforeEach
     public void setUp() {
         client = validTARAClient();
-        taraOidcConfigurationProvider.setUrl(wireMockServer.baseUrl());
+        taraOidcConfigurationProvider.setUrl(hydraWireMockServer.baseUrl());
     }
 
     @BeforeAll
     public static void genericSetUp() {
-        wireMockServer.start();
-        configureFor("localhost", wireMockServer.port());
+        hydraWireMockServer.start();
+        configureFor("localhost", hydraWireMockServer.port());
     }
 
     @AfterAll
     public static void genericTearDown() {
-        wireMockServer.stop();
+        hydraWireMockServer.stop();
     }
 
     @AfterEach
@@ -172,8 +171,8 @@ public class ImportServiceIT {
 
         Institution mockInstiution = createValidPrivateInstitution("1234567890", "Test institution & company");
         Client mockClient = validTARAClient();
-        stubFor(get("/clients/" + mockClient.getClientId()).willReturn(ok()));
-        stubFor(put("/clients/" + mockClient.getClientId()).willReturn(ok()));
+        hydraWireMockServer.stubFor(get("/admin/clients/" + mockClient.getClientId()).willReturn(ok()));
+        hydraWireMockServer.stubFor(put("/admin/clients/" + mockClient.getClientId()).willReturn(ok()));
 
         importService.saveClient(mockInstiution, mockClient);
         List<ee.ria.tara.repository.model.Institution> institutions = institutionRepository.findAllByRegistryCodeContainingIgnoreCaseOrNameContainingIgnoreCase(mockInstiution.getRegistryCode(), "null");

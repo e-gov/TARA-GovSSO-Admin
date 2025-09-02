@@ -1,14 +1,15 @@
 package ee.ria.tara.service;
 
 import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
-import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.controllers.exception.RecordDoesNotExistException;
 import ee.ria.tara.service.helper.PaginationHelper;
 import ee.ria.tara.service.model.HydraClient;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.hc.core5.net.URIBuilder;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
@@ -18,6 +19,8 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.HttpServerErrorException;
 import org.springframework.web.client.RestTemplate;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -31,20 +34,43 @@ public class OidcService {
     private final RestTemplate restTemplate;
     private final TaraOidcConfigurationProvider taraOidcConfigurationProvider;
 
-    public List<HydraClient> getAllClients(String clientId) throws FatalApiException {
-        if (clientId != null) {
-            HydraClient client = this.getClientByClientId(clientId);
-            return client == null ? List.of() : List.of(client);
-        } else {
-            return getAllHydraClients();
+    public List<HydraClient> getAllClients() throws FatalApiException {
+        List<HydraClient> clients = new ArrayList<>();
+        Optional<String> nextPageToken = Optional.of(PaginationHelper.INITIAL_PAGE_TOKEN);
+        while (nextPageToken.isPresent()) {
+            URI uri = null;
+            try {
+                uri = new URIBuilder(taraOidcConfigurationProvider.getUrl())
+                        .appendPath("/admin/clients")
+                        .addParameter("page_size", String.valueOf(taraOidcConfigurationProvider.getPageSize()))
+                        .addParameter("page_token", nextPageToken.get())
+                        .build();
+                log.info("Sending " + HttpMethod.GET.name() + " request to OIDC service.", value("url.full", uri));
+
+                ResponseEntity<List<HydraClient>> response = restTemplate.exchange(uri, HttpMethod.GET, null,
+                        new ParameterizedTypeReference<>() {
+                        });
+                clients.addAll(response.getBody());
+                nextPageToken = PaginationHelper.getNextPageToken(response.getHeaders());
+            } catch (HttpServerErrorException ex) {
+                log.error(String.format("Hydra request: %s failed.", uri.toString()), ex);
+                throw new FatalApiException("Oidc.serverError");
+            } catch (URISyntaxException e) {
+                throw new FatalApiException("Server.error", e);
+            }
         }
+
+        return clients;
     }
 
-    private HydraClient getClientByClientId(String clientId) throws FatalApiException {
-        String uri = String.format("%s/admin/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
-
-        log.info("Sending " + HttpMethod.GET.name() + " request to OIDC service.", value("url.full", uri));
+    public HydraClient getClient(@NonNull String clientId) throws FatalApiException {
+        URI uri = null;
         try {
+            uri = new URIBuilder(taraOidcConfigurationProvider.getUrl())
+                    .appendPath("/admin/clients")
+                    .appendPath(clientId)
+                    .build();
+            log.info("Sending " + HttpMethod.GET.name() + " request to OIDC service.", value("url.full", uri));
             ResponseEntity<HydraClient> response = restTemplate.getForEntity(uri, HydraClient.class);
 
             if (log.isDebugEnabled()) {
@@ -59,13 +85,18 @@ public class OidcService {
         } catch (HttpServerErrorException ex) {
             log.error(String.format("Hydra request: GET %s failed.", uri), ex);
             throw new FatalApiException("Oidc.serverError");
+        } catch (URISyntaxException e) {
+            throw new FatalApiException("Server.error", e);
         }
     }
 
-    public void deleteClient(String clientId) throws ApiException {
-        String uri = String.format("%s/admin/clients/%s", taraOidcConfigurationProvider.getUrl(), clientId);
-
+    public void deleteClient(String clientId) throws RecordDoesNotExistException, FatalApiException {
+        URI uri = null;
         try {
+            uri = new URIBuilder(taraOidcConfigurationProvider.getUrl())
+                    .appendPath("/admin/clients")
+                    .appendPath(clientId)
+                    .build();
             log.info("Sending " + HttpMethod.DELETE.name() + " request to OIDC service.", value("url.full", uri));
             ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.DELETE, null, new ParameterizedTypeReference<Void>() {});
 
@@ -81,33 +112,35 @@ public class OidcService {
         } catch (HttpServerErrorException ex) {
             log.error(String.format("Hydra request: DELETE %s failed.", uri), ex);
             throw new FatalApiException("Oidc.serverError");
+        } catch (URISyntaxException e) {
+            throw new FatalApiException("Server.error", e);
         }
     }
 
-    private List<HydraClient> getAllHydraClients() throws FatalApiException {
-        String uri = String.format("%s/admin/clients", taraOidcConfigurationProvider.getUrl());
-        List<HydraClient> clients = new ArrayList<>();
-        Optional<String> nextPageTokenEncoded = Optional.of(PaginationHelper.INITIAL_PAGE_TOKEN);
-        while (nextPageTokenEncoded.isPresent()) {
-            try {
-                String queryString = String.format("%s?page_size=%s&page_token=%s", uri, taraOidcConfigurationProvider.getPageSize(), nextPageTokenEncoded.get());
-                log.info("Sending " + HttpMethod.GET.name() + " request to OIDC service.", value("url.full", queryString));
-
-                ResponseEntity<List<HydraClient>> response = restTemplate.exchange(queryString, HttpMethod.GET, null,
-                        new ParameterizedTypeReference<>() {
-                        });
-                clients.addAll(response.getBody());
-                nextPageTokenEncoded = PaginationHelper.getNextPageToken(response.getHeaders());
-            } catch (HttpServerErrorException ex) {
-                log.error(String.format("Hydra request: %s failed.", uri), ex);
-                throw new FatalApiException("Oidc.serverError");
-            }
+    public void createClient(HydraClient client) {
+        try {
+            URI uri = new URIBuilder(taraOidcConfigurationProvider.getUrl())
+                    .appendPath("/admin/clients")
+                    .build();
+            saveClient(client, uri, HttpMethod.POST);
+        } catch (URISyntaxException e) {
+            throw new FatalApiException("Server.error", e);
         }
-
-        return clients;
     }
 
-    public void saveClient(HydraClient client, String uri, HttpMethod httpMethod) throws ApiException {
+    public void updateClient(String clientId, HydraClient client) {
+        try {
+            URI uri = new URIBuilder(taraOidcConfigurationProvider.getUrl())
+                    .appendPath("/admin/clients")
+                    .appendPath(clientId)
+                    .build();
+            saveClient(client, uri, HttpMethod.PUT);
+        } catch (URISyntaxException e) {
+            throw new FatalApiException("Server.error", e);
+        }
+    }
+
+    private void saveClient(HydraClient client, URI uri, HttpMethod httpMethod) throws InvalidDataException, FatalApiException {
         try {
             log.info("Sending " + httpMethod.name() + " request to OIDC service: " + client, value("url.full", uri));
             ResponseEntity<Object> response = restTemplate.exchange(uri, httpMethod, new HttpEntity<>(client), Object.class);

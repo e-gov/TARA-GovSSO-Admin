@@ -119,7 +119,7 @@ paths:
       parameters:
         - name: filter_by
           in: query
-          description: Filters search results by client_id or name
+          description: Filters search results by client_id
           required: false
           schema:
             type: string

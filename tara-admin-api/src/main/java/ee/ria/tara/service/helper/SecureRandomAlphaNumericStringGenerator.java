@@ -4,15 +4,17 @@ package ee.ria.tara.service.helper;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.security.SecureRandom;
 
 @Slf4j
-public enum SecureRandomAlphaNumericStringGenerator {
-    INSTANCE;
+@Component
+public class SecureRandomAlphaNumericStringGenerator {
 
-    private static final SecureRandom SECURE_RANDOM = new SecureRandom();
     private static final String CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+
+    private final SecureRandom secureRandom = new SecureRandom();
 
     public String generate(int length) throws ApiException {
         validateLength(length);
@@ -20,7 +22,7 @@ public enum SecureRandomAlphaNumericStringGenerator {
         StringBuilder sb = new StringBuilder(length);
 
         for (int i = 0; i < length; i++) {
-            sb.append(CHARS.charAt(SECURE_RANDOM.nextInt(CHARS.length())));
+            sb.append(CHARS.charAt(secureRandom.nextInt(CHARS.length())));
         }
 
         return sb.toString();

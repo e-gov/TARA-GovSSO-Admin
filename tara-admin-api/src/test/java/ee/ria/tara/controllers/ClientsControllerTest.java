@@ -15,7 +15,6 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.json.JacksonTester;
 import org.springframework.context.MessageSource;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockHttpServletResponse;
@@ -26,22 +25,21 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import java.util.List;
-import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.doCallRealMethod;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.doThrow;
-import static org.mockito.Mockito.nullable;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
 @ExtendWith(MockitoExtension.class)
 public class ClientsControllerTest {
+
     private MockMvc mvc;
-    private JacksonTester<Client> jsonClient;
     private Client client;
+
     @Mock
     private MessageSource messageSource;
     @Mock
@@ -70,7 +68,7 @@ public class ClientsControllerTest {
     public void testGetAllClients() throws Exception {
         List<Client> clientList = List.of(client);
 
-        doReturn(clientList).when(service).getAllClients(nullable(String.class));
+        doReturn(clientList).when(service).getAllClients();
 
         MockHttpServletResponse response = mvc.perform(
                 get("/clients")
@@ -79,13 +77,13 @@ public class ClientsControllerTest {
 
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertTrue(response.getContentAsString().contains(client.getClientId()));
-        verify(service, times(1)).getAllClients(null);
+        verify(service, times(1)).getAllClients();
     }
 
     @Test
     public void testGetAllClientsWhenExceptionThrown() throws Exception {
         doCallRealMethod().when(errorHandler).handleFatalApiException(any());
-        doThrow(new FatalApiException("")).when(service).getAllClients(nullable(String.class));
+        doThrow(new FatalApiException("")).when(service).getAllClients();
 
         MockHttpServletResponse response = mvc.perform(
                 get("/clients")
@@ -93,7 +91,7 @@ public class ClientsControllerTest {
                 .andReturn().getResponse();
 
         Assertions.assertEquals(500, response.getStatus());
-        verify(service, times(1)).getAllClients(null);
+        verify(service, times(1)).getAllClients();
     }
 
     @Test

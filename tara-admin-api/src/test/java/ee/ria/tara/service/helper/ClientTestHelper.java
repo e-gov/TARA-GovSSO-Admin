@@ -11,31 +11,35 @@ import ee.ria.tara.model.InstitutionType;
 import ee.ria.tara.model.NameTranslations;
 import ee.ria.tara.model.ShortNameTranslations;
 import ee.ria.tara.service.model.HydraClient;
-import org.junit.jupiter.api.Assertions;
+import ee.ria.tara.service.model.OidcClient;
 
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+
 public class ClientTestHelper {
-    public static void compareClientWithHydraClient(Client client, HydraClient hydraClient) {
-        Assertions.assertEquals(client.getClientId(), hydraClient.getClientId());
-        Assertions.assertEquals(client.getClientUrl(), hydraClient.getMetadata().getOidcClient().getLegacyReturnUrl());
-        Assertions.assertEquals(client.getRedirectUris(), hydraClient.getRedirectUris());
-        Assertions.assertEquals(String.join(" ", client.getScope()), hydraClient.getScope());
-        Assertions.assertEquals(client.getIsUserConsentRequired(), hydraClient.getMetadata().getDisplayUserConsent());
+    public static void compareClientWithHydraClient(HydraClient expected, Client actual) {
+        OidcClient expectedOidcClient = expected.getMetadata().getOidcClient();
 
-        Assertions.assertEquals(client.getClientName().getEt(), hydraClient.getClientName());
-        Assertions.assertEquals(client.getClientName().getEt(), hydraClient.getMetadata().getOidcClient().getNameTranslations().getEt());
-        Assertions.assertEquals(client.getClientName().getEn(), hydraClient.getMetadata().getOidcClient().getNameTranslations().getEn());
-        Assertions.assertEquals(client.getClientName().getRu(), hydraClient.getMetadata().getOidcClient().getNameTranslations().getRu());
+        assertEquals(expected.getClientId(), actual.getClientId());
+        assertEquals(expectedOidcClient.getLegacyReturnUrl(), actual.getClientUrl());
+        assertEquals(expected.getRedirectUris(), actual.getRedirectUris());
+        assertEquals(expected.getScope(), String.join(" ", actual.getScope()));
+        assertEquals(expected.getMetadata().getDisplayUserConsent(), actual.getIsUserConsentRequired());
 
-        Assertions.assertEquals(client.getClientShortName().getEt(), hydraClient.getMetadata().getOidcClient().getShortName());
-        Assertions.assertEquals(client.getClientShortName().getEt(), hydraClient.getMetadata().getOidcClient().getShortNameTranslations().getEt());
-        Assertions.assertEquals(client.getClientShortName().getEn(), hydraClient.getMetadata().getOidcClient().getShortNameTranslations().getEn());
-        Assertions.assertEquals(client.getClientShortName().getRu(), hydraClient.getMetadata().getOidcClient().getShortNameTranslations().getRu());
+        assertEquals(expected.getClientName(), actual.getClientName().getEt());
+        assertEquals(expectedOidcClient.getNameTranslations().getEt(), actual.getClientName().getEt());
+        assertEquals(expectedOidcClient.getNameTranslations().getEn(), actual.getClientName().getEn());
+        assertEquals(expectedOidcClient.getNameTranslations().getRu(), actual.getClientName().getRu());
 
-        Assertions.assertEquals(client.getCreatedAt(), OffsetDateTime.parse(hydraClient.getCreatedAt()));
-        Assertions.assertEquals(client.getUpdatedAt(), OffsetDateTime.parse(hydraClient.getUpdatedAt()));
+        assertEquals(expectedOidcClient.getShortName(), actual.getClientShortName().getEt());
+        assertEquals(expectedOidcClient.getShortNameTranslations().getEt(), actual.getClientShortName().getEt());
+        assertEquals(expectedOidcClient.getShortNameTranslations().getEn(), actual.getClientShortName().getEn());
+        assertEquals(expectedOidcClient.getShortNameTranslations().getRu(), actual.getClientShortName().getRu());
+
+        assertEquals(OffsetDateTime.parse(expected.getCreatedAt()), actual.getCreatedAt());
+        assertEquals(OffsetDateTime.parse(expected.getUpdatedAt()), actual.getUpdatedAt());
     }
 
     public static Client validSSOClient() {
@@ -57,6 +61,7 @@ public class ClientTestHelper {
         ShortNameTranslations shortNameTranslations = new ShortNameTranslations();
         InstitutionType institutionType = new InstitutionType();
         InstitutionMetainfo institutionMetainfo = new InstitutionMetainfo();
+        ClientSecretExportSettings clientSecretExportSettings = new ClientSecretExportSettings();
 
         institutionType.setType(InstitutionType.TypeEnum.PUBLIC);
 
@@ -66,6 +71,9 @@ public class ClientTestHelper {
 
         nameTranslations.setEt("Nimi");
         shortNameTranslations.setEt("Nimi");
+
+        clientSecretExportSettings.setRecipientIdCode("10101010005");
+        clientSecretExportSettings.setRecipientEmail("email@not.real.localhost");
 
         client.setClientId("ClientID-" + id);
         client.setClientName(nameTranslations);
@@ -79,8 +87,6 @@ public class ClientTestHelper {
         client.setBackchannelLogoutUri(null);
         client.setPostLogoutRedirectUris(null);
         client.setMinimumAcrValue(Client.MinimumAcrValueEnum.HIGH);
-        ClientSecretExportSettings clientSecretExportSettings = new ClientSecretExportSettings();
-        clientSecretExportSettings.setRecipientIdCode("10101010005");
         client.setClientSecretExportSettings(clientSecretExportSettings);
         client.setScope(List.of("openid"));
         client.setEidasRequesterId("urn:uuid:f75256ee-740d-4427-84ad-0f4b08417259");

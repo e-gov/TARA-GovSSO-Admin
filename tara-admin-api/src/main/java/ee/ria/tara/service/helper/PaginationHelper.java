@@ -1,11 +1,14 @@
 package ee.ria.tara.service.helper;
 
 import lombok.experimental.UtilityClass;
+import org.apache.hc.core5.net.PercentCodec;
 import org.springframework.http.HttpHeaders;
 
 import java.util.Optional;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 @UtilityClass
 public class PaginationHelper {
@@ -17,6 +20,7 @@ public class PaginationHelper {
                 .findFirst()
                 .map(NEXT_PAGE_TOKEN_PATTERN::matcher)
                 .filter(Matcher::matches)
-                .map(m -> m.group(1));
+                .map(m -> m.group(1))
+                .map(it -> PercentCodec.decode(it, UTF_8));
     }
 }
