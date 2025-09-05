@@ -526,18 +526,17 @@ components:
       properties:
         recipient_id_code:
           type: string
-          pattern: ^[0-9]{11,11}$
+          pattern: ^[0-9]{11}$
           example: '60001019906'
-        recipient_name_in_ldap:
-          type: string
-          minLength: 5
-          example: 'Mari-Liis Männik'
         recipient_email:
           type: string
           minLength: 5
           pattern: (^.*@.*\..*$)
           format: email
           example: '60001019906@eesti.ee'
+      required:
+        - recipient_id_code
+        - recipient_email
     ClientMidSettings:
       type: object
       properties:

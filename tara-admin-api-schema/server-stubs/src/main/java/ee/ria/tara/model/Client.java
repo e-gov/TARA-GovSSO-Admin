@@ -110,7 +110,7 @@ public class Client {
     
     HIGH("high");
 
-    private String value;
+    private final String value;
 
     MinimumAcrValueEnum(String value) {
       this.value = value;

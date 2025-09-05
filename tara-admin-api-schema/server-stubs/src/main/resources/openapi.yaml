@@ -145,7 +145,7 @@ paths:
     get:
       operationId: getAllClients
       parameters:
-      - description: Filters search results by client_id or name
+      - description: Filters search results by client_id
         explode: true
         in: query
         name: filter_by
@@ -644,16 +644,11 @@ components:
     ClientSecretExportSettings:
       example:
         recipient_id_code: "60001019906"
-        recipient_name_in_ldap: Mari-Liis Männik
         recipient_email: 60001019906@eesti.ee
       properties:
         recipient_id_code:
           example: "60001019906"
-          pattern: "^[0-9]{11,11}$"
-          type: string
-        recipient_name_in_ldap:
-          example: Mari-Liis Männik
-          minLength: 5
+          pattern: "^[0-9]{11}$"
           type: string
         recipient_email:
           example: 60001019906@eesti.ee
@@ -661,6 +656,9 @@ components:
           minLength: 5
           pattern: (^.*@.*\..*$)
           type: string
+      required:
+      - recipient_email
+      - recipient_id_code
       type: object
     ClientMidSettings:
       example:
@@ -809,7 +807,6 @@ components:
         paasuke_parameters: ns=A&role=B
         client_secret_export_settings:
           recipient_id_code: "60001019906"
-          recipient_name_in_ldap: Mari-Liis Männik
           recipient_email: 60001019906@eesti.ee
         updated_at: 2019-08-24T14:15:22Z
         client_short_name:

@@ -21,11 +21,21 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
 public class ClientSecretExportSettings {
 
-  private @Nullable String recipientIdCode;
+  private String recipientIdCode;
 
-  private @Nullable String recipientNameInLdap;
+  private String recipientEmail;
 
-  private @Nullable String recipientEmail;
+  public ClientSecretExportSettings() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ClientSecretExportSettings(String recipientIdCode, String recipientEmail) {
+    this.recipientIdCode = recipientIdCode;
+    this.recipientEmail = recipientEmail;
+  }
 
   public ClientSecretExportSettings recipientIdCode(String recipientIdCode) {
     this.recipientIdCode = recipientIdCode;
@@ -36,8 +46,8 @@ public class ClientSecretExportSettings {
    * Get recipientIdCode
    * @return recipientIdCode
    */
-  @Pattern(regexp = "^[0-9]{11,11}$") 
-  @Schema(name = "recipient_id_code", example = "60001019906", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Pattern(regexp = "^[0-9]{11}$") 
+  @Schema(name = "recipient_id_code", example = "60001019906", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("recipient_id_code")
   public String getRecipientIdCode() {
     return recipientIdCode;
@@ -45,26 +55,6 @@ public class ClientSecretExportSettings {
 
   public void setRecipientIdCode(String recipientIdCode) {
     this.recipientIdCode = recipientIdCode;
-  }
-
-  public ClientSecretExportSettings recipientNameInLdap(String recipientNameInLdap) {
-    this.recipientNameInLdap = recipientNameInLdap;
-    return this;
-  }
-
-  /**
-   * Get recipientNameInLdap
-   * @return recipientNameInLdap
-   */
-  @Size(min = 5) 
-  @Schema(name = "recipient_name_in_ldap", example = "Mari-Liis Männik", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("recipient_name_in_ldap")
-  public String getRecipientNameInLdap() {
-    return recipientNameInLdap;
-  }
-
-  public void setRecipientNameInLdap(String recipientNameInLdap) {
-    this.recipientNameInLdap = recipientNameInLdap;
   }
 
   public ClientSecretExportSettings recipientEmail(String recipientEmail) {
@@ -76,8 +66,8 @@ public class ClientSecretExportSettings {
    * Get recipientEmail
    * @return recipientEmail
    */
-  @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @jakarta.validation.constraints.Email 
-  @Schema(name = "recipient_email", example = "60001019906@eesti.ee", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @jakarta.validation.constraints.Email 
+  @Schema(name = "recipient_email", example = "60001019906@eesti.ee", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("recipient_email")
   public String getRecipientEmail() {
     return recipientEmail;
@@ -97,13 +87,12 @@ public class ClientSecretExportSettings {
     }
     ClientSecretExportSettings clientSecretExportSettings = (ClientSecretExportSettings) o;
     return Objects.equals(this.recipientIdCode, clientSecretExportSettings.recipientIdCode) &&
-        Objects.equals(this.recipientNameInLdap, clientSecretExportSettings.recipientNameInLdap) &&
         Objects.equals(this.recipientEmail, clientSecretExportSettings.recipientEmail);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(recipientIdCode, recipientNameInLdap, recipientEmail);
+    return Objects.hash(recipientIdCode, recipientEmail);
   }
 
   @Override
@@ -111,7 +100,6 @@ public class ClientSecretExportSettings {
     StringBuilder sb = new StringBuilder();
     sb.append("class ClientSecretExportSettings {\n");
     sb.append("    recipientIdCode: ").append(toIndentedString(recipientIdCode)).append("\n");
-    sb.append("    recipientNameInLdap: ").append(toIndentedString(recipientNameInLdap)).append("\n");
     sb.append("    recipientEmail: ").append(toIndentedString(recipientEmail)).append("\n");
     sb.append("}");
     return sb.toString();

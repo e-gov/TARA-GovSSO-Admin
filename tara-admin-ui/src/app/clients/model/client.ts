@@ -56,7 +56,6 @@ export type ClientMidSettings = {
 
 export type ClientSecretExportSettings = {
   recipient_id_code: string | undefined,
-  recipient_name_in_ldap: string | undefined,
   recipient_email: string | undefined
 }
 
