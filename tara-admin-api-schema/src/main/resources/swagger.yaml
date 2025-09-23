@@ -713,8 +713,6 @@ components:
             - substantial
             - high
           example: high
-        secret:
-          type: string
         eidas_requester_id:
           type: string
           maxLength: 1024

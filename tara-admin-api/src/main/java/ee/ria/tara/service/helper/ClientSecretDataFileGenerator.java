@@ -5,6 +5,7 @@ import ee.ria.tara.model.Client;
 import freemarker.template.Configuration;
 import freemarker.template.Template;
 import freemarker.template.TemplateException;
+import lombok.RequiredArgsConstructor;
 import org.openeid.cdoc4j.DataFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,30 +16,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 @Service
+@RequiredArgsConstructor
 public class ClientSecretDataFileGenerator {
+
     private final ClientSecretDataFileConfigurationProvider configurationProvider;
+    private final Configuration freemarkerConfiguration;
 
-    private Configuration freemarkerConfiguration;
-
-    @Autowired
-    ClientSecretDataFileGenerator(Configuration freemarkerConfiguration, ClientSecretDataFileConfigurationProvider configurationProvider) {
-        this.freemarkerConfiguration = freemarkerConfiguration;
-        this.configurationProvider = configurationProvider;
+    public DataFile generate(Client client, String secret) throws IOException, TemplateException {
+        return new DataFile(configurationProvider.getEncryptedFileName(), getSigningSecretBody(client, secret));
     }
 
-    public DataFile generate(Client client) throws IOException, TemplateException {
-        return new DataFile(configurationProvider.getEncryptedFileName(), getSigningSecretBody(client));
-    }
-
-    private byte[] getSigningSecretBody(Client client) throws IOException, TemplateException {
+    private byte[] getSigningSecretBody(Client client, String secret) throws IOException, TemplateException {
         Template template = freemarkerConfiguration.getTemplate(configurationProvider.getTextFileName());
-        return FreeMarkerTemplateUtils.processTemplateIntoString(template, buildTemplateModel(client)).getBytes();
+        return FreeMarkerTemplateUtils.processTemplateIntoString(template, buildTemplateModel(client, secret)).getBytes();
     }
 
-    private Map<String, String> buildTemplateModel(Client client) {
+    private Map<String, String> buildTemplateModel(Client client, String secret) {
         Map<String, String> model = new HashMap<>();
         model.put("clientId", client.getClientId());
-        model.put("clientSecret", client.getSecret());
+        model.put("clientSecret", secret);
         return model;
     }
 }

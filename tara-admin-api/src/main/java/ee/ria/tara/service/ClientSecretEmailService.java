@@ -43,12 +43,14 @@ public class ClientSecretEmailService {
         this.clientSecretDatafileGenerator = clientSecretDatafileGenerator;
     }
 
-    public void sendSigningSecretByEmail(Client client) throws ApiException {
-        Email email = clientSecretEmailComposer.compose(client.getClientSecretExportSettings().getRecipientEmail(), getCdoc(client));
+    public void sendSigningSecretByEmail(Client client, String secret) throws ApiException {
+        Email email = clientSecretEmailComposer.compose(
+                client.getClientSecretExportSettings().getRecipientEmail(),
+                getCdoc(client, secret));
 
         try {
             log.info(String.format("Sending email with encrypted secret for client: %s (from: '%s' , to: '%s')",
-                    client.getClientId(),email.getFrom().getEmail(), email.getTo()));
+                    client.getClientId(), email.getFrom().getEmail(), email.getTo()));
             javaMailSender.send(createMessage(email));
             log.info(String.format("Email sent successfully to '%s'", email.getTo()));
         } catch (Exception e) {
@@ -74,11 +76,11 @@ public class ClientSecretEmailService {
         }
     }
 
-    private byte[] getCdoc(Client client) throws ApiException {
+    private byte[] getCdoc(Client client, String secret) throws ApiException {
         List<X509Certificate> certificates = certificateService.findAuthenticationCertificates(client.getClientSecretExportSettings().getRecipientIdCode());
         DataFile dataFile;
         try {
-            dataFile = clientSecretDatafileGenerator.generate(client);
+            dataFile = clientSecretDatafileGenerator.generate(client, secret);
         } catch (IOException | TemplateException e) {
             log.error("Failed to generate datafile.", e);
             throw new FatalApiException("Client.secret.email.failed");
@@ -90,7 +92,7 @@ public class ClientSecretEmailService {
     private byte[] generateCdoc(DataFile dataFile, List<X509Certificate> certificates) throws ApiException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-        if (certificates.size() == 0) {
+        if (certificates.isEmpty()) {
             log.error("No valid recipients found.");
             throw new InvalidDataException("Client.secret.email.invalidIdCode");
         }

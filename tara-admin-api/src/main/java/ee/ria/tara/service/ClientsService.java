@@ -5,13 +5,11 @@ import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.model.Client;
-import ee.ria.tara.model.ClientSecretExportSettings;
 import ee.ria.tara.repository.ClientRepository;
 import ee.ria.tara.repository.InstitutionRepository;
 import ee.ria.tara.repository.model.Institution;
 import ee.ria.tara.service.helper.ClientHelper;
 import ee.ria.tara.service.helper.ClientValidator;
-import ee.ria.tara.service.helper.NationalIdCodeValidator;
 import ee.ria.tara.service.helper.ScopeFilter;
 import ee.ria.tara.service.helper.SecureRandomAlphaNumericStringGenerator;
 import ee.ria.tara.service.model.HydraClient;
@@ -20,7 +18,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,6 +30,7 @@ import java.util.stream.Collectors;
 import static ee.ria.tara.service.helper.ClientHelper.convertToClient;
 import static ee.ria.tara.service.helper.ClientHelper.convertToHydraClient;
 import static java.util.function.Function.identity;
+import static org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW;
 
 @Slf4j
 @Service
@@ -46,6 +47,7 @@ public class ClientsService {
     private final ClientValidator clientValidator;
     private final ScopeFilter scopeFilter;
     private final SecureRandomAlphaNumericStringGenerator secureRandomAlphaNumericStringGenerator;
+    private final PlatformTransactionManager transactionManager;
 
     public Client getClient(@NonNull String clientId) throws FatalApiException {
         HydraClient hydraClient = this.oidcService.getClient(clientId);
@@ -123,11 +125,6 @@ public class ClientsService {
         }
     }
 
-    private boolean shouldGenerateNewSecret(Client client) {
-        ClientSecretExportSettings settings = client.getClientSecretExportSettings();
-        return settings != null && settings.getRecipientEmail() != null && settings.getRecipientIdCode() != null;
-    }
-
     /*
       1. Save client to TARA database, which is reversible transaction.
       2. Save client to Hydra.
@@ -142,38 +139,32 @@ public class ClientsService {
     // an existing one. We are also not checking if `clientId` equals `client.getClientId()`, a mismatch there could
     // lead to odd behaviour.
     private void saveClient(Client client, String registryCode, String clientId) {
-        Institution institution = institutionRepository.findInstitutionByRegistryCode(registryCode);
-        client.setScope(scopeFilter.filterInstitutionClientScopes(client.getScope(), institution.getType()));
-        clientValidator.validateClient(client, institution.getType());
-        saveClientEntity(ClientHelper.convertToEntity(client, institution));
+        TransactionTemplate transactionTemplate = new TransactionTemplate(transactionManager);
+        transactionTemplate.setPropagationBehavior(PROPAGATION_REQUIRES_NEW);
 
-        boolean ssoMode = adminConfigurationProvider.isSsoMode();
-        HydraClient hydraClient = convertToHydraClient(client, ssoMode);
-        if (clientId == null) {
-            oidcService.createClient(hydraClient);
-        } else {
-            oidcService.updateClient(clientId, hydraClient);
-        }
+        transactionTemplate.executeWithoutResult(transactionStatus -> {
+            Institution institution = institutionRepository.findInstitutionByRegistryCode(registryCode);
+            client.setScope(scopeFilter.filterInstitutionClientScopes(client.getScope(), institution.getType()));
+            clientValidator.validateClient(client, institution.getType());
+            saveClientEntity(ClientHelper.convertToEntity(client, institution));
 
-        if (shouldGenerateNewSecret(client)) {
-            resetSecret(client.getClientId(), client, hydraClient, ssoMode);
+            boolean ssoMode = adminConfigurationProvider.isSsoMode();
+            HydraClient hydraClient = convertToHydraClient(client, ssoMode);
+            if (clientId == null) {
+                oidcService.createClient(hydraClient);
+            } else {
+                oidcService.updateClient(clientId, hydraClient);
+            }
+        });
+
+        if (client.getClientSecretExportSettings() != null) {
+            resetSecret(client);
         }
     }
 
-    private void resetSecret(String clientId, Client client, HydraClient hydraClient, boolean ssoMode) {
-        assertValidIdCode(client.getClientSecretExportSettings());
+    private void resetSecret(Client client) {
         String newSecret = secureRandomAlphaNumericStringGenerator.generate(SIGNING_SECRET_LENGTH);
-        client.setSecret(newSecret);
-        clientSecretEmailService.sendSigningSecretByEmail(client);
-
-        hydraClient.setClientSecret(!ssoMode ? ClientHelper.getDigest(newSecret) : newSecret);
-        oidcService.updateClient(clientId, hydraClient);
-    }
-
-    private void assertValidIdCode(ClientSecretExportSettings clientSecretExportSettings) throws InvalidDataException {
-        if (!NationalIdCodeValidator.isValid(clientSecretExportSettings.getRecipientIdCode())) {
-            log.error(String.format("Given CDOC national id code is not valid: %s.", clientSecretExportSettings.getRecipientIdCode()));
-            throw new InvalidDataException("Client.secret.invalidIdCode");
-        }
+        clientSecretEmailService.sendSigningSecretByEmail(client, newSecret);
+        oidcService.setSecret(client.getClientId(), newSecret);
     }
 }

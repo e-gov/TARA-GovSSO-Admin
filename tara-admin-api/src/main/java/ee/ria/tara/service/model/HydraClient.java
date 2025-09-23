@@ -23,18 +23,6 @@ public class HydraClient {
     @Pattern(regexp="^(?!\\s*$).+") @Size(max=512)
     private String clientName;
 
-    @JsonProperty("client_secret")
-    @Pattern(regexp="-A-Za-z0-9")
-    private String clientSecret;
-
-    @ToString.Include(name = "clientSecret")
-    public String clientSecretToString() {
-        if (clientSecret == null) {
-            return "null";
-        }
-        return "[non-null value]";
-    }
-
     @JsonProperty("access_token_strategy")
     private String accessTokenStrategy;
 

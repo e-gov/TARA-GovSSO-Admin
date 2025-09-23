@@ -1,7 +1,6 @@
 package ee.ria.tara.service.helper;
 
 
-import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientContact;
 import ee.ria.tara.model.ClientMidSettings;
@@ -17,13 +16,9 @@ import ee.ria.tara.service.model.OidcClient;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.bouncycastle.util.encoders.Hex;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -166,8 +161,6 @@ public class ClientHelper {
         hydraClient.setAuthorizationCodeGrantAccessTokenLifespan(client.getAccessTokenLifespan());
         hydraClient.setRefreshTokenGrantAccessTokenLifespan(client.getAccessTokenLifespan());
         hydraClient.setClientId(client.getClientId());
-        // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.
-        hydraClient.setClientSecret(!ssoMode ? getDigest(client.getSecret()): client.getSecret());
         hydraClient.setClientName(client.getClientName() != null ? client.getClientName().getEt() : null);
         hydraClient.setScope(String.join(" ", client.getScope()));
         hydraClient.setRedirectUris(client.getRedirectUris());
@@ -277,19 +270,6 @@ public class ClientHelper {
         return client.getSkipUserConsentClientIds().stream()
                 .distinct()
                 .collect(Collectors.toList());
-    }
-
-    @SneakyThrows
-    public static String getDigest(String secret) {
-        if (secret == null)
-            return null;
-
-        try {
-            return Hex.toHexString(MessageDigest.getInstance("SHA-256").digest(secret.getBytes(StandardCharsets.UTF_8)));
-        } catch (NoSuchAlgorithmException e) {
-            log.error("Failed to retrieve SHA-256 algorithm.", e);
-            throw new FatalApiException(e);
-        }
     }
 
     private static String getBackchannelLogoutHostAndPort(String backchannelLogoutUri) throws MalformedURLException {

@@ -3,6 +3,7 @@ package ee.ria.tara.service.helper;
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.model.Client;
+import ee.ria.tara.model.ClientSecretExportSettings;
 import ee.ria.tara.model.InstitutionType;
 import ee.ria.tara.repository.ClientRepository;
 import inet.ipaddr.AddressStringException;
@@ -55,6 +56,17 @@ public class ClientValidator {
         validateAccessTokenJwtEnabled(client);
         validateAccessTokenAudienceUris(client);
         validateAccessTokenLifespan(client);
+        validateClientSecretExportSettings(client);
+    }
+
+    private static void validateClientSecretExportSettings(Client client) {
+        ClientSecretExportSettings clientSecretExportSettings = client.getClientSecretExportSettings();
+        if (clientSecretExportSettings == null) {
+            return;
+        }
+        if (!NationalIdCodeValidator.isValid(clientSecretExportSettings.getRecipientIdCode())) {
+            throw new InvalidDataException("Client.secret.invalidIdCode");
+        }
     }
 
     private void validateIpAddresses(List<String> ipAddresses) {

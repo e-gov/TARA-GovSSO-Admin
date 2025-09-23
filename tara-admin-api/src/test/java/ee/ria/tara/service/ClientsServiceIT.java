@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.context.jdbc.Sql;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.badRequest;
@@ -38,6 +39,8 @@ import static com.github.tomakehurst.wiremock.client.WireMock.serverError;
 import static com.github.tomakehurst.wiremock.client.WireMock.status;
 import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doThrow;
 
 @SpringBootTest
 @EnableConfigurationProperties
@@ -45,7 +48,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ClientsServiceIT {
-    private static WireMockServer hydraWireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
+    private static final WireMockServer hydraWireMockServer =
+            new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
     private final String registryCode = "testcode";
 
     @Autowired
@@ -56,6 +60,8 @@ public class ClientsServiceIT {
     private ClientsService service;
     @Autowired
     private TaraOidcConfigurationProvider taraOidcConfigurationProvider;
+    @MockitoBean
+    private ClientSecretEmailService clientSecretEmailService;
 
     private Client client;
 
@@ -63,6 +69,7 @@ public class ClientsServiceIT {
     public void setUp() {
         client = validTARAClient();
         client.setClientSecretExportSettings(null);
+        hydraWireMockServer.resetAll();
     }
 
     @BeforeAll
@@ -284,6 +291,24 @@ public class ClientsServiceIT {
 
     @Test
     @Order(13)
+    public void addClient_whenSendingSecretEmailFails_clientPersisted() {
+        Assertions.assertEquals(0, clientRepository.findAll().size());
+
+        client.setClientSecretExportSettings(validTARAClient().getClientSecretExportSettings());
+        hydraWireMockServer.stubFor(
+                post("/admin/clients")
+                        .willReturn(ok())
+        );
+        doThrow(new FatalApiException("Client.secret.email.failed")).when(clientSecretEmailService)
+                .sendSigningSecretByEmail(any(), any());
+
+        assertThrows(FatalApiException.class, () -> service.addClientToInstitution(registryCode, client));
+
+        Assertions.assertEquals(1, clientRepository.findAll().size());
+    }
+
+    @Test
+    @Order(14)
     public void clearDatabase() {
         clientRepository.deleteAll();
         institutionRepository.deleteAll();

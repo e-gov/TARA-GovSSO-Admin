@@ -35,9 +35,8 @@ class SigningSecretEmailServiceIT {
         clientSecretExportSettings.setRecipientEmail(TO);
         clientSecretExportSettings.setRecipientIdCode(ID_CODE);
         client.setClientSecretExportSettings(clientSecretExportSettings);
-        client.setSecret("secret");
 
-        clientSecretEmailService.sendSigningSecretByEmail(client);
+        clientSecretEmailService.sendSigningSecretByEmail(client, "secret");
 
         MimeMessageParser parser = new MimeMessageParser(smtpServer.getMessages()[0]).parse();
 

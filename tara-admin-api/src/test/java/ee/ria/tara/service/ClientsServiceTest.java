@@ -22,6 +22,7 @@ import org.mockito.ArgumentCaptor;
 import org.mockito.Captor;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.batch.support.transaction.ResourcelessTransactionManager;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.time.OffsetDateTime;
@@ -89,7 +90,8 @@ public class ClientsServiceTest {
                 adminConfigurationProvider,
                 clientValidator,
                 scopeFilter,
-                secureRandomAlphaNumericStringGenerator
+                secureRandomAlphaNumericStringGenerator,
+                new ResourcelessTransactionManager()
         );
         adminConfigurationProvider.setSsoMode(false);
         client = validTARAClient();
@@ -169,7 +171,7 @@ public class ClientsServiceTest {
         verify(oidcService, times(1)).createClient(hydraClientCaptor.capture());
         verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
-        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
+        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class), anyString());
 
         HydraClient savedHydraClient = hydraClientCaptor.getValue();
         ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
@@ -182,6 +184,7 @@ public class ClientsServiceTest {
     public void addClientToInstitution_whenOidcServiceFails_apiExceptionThrowAndSecretNotEmailed() {
         String registryCode = "1";
         String errorMessage = "Oops.";
+
         doThrow(new ApiException(errorMessage)).when(oidcService).createClient(any(HydraClient.class));
         doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
@@ -191,7 +194,7 @@ public class ClientsServiceTest {
         assertTrue(exception.getMessage()
                 .contains(errorMessage));
 
-        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
+        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class), anyString());
     }
 
     @Test
@@ -237,7 +240,7 @@ public class ClientsServiceTest {
 
         verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
-        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
+        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class), anyString());
         verify(oidcService, times(1)).createClient(hydraClientCaptor.capture());
 
         HydraClient savedHydraClient = hydraClientCaptor.getValue();
@@ -258,16 +261,16 @@ public class ClientsServiceTest {
 
         doReturn(secret).when(secureRandomAlphaNumericStringGenerator).generate(ClientsService.SIGNING_SECRET_LENGTH);
         doNothing().when(oidcService).createClient(any(HydraClient.class));
-        doNothing().when(oidcService).updateClient(eq(client.getClientId()), any(HydraClient.class));
+        doNothing().when(oidcService).setSecret(eq(client.getClientId()), eq(secret));
         doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 
         clientsService.addClientToInstitution(registryCode, client);
 
         verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
-        verify(clientSecretEmailService, times(1)).sendSigningSecretByEmail(eq(client));
+        verify(clientSecretEmailService, times(1)).sendSigningSecretByEmail(eq(client), eq(secret));
         verify(oidcService, times(1)).createClient(hydraClientCaptor.capture());
-        verify(oidcService, times(1)).updateClient(eq(client.getClientId()), any(HydraClient.class));
+        verify(oidcService, times(1)).setSecret(client.getClientId(), secret);
 
         HydraClient savedHydraClient = hydraClientCaptor.getValue();
         ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
@@ -291,6 +294,7 @@ public class ClientsServiceTest {
 
     @Test
     public void updateClient_whenSecretRecipientNotSet_secretNotEmailedAndClientUpdatedOnce() {
+        String secret = "a".repeat(ClientsService.SIGNING_SECRET_LENGTH);
         String registryCode = "1";
         String clientId = "10101010005";
         client.setClientSecretExportSettings(null);
@@ -302,7 +306,7 @@ public class ClientsServiceTest {
 
         verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
-        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
+        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class), eq(secret));
         verify(oidcService, times(1)).updateClient(eq(clientId), hydraClientCaptor.capture());
 
         HydraClient savedHydraClient = hydraClientCaptor.getValue();
@@ -319,7 +323,7 @@ public class ClientsServiceTest {
         String clientId = client.getClientId();
         ClientSecretExportSettings secretExportSettings = new ClientSecretExportSettings();
         secretExportSettings.setRecipientEmail("email");
-        secretExportSettings.setRecipientIdCode("10101010005");
+        secretExportSettings.setRecipientIdCode("30303039914");
         client.setClientSecretExportSettings(secretExportSettings);
 
         doReturn(secret).when(secureRandomAlphaNumericStringGenerator).generate(ClientsService.SIGNING_SECRET_LENGTH);
@@ -330,12 +334,11 @@ public class ClientsServiceTest {
 
         verify(clientRepository, times(1)).save(clientEntityCaptor.capture());
         verify(institutionRepository, times(1)).findInstitutionByRegistryCode(registryCode);
-        verify(clientSecretEmailService, times(1)).sendSigningSecretByEmail(any(Client.class));
-        verify(oidcService, times(2)).updateClient(eq(clientId), hydraClientCaptor.capture());
+        verify(clientSecretEmailService, times(1)).sendSigningSecretByEmail(any(Client.class), eq(secret));
+        verify(oidcService, times(1)).updateClient(eq(clientId), hydraClientCaptor.capture());
+        verify(oidcService, times(1)).setSecret(client.getClientId(), secret);
 
-        // First save is done without updating the secret, meaning the secret is set to `null`, which does not match the
-        // input client, so lets compare the value from the second save.
-        HydraClient savedHydraClient = hydraClientCaptor.getAllValues().get(1);
+        HydraClient savedHydraClient = hydraClientCaptor.getValue();
         ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
 
         assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
@@ -347,6 +350,7 @@ public class ClientsServiceTest {
         String registryCode = "1";
         String clientId = "10101010005";
         String errorMessage = "Oops.";
+
         doThrow(new ApiException(errorMessage))
                 .when(oidcService).updateClient(eq(clientId), any(HydraClient.class));
         doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
@@ -355,7 +359,7 @@ public class ClientsServiceTest {
                 () -> clientsService.updateClient(registryCode, clientId, client));
 
         assertTrue(exception.getMessage().contains(errorMessage));
-        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class));
+        verify(clientSecretEmailService, times(0)).sendSigningSecretByEmail(any(Client.class), anyString());
     }
 
     @Test

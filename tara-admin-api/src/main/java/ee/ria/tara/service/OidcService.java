@@ -1,5 +1,6 @@
 package ee.ria.tara.service;
 
+import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
@@ -10,9 +11,11 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.hc.core5.net.URIBuilder;
+import org.bouncycastle.util.encoders.Hex;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
@@ -21,10 +24,15 @@ import org.springframework.web.client.RestTemplate;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import static java.util.Map.entry;
 import static net.logstash.logback.argument.StructuredArguments.value;
 
 @Slf4j
@@ -33,6 +41,7 @@ import static net.logstash.logback.argument.StructuredArguments.value;
 public class OidcService {
     private final RestTemplate restTemplate;
     private final TaraOidcConfigurationProvider taraOidcConfigurationProvider;
+    private final AdminConfigurationProvider adminConfigurationProvider;
 
     public List<HydraClient> getAllClients() throws FatalApiException {
         List<HydraClient> clients = new ArrayList<>();
@@ -90,7 +99,7 @@ public class OidcService {
         }
     }
 
-    public void deleteClient(String clientId) throws RecordDoesNotExistException, FatalApiException {
+    public void deleteClient(@NonNull String clientId) throws RecordDoesNotExistException, FatalApiException {
         URI uri = null;
         try {
             uri = new URIBuilder(taraOidcConfigurationProvider.getUrl())
@@ -98,7 +107,7 @@ public class OidcService {
                     .appendPath(clientId)
                     .build();
             log.info("Sending " + HttpMethod.DELETE.name() + " request to OIDC service.", value("url.full", uri));
-            ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.DELETE, null, new ParameterizedTypeReference<Void>() {});
+            ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.DELETE, null, Void.class);
 
             if (log.isDebugEnabled()) {
                 log.debug("OIDC response: {}", value("response", response));
@@ -117,7 +126,7 @@ public class OidcService {
         }
     }
 
-    public void createClient(HydraClient client) {
+    public void createClient(@NonNull HydraClient client) {
         try {
             URI uri = new URIBuilder(taraOidcConfigurationProvider.getUrl())
                     .appendPath("/admin/clients")
@@ -128,7 +137,7 @@ public class OidcService {
         }
     }
 
-    public void updateClient(String clientId, HydraClient client) {
+    public void updateClient(@NonNull String clientId, @NonNull HydraClient client) {
         try {
             URI uri = new URIBuilder(taraOidcConfigurationProvider.getUrl())
                     .appendPath("/admin/clients")
@@ -162,4 +171,52 @@ public class OidcService {
             throw new FatalApiException("Oidc.serverError");
         }
     }
+
+    public void setSecret(@NonNull String clientId, @NonNull String secret) {
+        URI uri = null;
+        try {
+            uri = new URIBuilder(taraOidcConfigurationProvider.getUrl())
+                    .appendPath("/admin/clients")
+                    .appendPath(clientId)
+                    .build();
+            boolean ssoMode = adminConfigurationProvider.isSsoMode();
+            // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.
+            Map<String, String> payload = Map.ofEntries(
+                    entry("op", "replace"),
+                    entry("path", "/client_secret"),
+                    entry("value", ssoMode ? secret : getDigest(secret)));
+            log.info("Sending " + HttpMethod.PATCH.name() + " request to OIDC service.", value("url.full", uri));
+            ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.PATCH, new HttpEntity<>(payload), Void.class);
+
+            if (log.isDebugEnabled()) {
+                log.debug("OIDC response: {}", value("response", response));
+            }
+
+            log.info("Updated secret on client with client_id {}.", clientId);
+        } catch (HttpClientErrorException ex) {
+            log.error(String.format("Hydra request: %s %s failed.", HttpMethod.PATCH.name(), uri), ex);
+
+            if (ex.getStatusCode() == HttpStatus.NOT_FOUND) {
+                log.warn(
+                        "Expecting failure to be caused by not finding client with client_id: {}",
+                        clientId);
+            }
+            throw new InvalidDataException("Oidc.clientError.400");
+        } catch (HttpServerErrorException ex) {
+            log.error(String.format("Hydra request: %s %s failed.", HttpMethod.PATCH.name(), uri), ex);
+            throw new FatalApiException("Oidc.serverError");
+        } catch (URISyntaxException e) {
+            throw new FatalApiException("Server.error", e);
+        }
+    }
+
+    public static String getDigest(String secret) {
+        try {
+            return Hex.toHexString(MessageDigest.getInstance("SHA-256").digest(secret.getBytes(StandardCharsets.UTF_8)));
+        } catch (NoSuchAlgorithmException e) {
+            log.error("Failed to retrieve SHA-256 algorithm.", e);
+            throw new FatalApiException(e);
+        }
+    }
+
 }

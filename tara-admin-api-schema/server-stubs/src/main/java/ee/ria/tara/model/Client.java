@@ -139,8 +139,6 @@ public class Client {
 
   private @Nullable MinimumAcrValueEnum minimumAcrValue;
 
-  private @Nullable String secret;
-
   private @Nullable String eidasRequesterId;
 
   private @Nullable String description;
@@ -513,26 +511,6 @@ public class Client {
 
   public void setMinimumAcrValue(MinimumAcrValueEnum minimumAcrValue) {
     this.minimumAcrValue = minimumAcrValue;
-  }
-
-  public Client secret(String secret) {
-    this.secret = secret;
-    return this;
-  }
-
-  /**
-   * Get secret
-   * @return secret
-   */
-  
-  @Schema(name = "secret", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
-  @JsonProperty("secret")
-  public String getSecret() {
-    return secret;
-  }
-
-  public void setSecret(String secret) {
-    this.secret = secret;
   }
 
   public Client eidasRequesterId(String eidasRequesterId) {
@@ -910,7 +888,6 @@ public class Client {
         Objects.equals(this.tokenRequestAllowedIpAddresses, client.tokenRequestAllowedIpAddresses) &&
         Objects.equals(this.tokenEndpointAuthMethod, client.tokenEndpointAuthMethod) &&
         Objects.equals(this.minimumAcrValue, client.minimumAcrValue) &&
-        Objects.equals(this.secret, client.secret) &&
         Objects.equals(this.eidasRequesterId, client.eidasRequesterId) &&
         Objects.equals(this.description, client.description) &&
         Objects.equals(this.infoNotificationEmails, client.infoNotificationEmails) &&
@@ -931,7 +908,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, secret, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -952,7 +929,6 @@ public class Client {
     sb.append("    tokenRequestAllowedIpAddresses: ").append(toIndentedString(tokenRequestAllowedIpAddresses)).append("\n");
     sb.append("    tokenEndpointAuthMethod: ").append(toIndentedString(tokenEndpointAuthMethod)).append("\n");
     sb.append("    minimumAcrValue: ").append(toIndentedString(minimumAcrValue)).append("\n");
-    sb.append("    secret: ").append(toIndentedString(secret)).append("\n");
     sb.append("    eidasRequesterId: ").append(toIndentedString(eidasRequesterId)).append("\n");
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    infoNotificationEmails: ").append(toIndentedString(infoNotificationEmails)).append("\n");

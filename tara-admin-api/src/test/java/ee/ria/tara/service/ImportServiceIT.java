@@ -3,9 +3,7 @@ package ee.ria.tara.service;
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.core.WireMockConfiguration;
 import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
-import ee.ria.tara.model.Client;
-import ee.ria.tara.model.ClientContact;
-import ee.ria.tara.model.Institution;
+import ee.ria.tara.model.ClientImportResponse;
 import ee.ria.tara.repository.ClientRepository;
 import ee.ria.tara.repository.InstitutionRepository;
 import lombok.RequiredArgsConstructor;
@@ -13,7 +11,6 @@ import org.apache.poi.EmptyFileException;
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.MethodOrderer;
@@ -29,18 +26,25 @@ import wiremock.org.apache.commons.io.IOUtils;
 
 import java.io.FileInputStream;
 import java.io.InputStream;
-import java.util.Iterator;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Stream;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.equalToJson;
 import static com.github.tomakehurst.wiremock.client.WireMock.get;
 import static com.github.tomakehurst.wiremock.client.WireMock.ok;
 import static com.github.tomakehurst.wiremock.client.WireMock.put;
-import static com.github.tomakehurst.wiremock.client.WireMock.reset;
-import static ee.ria.tara.service.helper.ClientTestHelper.createValidPrivateInstitution;
-import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
+import static com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor;
+import static com.github.tomakehurst.wiremock.client.WireMock.serverError;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathEqualTo;
+import static com.github.tomakehurst.wiremock.client.WireMock.urlPathTemplate;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @SpringBootTest
@@ -49,8 +53,8 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ImportServiceIT {
-    private static WireMockServer hydraWireMockServer = new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
-    private final String registryCode = "testcode";
+    private static final WireMockServer hydraWireMockServer =
+            new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());
 
     @Autowired
     private ClientRepository clientRepository;
@@ -61,11 +65,8 @@ public class ImportServiceIT {
     @Autowired
     private TaraOidcConfigurationProvider taraOidcConfigurationProvider;
 
-    private Client client;
-
     @BeforeEach
     public void setUp() {
-        client = validTARAClient();
         taraOidcConfigurationProvider.setUrl(hydraWireMockServer.baseUrl());
     }
 
@@ -82,7 +83,9 @@ public class ImportServiceIT {
 
     @AfterEach
     public void tearDown() {
-        reset();
+        hydraWireMockServer.resetAll();
+        clientRepository.deleteAll();
+        institutionRepository.deleteAll();
     }
 
     @Test
@@ -110,83 +113,101 @@ public class ImportServiceIT {
     }
 
     @Test
+    @Order(999)
+    @Sql({"classpath:fixtures/ADD_institution_9999.sql"})
     public void importFromExcel_validFile() throws Exception {
+        List<String> expectedSuccessfulClientIds = List.of(
+                "openIdDemo-1",
+                "openIdDemo-2",
+                "openIdDemo-4",
+                "openIdDemo-7"
+        );
+        List<String> invalidClientIds = List.of(
+                "openIdDemo-3",
+                "openIdDemo-5",
+                "openIdDemo-6"
+        );
 
-        Map<Institution, List<Client>> institutionListMap = importService.importFromExcelFile(new FileInputStream("src/test/resources/import_files/clients.xlsx"));
-        assertEquals(2, institutionListMap.size());
+        hydraWireMockServer.stubFor(put(urlPathTemplate("/admin/clients/{clientId}")).willReturn(ok()));
+        hydraWireMockServer.stubFor(get(urlPathTemplate("/admin/clients/{clientId}")).willReturn(ok()));
 
-        Iterator<Map.Entry<Institution, List<Client>>> iterator = institutionListMap.entrySet().iterator();
-        Map.Entry<Institution, List<Client>> entry = iterator.next();
-        assertEquals("Example Institution", entry.getKey().getName());
-        assertEquals("12345678", entry.getKey().getRegistryCode());
-        assertEquals(6, entry.getValue().size());
+        ClientImportResponse actual =
+                importService.importFromExcelFile(new FileInputStream("src/test/resources/import_files/clients.xlsx"));
 
-        assertEquals("openIdDemo-1", entry.getValue().get(0).getClientId());
-        assertEquals(List.of("https://localhost:8444/authenticate"), entry.getValue().get(0).getRedirectUris());
-        assertEquals("2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b", entry.getValue().get(0).getSecret());
-        assertEquals(null, entry.getValue().get(0).getClientUrl());
-        assertEquals(null, entry.getValue().get(0).getClientName().getEt());
-        assertEquals(null, entry.getValue().get(0).getClientName().getEn());
-        assertEquals(null, entry.getValue().get(0).getClientName().getRu());
-        assertEquals(null, entry.getValue().get(0).getClientShortName().getEt());
-        assertEquals(null, entry.getValue().get(0).getClientShortName().getEn());
-        assertEquals(null, entry.getValue().get(0).getClientShortName().getRu());
-        assertEquals(List.of(), entry.getValue().get(0).getClientContacts());
-        assertEquals(null, entry.getValue().get(0).getDescription());
+        for (String clientId : expectedSuccessfulClientIds) {
+            String expectedBody = Files.readString(
+                    Paths.get(getClass().getResource("/import_client_bodies/" + clientId + ".json").toURI()),
+                    StandardCharsets.UTF_8
+            );
+            hydraWireMockServer.verify(putRequestedFor(urlPathEqualTo("/admin/clients/" + clientId))
+                    .withRequestBody(equalToJson(expectedBody)));
+        }
 
-        assertEquals("openIdDemo-5", entry.getValue().get(4).getClientId());
-        assertEquals(List.of("^https://tara-client.example.com:8451/oauth/response.*"), entry.getValue().get(4).getRedirectUris());
-        assertEquals("2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b", entry.getValue().get(4).getSecret());
-        assertEquals("https://tara-client.example.com:8451/ui", entry.getValue().get(4).getClientUrl());
-        assertEquals("Teenusenimi_est", entry.getValue().get(4).getClientName().getEt());
-        assertEquals("Servicename_en", entry.getValue().get(4).getClientName().getEn());
-        assertEquals("Тестовая система", entry.getValue().get(4).getClientName().getRu());
-        assertEquals("Lühinimi_est", entry.getValue().get(4).getClientShortName().getEt());
-        assertEquals("Shortname_en", entry.getValue().get(4).getClientShortName().getEn());
-        assertEquals("Тест-ru", entry.getValue().get(4).getClientShortName().getRu());
-        assertEquals(List.of(getContact("Kalle Kajakas", "kalle.kajakas@kajakas.com", "+37207114725", "example department")), entry.getValue().get(4).getClientContacts());
-        assertEquals("openIdDemo3", entry.getValue().get(4).getDescription());
-        assertEquals("58ee2267-7864-4e09-958b-b53c3135298e", entry.getValue().get(4).getEidasRequesterId());
+        ClientImportResponse expected = new ClientImportResponse();
+        expected.setClientsCount(expectedSuccessfulClientIds.size() + invalidClientIds.size());
+        expected.setClientsImportFailedCount(invalidClientIds.size());
+        expected.setClientsImportSuccessCount(expectedSuccessfulClientIds.size());
+        expected.setClientsNotImported(invalidClientIds);
+        expected.setStatus("FINISHED_WITH_ERRORS");
 
-        entry = iterator.next();
-        assertEquals("Example Institution", entry.getKey().getName());
-        assertEquals("00000000", entry.getKey().getRegistryCode());
-        assertEquals(1, entry.getValue().size());
-    }
-
-    private ClientContact getContact(String name, String email, String phone, String department) {
-        ClientContact clientContact = new ClientContact();
-        clientContact.setName(name);
-        clientContact.setEmail(email);
-        clientContact.setPhone(phone);
-        clientContact.setDepartment(department);
-        return clientContact;
+        assertEquals(expected, actual);
     }
 
     @Test
     @Order(999)
     @Sql({"classpath:fixtures/ADD_institution_9999.sql"})
-    public void saveClientToDatabase() {
-        Assertions.assertNotNull(institutionRepository.findInstitutionByRegistryCode(registryCode));
+    public void importFromExcel_oneHydraRequestFails() throws Exception {
+        List<String> expectedSuccessfulClientIds = List.of(
+                "openIdDemo-1",
+                "openIdDemo-4",
+                "openIdDemo-7"
+        );
+        List<String> hydraRequestFailsClientIds = List.of(
+                "openIdDemo-2"
+        );
+        List<String> invalidClientIds = List.of(
+                "openIdDemo-3",
+                "openIdDemo-5",
+                "openIdDemo-6"
+        );
+        List<String> importFailedClientIds = Stream.of(hydraRequestFailsClientIds, invalidClientIds)
+                .flatMap(Collection::stream)
+                .sorted()
+                .toList();
 
-        Institution mockInstiution = createValidPrivateInstitution("1234567890", "Test institution & company");
-        Client mockClient = validTARAClient();
-        hydraWireMockServer.stubFor(get("/admin/clients/" + mockClient.getClientId()).willReturn(ok()));
-        hydraWireMockServer.stubFor(put("/admin/clients/" + mockClient.getClientId()).willReturn(ok()));
+        hydraWireMockServer.stubFor(put(urlPathTemplate("/admin/clients/{clientId}")).willReturn(ok()));
+        hydraWireMockServer.stubFor(get(urlPathTemplate("/admin/clients/{clientId}")).willReturn(ok()));
+        for (String clientId : hydraRequestFailsClientIds) {
+            hydraWireMockServer.stubFor(put(urlPathTemplate("/admin/clients/" + clientId)).atPriority(1).willReturn(serverError()));
+        }
 
-        importService.saveClient(mockInstiution, mockClient);
-        List<ee.ria.tara.repository.model.Institution> institutions = institutionRepository.findAllByRegistryCodeContainingIgnoreCaseOrNameContainingIgnoreCase(mockInstiution.getRegistryCode(), "null");
-        Assertions.assertEquals(1, institutions.size());
-        Assertions.assertEquals(mockInstiution.getName(), institutions.get(0).getName());
-        Assertions.assertEquals(mockInstiution.getRegistryCode(), institutions.get(0).getRegistryCode());
+        ClientImportResponse actual =
+                importService.importFromExcelFile(new FileInputStream("src/test/resources/import_files/clients.xlsx"));
 
-        ee.ria.tara.repository.model.Client client = clientRepository.findByClientId(mockClient.getClientId());
-        Assertions.assertNotNull(client);
-        Assertions.assertEquals(mockClient.getClientId(), client.getClientId());
+        for (String clientId : expectedSuccessfulClientIds) {
+            String expectedBody = Files.readString(
+                    Paths.get(getClass().getResource("/import_client_bodies/" + clientId + ".json").toURI()),
+                    StandardCharsets.UTF_8
+            );
+            hydraWireMockServer.verify(putRequestedFor(urlPathEqualTo("/admin/clients/" + clientId))
+                    .withRequestBody(equalToJson(expectedBody)));
+        }
 
-        clientRepository.deleteAll();
-        institutionRepository.deleteAll();
-        Assertions.assertEquals(0, institutionRepository.findAll().size());
-        Assertions.assertEquals(0, clientRepository.findAll().size());
+        ClientImportResponse expected = new ClientImportResponse();
+        expected.setClientsCount(expectedSuccessfulClientIds.size() + importFailedClientIds.size());
+        expected.setClientsImportFailedCount(importFailedClientIds.size());
+        expected.setClientsImportSuccessCount(expectedSuccessfulClientIds.size());
+        expected.setClientsNotImported(importFailedClientIds);
+        expected.setStatus("FINISHED_WITH_ERRORS");
+
+        assertEquals(expected, actual);
+
+        for (String clientId : expectedSuccessfulClientIds) {
+            assertNotNull(clientRepository.findByClientId(clientId));
+        }
+        for (String clientId : importFailedClientIds) {
+            assertNull(clientRepository.findByClientId(clientId));
+        }
     }
+
 }

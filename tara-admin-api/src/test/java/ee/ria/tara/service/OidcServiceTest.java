@@ -212,18 +212,18 @@ public class OidcServiceTest {
         String clientId = "1";
 
         doReturn(ResponseEntity.ok().build()).when(restTemplate)
-                .exchange(any(URI.class), any(), nullable(HttpEntity.class), any(ParameterizedTypeReference.class));
+                .exchange(any(URI.class), any(), nullable(HttpEntity.class), eq(Void.class));
 
         oidcService.deleteClient(clientId);
 
         verify(restTemplate, times(1))
-                .exchange(eq(new URI("http://hydra/admin/clients/1")), eq(HttpMethod.DELETE), eq(null), any(ParameterizedTypeReference.class));
+                .exchange(eq(new URI("http://hydra/admin/clients/1")), eq(HttpMethod.DELETE), eq(null), eq(Void.class));
     }
 
     @Test
     public void deleteClient_whenHydraRequestFailsWithBadRequest_recordDoesNotExistExceptionThrown() {
         doThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST))
-                .when(restTemplate).exchange(any(URI.class), any(HttpMethod.class), any(), any(ParameterizedTypeReference.class));
+                .when(restTemplate).exchange(any(URI.class), any(HttpMethod.class), any(), eq(Void.class));
 
         RecordDoesNotExistException exception = assertThrows(RecordDoesNotExistException.class,
                 () -> oidcService.deleteClient( "1"));
@@ -234,7 +234,7 @@ public class OidcServiceTest {
     @Test
     public void deleteClient_whenHydraRequestFailsWithServerError_fatalApiExceptionThrown() {
         doThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR))
-                .when(restTemplate).exchange(any(URI.class), any(HttpMethod.class), any(), any(ParameterizedTypeReference.class));
+                .when(restTemplate).exchange(any(URI.class), any(HttpMethod.class), any(), eq(Void.class));
 
         FatalApiException exception = assertThrows(FatalApiException.class,
                 () -> oidcService.deleteClient( "1"));

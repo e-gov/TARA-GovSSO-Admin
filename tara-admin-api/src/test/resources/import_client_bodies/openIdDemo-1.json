@@ -1,0 +1,28 @@
+{
+  "client_id": "openIdDemo-1",
+  "grant_types": [
+    "authorization_code"
+  ],
+  "redirect_uris": [
+    "https://localhost:8444/authenticate"
+  ],
+  "response_types": [
+    "code"
+  ],
+  "scope": "openid eidas eidasonly eidas:country:* idcard mid smartid email phone",
+  "subject_type": "public",
+  "token_endpoint_auth_method": "client_secret_post",
+  "backchannel_logout_session_required": true,
+  "metadata": {
+    "oidc_client": {
+      "name_translations": {},
+      "short_name_translations": {},
+      "eidas_requester_id": "58ee2267-7864-4e09-958b-b53c3135298a",
+      "institution": {
+        "registry_code": "12345678",
+        "sector": "public"
+      }
+    }
+  },
+  "client_secret": "2bb80d537b1da3e38bd30361aa855686bde0eacd7162fef6a25fe97bf527a25b"
+}
