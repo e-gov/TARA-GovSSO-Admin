@@ -12,7 +12,8 @@ import ee.ria.tara.model.Institution;
 import ee.ria.tara.repository.helper.PropertyFilterMixIn;
 import ee.ria.tara.service.ImportService;
 import ee.ria.tara.service.helper.ClientValidator;
-import ee.ria.tara.service.helper.ScopeFilter;
+import ee.ria.tara.service.helper.GovSsoScopeFilter;
+import ee.ria.tara.service.helper.TaraScopeFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -38,7 +39,8 @@ import java.util.Map;
         FileImportConfiguration.class,
         ClientValidator.class,
         AdminConfigurationProvider.class,
-        ScopeFilter.class,
+        TaraScopeFilter.class,
+        GovSsoScopeFilter.class
 })
 public class ClientUtilsApplication implements CommandLineRunner {
 
