@@ -6,7 +6,6 @@ import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.model.ClientImportResponse;
 import ee.ria.tara.repository.ClientRepository;
 import ee.ria.tara.repository.InstitutionRepository;
-import lombok.RequiredArgsConstructor;
 import org.apache.poi.EmptyFileException;
 import org.apache.poi.openxml4j.exceptions.NotOfficeXmlFileException;
 import org.junit.jupiter.api.AfterAll;
@@ -51,7 +50,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @EnableConfigurationProperties
 @ActiveProfiles({"integrationtest"})
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class ImportServiceIT {
     private static final WireMockServer hydraWireMockServer =
             new WireMockServer(WireMockConfiguration.wireMockConfig().dynamicPort());

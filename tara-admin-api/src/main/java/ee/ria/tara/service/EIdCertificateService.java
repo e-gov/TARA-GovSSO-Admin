@@ -3,12 +3,13 @@ package ee.ria.tara.service;
 import com.unboundid.ldap.sdk.Attribute;
 import com.unboundid.ldap.sdk.LDAPConnection;
 import com.unboundid.ldap.sdk.LDAPException;
-import com.unboundid.ldap.sdk.LDAPSearchException;
 import com.unboundid.ldap.sdk.SearchResult;
 import com.unboundid.ldap.sdk.SearchResultEntry;
 import com.unboundid.ldap.sdk.SearchScope;
-import ee.ria.tara.configuration.providers.CertificateServiceConfigurationProvider;
+import ee.ria.tara.configuration.providers.EIdCertificateConfigurationProvider;
+import ee.ria.tara.configuration.providers.EIdCertificateConfigurationProvider.LdapSource;
 import ee.ria.tara.controllers.exception.FatalApiException;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.bouncycastle.asn1.ASN1ObjectIdentifier;
@@ -18,7 +19,6 @@ import org.bouncycastle.asn1.x509.PolicyInformation;
 import org.bouncycastle.cert.X509CertificateHolder;
 import org.springframework.stereotype.Service;
 
-import javax.net.ssl.SSLContext;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.cert.CertificateException;
@@ -26,6 +26,8 @@ import java.security.cert.CertificateFactory;
 import java.security.cert.X509Certificate;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -34,15 +36,25 @@ import static java.lang.String.format;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CertificateService {
-    private static final String BASE_DN = "c=EE";
-    private static final String SN_QUERY = "serialNumber=PNOEE-%s";
-    private static final String CERT_BINARY_ATTR = "userCertificate;binary";
+public class EIdCertificateService {
 
-    public static final CertificateFactory X509_FACTORY;
+    static final Set<String> VALID_ENCRYPTION_POLICY_IDENTIFIERS = Set.of(
+            //older ID-card and Digi-ID policies (https://www.sk.ee/upload/files/SK-CPR-ESTEID-EN-v8_3-20190605.pdf)
+            "1.3.6.1.4.1.10015.1.1",
+            "1.3.6.1.4.1.10015.1.2",
+            //newer ID-card and Digi-ID policies (https://www.sk.ee/upload/files/SK-CPR-ESTEID2018-EN-v1_1_20190503.pdf)
+            "1.3.6.1.4.1.51361.1.1.1",
+            "1.3.6.1.4.1.51361.1.1.3"
+    );
 
-    private final CertificateServiceConfigurationProvider configurationProvider;
-    private final SSLContext sslContext;
+    static final String SN_QUERY = "serialNumber=PNOEE-%s";
+    static final String CERT_BINARY_ATTR = "userCertificate;binary";
+    static final Pattern ID_CODE_PATTERN = Pattern.compile("^[0-9]+$");
+
+    private static final CertificateFactory X509_FACTORY;
+
+    private final EIdCertificateConfigurationProvider eIdCertificateConfiguration;
+    private final EIdLdapConnectionFactory eIdLdapConnectionFactory;
 
     static {
         try {
@@ -52,19 +64,31 @@ public class CertificateService {
         }
     }
 
-    public List<X509Certificate> findAuthenticationCertificates(String idCode) throws FatalApiException {
-        log.info("Requesting certificate from LDAP for user: " + idCode);
-        try (LDAPConnection connection = new LDAPConnection(sslContext.getSocketFactory())) {
-            connection.connect(configurationProvider.getUrl(), configurationProvider.getPort());
-            return executeSearch(connection, idCode);
+    public List<X509Certificate> findEncryptionCertificates(@NonNull String idCode) throws FatalApiException {
+        if (!ID_CODE_PATTERN.matcher(idCode).matches()) {
+            throw new IllegalArgumentException("`idCode` should be numeric");
+        }
+        return eIdCertificateConfiguration.ldapSources().stream()
+                // Could do it in parallel but sequential execution is good enough
+                .map(ldapSource -> findEncryptionCertificates(idCode, ldapSource))
+                .flatMap(Collection::stream)
+                .toList();
+    }
+
+    private List<X509Certificate> findEncryptionCertificates(String idCode, LdapSource ldapSource) {
+        log.info("Requesting certificate from LDAP for user \"{}\" from LDAP server {}:{}",
+                idCode, ldapSource.host(), ldapSource.port());
+        try (LDAPConnection connection = eIdLdapConnectionFactory.connect(ldapSource)) {
+            SearchResult result = connection.search(
+                    ldapSource.baseDn(), SearchScope.SUB, format(SN_QUERY, idCode), CERT_BINARY_ATTR);
+            return extractEncryptionCertificates(result);
         } catch (LDAPException e) {
-            log.error(String.format("Failed to find authentication certificate for user: %s.", idCode), e);
+            log.error(String.format("Failed to find authentication certificate for user %s.", idCode), e);
             throw new FatalApiException(e);
         }
     }
 
-    private List<X509Certificate> executeSearch(LDAPConnection connection, String idCode) throws LDAPSearchException {
-        SearchResult result = connection.search(BASE_DN, SearchScope.SUB, format(SN_QUERY, idCode), CERT_BINARY_ATTR);
+    private List<X509Certificate> extractEncryptionCertificates(SearchResult result) {
         return result.getSearchEntries().stream()
                 .map(SearchResultEntry::getAttributes)
                 .flatMap(Collection::stream)
@@ -97,16 +121,7 @@ public class CertificateService {
         return Stream.of(certificatePolicies.getPolicyInformation())
                 .map(PolicyInformation::getPolicyIdentifier)
                 .map(ASN1ObjectIdentifier::getId)
-                .anyMatch(this::isIdCardOrDigiIdPolicyIdentifier);
-    }
-
-    private boolean isIdCardOrDigiIdPolicyIdentifier(String policyIdentifier) {
-        //older ID-card and Digi-ID policies (https://www.sk.ee/upload/files/SK-CPR-ESTEID-EN-v8_3-20190605.pdf)
-        return policyIdentifier.equals("1.3.6.1.4.1.10015.1.1")
-                || policyIdentifier.equals("1.3.6.1.4.1.10015.1.2")
-                //newer ID-card and Digi-ID policies (https://www.sk.ee/upload/files/SK-CPR-ESTEID2018-EN-v1_1_20190503.pdf)
-                || policyIdentifier.equals("1.3.6.1.4.1.51361.1.1.1")
-                || policyIdentifier.equals("1.3.6.1.4.1.51361.1.1.3");
+                .anyMatch(VALID_ENCRYPTION_POLICY_IDENTIFIERS::contains);
     }
 
     private X509Certificate toX09Certificate(Attribute userCertificate) {

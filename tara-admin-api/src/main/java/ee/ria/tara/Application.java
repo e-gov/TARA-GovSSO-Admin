@@ -4,10 +4,12 @@ import co.elastic.apm.attach.ElasticApmAttacher;
 import ee.ria.tara.configuration.HomeController;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.context.properties.ConfigurationPropertiesScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 
 @SpringBootApplication
+@ConfigurationPropertiesScan
 @ComponentScan(excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = HomeController.class)})
 public class Application {
 

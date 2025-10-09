@@ -30,16 +30,16 @@ import java.util.List;
 @Service
 public class ClientSecretEmailService {
     private final JavaMailSender javaMailSender;
-    private final CertificateService certificateService;
+    private final EIdCertificateService eIdCertificateService;
     private final ClientSecretEmailHelper clientSecretEmailComposer;
     private final ClientSecretDataFileGenerator clientSecretDatafileGenerator;
 
     @Autowired
     public ClientSecretEmailService(ClientSecretEmailHelper clientSecretEmailHelper, JavaMailSender javaMailSender,
-                                    CertificateService certificateService, ClientSecretDataFileGenerator clientSecretDatafileGenerator) {
+                                    EIdCertificateService eIdCertificateService, ClientSecretDataFileGenerator clientSecretDatafileGenerator) {
         this.clientSecretEmailComposer = clientSecretEmailHelper;
         this.javaMailSender = javaMailSender;
-        this.certificateService = certificateService;
+        this.eIdCertificateService = eIdCertificateService;
         this.clientSecretDatafileGenerator = clientSecretDatafileGenerator;
     }
 
@@ -77,7 +77,7 @@ public class ClientSecretEmailService {
     }
 
     private byte[] getCdoc(Client client, String secret) throws ApiException {
-        List<X509Certificate> certificates = certificateService.findAuthenticationCertificates(client.getClientSecretExportSettings().getRecipientIdCode());
+        List<X509Certificate> certificates = eIdCertificateService.findEncryptionCertificates(client.getClientSecretExportSettings().getRecipientIdCode());
         DataFile dataFile;
         try {
             dataFile = clientSecretDatafileGenerator.generate(client, secret);

@@ -4,12 +4,10 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
 
 
 @Getter
 @Setter
-@Configuration
 @ConfigurationProperties("tara.admin.data-file")
 public class ClientSecretDataFileConfigurationProvider {
     @NotNull

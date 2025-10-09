@@ -1,19 +1,16 @@
 package ee.ria.tara.configuration.providers;
 
-import lombok.Getter;
-import lombok.Setter;
-import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.validation.annotation.Validated;
-
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import lombok.Getter;
+import lombok.Setter;
+import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
 @Getter
 @Setter
 @Validated
-@Configuration
 @ConfigurationProperties("tara-oidc")
 public class TaraOidcConfigurationProvider {
     @NotNull
