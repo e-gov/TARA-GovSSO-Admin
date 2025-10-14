@@ -38,14 +38,14 @@ import static java.lang.String.format;
 @RequiredArgsConstructor
 public class EIdCertificateService {
 
-    static final Set<String> VALID_ENCRYPTION_POLICY_IDENTIFIERS = Set.of(
-            //older ID-card and Digi-ID policies (https://www.sk.ee/upload/files/SK-CPR-ESTEID-EN-v8_3-20190605.pdf)
-            "1.3.6.1.4.1.10015.1.1",
-            "1.3.6.1.4.1.10015.1.2",
-            //newer ID-card and Digi-ID policies (https://www.sk.ee/upload/files/SK-CPR-ESTEID2018-EN-v1_1_20190503.pdf)
-            "1.3.6.1.4.1.51361.1.1.1",
-            "1.3.6.1.4.1.51361.1.1.3"
+    /* Blacklist Mobile-ID policy identifiers as Mobile-ID cannot be used for decrypting.  */
+    static final Set<String> POLICY_IDENTIFIER_BLACKLIST = Set.of(
+            //Mobile-ID (https://www.sk.ee/upload/files/SK-CPR-ESTEID-EN-v8_3-20190605.pdf)
+            "1.3.6.1.4.1.10015.1.3",
+            //Mobile-ID (https://www.skidsolutions.eu/wp-content/uploads/2025/01/Certificate_and_OCSP_Profile_for_Mobile-ID_v_2_3.pdf)
+            "1.3.6.1.4.1.10015.18.1"
     );
+
 
     static final String SN_QUERY = "serialNumber=PNOEE-%s";
     static final String CERT_BINARY_ATTR = "userCertificate;binary";
@@ -99,7 +99,7 @@ public class EIdCertificateService {
 
     private boolean isSuitableAuthCertificateForEncryption(Attribute userCertificate) {
         X509CertificateHolder certificate = getCertificate(userCertificate);
-        return isAuthCertificate(certificate) && hasIdCardOrDigiIdPolicyIdentifier(certificate);
+        return isAuthCertificate(certificate) && !isPolicyIdentifierBlacklisted(certificate);
     }
 
     private X509CertificateHolder getCertificate(Attribute userCertificate) {
@@ -116,12 +116,12 @@ public class EIdCertificateService {
         return keyUsage.hasUsages(KeyUsage.keyEncipherment) || keyUsage.hasUsages(KeyUsage.keyAgreement);
     }
 
-    private boolean hasIdCardOrDigiIdPolicyIdentifier(X509CertificateHolder certificate) {
+    private boolean isPolicyIdentifierBlacklisted(X509CertificateHolder certificate) {
         CertificatePolicies certificatePolicies = CertificatePolicies.fromExtensions(certificate.getExtensions());
         return Stream.of(certificatePolicies.getPolicyInformation())
                 .map(PolicyInformation::getPolicyIdentifier)
                 .map(ASN1ObjectIdentifier::getId)
-                .anyMatch(VALID_ENCRYPTION_POLICY_IDENTIFIERS::contains);
+                .anyMatch(POLICY_IDENTIFIER_BLACKLIST::contains);
     }
 
     private X509Certificate toX09Certificate(Attribute userCertificate) {

@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static ee.ria.tara.service.EIdCertificateService.CERT_BINARY_ATTR;
+import static ee.ria.tara.service.EIdCertificateService.POLICY_IDENTIFIER_BLACKLIST;
 import static ee.ria.tara.util.EidCertificateTestUtil.createCertificate;
 import static ee.ria.tara.util.EidCertificateTestUtil.simplifiedDescription;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -249,9 +250,9 @@ class EIdCertificateServiceTest {
         }
 
         @Test
-        void whenSearchResultContainsCertificateWithUnknownPolicyIdentifier_onlyValidCertificateReturned() {
+        void whenSearchResultContainsCertificateWithUnknownPolicyIdentifier_thatCertificateIncludedInResult() {
             String unknownPolicyIdentifier = "1.2.3";
-            X509Certificate invalidCertificate = createCertificate(CertificateParams.builder()
+            X509Certificate unknownPolicyIdentifierCertificate = createCertificate(CertificateParams.builder()
                     .idCode(ID_CODE)
                     .policyIdentifier(unknownPolicyIdentifier)
                     .build());
@@ -261,7 +262,29 @@ class EIdCertificateServiceTest {
             initService(configuration);
             mockLdapSearchResult(FIRST_LDAP_SOURCE, List.of(
                     List.of(FIRST_VALID_CERTIFICATE),
-                    List.of(invalidCertificate)));
+                    List.of(unknownPolicyIdentifierCertificate)));
+
+            List<X509Certificate> result = service.findEncryptionCertificates(ID_CODE);
+
+            assertThat(result)
+                    .withRepresentation(CERTIFICATE_SIMPLE_REPRESENTATION)
+                    .isEqualTo(List.of(FIRST_VALID_CERTIFICATE, unknownPolicyIdentifierCertificate));
+        }
+
+        @Test
+        void whenSearchResultContainsCertificateWithBlacklistedPolicyIdentifier_onlyValidCertificatesReturned() {
+            String blacklistedPolicyIdentifier = POLICY_IDENTIFIER_BLACKLIST.iterator().next();
+            X509Certificate blacklistedPolicyIdentifierCertificate = createCertificate(CertificateParams.builder()
+                    .idCode(ID_CODE)
+                    .policyIdentifier(blacklistedPolicyIdentifier)
+                    .build());
+            EIdCertificateConfigurationProvider configuration = EIdCertificateConfigurationProvider.builder()
+                    .ldapSource(FIRST_LDAP_SOURCE)
+                    .build();
+            initService(configuration);
+            mockLdapSearchResult(FIRST_LDAP_SOURCE, List.of(
+                    List.of(FIRST_VALID_CERTIFICATE),
+                    List.of(blacklistedPolicyIdentifierCertificate)));
 
             List<X509Certificate> result = service.findEncryptionCertificates(ID_CODE);
 
