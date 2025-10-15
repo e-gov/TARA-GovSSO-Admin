@@ -24,6 +24,9 @@
     <properties>
         <maven.compiler.release>17</maven.compiler.release>
         <wiremock.version>3.13.0</wiremock.version>
+        <!-- TODO (AUT-2354): Remove when upgrading to Spring Boot >= 3.5.6 as
+                              Jackson version 2.19.2 is already default there. -->
+        <jackson-bom.version>2.19.2</jackson-bom.version>
     </properties>
 
     <parent>
