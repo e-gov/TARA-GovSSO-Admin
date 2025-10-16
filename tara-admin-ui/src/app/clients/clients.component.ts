@@ -15,6 +15,8 @@ import {DateHelper} from "../helper/datehelper";
 import {environment} from "../../environments/environment";
 import {AuthService} from "../auth/auth.service";
 
+type DialogType = 'ADD' | 'UPDATE' | 'INFO';
+
 @Component({
   selector: 'app-clients',
   templateUrl: './clients.component.html',
@@ -47,7 +49,7 @@ export class ClientsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.updateDatasource()
+    this.updateDatasource();
   }
 
   ngOnDestroy() {
@@ -68,7 +70,7 @@ export class ClientsComponent implements OnInit {
     }
   }
 
-  openClientDialog(data: Client, dialogType: 'ADD' | 'UPDATE' | 'INFO') {
+  openClientDialog(data: Client, dialogType: DialogType) {
     const dialogConfig = new MatDialogConfig();
 
     dialogConfig.autoFocus = true;
@@ -76,7 +78,8 @@ export class ClientsComponent implements OnInit {
       obj: data,
       institutions: this.getInstitutionMetainfo(),
       dialogType: dialogType,
-      onAction: this.getTypeAction(dialogType)
+      onSave: this.getSaveAction(dialogType),
+      onDelete: this.getDeleteAction(dialogType)
     };
     dialogConfig.width = "100%";
     dialogConfig.height = "100%";
@@ -222,15 +225,26 @@ export class ClientsComponent implements OnInit {
       });
   }
 
-  getTypeAction(dialogType: 'ADD' | 'UPDATE' | 'INFO'): (client: Client) => Promise<any> {
-    if (dialogType === 'ADD') {
-      return (client: Client) => this.addClient(client);
+  getSaveAction(dialogType: DialogType): (client: Client) => Promise<any> {
+    switch (dialogType) {
+      case 'ADD':
+        return (client: Client) => this.addClient(client);
+      case 'UPDATE':
+      case 'INFO':
+        return (client: Client) => this.updateClient(client);
     }
-    if (dialogType === 'UPDATE') {
-      return (client: Client) => this.updateClient(client);
-    }
-    if (dialogType === 'INFO') {
-      return (client: Client) => this.deleteClient(client);
+    throw new Error('Invalid dialog type ' + JSON.stringify(dialogType));
+  }
+
+  getDeleteAction(dialogType: DialogType): (client: Client) => Promise<any> {
+    switch (dialogType) {
+      case 'ADD':
+        return (_: Client) => {
+          throw new Error('Cannot delete client in dialog of type' + JSON.stringify(dialogType));
+        };
+      case 'UPDATE':
+      case 'INFO':
+        return (client: Client) => this.deleteClient(client);
     }
     throw new Error('Invalid dialog type ' + JSON.stringify(dialogType));
   }

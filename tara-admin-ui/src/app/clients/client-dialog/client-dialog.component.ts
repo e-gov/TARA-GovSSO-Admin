@@ -24,6 +24,7 @@ import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {NgForm} from '@angular/forms';
 import {MessageService} from '../../main/message/message.service';
 
+type DialogType = 'ADD' | 'UPDATE' | 'INFO';
 
 @Component({
   selector: 'app-client-dialog',
@@ -52,10 +53,11 @@ export class ClientDialogComponent implements OnInit {
   newData: Client;
 
   constructor(@Inject(MAT_DIALOG_DATA) public data: {
-                dialogType: "ADD" | "UPDATE" | "INFO"
+                dialogType: DialogType
                 obj: Client,
                 institutions: Observable<InstitutionMetainfo[]>,
-                onAction: (client: Client) => Promise<any>;
+                onSave: (client: Client) => Promise<any>;
+                onDelete: (client: Client) => Promise<any>;
               },
               public mainDialog: MatDialogRef<ClientDialogComponent>,
               public dialog: MatDialog,
@@ -366,17 +368,17 @@ export class ClientDialogComponent implements OnInit {
        return value;
     });
 
-    this.data.onAction(requestBody).then(() => {
+    this.data.onSave(requestBody).then(() => {
       this.mainDialog.close();
     });
   }
 
   removeSupportEmail(email: string) {
-    this.newData.info_notification_emails.splice(this.newData.info_notification_emails.indexOf(email), 1)
+    this.newData.info_notification_emails.splice(this.newData.info_notification_emails.indexOf(email), 1);
   }
 
   removeBlackoutEmail(email: string) {
-    this.newData.sla_notification_emails.splice(this.newData.sla_notification_emails.indexOf(email), 1)
+    this.newData.sla_notification_emails.splice(this.newData.sla_notification_emails.indexOf(email), 1);
   }
 
   addTranslation(data: ClientNameTranslation) {
@@ -447,7 +449,7 @@ export class ClientDialogComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result: any) => {
       if (result === true) {
-        this.data.onAction(this.data.obj).then(() => {
+        this.data.onDelete(this.data.obj).then(() => {
           this.mainDialog.close();
         });
       }
