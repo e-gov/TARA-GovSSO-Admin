@@ -23,7 +23,7 @@ Execute the following commands, starting in the project's root directory, to bui
 ```shell
 cd tara-admin-ui
 npm install
-npm run build
+npm run build -- --configuration=dev-local
 cd ..
 ./mvnw clean package
 ```
