@@ -15,6 +15,7 @@ import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -22,10 +23,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 import static java.lang.String.format;
 import static java.lang.String.join;
@@ -88,19 +90,30 @@ public class ErrorHandler {
 
     private String formatBindingErrors(MethodArgumentNotValidException bindException) {
         BindingResult bindingResult = bindException.getBindingResult();
-
-        List<String> errors = new ArrayList<>();
-
         List<ObjectError> allErrors = bindingResult.getAllErrors();
-
         Locale locale = LocaleContextHolder.getLocale();
 
-        for (ObjectError objectError: allErrors) {
-            errors.add(format("%s", messageSource.getMessage(objectError, locale)));
+        List<String> errorMessages = allErrors.stream()
+                .map(objectError -> getMessage(objectError, locale))
+                .collect(Collectors.toList());
+
+        log.info("errors: " + errorMessages);
+        Collections.sort(errorMessages);
+        return join("\n", errorMessages);
+    }
+
+    private String getMessage(ObjectError objectError, Locale locale) {
+        String resolvedMessage = messageSource.getMessage(objectError, locale);
+        if (!Objects.equals(resolvedMessage, objectError.getDefaultMessage())) {
+            return resolvedMessage;
         }
-        log.info("errors: " + errors);
-        Collections.sort(errors);
-        return join(" ", errors);
+        StringBuilder sb = new StringBuilder();
+        sb.append(objectError.getObjectName());
+        if (objectError instanceof FieldError fieldError) {
+            sb.append(".").append(fieldError.getField());
+        }
+        sb.append(": ").append(objectError.getDefaultMessage());
+        return sb.toString();
     }
 
     private String formatError(Exception exception, Object... args) {
