@@ -39,7 +39,7 @@ Execute the following commands, starting in the project's root directory, to bui
 ```shell
 cd tara-admin-ui
 npm install
-npm run build
+npm run build -- --configuration=dev-local
 cd ..
 ./mvnw clean install
 ./mvnw --projects tara-admin-api -DskipTests -Djacoco.skip=true spring-boot:build-image
