@@ -181,12 +181,13 @@ public class OidcService {
                     .build();
             boolean ssoMode = adminConfigurationProvider.isSsoMode();
             // NB! For backward compatibility with TARA-Server all client secrets must be saved to Ory Hydra as sha256 digests.
-            Map<String, String> payload = Map.ofEntries(
+            Map<String, String> replaceSecretOperation = Map.ofEntries(
                     entry("op", "replace"),
                     entry("path", "/client_secret"),
                     entry("value", ssoMode ? secret : getDigest(secret)));
+            List<?> operations = List.of(replaceSecretOperation);
             log.info("Sending " + HttpMethod.PATCH.name() + " request to OIDC service.", value("url.full", uri));
-            ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.PATCH, new HttpEntity<>(payload), Void.class);
+            ResponseEntity<Void> response = restTemplate.exchange(uri, HttpMethod.PATCH, new HttpEntity<>(operations), Void.class);
 
             if (log.isDebugEnabled()) {
                 log.debug("OIDC response: {}", value("response", response));
