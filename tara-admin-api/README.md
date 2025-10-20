@@ -9,6 +9,7 @@
     * [Database schema initialization and migration](#db_conf_updates)
     * [Mail server client](#smtp_conf)
     * [Email content for issuing secrets](#email_conf)
+    * [eID LDAP servers](#eid_ldap_conf)
     * [Session security configuration](#security_conf)
     * [Logging](#logging)
     * [Health endpoint](#health)
@@ -131,6 +132,22 @@ The email content and metadata can be configured using the following configurati
 | tara.admin.email.attachment-file-name     | Y        | Email attachment file name        | parooliymbrik.cdoc                                  |
 | tara.admin.data-file.encrypted-file-name  | Y        | Encrypted file name in cdoc       | parooliymbrik.txt                                   |
 | tara.admin.data-file.text-file-name       | Y        | Client secret text file template  | client-secret-txt-template.ftl                     |
+
+<a href="eid_ldap_conf"></a>
+### eID LDAP
+
+In order to encrypt data addressed to a certain person, we need to query the person's eID certificates from LDAP.
+
+Multiple LDAP servers can be configured using the `tara.admin.eid-certificates.ldap-sources[{index}]` notation, 
+where `{index}` is the index of the item, starting from `0`. 
+Each LDAP servers can be configured using the following configuration parameters:
+
+| Parameter | Required | Description | Example |
+| :-------- | :------- | :---------- | :------ |
+| `admin.eid-certificates.ldap-sources[].host` | Y | Hostname of the server | ldap.example.com |
+| `admin.eid-certificates.ldap-sources[].port` | Y | Port of the server | 636 |
+| `admin.eid-certificates.ldap-sources[].base-dn` | Y | Base DN for the certificates search query | c=EE |
+
 
 <a href="security_conf"></a>
 ### Security configuration
