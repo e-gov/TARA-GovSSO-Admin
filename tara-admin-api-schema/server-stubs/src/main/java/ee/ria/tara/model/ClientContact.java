@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * ClientContact
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class ClientContact {
 
   private @Nullable String name;
@@ -29,7 +29,7 @@ public class ClientContact {
 
   private @Nullable String department;
 
-  public ClientContact name(String name) {
+  public ClientContact name(@Nullable String name) {
     this.name = name;
     return this;
   }
@@ -41,15 +41,15 @@ public class ClientContact {
   
   @Schema(name = "name", example = "test", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("name")
-  public String getName() {
+  public @Nullable String getName() {
     return name;
   }
 
-  public void setName(String name) {
+  public void setName(@Nullable String name) {
     this.name = name;
   }
 
-  public ClientContact email(String email) {
+  public ClientContact email(@Nullable String email) {
     this.email = email;
     return this;
   }
@@ -61,15 +61,15 @@ public class ClientContact {
   @jakarta.validation.constraints.Email 
   @Schema(name = "email", example = "test@example.com", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("email")
-  public String getEmail() {
+  public @Nullable String getEmail() {
     return email;
   }
 
-  public void setEmail(String email) {
+  public void setEmail(@Nullable String email) {
     this.email = email;
   }
 
-  public ClientContact phone(String phone) {
+  public ClientContact phone(@Nullable String phone) {
     this.phone = phone;
     return this;
   }
@@ -81,15 +81,15 @@ public class ClientContact {
   
   @Schema(name = "phone", example = "+3726630200", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("phone")
-  public String getPhone() {
+  public @Nullable String getPhone() {
     return phone;
   }
 
-  public void setPhone(String phone) {
+  public void setPhone(@Nullable String phone) {
     this.phone = phone;
   }
 
-  public ClientContact department(String department) {
+  public ClientContact department(@Nullable String department) {
     this.department = department;
     return this;
   }
@@ -101,11 +101,11 @@ public class ClientContact {
   
   @Schema(name = "department", example = "test", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("department")
-  public String getDepartment() {
+  public @Nullable String getDepartment() {
     return department;
   }
 
-  public void setDepartment(String department) {
+  public void setDepartment(@Nullable String department) {
     this.department = department;
   }
 

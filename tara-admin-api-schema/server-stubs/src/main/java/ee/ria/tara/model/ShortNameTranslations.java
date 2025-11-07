@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * ShortNameTranslations
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class ShortNameTranslations {
 
   private @Nullable String et;
@@ -27,7 +27,7 @@ public class ShortNameTranslations {
 
   private @Nullable String ru;
 
-  public ShortNameTranslations et(String et) {
+  public ShortNameTranslations et(@Nullable String et) {
     this.et = et;
     return this;
   }
@@ -39,15 +39,15 @@ public class ShortNameTranslations {
   @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 40) 
   @Schema(name = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("et")
-  public String getEt() {
+  public @Nullable String getEt() {
     return et;
   }
 
-  public void setEt(String et) {
+  public void setEt(@Nullable String et) {
     this.et = et;
   }
 
-  public ShortNameTranslations en(String en) {
+  public ShortNameTranslations en(@Nullable String en) {
     this.en = en;
     return this;
   }
@@ -59,15 +59,15 @@ public class ShortNameTranslations {
   @Size(min = 3, max = 40) 
   @Schema(name = "en", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("en")
-  public String getEn() {
+  public @Nullable String getEn() {
     return en;
   }
 
-  public void setEn(String en) {
+  public void setEn(@Nullable String en) {
     this.en = en;
   }
 
-  public ShortNameTranslations ru(String ru) {
+  public ShortNameTranslations ru(@Nullable String ru) {
     this.ru = ru;
     return this;
   }
@@ -79,11 +79,11 @@ public class ShortNameTranslations {
   @Size(min = 3, max = 40) 
   @Schema(name = "ru", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("ru")
-  public String getRu() {
+  public @Nullable String getRu() {
     return ru;
   }
 
-  public void setRu(String ru) {
+  public void setRu(@Nullable String ru) {
     this.ru = ru;
   }
 

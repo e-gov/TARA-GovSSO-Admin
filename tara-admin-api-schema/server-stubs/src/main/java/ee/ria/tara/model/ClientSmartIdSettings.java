@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * ClientSmartIdSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class ClientSmartIdSettings {
 
   private @Nullable String relyingPartyUUID;
@@ -27,7 +27,7 @@ public class ClientSmartIdSettings {
 
   private @Nullable Boolean shouldUseAdditionalVerificationCodeCheck;
 
-  public ClientSmartIdSettings relyingPartyUUID(String relyingPartyUUID) {
+  public ClientSmartIdSettings relyingPartyUUID(@Nullable String relyingPartyUUID) {
     this.relyingPartyUUID = relyingPartyUUID;
     return this;
   }
@@ -39,15 +39,15 @@ public class ClientSmartIdSettings {
   @Size(max = 512) 
   @Schema(name = "relying_party_UUID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("relying_party_UUID")
-  public String getRelyingPartyUUID() {
+  public @Nullable String getRelyingPartyUUID() {
     return relyingPartyUUID;
   }
 
-  public void setRelyingPartyUUID(String relyingPartyUUID) {
+  public void setRelyingPartyUUID(@Nullable String relyingPartyUUID) {
     this.relyingPartyUUID = relyingPartyUUID;
   }
 
-  public ClientSmartIdSettings relyingPartyName(String relyingPartyName) {
+  public ClientSmartIdSettings relyingPartyName(@Nullable String relyingPartyName) {
     this.relyingPartyName = relyingPartyName;
     return this;
   }
@@ -59,15 +59,15 @@ public class ClientSmartIdSettings {
   @Size(max = 512) 
   @Schema(name = "relying_party_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("relying_party_name")
-  public String getRelyingPartyName() {
+  public @Nullable String getRelyingPartyName() {
     return relyingPartyName;
   }
 
-  public void setRelyingPartyName(String relyingPartyName) {
+  public void setRelyingPartyName(@Nullable String relyingPartyName) {
     this.relyingPartyName = relyingPartyName;
   }
 
-  public ClientSmartIdSettings shouldUseAdditionalVerificationCodeCheck(Boolean shouldUseAdditionalVerificationCodeCheck) {
+  public ClientSmartIdSettings shouldUseAdditionalVerificationCodeCheck(@Nullable Boolean shouldUseAdditionalVerificationCodeCheck) {
     this.shouldUseAdditionalVerificationCodeCheck = shouldUseAdditionalVerificationCodeCheck;
     return this;
   }
@@ -79,11 +79,11 @@ public class ClientSmartIdSettings {
   
   @Schema(name = "should_use_additional_verification_code_check", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("should_use_additional_verification_code_check")
-  public Boolean getShouldUseAdditionalVerificationCodeCheck() {
+  public @Nullable Boolean getShouldUseAdditionalVerificationCodeCheck() {
     return shouldUseAdditionalVerificationCodeCheck;
   }
 
-  public void setShouldUseAdditionalVerificationCodeCheck(Boolean shouldUseAdditionalVerificationCodeCheck) {
+  public void setShouldUseAdditionalVerificationCodeCheck(@Nullable Boolean shouldUseAdditionalVerificationCodeCheck) {
     this.shouldUseAdditionalVerificationCodeCheck = shouldUseAdditionalVerificationCodeCheck;
   }
 

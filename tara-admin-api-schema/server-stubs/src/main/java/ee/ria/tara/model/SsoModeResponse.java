@@ -18,12 +18,12 @@ import jakarta.annotation.Generated;
  * SsoModeResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class SsoModeResponse {
 
   private @Nullable Boolean ssoMode;
 
-  public SsoModeResponse ssoMode(Boolean ssoMode) {
+  public SsoModeResponse ssoMode(@Nullable Boolean ssoMode) {
     this.ssoMode = ssoMode;
     return this;
   }
@@ -35,11 +35,11 @@ public class SsoModeResponse {
   
   @Schema(name = "ssoMode", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("ssoMode")
-  public Boolean getSsoMode() {
+  public @Nullable Boolean getSsoMode() {
     return ssoMode;
   }
 
-  public void setSsoMode(Boolean ssoMode) {
+  public void setSsoMode(@Nullable Boolean ssoMode) {
     this.ssoMode = ssoMode;
   }
 

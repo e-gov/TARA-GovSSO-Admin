@@ -18,14 +18,14 @@ import jakarta.annotation.Generated;
  * ClientMidSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class ClientMidSettings {
 
   private @Nullable String relyingPartyUUID;
 
   private @Nullable String relyingPartyName;
 
-  public ClientMidSettings relyingPartyUUID(String relyingPartyUUID) {
+  public ClientMidSettings relyingPartyUUID(@Nullable String relyingPartyUUID) {
     this.relyingPartyUUID = relyingPartyUUID;
     return this;
   }
@@ -37,15 +37,15 @@ public class ClientMidSettings {
   @Size(max = 512) 
   @Schema(name = "relying_party_UUID", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("relying_party_UUID")
-  public String getRelyingPartyUUID() {
+  public @Nullable String getRelyingPartyUUID() {
     return relyingPartyUUID;
   }
 
-  public void setRelyingPartyUUID(String relyingPartyUUID) {
+  public void setRelyingPartyUUID(@Nullable String relyingPartyUUID) {
     this.relyingPartyUUID = relyingPartyUUID;
   }
 
-  public ClientMidSettings relyingPartyName(String relyingPartyName) {
+  public ClientMidSettings relyingPartyName(@Nullable String relyingPartyName) {
     this.relyingPartyName = relyingPartyName;
     return this;
   }
@@ -57,11 +57,11 @@ public class ClientMidSettings {
   @Size(max = 512) 
   @Schema(name = "relying_party_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("relying_party_name")
-  public String getRelyingPartyName() {
+  public @Nullable String getRelyingPartyName() {
     return relyingPartyName;
   }
 
-  public void setRelyingPartyName(String relyingPartyName) {
+  public void setRelyingPartyName(@Nullable String relyingPartyName) {
     this.relyingPartyName = relyingPartyName;
   }
 

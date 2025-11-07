@@ -25,7 +25,7 @@ import jakarta.annotation.Generated;
  * Institution
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class Institution {
 
   private @Nullable String id;
@@ -70,7 +70,7 @@ public class Institution {
     this.billingSettings = billingSettings;
   }
 
-  public Institution id(String id) {
+  public Institution id(@Nullable String id) {
     this.id = id;
     return this;
   }
@@ -82,11 +82,11 @@ public class Institution {
   
   @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("id")
-  public String getId() {
+  public @Nullable String getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(@Nullable String id) {
     this.id = id;
   }
 
@@ -150,7 +150,7 @@ public class Institution {
     this.type = type;
   }
 
-  public Institution clientIds(List<String> clientIds) {
+  public Institution clientIds(@Nullable List<String> clientIds) {
     this.clientIds = clientIds;
     return this;
   }
@@ -170,11 +170,11 @@ public class Institution {
   
   @Schema(name = "client_ids", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_ids")
-  public List<String> getClientIds() {
+  public @Nullable List<String> getClientIds() {
     return clientIds;
   }
 
-  public void setClientIds(List<String> clientIds) {
+  public void setClientIds(@Nullable List<String> clientIds) {
     this.clientIds = clientIds;
   }
 
@@ -258,7 +258,7 @@ public class Institution {
     this.billingSettings = billingSettings;
   }
 
-  public Institution createdAt(OffsetDateTime createdAt) {
+  public Institution createdAt(@Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -270,15 +270,15 @@ public class Institution {
   @Valid 
   @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("created_at")
-  public OffsetDateTime getCreatedAt() {
+  public @Nullable OffsetDateTime getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(OffsetDateTime createdAt) {
+  public void setCreatedAt(@Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
   }
 
-  public Institution updatedAt(OffsetDateTime updatedAt) {
+  public Institution updatedAt(@Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -290,11 +290,11 @@ public class Institution {
   @Valid 
   @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("updated_at")
-  public OffsetDateTime getUpdatedAt() {
+  public @Nullable OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(OffsetDateTime updatedAt) {
+  public void setUpdatedAt(@Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
   }
 

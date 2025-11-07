@@ -18,12 +18,12 @@ import jakarta.annotation.Generated;
  * WhoAmIResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class WhoAmIResponse {
 
   private @Nullable String username;
 
-  public WhoAmIResponse username(String username) {
+  public WhoAmIResponse username(@Nullable String username) {
     this.username = username;
     return this;
   }
@@ -35,11 +35,11 @@ public class WhoAmIResponse {
   
   @Schema(name = "username", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("username")
-  public String getUsername() {
+  public @Nullable String getUsername() {
     return username;
   }
 
-  public void setUsername(String username) {
+  public void setUsername(@Nullable String username) {
     this.username = username;
   }
 

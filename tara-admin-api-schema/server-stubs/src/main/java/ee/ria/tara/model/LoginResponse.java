@@ -18,14 +18,14 @@ import jakarta.annotation.Generated;
  * LoginResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class LoginResponse {
 
   private @Nullable String error;
 
   private @Nullable String username;
 
-  public LoginResponse error(String error) {
+  public LoginResponse error(@Nullable String error) {
     this.error = error;
     return this;
   }
@@ -37,15 +37,15 @@ public class LoginResponse {
   
   @Schema(name = "error", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("error")
-  public String getError() {
+  public @Nullable String getError() {
     return error;
   }
 
-  public void setError(String error) {
+  public void setError(@Nullable String error) {
     this.error = error;
   }
 
-  public LoginResponse username(String username) {
+  public LoginResponse username(@Nullable String username) {
     this.username = username;
     return this;
   }
@@ -57,11 +57,11 @@ public class LoginResponse {
   
   @Schema(name = "username", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("username")
-  public String getUsername() {
+  public @Nullable String getUsername() {
     return username;
   }
 
-  public void setUsername(String username) {
+  public void setUsername(@Nullable String username) {
     this.username = username;
   }
 

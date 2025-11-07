@@ -24,7 +24,7 @@ import jakarta.annotation.Generated;
  * EmailAlert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class EmailAlert {
 
   private @Nullable Boolean enabled;
@@ -35,7 +35,7 @@ public class EmailAlert {
   @Valid
   private @Nullable List<@Valid MessageTemplate> messageTemplates;
 
-  public EmailAlert enabled(Boolean enabled) {
+  public EmailAlert enabled(@Nullable Boolean enabled) {
     this.enabled = enabled;
     return this;
   }
@@ -47,15 +47,15 @@ public class EmailAlert {
   
   @Schema(name = "enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("enabled")
-  public Boolean getEnabled() {
+  public @Nullable Boolean getEnabled() {
     return enabled;
   }
 
-  public void setEnabled(Boolean enabled) {
+  public void setEnabled(@Nullable Boolean enabled) {
     this.enabled = enabled;
   }
 
-  public EmailAlert sendAt(OffsetDateTime sendAt) {
+  public EmailAlert sendAt(@Nullable OffsetDateTime sendAt) {
     this.sendAt = sendAt;
     return this;
   }
@@ -67,15 +67,15 @@ public class EmailAlert {
   @Valid 
   @Schema(name = "send_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("send_at")
-  public OffsetDateTime getSendAt() {
+  public @Nullable OffsetDateTime getSendAt() {
     return sendAt;
   }
 
-  public void setSendAt(OffsetDateTime sendAt) {
+  public void setSendAt(@Nullable OffsetDateTime sendAt) {
     this.sendAt = sendAt;
   }
 
-  public EmailAlert messageTemplates(List<@Valid MessageTemplate> messageTemplates) {
+  public EmailAlert messageTemplates(@Nullable List<@Valid MessageTemplate> messageTemplates) {
     this.messageTemplates = messageTemplates;
     return this;
   }
@@ -95,11 +95,11 @@ public class EmailAlert {
   @Valid 
   @Schema(name = "message_templates", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("message_templates")
-  public List<@Valid MessageTemplate> getMessageTemplates() {
+  public @Nullable List<@Valid MessageTemplate> getMessageTemplates() {
     return messageTemplates;
   }
 
-  public void setMessageTemplates(List<@Valid MessageTemplate> messageTemplates) {
+  public void setMessageTemplates(@Nullable List<@Valid MessageTemplate> messageTemplates) {
     this.messageTemplates = messageTemplates;
   }
 

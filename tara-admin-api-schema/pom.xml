@@ -15,7 +15,11 @@
 
     <properties>
         <!-- If you change this version or src/main/resources/swagger.yaml file content, then delete server-stubs folder and run `mvn clean install -P regenerate-swagger` -->
-        <openapi-generator-maven-plugin.version>7.13.0</openapi-generator-maven-plugin.version>
+        <!-- TODO Upgrading to >= 7.16.0 causes runtime error: HV000151: A method overriding another method must not
+              redefine the parameter constraint configuration, but method InstitutionsController
+              #addClientToInstitution(String,Client)redefines the configuration of InstitutionsApi
+              #addClientToInstitution(String,Client). -->
+        <openapi-generator-maven-plugin.version>7.15.0</openapi-generator-maven-plugin.version>
         <springdoc-openapi-ui.version>2.8.14</springdoc-openapi-ui.version>
     </properties>
 

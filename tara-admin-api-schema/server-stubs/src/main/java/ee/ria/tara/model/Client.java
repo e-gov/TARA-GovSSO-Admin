@@ -31,7 +31,7 @@ import jakarta.annotation.Generated;
  * Client
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class Client {
 
   private @Nullable String id;
@@ -193,7 +193,7 @@ public class Client {
     this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
   }
 
-  public Client id(String id) {
+  public Client id(@Nullable String id) {
     this.id = id;
     return this;
   }
@@ -205,11 +205,11 @@ public class Client {
   
   @Schema(name = "id", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("id")
-  public String getId() {
+  public @Nullable String getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(@Nullable String id) {
     this.id = id;
   }
 
@@ -233,7 +233,7 @@ public class Client {
     this.clientId = clientId;
   }
 
-  public Client clientName(NameTranslations clientName) {
+  public Client clientName(@Nullable NameTranslations clientName) {
     this.clientName = clientName;
     return this;
   }
@@ -245,15 +245,15 @@ public class Client {
   @Valid 
   @Schema(name = "client_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_name")
-  public NameTranslations getClientName() {
+  public @Nullable NameTranslations getClientName() {
     return clientName;
   }
 
-  public void setClientName(NameTranslations clientName) {
+  public void setClientName(@Nullable NameTranslations clientName) {
     this.clientName = clientName;
   }
 
-  public Client clientShortName(ShortNameTranslations clientShortName) {
+  public Client clientShortName(@Nullable ShortNameTranslations clientShortName) {
     this.clientShortName = clientShortName;
     return this;
   }
@@ -265,15 +265,15 @@ public class Client {
   @Valid 
   @Schema(name = "client_short_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_short_name")
-  public ShortNameTranslations getClientShortName() {
+  public @Nullable ShortNameTranslations getClientShortName() {
     return clientShortName;
   }
 
-  public void setClientShortName(ShortNameTranslations clientShortName) {
+  public void setClientShortName(@Nullable ShortNameTranslations clientShortName) {
     this.clientShortName = clientShortName;
   }
 
-  public Client clientSecretExportSettings(ClientSecretExportSettings clientSecretExportSettings) {
+  public Client clientSecretExportSettings(@Nullable ClientSecretExportSettings clientSecretExportSettings) {
     this.clientSecretExportSettings = clientSecretExportSettings;
     return this;
   }
@@ -285,11 +285,11 @@ public class Client {
   @Valid 
   @Schema(name = "client_secret_export_settings", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_secret_export_settings")
-  public ClientSecretExportSettings getClientSecretExportSettings() {
+  public @Nullable ClientSecretExportSettings getClientSecretExportSettings() {
     return clientSecretExportSettings;
   }
 
-  public void setClientSecretExportSettings(ClientSecretExportSettings clientSecretExportSettings) {
+  public void setClientSecretExportSettings(@Nullable ClientSecretExportSettings clientSecretExportSettings) {
     this.clientSecretExportSettings = clientSecretExportSettings;
   }
 
@@ -313,7 +313,7 @@ public class Client {
     this.institutionMetainfo = institutionMetainfo;
   }
 
-  public Client accessTokenAudienceUris(List<String> accessTokenAudienceUris) {
+  public Client accessTokenAudienceUris(@Nullable List<String> accessTokenAudienceUris) {
     this.accessTokenAudienceUris = accessTokenAudienceUris;
     return this;
   }
@@ -333,15 +333,15 @@ public class Client {
   
   @Schema(name = "access_token_audience_uris", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("access_token_audience_uris")
-  public List<String> getAccessTokenAudienceUris() {
+  public @Nullable List<String> getAccessTokenAudienceUris() {
     return accessTokenAudienceUris;
   }
 
-  public void setAccessTokenAudienceUris(List<String> accessTokenAudienceUris) {
+  public void setAccessTokenAudienceUris(@Nullable List<String> accessTokenAudienceUris) {
     this.accessTokenAudienceUris = accessTokenAudienceUris;
   }
 
-  public Client accessTokenLifespan(String accessTokenLifespan) {
+  public Client accessTokenLifespan(@Nullable String accessTokenLifespan) {
     this.accessTokenLifespan = accessTokenLifespan;
     return this;
   }
@@ -353,11 +353,11 @@ public class Client {
   @Pattern(regexp = "^([0-9]+(s|m))*$") 
   @Schema(name = "access_token_lifespan", example = "15m", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("access_token_lifespan")
-  public String getAccessTokenLifespan() {
+  public @Nullable String getAccessTokenLifespan() {
     return accessTokenLifespan;
   }
 
-  public void setAccessTokenLifespan(String accessTokenLifespan) {
+  public void setAccessTokenLifespan(@Nullable String accessTokenLifespan) {
     this.accessTokenLifespan = accessTokenLifespan;
   }
 
@@ -389,7 +389,7 @@ public class Client {
     this.redirectUris = redirectUris;
   }
 
-  public Client postLogoutRedirectUris(List<String> postLogoutRedirectUris) {
+  public Client postLogoutRedirectUris(@Nullable List<String> postLogoutRedirectUris) {
     this.postLogoutRedirectUris = postLogoutRedirectUris;
     return this;
   }
@@ -409,11 +409,11 @@ public class Client {
   @Size(min = 1) 
   @Schema(name = "post_logout_redirect_uris", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("post_logout_redirect_uris")
-  public List<String> getPostLogoutRedirectUris() {
+  public @Nullable List<String> getPostLogoutRedirectUris() {
     return postLogoutRedirectUris;
   }
 
-  public void setPostLogoutRedirectUris(List<String> postLogoutRedirectUris) {
+  public void setPostLogoutRedirectUris(@Nullable List<String> postLogoutRedirectUris) {
     this.postLogoutRedirectUris = postLogoutRedirectUris;
   }
 
@@ -493,7 +493,7 @@ public class Client {
     this.tokenEndpointAuthMethod = tokenEndpointAuthMethod;
   }
 
-  public Client minimumAcrValue(MinimumAcrValueEnum minimumAcrValue) {
+  public Client minimumAcrValue(@Nullable MinimumAcrValueEnum minimumAcrValue) {
     this.minimumAcrValue = minimumAcrValue;
     return this;
   }
@@ -505,15 +505,15 @@ public class Client {
   
   @Schema(name = "minimum_acr_value", example = "high", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("minimum_acr_value")
-  public MinimumAcrValueEnum getMinimumAcrValue() {
+  public @Nullable MinimumAcrValueEnum getMinimumAcrValue() {
     return minimumAcrValue;
   }
 
-  public void setMinimumAcrValue(MinimumAcrValueEnum minimumAcrValue) {
+  public void setMinimumAcrValue(@Nullable MinimumAcrValueEnum minimumAcrValue) {
     this.minimumAcrValue = minimumAcrValue;
   }
 
-  public Client eidasRequesterId(String eidasRequesterId) {
+  public Client eidasRequesterId(@Nullable String eidasRequesterId) {
     this.eidasRequesterId = eidasRequesterId;
     return this;
   }
@@ -525,15 +525,15 @@ public class Client {
   @Pattern(regexp = "^((?!urn:uuid:)[a-zA-Z][a-zA-Z0-9+.-]*:.*|urn:uuid:[a-fA-F0-9]{8}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{4}-[a-fA-F0-9]{12})$") @Size(max = 1024) 
   @Schema(name = "eidas_requester_id", example = "urn:uuid:33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("eidas_requester_id")
-  public String getEidasRequesterId() {
+  public @Nullable String getEidasRequesterId() {
     return eidasRequesterId;
   }
 
-  public void setEidasRequesterId(String eidasRequesterId) {
+  public void setEidasRequesterId(@Nullable String eidasRequesterId) {
     this.eidasRequesterId = eidasRequesterId;
   }
 
-  public Client description(String description) {
+  public Client description(@Nullable String description) {
     this.description = description;
     return this;
   }
@@ -545,15 +545,15 @@ public class Client {
   @Size(min = 3, max = 4000) 
   @Schema(name = "description", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("description")
-  public String getDescription() {
+  public @Nullable String getDescription() {
     return description;
   }
 
-  public void setDescription(String description) {
+  public void setDescription(@Nullable String description) {
     this.description = description;
   }
 
-  public Client infoNotificationEmails(List<@Email String> infoNotificationEmails) {
+  public Client infoNotificationEmails(@Nullable List<@Email String> infoNotificationEmails) {
     this.infoNotificationEmails = infoNotificationEmails;
     return this;
   }
@@ -573,15 +573,15 @@ public class Client {
   
   @Schema(name = "info_notification_emails", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("info_notification_emails")
-  public List<@Email String> getInfoNotificationEmails() {
+  public @Nullable List<@Email String> getInfoNotificationEmails() {
     return infoNotificationEmails;
   }
 
-  public void setInfoNotificationEmails(List<@Email String> infoNotificationEmails) {
+  public void setInfoNotificationEmails(@Nullable List<@Email String> infoNotificationEmails) {
     this.infoNotificationEmails = infoNotificationEmails;
   }
 
-  public Client slaNotificationEmails(List<@Email String> slaNotificationEmails) {
+  public Client slaNotificationEmails(@Nullable List<@Email String> slaNotificationEmails) {
     this.slaNotificationEmails = slaNotificationEmails;
     return this;
   }
@@ -601,11 +601,11 @@ public class Client {
   
   @Schema(name = "sla_notification_emails", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("sla_notification_emails")
-  public List<@Email String> getSlaNotificationEmails() {
+  public @Nullable List<@Email String> getSlaNotificationEmails() {
     return slaNotificationEmails;
   }
 
-  public void setSlaNotificationEmails(List<@Email String> slaNotificationEmails) {
+  public void setSlaNotificationEmails(@Nullable List<@Email String> slaNotificationEmails) {
     this.slaNotificationEmails = slaNotificationEmails;
   }
 
@@ -629,7 +629,7 @@ public class Client {
     this.accessTokenJwtEnabled = accessTokenJwtEnabled;
   }
 
-  public Client isUserConsentRequired(Boolean isUserConsentRequired) {
+  public Client isUserConsentRequired(@Nullable Boolean isUserConsentRequired) {
     this.isUserConsentRequired = isUserConsentRequired;
     return this;
   }
@@ -641,15 +641,15 @@ public class Client {
   
   @Schema(name = "is_user_consent_required", example = "false", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("is_user_consent_required")
-  public Boolean getIsUserConsentRequired() {
+  public @Nullable Boolean getIsUserConsentRequired() {
     return isUserConsentRequired;
   }
 
-  public void setIsUserConsentRequired(Boolean isUserConsentRequired) {
+  public void setIsUserConsentRequired(@Nullable Boolean isUserConsentRequired) {
     this.isUserConsentRequired = isUserConsentRequired;
   }
 
-  public Client skipUserConsentClientIds(List<String> skipUserConsentClientIds) {
+  public Client skipUserConsentClientIds(@Nullable List<String> skipUserConsentClientIds) {
     this.skipUserConsentClientIds = skipUserConsentClientIds;
     return this;
   }
@@ -669,15 +669,15 @@ public class Client {
   
   @Schema(name = "skip_user_consent_client_ids", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("skip_user_consent_client_ids")
-  public List<String> getSkipUserConsentClientIds() {
+  public @Nullable List<String> getSkipUserConsentClientIds() {
     return skipUserConsentClientIds;
   }
 
-  public void setSkipUserConsentClientIds(List<String> skipUserConsentClientIds) {
+  public void setSkipUserConsentClientIds(@Nullable List<String> skipUserConsentClientIds) {
     this.skipUserConsentClientIds = skipUserConsentClientIds;
   }
 
-  public Client clientUrl(String clientUrl) {
+  public Client clientUrl(@Nullable String clientUrl) {
     this.clientUrl = clientUrl;
     return this;
   }
@@ -689,15 +689,15 @@ public class Client {
   
   @Schema(name = "client_url", example = "https://client.example.com/", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_url")
-  public String getClientUrl() {
+  public @Nullable String getClientUrl() {
     return clientUrl;
   }
 
-  public void setClientUrl(String clientUrl) {
+  public void setClientUrl(@Nullable String clientUrl) {
     this.clientUrl = clientUrl;
   }
 
-  public Client backchannelLogoutUri(String backchannelLogoutUri) {
+  public Client backchannelLogoutUri(@Nullable String backchannelLogoutUri) {
     this.backchannelLogoutUri = backchannelLogoutUri;
     return this;
   }
@@ -709,15 +709,15 @@ public class Client {
   
   @Schema(name = "backchannel_logout_uri", example = "https://example.com/", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("backchannel_logout_uri")
-  public String getBackchannelLogoutUri() {
+  public @Nullable String getBackchannelLogoutUri() {
     return backchannelLogoutUri;
   }
 
-  public void setBackchannelLogoutUri(String backchannelLogoutUri) {
+  public void setBackchannelLogoutUri(@Nullable String backchannelLogoutUri) {
     this.backchannelLogoutUri = backchannelLogoutUri;
   }
 
-  public Client paasukeParameters(String paasukeParameters) {
+  public Client paasukeParameters(@Nullable String paasukeParameters) {
     this.paasukeParameters = paasukeParameters;
     return this;
   }
@@ -729,15 +729,15 @@ public class Client {
   
   @Schema(name = "paasuke_parameters", example = "ns=A&role=B", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("paasuke_parameters")
-  public String getPaasukeParameters() {
+  public @Nullable String getPaasukeParameters() {
     return paasukeParameters;
   }
 
-  public void setPaasukeParameters(String paasukeParameters) {
+  public void setPaasukeParameters(@Nullable String paasukeParameters) {
     this.paasukeParameters = paasukeParameters;
   }
 
-  public Client midSettings(ClientMidSettings midSettings) {
+  public Client midSettings(@Nullable ClientMidSettings midSettings) {
     this.midSettings = midSettings;
     return this;
   }
@@ -749,15 +749,15 @@ public class Client {
   @Valid 
   @Schema(name = "mid_settings", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("mid_settings")
-  public ClientMidSettings getMidSettings() {
+  public @Nullable ClientMidSettings getMidSettings() {
     return midSettings;
   }
 
-  public void setMidSettings(ClientMidSettings midSettings) {
+  public void setMidSettings(@Nullable ClientMidSettings midSettings) {
     this.midSettings = midSettings;
   }
 
-  public Client smartidSettings(ClientSmartIdSettings smartidSettings) {
+  public Client smartidSettings(@Nullable ClientSmartIdSettings smartidSettings) {
     this.smartidSettings = smartidSettings;
     return this;
   }
@@ -769,15 +769,15 @@ public class Client {
   @Valid 
   @Schema(name = "smartid_settings", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("smartid_settings")
-  public ClientSmartIdSettings getSmartidSettings() {
+  public @Nullable ClientSmartIdSettings getSmartidSettings() {
     return smartidSettings;
   }
 
-  public void setSmartidSettings(ClientSmartIdSettings smartidSettings) {
+  public void setSmartidSettings(@Nullable ClientSmartIdSettings smartidSettings) {
     this.smartidSettings = smartidSettings;
   }
 
-  public Client clientContacts(List<@Valid ClientContact> clientContacts) {
+  public Client clientContacts(@Nullable List<@Valid ClientContact> clientContacts) {
     this.clientContacts = clientContacts;
     return this;
   }
@@ -797,15 +797,15 @@ public class Client {
   @Valid 
   @Schema(name = "client_contacts", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_contacts")
-  public List<@Valid ClientContact> getClientContacts() {
+  public @Nullable List<@Valid ClientContact> getClientContacts() {
     return clientContacts;
   }
 
-  public void setClientContacts(List<@Valid ClientContact> clientContacts) {
+  public void setClientContacts(@Nullable List<@Valid ClientContact> clientContacts) {
     this.clientContacts = clientContacts;
   }
 
-  public Client createdAt(OffsetDateTime createdAt) {
+  public Client createdAt(@Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -817,15 +817,15 @@ public class Client {
   @Valid 
   @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("created_at")
-  public OffsetDateTime getCreatedAt() {
+  public @Nullable OffsetDateTime getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(OffsetDateTime createdAt) {
+  public void setCreatedAt(@Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
   }
 
-  public Client updatedAt(OffsetDateTime updatedAt) {
+  public Client updatedAt(@Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -837,15 +837,15 @@ public class Client {
   @Valid 
   @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("updated_at")
-  public OffsetDateTime getUpdatedAt() {
+  public @Nullable OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(OffsetDateTime updatedAt) {
+  public void setUpdatedAt(@Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
   }
 
-  public Client clientLogo(byte[] clientLogo) {
+  public Client clientLogo(@Nullable byte[] clientLogo) {
     this.clientLogo = clientLogo;
     return this;
   }
@@ -857,11 +857,11 @@ public class Client {
   
   @Schema(name = "client_logo", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("client_logo")
-  public byte[] getClientLogo() {
+  public @Nullable byte[] getClientLogo() {
     return clientLogo;
   }
 
-  public void setClientLogo(byte[] clientLogo) {
+  public void setClientLogo(@Nullable byte[] clientLogo) {
     this.clientLogo = clientLogo;
   }
 

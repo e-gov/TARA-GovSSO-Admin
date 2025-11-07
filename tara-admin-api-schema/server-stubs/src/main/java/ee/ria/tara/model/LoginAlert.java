@@ -22,7 +22,7 @@ import jakarta.annotation.Generated;
  * LoginAlert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class LoginAlert {
 
   private @Nullable Boolean enabled;
@@ -33,7 +33,7 @@ public class LoginAlert {
   @Valid
   private @Nullable List<String> authMethods;
 
-  public LoginAlert enabled(Boolean enabled) {
+  public LoginAlert enabled(@Nullable Boolean enabled) {
     this.enabled = enabled;
     return this;
   }
@@ -45,15 +45,15 @@ public class LoginAlert {
   
   @Schema(name = "enabled", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("enabled")
-  public Boolean getEnabled() {
+  public @Nullable Boolean getEnabled() {
     return enabled;
   }
 
-  public void setEnabled(Boolean enabled) {
+  public void setEnabled(@Nullable Boolean enabled) {
     this.enabled = enabled;
   }
 
-  public LoginAlert messageTemplates(List<@Valid MessageTemplate> messageTemplates) {
+  public LoginAlert messageTemplates(@Nullable List<@Valid MessageTemplate> messageTemplates) {
     this.messageTemplates = messageTemplates;
     return this;
   }
@@ -73,15 +73,15 @@ public class LoginAlert {
   @Valid 
   @Schema(name = "message_templates", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("message_templates")
-  public List<@Valid MessageTemplate> getMessageTemplates() {
+  public @Nullable List<@Valid MessageTemplate> getMessageTemplates() {
     return messageTemplates;
   }
 
-  public void setMessageTemplates(List<@Valid MessageTemplate> messageTemplates) {
+  public void setMessageTemplates(@Nullable List<@Valid MessageTemplate> messageTemplates) {
     this.messageTemplates = messageTemplates;
   }
 
-  public LoginAlert authMethods(List<String> authMethods) {
+  public LoginAlert authMethods(@Nullable List<String> authMethods) {
     this.authMethods = authMethods;
     return this;
   }
@@ -101,11 +101,11 @@ public class LoginAlert {
   
   @Schema(name = "auth_methods", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("auth_methods")
-  public List<String> getAuthMethods() {
+  public @Nullable List<String> getAuthMethods() {
     return authMethods;
   }
 
-  public void setAuthMethods(List<String> authMethods) {
+  public void setAuthMethods(@Nullable List<String> authMethods) {
     this.authMethods = authMethods;
   }
 

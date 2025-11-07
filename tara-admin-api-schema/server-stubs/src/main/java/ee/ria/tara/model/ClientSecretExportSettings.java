@@ -18,7 +18,7 @@ import jakarta.annotation.Generated;
  * ClientSecretExportSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class ClientSecretExportSettings {
 
   private String recipientIdCode;

@@ -18,14 +18,14 @@ import jakarta.annotation.Generated;
  * MessageTemplate
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class MessageTemplate {
 
   private @Nullable String message;
 
   private @Nullable String locale;
 
-  public MessageTemplate message(String message) {
+  public MessageTemplate message(@Nullable String message) {
     this.message = message;
     return this;
   }
@@ -37,15 +37,15 @@ public class MessageTemplate {
   @Size(min = 1, max = 255) 
   @Schema(name = "message", example = "Seoses SK plaaniliste hooldustöödega on Mobiil-ID teenuste kasutamine häiritud vahemikus 12.01.2020 00:00 kuni 13.01.2020 01:00", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("message")
-  public String getMessage() {
+  public @Nullable String getMessage() {
     return message;
   }
 
-  public void setMessage(String message) {
+  public void setMessage(@Nullable String message) {
     this.message = message;
   }
 
-  public MessageTemplate locale(String locale) {
+  public MessageTemplate locale(@Nullable String locale) {
     this.locale = locale;
     return this;
   }
@@ -57,11 +57,11 @@ public class MessageTemplate {
   
   @Schema(name = "locale", example = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("locale")
-  public String getLocale() {
+  public @Nullable String getLocale() {
     return locale;
   }
 
-  public void setLocale(String locale) {
+  public void setLocale(@Nullable String locale) {
     this.locale = locale;
   }
 

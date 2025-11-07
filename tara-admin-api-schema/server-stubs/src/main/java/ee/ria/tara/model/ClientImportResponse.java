@@ -21,7 +21,7 @@ import jakarta.annotation.Generated;
  * ClientImportResponse
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class ClientImportResponse {
 
   private @Nullable String status;
@@ -35,7 +35,7 @@ public class ClientImportResponse {
   @Valid
   private @Nullable List<String> clientsNotImported;
 
-  public ClientImportResponse status(String status) {
+  public ClientImportResponse status(@Nullable String status) {
     this.status = status;
     return this;
   }
@@ -47,15 +47,15 @@ public class ClientImportResponse {
   
   @Schema(name = "status", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("status")
-  public String getStatus() {
+  public @Nullable String getStatus() {
     return status;
   }
 
-  public void setStatus(String status) {
+  public void setStatus(@Nullable String status) {
     this.status = status;
   }
 
-  public ClientImportResponse clientsCount(Integer clientsCount) {
+  public ClientImportResponse clientsCount(@Nullable Integer clientsCount) {
     this.clientsCount = clientsCount;
     return this;
   }
@@ -67,15 +67,15 @@ public class ClientImportResponse {
   
   @Schema(name = "clients_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("clients_count")
-  public Integer getClientsCount() {
+  public @Nullable Integer getClientsCount() {
     return clientsCount;
   }
 
-  public void setClientsCount(Integer clientsCount) {
+  public void setClientsCount(@Nullable Integer clientsCount) {
     this.clientsCount = clientsCount;
   }
 
-  public ClientImportResponse clientsImportSuccessCount(Integer clientsImportSuccessCount) {
+  public ClientImportResponse clientsImportSuccessCount(@Nullable Integer clientsImportSuccessCount) {
     this.clientsImportSuccessCount = clientsImportSuccessCount;
     return this;
   }
@@ -87,15 +87,15 @@ public class ClientImportResponse {
   
   @Schema(name = "clients_import_success_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("clients_import_success_count")
-  public Integer getClientsImportSuccessCount() {
+  public @Nullable Integer getClientsImportSuccessCount() {
     return clientsImportSuccessCount;
   }
 
-  public void setClientsImportSuccessCount(Integer clientsImportSuccessCount) {
+  public void setClientsImportSuccessCount(@Nullable Integer clientsImportSuccessCount) {
     this.clientsImportSuccessCount = clientsImportSuccessCount;
   }
 
-  public ClientImportResponse clientsImportFailedCount(Integer clientsImportFailedCount) {
+  public ClientImportResponse clientsImportFailedCount(@Nullable Integer clientsImportFailedCount) {
     this.clientsImportFailedCount = clientsImportFailedCount;
     return this;
   }
@@ -107,15 +107,15 @@ public class ClientImportResponse {
   
   @Schema(name = "clients_import_failed_count", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("clients_import_failed_count")
-  public Integer getClientsImportFailedCount() {
+  public @Nullable Integer getClientsImportFailedCount() {
     return clientsImportFailedCount;
   }
 
-  public void setClientsImportFailedCount(Integer clientsImportFailedCount) {
+  public void setClientsImportFailedCount(@Nullable Integer clientsImportFailedCount) {
     this.clientsImportFailedCount = clientsImportFailedCount;
   }
 
-  public ClientImportResponse clientsNotImported(List<String> clientsNotImported) {
+  public ClientImportResponse clientsNotImported(@Nullable List<String> clientsNotImported) {
     this.clientsNotImported = clientsNotImported;
     return this;
   }
@@ -135,11 +135,11 @@ public class ClientImportResponse {
   
   @Schema(name = "clients_not_imported", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("clients_not_imported")
-  public List<String> getClientsNotImported() {
+  public @Nullable List<String> getClientsNotImported() {
     return clientsNotImported;
   }
 
-  public void setClientsNotImported(List<String> clientsNotImported) {
+  public void setClientsNotImported(@Nullable List<String> clientsNotImported) {
     this.clientsNotImported = clientsNotImported;
   }
 

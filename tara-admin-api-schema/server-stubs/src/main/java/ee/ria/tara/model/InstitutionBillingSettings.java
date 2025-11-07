@@ -18,12 +18,12 @@ import jakarta.annotation.Generated;
  * InstitutionBillingSettings
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class InstitutionBillingSettings {
 
   private @Nullable String email;
 
-  public InstitutionBillingSettings email(String email) {
+  public InstitutionBillingSettings email(@Nullable String email) {
     this.email = email;
     return this;
   }
@@ -35,11 +35,11 @@ public class InstitutionBillingSettings {
   @Pattern(regexp = "(^.*@.*\\..*$)") @Size(min = 5) @jakarta.validation.constraints.Email 
   @Schema(name = "email", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("email")
-  public String getEmail() {
+  public @Nullable String getEmail() {
     return email;
   }
 
-  public void setEmail(String email) {
+  public void setEmail(@Nullable String email) {
     this.email = email;
   }
 

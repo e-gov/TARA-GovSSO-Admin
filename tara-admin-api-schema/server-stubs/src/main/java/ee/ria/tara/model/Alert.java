@@ -22,7 +22,7 @@ import jakarta.annotation.Generated;
  * Alert
  */
 
-@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.13.0")
+@Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class Alert {
 
   private @Nullable String id;
@@ -58,7 +58,7 @@ public class Alert {
     this.endTime = endTime;
   }
 
-  public Alert id(String id) {
+  public Alert id(@Nullable String id) {
     this.id = id;
     return this;
   }
@@ -70,11 +70,11 @@ public class Alert {
   
   @Schema(name = "id", example = "1234567", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("id")
-  public String getId() {
+  public @Nullable String getId() {
     return id;
   }
 
-  public void setId(String id) {
+  public void setId(@Nullable String id) {
     this.id = id;
   }
 
@@ -138,7 +138,7 @@ public class Alert {
     this.endTime = endTime;
   }
 
-  public Alert loginAlert(LoginAlert loginAlert) {
+  public Alert loginAlert(@Nullable LoginAlert loginAlert) {
     this.loginAlert = loginAlert;
     return this;
   }
@@ -150,15 +150,15 @@ public class Alert {
   @Valid 
   @Schema(name = "login_alert", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("login_alert")
-  public LoginAlert getLoginAlert() {
+  public @Nullable LoginAlert getLoginAlert() {
     return loginAlert;
   }
 
-  public void setLoginAlert(LoginAlert loginAlert) {
+  public void setLoginAlert(@Nullable LoginAlert loginAlert) {
     this.loginAlert = loginAlert;
   }
 
-  public Alert emailAlert(EmailAlert emailAlert) {
+  public Alert emailAlert(@Nullable EmailAlert emailAlert) {
     this.emailAlert = emailAlert;
     return this;
   }
@@ -170,15 +170,15 @@ public class Alert {
   @Valid 
   @Schema(name = "email_alert", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("email_alert")
-  public EmailAlert getEmailAlert() {
+  public @Nullable EmailAlert getEmailAlert() {
     return emailAlert;
   }
 
-  public void setEmailAlert(EmailAlert emailAlert) {
+  public void setEmailAlert(@Nullable EmailAlert emailAlert) {
     this.emailAlert = emailAlert;
   }
 
-  public Alert createdAt(OffsetDateTime createdAt) {
+  public Alert createdAt(@Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
     return this;
   }
@@ -190,15 +190,15 @@ public class Alert {
   @Valid 
   @Schema(name = "created_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("created_at")
-  public OffsetDateTime getCreatedAt() {
+  public @Nullable OffsetDateTime getCreatedAt() {
     return createdAt;
   }
 
-  public void setCreatedAt(OffsetDateTime createdAt) {
+  public void setCreatedAt(@Nullable OffsetDateTime createdAt) {
     this.createdAt = createdAt;
   }
 
-  public Alert updatedAt(OffsetDateTime updatedAt) {
+  public Alert updatedAt(@Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
     return this;
   }
@@ -210,11 +210,11 @@ public class Alert {
   @Valid 
   @Schema(name = "updated_at", example = "2019-08-24T14:15:22Z", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("updated_at")
-  public OffsetDateTime getUpdatedAt() {
+  public @Nullable OffsetDateTime getUpdatedAt() {
     return updatedAt;
   }
 
-  public void setUpdatedAt(OffsetDateTime updatedAt) {
+  public void setUpdatedAt(@Nullable OffsetDateTime updatedAt) {
     this.updatedAt = updatedAt;
   }
 

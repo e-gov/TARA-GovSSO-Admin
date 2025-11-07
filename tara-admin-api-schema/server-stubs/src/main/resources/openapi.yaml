@@ -46,7 +46,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Institution'
+                  $ref: "#/components/schemas/Institution"
                 type: array
           description: Successful operation
         "400":
@@ -66,7 +66,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Institution'
+              $ref: "#/components/schemas/Institution"
         description: Institution object that needs to be added
         required: true
       responses:
@@ -123,7 +123,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Institution'
+              $ref: "#/components/schemas/Institution"
         description: Institution object that needs to be updated
         required: true
       responses:
@@ -159,7 +159,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Client'
+                  $ref: "#/components/schemas/Client"
                 type: array
           description: Successful operation
         "400":
@@ -201,13 +201,13 @@ paths:
         content:
           multipart/form-data:
             schema:
-              $ref: '#/components/schemas/importClients_request'
+              $ref: "#/components/schemas/importClients_request"
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/ClientImportResponse'
+                $ref: "#/components/schemas/ClientImportResponse"
           description: Successful operation
         "400":
           description: Invalid input
@@ -230,7 +230,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/InstitutionMetainfo'
+                  $ref: "#/components/schemas/InstitutionMetainfo"
                 type: array
           description: Successful operation
         "400":
@@ -262,7 +262,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Client'
+                  $ref: "#/components/schemas/Client"
                 type: array
           description: Successful operation
         "400":
@@ -288,7 +288,7 @@ paths:
           type: string
         style: simple
       requestBody:
-        $ref: '#/components/requestBodies/Client'
+        $ref: "#/components/requestBodies/Client"
       responses:
         "200":
           description: Successful operation
@@ -358,7 +358,7 @@ paths:
           type: string
         style: simple
       requestBody:
-        $ref: '#/components/requestBodies/Client'
+        $ref: "#/components/requestBodies/Client"
       responses:
         "200":
           content:
@@ -387,7 +387,7 @@ paths:
             application/json:
               schema:
                 items:
-                  $ref: '#/components/schemas/Alert'
+                  $ref: "#/components/schemas/Alert"
                 type: array
           description: Successful operation
         "400":
@@ -402,13 +402,13 @@ paths:
     post:
       operationId: addAlert
       requestBody:
-        $ref: '#/components/requestBodies/Alert'
+        $ref: "#/components/requestBodies/Alert"
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Alert'
+                $ref: "#/components/schemas/Alert"
           description: Successful operation
         "400":
           description: Invalid input
@@ -460,13 +460,13 @@ paths:
           type: string
         style: simple
       requestBody:
-        $ref: '#/components/requestBodies/Alert'
+        $ref: "#/components/requestBodies/Alert"
       responses:
         "200":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Alert'
+                $ref: "#/components/schemas/Alert"
           description: Successful operation
         "400":
           description: Invalid input
@@ -489,7 +489,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/LoginRequest'
+              $ref: "#/components/schemas/LoginRequest"
         description: Authentication request object
         required: true
       responses:
@@ -497,7 +497,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/LoginResponse'
+                $ref: "#/components/schemas/LoginResponse"
           description: successful operation
           headers:
             X-Rate-Limit:
@@ -546,7 +546,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/WhoAmIResponse'
+                $ref: "#/components/schemas/WhoAmIResponse"
           description: Success
       summary: Check if user is already logged in
       tags:
@@ -565,7 +565,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/SsoModeResponse'
+                $ref: "#/components/schemas/SsoModeResponse"
           description: Success
       summary: Check what mode the application is running in
       tags:
@@ -580,14 +580,14 @@ components:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Client'
+            $ref: "#/components/schemas/Client"
       description: Client object that needs to be added
       required: true
     Alert:
       content:
         application/json:
           schema:
-            $ref: '#/components/schemas/Alert'
+            $ref: "#/components/schemas/Alert"
       description: Client object that needs to be added
       required: true
   schemas:
@@ -717,7 +717,7 @@ components:
           minLength: 3
           type: string
         type:
-          $ref: '#/components/schemas/InstitutionType'
+          $ref: "#/components/schemas/InstitutionType"
         client_ids:
           items:
             example: openIdDemo
@@ -739,7 +739,7 @@ components:
           pattern: (^.*@.*\..*$)
           type: string
         billing_settings:
-          $ref: '#/components/schemas/InstitutionBillingSettings'
+          $ref: "#/components/schemas/InstitutionBillingSettings"
         created_at:
           example: 2019-08-24T14:15:22Z
           format: date-time
@@ -772,7 +772,7 @@ components:
           pattern: "\\d{3,}"
           type: string
         type:
-          $ref: '#/components/schemas/InstitutionType'
+          $ref: "#/components/schemas/InstitutionType"
       required:
       - name
       - registry_code
@@ -872,13 +872,13 @@ components:
           pattern: ^(?!\s*$).+
           type: string
         client_name:
-          $ref: '#/components/schemas/NameTranslations'
+          $ref: "#/components/schemas/NameTranslations"
         client_short_name:
-          $ref: '#/components/schemas/ShortNameTranslations'
+          $ref: "#/components/schemas/ShortNameTranslations"
         client_secret_export_settings:
-          $ref: '#/components/schemas/ClientSecretExportSettings'
+          $ref: "#/components/schemas/ClientSecretExportSettings"
         institution_metainfo:
-          $ref: '#/components/schemas/InstitutionMetainfo'
+          $ref: "#/components/schemas/InstitutionMetainfo"
         access_token_audience_uris:
           items:
             example: https://jwt-service-uri.test.ee
@@ -978,12 +978,12 @@ components:
           example: ns=A&role=B
           type: string
         mid_settings:
-          $ref: '#/components/schemas/ClientMidSettings'
+          $ref: "#/components/schemas/ClientMidSettings"
         smartid_settings:
-          $ref: '#/components/schemas/ClientSmartIdSettings'
+          $ref: "#/components/schemas/ClientSmartIdSettings"
         client_contacts:
           items:
-            $ref: '#/components/schemas/ClientContact'
+            $ref: "#/components/schemas/ClientContact"
           type: array
         created_at:
           example: 2019-08-24T14:15:22Z
@@ -1043,7 +1043,7 @@ components:
           type: boolean
         message_templates:
           items:
-            $ref: '#/components/schemas/MessageTemplate'
+            $ref: "#/components/schemas/MessageTemplate"
           type: array
         auth_methods:
           items:
@@ -1071,7 +1071,7 @@ components:
           type: string
         message_templates:
           items:
-            $ref: '#/components/schemas/MessageTemplate'
+            $ref: "#/components/schemas/MessageTemplate"
           type: array
       type: object
     MessageTemplate:
@@ -1137,9 +1137,9 @@ components:
           format: date-time
           type: string
         login_alert:
-          $ref: '#/components/schemas/LoginAlert'
+          $ref: "#/components/schemas/LoginAlert"
         email_alert:
-          $ref: '#/components/schemas/EmailAlert'
+          $ref: "#/components/schemas/EmailAlert"
         created_at:
           example: 2019-08-24T14:15:22Z
           format: date-time
