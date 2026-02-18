@@ -34,6 +34,8 @@ The backend application is built on top of classes generated from the API specif
 | ---------------------------- | -------- | --------------------------------- | ---------------------------------------------------- |
 | tara.admin.sso-mode           | N        | Toggle between GovSSO mode when true and TARA mode when false, false by default  | false                                                 |
 | tara.admin.max-access-token-lifespan  | N | Max allowed value for JWT access token lifespan. Default value is PT15M (15 minutes). | PT14M |
+| tara.admin.max-short-name-length | N | Maximum allowed length for client short name. Default value is 38. | 38 |
+| tara.admin.max-name-length | N | Maximum allowed length for client full name. Default value is 150. | 150 |
 
 <a href="oidc_conf"></a>
 ### Integration with TARA/GovSSO OIDC service

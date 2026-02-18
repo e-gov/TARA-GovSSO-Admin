@@ -29,9 +29,6 @@ import static ee.ria.tara.service.helper.ClientHelper.SCOPE_REPRESENTEE_LIST;
 public class ClientValidator {
 
     private static final int LOGO_ALLOWED_MAX_SIZE_IN_BYTES = 100 * 1024;
-    private static final int MAX_SHORT_NAME_LENGTH = 40;
-    private static final int MAX_SHORT_NAME_GSM7_LENGTH = 20;
-    private static final String GSM_7_CHARACTERS = "@£$¥èéùìòÇØøÅåΔ_ΦΓΛΩΠΨΣΘΞ^{}[~]|€ÆæßÉ!\"#¤%&'()*+,-./0123456789:;<=>?¡ABCDEFGHIJKLMNOPQRSTUVWXYZÄÖÑÜ§¿abcdefghijklmnopqrstuvwxyzäöñüà \r\n\\";
     private static final String VALID_QUERY_PARAM_VALUE = "[\\w-%!:.~'()*]";
     private static final String VALID_PAASUKE_PARAMS_PATTERN = "^"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?(&"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?)*?$";
     private static final Duration MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN = Duration.ofSeconds(1);
@@ -98,17 +95,38 @@ public class ClientValidator {
     }
 
     private void validateName(Client client) {
+        var clientName = client.getClientName();
+        var clientShortName = client.getClientShortName();
+
         if (adminConfProvider.isSsoMode()) {
-            if (StringUtils.isBlank(client.getClientName().getEt())) {
+            if (clientName == null || StringUtils.isBlank(clientName.getEt())) {
                 throw new InvalidDataException("Client.sso.clientName");
             }
-            if (StringUtils.isBlank(client.getClientShortName().getEt())) {
+            if (clientShortName == null || StringUtils.isBlank(clientShortName.getEt())) {
                 throw new InvalidDataException("Client.sso.clientShortName");
             }
         }
-        validateShortName(client.getClientShortName().getEt());
-        validateShortName(client.getClientShortName().getEn());
-        validateShortName(client.getClientShortName().getRu());
+
+        if (clientName != null) {
+            validateFullName(clientName.getEt());
+            validateFullName(clientName.getEn());
+            validateFullName(clientName.getRu());
+        }
+
+        if (clientShortName != null) {
+            validateShortName(clientShortName.getEt());
+            validateShortName(clientShortName.getEn());
+            validateShortName(clientShortName.getRu());
+        }
+    }
+
+    private void validateFullName(String name) {
+        if (name == null) {
+            return;
+        }
+        if (name.length() > adminConfProvider.getMaxNameLength()) {
+            throw new InvalidDataException("Client.name.tooLong");
+        }
     }
 
     private void validateShortName(String shortName) {
@@ -118,21 +136,9 @@ public class ClientValidator {
         if (containsNonUcs2Characters(shortName)) {
             throw new InvalidDataException("Client.shortName.forbiddenCharacters");
         }
-        if (shortName.length() > MAX_SHORT_NAME_LENGTH) {
+        if (shortName.length() > adminConfProvider.getMaxShortNameLength()) {
             throw new InvalidDataException("Client.shortName.tooLong");
         }
-        if (containsNonGsm7Characters(shortName) && shortName.length() > MAX_SHORT_NAME_GSM7_LENGTH) {
-            throw new InvalidDataException("Client.shortName.tooLong");
-        }
-    }
-
-    private boolean containsNonGsm7Characters(String str) {
-        for (int i = 0; i < str.length(); i++) {
-            if (GSM_7_CHARACTERS.indexOf(str.charAt(i)) == -1) {
-                return true;
-            }
-        }
-        return false;
     }
 
     private boolean containsNonUcs2Characters(String str) {

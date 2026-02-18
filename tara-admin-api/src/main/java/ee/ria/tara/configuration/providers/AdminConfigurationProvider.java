@@ -1,5 +1,6 @@
 package ee.ria.tara.configuration.providers;
 
+import jakarta.validation.constraints.Positive;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
@@ -16,4 +17,9 @@ public class AdminConfigurationProvider {
     boolean ssoMode = false;
     Duration maxAccessTokenLifespan = Duration.ofMinutes(15);
 
+    @Positive
+    int maxShortNameLength = 38;
+
+    @Positive
+    int maxNameLength = 150;
 }

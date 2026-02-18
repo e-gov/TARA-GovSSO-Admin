@@ -7,6 +7,7 @@ import ee.ria.tara.model.NameTranslations;
 import ee.ria.tara.model.ShortNameTranslations;
 import ee.ria.tara.repository.ClientRepository;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
@@ -29,31 +30,37 @@ import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
 
 @ActiveProfiles("test")
-public class ClientValidatorTest {
+class ClientValidatorTest {
 
-    private final static String ALLOWED_CHARS = "-%_!:.~'()*abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    private final static String ALLOWED_PARAM = ALLOWED_CHARS + "=" + ALLOWED_CHARS;
+    private static final String ALLOWED_CHARS = "-%_!:.~'()*abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    private static final String ALLOWED_PARAM = ALLOWED_CHARS + "=" + ALLOWED_CHARS;
 
     private final ClientRepository clientRepository = mock(ClientRepository.class);
     private final AdminConfigurationProvider adminConfigurationProvider = mock(AdminConfigurationProvider.class);
     private final ClientValidator clientValidator = new ClientValidator(adminConfigurationProvider, clientRepository);
 
+    @BeforeEach
+    void setUp() {
+        doReturn(38).when(adminConfigurationProvider).getMaxShortNameLength();
+        doReturn(150).when(adminConfigurationProvider).getMaxNameLength();
+    }
+
     @Test
-    public void validateClient_ssoMode_successfulValidation() {
+    void validateClient_ssoMode_successfulValidation() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
         Client client = validSSOClient();
         clientValidator.validateClient(client, PUBLIC);
     }
 
     @Test
-    public void validateClient_taraMode_successfulValidation() {
+    void validateClient_taraMode_successfulValidation() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
         Client client = validTARAClient();
         clientValidator.validateClient(client, PUBLIC);
     }
 
     @Test
-    public void validateClient_ssoClientNameMissing_exceptionThrown() {
+    void validateClient_ssoClientNameMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -65,7 +72,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_ssoClientShortNameMissing_exceptionThrown() {
+    void validateClient_ssoClientShortNameMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -77,7 +84,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_taraNameMissing_valid() {
+    void validateClient_taraNameMissing_valid() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -88,68 +95,55 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_taraShortNameTooLong_exceptionThrown() {
+    void validateClient_taraShortNameTooLong_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        String fortyOneCharacterString = "12345678901234567890123456789012345678901";
+        String thirtyNineCharString = "123456789012345678901234567890123456789";
         Client client = validTARAClient();
-        client.getClientShortName().setEt(fortyOneCharacterString);
+
+        ShortNameTranslations shortNameTranslations = new ShortNameTranslations();
+        shortNameTranslations.setEt(thirtyNineCharString);
+        client.setClientShortName(shortNameTranslations);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
+
         Assertions.assertTrue(exception.getMessage().contains("Client.shortName.tooLong"));
     }
 
     @Test
-    public void validateClient_taraShortNameWithMaxLength_valid() {
+    void validateClient_taraShortNameWithMaxLength_valid() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
-        String fortyOneCharacterString = "1234567890123456789012345678901234567890";
+        String thirtyEightCharacterString = "12345678901234567890123456789012345678";
         Client client = validTARAClient();
-        client.getClientShortName().setEt(fortyOneCharacterString);
+
+        ShortNameTranslations shortNameTranslations = new ShortNameTranslations();
+        shortNameTranslations.setEt(thirtyEightCharacterString);
+        client.setClientShortName(shortNameTranslations);
 
         clientValidator.validateClient(client, PUBLIC);
     }
 
     @Test
-    public void validateClient_taraShortNameWithNonGsm7CharactersTooLong_exceptionThrown() {
-        doReturn(false).when(adminConfigurationProvider).isSsoMode();
-
-        String twentyOneCharacterUcs2String = "12345678901234567890Õ";
-        Client client = validTARAClient();
-        client.getClientShortName().setEt(twentyOneCharacterUcs2String);
-
-        InvalidDataException exception = assertThrows(InvalidDataException.class,
-                () -> clientValidator.validateClient(client, PUBLIC));
-        Assertions.assertTrue(exception.getMessage().contains("Client.shortName.tooLong"));
-    }
-
-    @Test
-    public void validateClient_taraShortNameWithNonGsm7CharactersMaxLength_valid() {
-        doReturn(false).when(adminConfigurationProvider).isSsoMode();
-
-        String fortyOneCharacterString = "1234567890123456789Õ";
-        Client client = validTARAClient();
-        client.getClientShortName().setEt(fortyOneCharacterString);
-
-        clientValidator.validateClient(client, PUBLIC);
-    }
-
-    @Test
-    public void validateClient_taraShortNameWithNonUcs2Characters_exceptionThrown() {
+    void validateClient_taraShortNameWithNonUcs2Characters_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         String nonUcs2String = "abc-\uD83D\uDE00";
         Client client = validTARAClient();
-        client.getClientShortName().setEt(nonUcs2String);
+
+        ShortNameTranslations shortNameTranslations = new ShortNameTranslations();
+        shortNameTranslations.setEt(nonUcs2String);
+        client.setClientShortName(shortNameTranslations);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
+
         Assertions.assertTrue(exception.getMessage().contains("Client.shortName.forbiddenCharacters"));
     }
 
     @Test
-    public void validateClient_ssoBackchannelLogoutUriUriMissing_exceptionThrown() {
+    void validateClient_ssoBackchannelLogoutUriUriMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -161,7 +155,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_ssoScopeMissing_exceptionThrown() {
+    void validateClient_ssoScopeMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -173,7 +167,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_taraScopeMissing_exceptionThrown() {
+    void validateClient_taraScopeMissing_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -185,7 +179,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_ssoPostLogoutUriUriMissing_exceptionThrown() {
+    void validateClient_ssoPostLogoutUriUriMissing_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -197,7 +191,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_ssoPostLogoutUriUriInvalid_exceptionThrown() {
+    void validateClient_ssoPostLogoutUriUriInvalid_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -209,7 +203,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_ssoRedirectUriUriInvalid_exceptionThrown() {
+    void validateClient_ssoRedirectUriUriInvalid_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -221,7 +215,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_taraPostLogoutRedirectUriPresent_exceptionThrown() {
+    void validateClient_taraPostLogoutRedirectUriPresent_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -233,7 +227,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_taraBackchannelLogoutUriPresent_exceptionThrown() {
+    void validateClient_taraBackchannelLogoutUriPresent_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -245,7 +239,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_taraRedirectUriUriInvalid_exceptionThrown() {
+    void validateClient_taraRedirectUriUriInvalid_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -257,7 +251,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_ssoEidasRequesterIdSet_exceptionThrown() {
+    void validateClient_ssoEidasRequesterIdSet_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -269,7 +263,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_taraEidasRequesterIdMissing_exceptionThrown() {
+    void validateClient_taraEidasRequesterIdMissing_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -281,7 +275,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_taraClientAlreadyExistsWithEidasRequesterId_exceptionThrown() {
+    void validateClient_taraClientAlreadyExistsWithEidasRequesterId_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -295,7 +289,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_ssoClientWithTooLargeLogo_exceptionThrown() {
+    void validateClient_ssoClientWithTooLargeLogo_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -307,7 +301,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_taraClientWithLogo_exceptionThrown() {
+    void validateClient_taraClientWithLogo_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -320,7 +314,7 @@ public class ClientValidatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"1.2.3.4", "1:2:3:4:5:6:7:8", "1.2.0.0/16", "1.*.1-3.1-4", "1111:222::/64", "1:2:*:4:5-10:6:7"})
-    public void validateClient_taraClientIpAddressValid_successfulValidation(String ipAddress) {
+    void validateClient_taraClientIpAddressValid_successfulValidation(String ipAddress) {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -331,7 +325,7 @@ public class ClientValidatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"1.1.1.1.1", "1.1.a.1", "1111.1.1.1", "999.1.1.1", "1.1.1.1+1.1.1.1","1:2:3:4:5:6:7", " "})
-    public void validateClient_taraClientIpAddressInvalid_exceptionThrown(String ipAddress) {
+    void validateClient_taraClientIpAddressInvalid_exceptionThrown(String ipAddress) {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -343,7 +337,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_usingJwtAccessTokenStrategyWithAccessTokenAudienceUris_successfulValidation() {
+    void validateClient_usingJwtAccessTokenStrategyWithAccessTokenAudienceUris_successfulValidation() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -354,7 +348,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_usingJwtAccessTokenStrategyWithAccessTokenLifespan_successfulValidation() {
+    void validateClient_usingJwtAccessTokenStrategyWithAccessTokenLifespan_successfulValidation() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
         doReturn(Duration.ofMinutes(15)).when(adminConfigurationProvider).getMaxAccessTokenLifespan();
 
@@ -367,7 +361,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_whenAccessTokenLifespanTooLong_exceptionThrown() {
+    void validateClient_whenAccessTokenLifespanTooLong_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
         doReturn(Duration.ofMinutes(15)).when(adminConfigurationProvider).getMaxAccessTokenLifespan();
 
@@ -386,7 +380,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_whenAccessTokenLifespanTooShort_exceptionThrown() {
+    void validateClient_whenAccessTokenLifespanTooShort_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -404,7 +398,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_givenJwtAccessTokenLifespanWithoutSsoMode_exceptionThrown() {
+    void validateClient_givenJwtAccessTokenLifespanWithoutSsoMode_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -416,7 +410,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_givenJwtAccessTokenLifespanWhenAccessTokenJwtIsNotEnabled_exceptionThrown() {
+    void validateClient_givenJwtAccessTokenLifespanWhenAccessTokenJwtIsNotEnabled_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -430,7 +424,7 @@ public class ClientValidatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"test", "https://user:password@example.com", "https://test#fragment"})
-    public void validateClient_usingJwtAccessTokenStrategyWithInvalidAccessTokenAudienceUris_exceptionThrown(String uri) {
+    void validateClient_usingJwtAccessTokenStrategyWithInvalidAccessTokenAudienceUris_exceptionThrown(String uri) {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -443,7 +437,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_usingJwtAccessTokenStrategyWithoutAccessTokenAudienceUris_exceptionThrown() {
+    void validateClient_usingJwtAccessTokenStrategyWithoutAccessTokenAudienceUris_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -455,7 +449,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_withJwtServiceUrisWithoutSsoMode_exceptionThrown() {
+    void validateClient_withJwtServiceUrisWithoutSsoMode_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -467,7 +461,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_usingJwtAccessTokenStrategyWithoutSsoMode_exceptionThrown() {
+    void validateClient_usingJwtAccessTokenStrategyWithoutSsoMode_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -479,7 +473,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_withJwtServiceUrisWhenAccessTokenJwtIsNotEnabled_exceptionThrown() {
+    void validateClient_withJwtServiceUrisWhenAccessTokenJwtIsNotEnabled_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -491,7 +485,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_withPaasukeParametersWithoutSsoMode_exceptionThrown() {
+    void validateClient_withPaasukeParametersWithoutSsoMode_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
@@ -507,7 +501,7 @@ public class ClientValidatorTest {
     @ValueSource(strings = {"=", "a&", "&a", "a==", "a=a=a", "a&&a", "a\n",
             "\0", "\b", "\t", "\n", "\f", "\r", " ", "\"", "#", "$", "&", "+", ",", "/", ";", "<", "=", ">", "?", "@", "[", "\\", "]", "^", "`", "{", "|", "}", "õ"
     })
-    public void validateClient_withPaasukeParameters_exceptionThrown(String queryParameters) {
+    void validateClient_withPaasukeParameters_exceptionThrown(String queryParameters) {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -523,7 +517,7 @@ public class ClientValidatorTest {
     @ValueSource(strings = {"a", "a=", "a=a", "a=a&a", "a=a&a=", "a&a=a", "a=a&a=a", "a&a",
             "a&a&a", "a&a&a=", "a&a&a=a",
             ALLOWED_PARAM + "&" +  ALLOWED_PARAM + "&" + ALLOWED_PARAM})
-    public void validateClient_withPaasukeParameters_successfulValidation(String queryParameters) {
+    void validateClient_withPaasukeParameters_successfulValidation(String queryParameters) {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -534,7 +528,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_withPaasukeParametersAndScopeRepresenteeList_successfulValidation() {
+    void validateClient_withPaasukeParametersAndScopeRepresenteeList_successfulValidation() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -545,7 +539,7 @@ public class ClientValidatorTest {
     }
 
     @Test
-    public void validateClient_withPaasukeParametersWithoutRepresenteeScope_exceptionThrown() {
+    void validateClient_withPaasukeParametersWithoutRepresenteeScope_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
@@ -555,4 +549,79 @@ public class ClientValidatorTest {
                 () -> clientValidator.validateClient(client, PUBLIC));
         Assertions.assertTrue(exception.getMessage().contains("Paasuke parameters must not be set without representee.* or representee_list scope"));
     }
+
+    @Test
+    void validateClient_fullNameTooLong_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        String tooLong = "a".repeat(151);
+        Client client = validTARAClient();
+
+        NameTranslations nameTranslations = new NameTranslations();
+        nameTranslations.setEt(tooLong);
+        client.setClientName(nameTranslations);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.name.tooLong"));
+    }
+
+    @Test
+    void validateClient_fullNameWithMaxLength_valid() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        String maxLength = "a".repeat(150);
+        Client client = validTARAClient();
+
+        NameTranslations nameTranslations = new NameTranslations();
+        nameTranslations.setEt(maxLength);
+        client.setClientName(nameTranslations);
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    void validateClient_skipUserConsentContainsSelf_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setSkipUserConsentClientIds(List.of(client.getClientId()));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.skipUserConsent.clients.invalid"));
+    }
+
+    @Test
+    void validateClient_skipUserConsentContainsNonExistingClient_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setSkipUserConsentClientIds(List.of("non-existing"));
+
+        doReturn(Collections.emptyList()).when(clientRepository).findAll();
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.skipUserConsent.clients.missing"));
+    }
+
+    @Test
+    void validateClient_skipUserConsentValid_successfulValidation() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setSkipUserConsentClientIds(List.of("other-client"));
+
+        ee.ria.tara.repository.model.Client repoClient = new ee.ria.tara.repository.model.Client();
+        repoClient.setClientId("other-client");
+
+        doReturn(List.of(repoClient)).when(clientRepository).findAll();
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
 }
