@@ -598,16 +598,13 @@ components:
         et: et
       properties:
         et:
-          maxLength: 150
           minLength: 3
           pattern: ^(?!\s*$).+
           type: string
         en:
-          maxLength: 150
           minLength: 3
           type: string
         ru:
-          maxLength: 150
           minLength: 3
           type: string
       type: object
@@ -618,16 +615,13 @@ components:
         et: et
       properties:
         et:
-          maxLength: 40
           minLength: 3
           pattern: ^(?!\s*$).+
           type: string
         en:
-          maxLength: 40
           minLength: 3
           type: string
         ru:
-          maxLength: 40
           minLength: 3
           type: string
       type: object

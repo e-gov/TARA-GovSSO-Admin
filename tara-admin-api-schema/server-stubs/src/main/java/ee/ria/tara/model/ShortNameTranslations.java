@@ -36,7 +36,7 @@ public class ShortNameTranslations {
    * Get et
    * @return et
    */
-  @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3, max = 40) 
+  @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3) 
   @Schema(name = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("et")
   public @Nullable String getEt() {
@@ -56,7 +56,7 @@ public class ShortNameTranslations {
    * Get en
    * @return en
    */
-  @Size(min = 3, max = 40) 
+  @Size(min = 3) 
   @Schema(name = "en", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("en")
   public @Nullable String getEn() {
@@ -76,7 +76,7 @@ public class ShortNameTranslations {
    * Get ru
    * @return ru
    */
-  @Size(min = 3, max = 40) 
+  @Size(min = 3) 
   @Schema(name = "ru", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
   @JsonProperty("ru")
   public @Nullable String getRu() {

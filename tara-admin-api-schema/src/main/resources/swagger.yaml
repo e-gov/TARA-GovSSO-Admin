@@ -487,32 +487,26 @@ components:
         et:
           type: string
           minLength: 3
-          maxLength: 150
           pattern: ^(?!\s*$).+
         en:
           type: string
           minLength: 3
-          maxLength: 150
         ru:
           type: string
           minLength: 3
-          maxLength: 150
     ShortNameTranslations:
       type: object
       properties:
         et:
           type: string
           minLength: 3
-          maxLength: 40
           pattern: ^(?!\s*$).+
         en:
           type: string
           minLength: 3
-          maxLength: 40
         ru:
           type: string
           minLength: 3
-          maxLength: 40
     InstitutionBillingSettings:
       type: object
       properties:

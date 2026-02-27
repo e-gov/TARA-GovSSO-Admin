@@ -125,7 +125,7 @@ public class ClientValidator {
             return;
         }
         if (name.length() > adminConfProvider.getMaxNameLength()) {
-            throw new InvalidDataException("Client.name.tooLong");
+            throw new InvalidDataException("Client.name.tooLong", adminConfProvider.getMaxNameLength());
         }
     }
 
@@ -137,7 +137,7 @@ public class ClientValidator {
             throw new InvalidDataException("Client.shortName.forbiddenCharacters");
         }
         if (shortName.length() > adminConfProvider.getMaxShortNameLength()) {
-            throw new InvalidDataException("Client.shortName.tooLong");
+            throw new InvalidDataException("Client.shortName.tooLong", adminConfProvider.getMaxShortNameLength());
         }
     }
 

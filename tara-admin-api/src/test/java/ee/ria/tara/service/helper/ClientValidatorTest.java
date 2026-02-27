@@ -97,6 +97,7 @@ class ClientValidatorTest {
     @Test
     void validateClient_taraShortNameTooLong_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
+        doReturn(38).when(adminConfigurationProvider).getMaxShortNameLength();
 
         String thirtyNineCharString = "123456789012345678901234567890123456789";
         Client client = validTARAClient();
@@ -108,7 +109,8 @@ class ClientValidatorTest {
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
 
-        Assertions.assertTrue(exception.getMessage().contains("Client.shortName.tooLong"));
+        Assertions.assertEquals("Client.shortName.tooLong", exception.getMessage());
+        Assertions.assertArrayEquals(new Object[]{38}, exception.getArgs());
     }
 
     @Test
@@ -553,6 +555,7 @@ class ClientValidatorTest {
     @Test
     void validateClient_fullNameTooLong_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
+        doReturn(150).when(adminConfigurationProvider).getMaxNameLength();
 
         String tooLong = "a".repeat(151);
         Client client = validTARAClient();
@@ -564,7 +567,8 @@ class ClientValidatorTest {
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
 
-        Assertions.assertTrue(exception.getMessage().contains("Client.name.tooLong"));
+        Assertions.assertEquals("Client.name.tooLong", exception.getMessage());
+        Assertions.assertArrayEquals(new Object[]{150}, exception.getArgs());
     }
 
     @Test
