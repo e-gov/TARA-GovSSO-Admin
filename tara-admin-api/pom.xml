@@ -5,12 +5,12 @@
     <parent>
         <artifactId>tara-admin-parent</artifactId>
         <groupId>ee.ria.tara-admin</groupId>
-        <version>1.12.2</version>
+        <version>1.12.3</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>tara-admin-api</artifactId>
-    <version>1.12.2</version>
+    <version>1.12.3</version>
     <packaging>jar</packaging>
 
     <properties>
@@ -28,7 +28,7 @@
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
         <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version><!-- TODO Upgrade to logstash-logback-encoder 9.x with Spring Boot 4.x, both upgrade to Jackson 3 -->
         <poi.version>5.5.1</poi.version>
-        <tara-admin-api-schema.version>1.12.2</tara-admin-api-schema.version>
+        <tara-admin-api-schema.version>1.12.3</tara-admin-api-schema.version>
 
         <!-- TODO H2 2.x requires a more specific constraint definition at https://github.com/e-gov/TARA-GovSSO-Admin/blob/v1.4.3/tara-admin-api/src/main/resources/db/changelog/TARA2-132-init.yaml#L31
               but existing Liquibase changesets should not be modified (error "Validation Failed: 1 change sets check
