@@ -158,6 +158,10 @@ Each LDAP servers can be configured using the following configuration parameters
 | :---------------- | :---------- | :---------- | :---------------- |
 | `tara.admin.security.content-security-policy` | No | | Content security policy. Default value `connect-src 'self'; default-src 'none'; font-src 'self'; img-src 'self'; script-src 'self'; style-src 'self'; base-uri 'none'; frame-ancestors 'none'; block-all-mixed-content` |
 
+| Environment variable        | Mandatory | Description, example |
+| :---------------- | :---------- | :----------------|
+| `ALLOW_INSECURE_TLS_RSA_KEY_EXCHANGE` | No | To enable TLS_RSA_* key exchange ciphers (overriding "jdk.tls.disabledAlgorithms" security property), set this to "true" |
+
 <a href="logging"></a>
 ### Logging
 
