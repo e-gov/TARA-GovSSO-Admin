@@ -362,6 +362,10 @@ export class ClientDialogComponent implements OnInit {
       this.newData.access_token_lifespan = undefined;
     }
 
+    if (!this.authService.isSsoMode) {
+      this.newData.client_type = undefined;
+    }
+
     let requestBody = JSON.parse(JSON.stringify(this.newData), (key, value) => {
        if (value == '')
            return undefined;
@@ -458,6 +462,10 @@ export class ClientDialogComponent implements OnInit {
 
   validateAndGetNewClient(client: Client): Client {
     let newClient = JSON.parse(JSON.stringify(client));
+
+    if (this.authService.isSsoMode && newClient.client_type !== 'SECURED_APP') {
+      newClient.client_type = 'DEFAULT';
+    }
 
     if (newClient.institution_metainfo == undefined) {
       newClient.institution_metainfo = {type: "private"};

@@ -33,9 +33,17 @@ public class HydraClient {
     @Pattern(regexp="^([0-9]+(ns|us|ms|s|m|h))*$")
     private String authorizationCodeGrantAccessTokenLifespan;
 
+    @JsonProperty("authorization_code_grant_refresh_token_lifespan")
+    @Pattern(regexp="^([0-9]+(ns|us|ms|s|m|h))*$")
+    private String authorizationCodeGrantRefreshTokenLifespan;
+
     @JsonProperty("refresh_token_grant_access_token_lifespan")
     @Pattern(regexp="^([0-9]+(ns|us|ms|s|m|h))*$")
     private String refreshTokenGrantAccessTokenLifespan;
+
+    @JsonProperty("refresh_token_grant_refresh_token_lifespan")
+    @Pattern(regexp="^([0-9]+(ns|us|ms|s|m|h))*$")
+    private String refreshTokenGrantRefreshTokenLifespan;
 
     @JsonProperty("grant_types")
     @Size(min=1)

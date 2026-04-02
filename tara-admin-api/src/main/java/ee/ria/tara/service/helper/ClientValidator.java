@@ -53,7 +53,14 @@ public class ClientValidator {
         validateAccessTokenJwtEnabled(client);
         validateAccessTokenAudienceUris(client);
         validateAccessTokenLifespan(client);
+        validateClientType(client);
         validateClientSecretExportSettings(client);
+    }
+
+    private void validateClientType(Client client) {
+        if (!adminConfProvider.isSsoMode() && client.getClientType() != null) {
+            throw new IllegalStateException("Client type must not be set in TARA mode");
+        }
     }
 
     private static void validateClientSecretExportSettings(Client client) {

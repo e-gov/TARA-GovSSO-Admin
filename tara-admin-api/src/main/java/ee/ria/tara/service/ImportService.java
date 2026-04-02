@@ -24,6 +24,7 @@ import ee.ria.tara.repository.helper.PropertyFilterMixIn;
 import ee.ria.tara.repository.model.Institution;
 import ee.ria.tara.service.helper.ClientHelper;
 import ee.ria.tara.service.helper.ClientValidator;
+import ee.ria.tara.service.helper.HydraDurationHelper;
 import ee.ria.tara.service.helper.ScopeFilter;
 import ee.ria.tara.service.model.ClientImportItem;
 import ee.ria.tara.service.model.HydraClient;
@@ -262,7 +263,8 @@ public class ImportService {
                 throw new IllegalStateException("Something went wrong while saving to admin-service database: " + e.getMessage(), e);
             }
 
-            HydraClient hydraClient = convertToHydraClient(client, false);
+            String sessionDuration = HydraDurationHelper.format(adminConfigurationProvider.getMaxSessionDuration());
+            HydraClient hydraClient = convertToHydraClient(client, false, sessionDuration);
             HydraClientWithSecret hydraClientWithSecret =
                     new HydraClientWithSecret(hydraClient, getDigest(clientImportItem.secret()));
 

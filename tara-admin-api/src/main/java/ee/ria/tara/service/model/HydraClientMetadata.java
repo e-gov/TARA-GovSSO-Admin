@@ -15,6 +15,9 @@ import java.util.List;
 @ToString
 @EqualsAndHashCode
 public class HydraClientMetadata   {
+  @JsonProperty("client_type")
+  private String clientType;
+
   @JsonProperty("display_user_consent")
   @NotNull
   private Boolean displayUserConsent;

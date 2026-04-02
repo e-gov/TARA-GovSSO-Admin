@@ -118,6 +118,7 @@ public class ClientHelper {
         client.setCreatedAt(OffsetDateTime.parse(hydraClient.getCreatedAt()));
         client.setUpdatedAt(OffsetDateTime.parse(hydraClient.getUpdatedAt()));
         client.setMinimumAcrValue(hydraClient.getMetadata().getMinimumAcrValue());
+        client.setClientType(getClientType(hydraClient));
         if (hydraClient.getAccessTokenStrategy() != null && hydraClient.getAccessTokenStrategy().equals(ACCESS_TOKEN_STRATEGY_JWT)) {
             client.setAccessTokenJwtEnabled(true);
         }
@@ -128,7 +129,7 @@ public class ClientHelper {
         return client;
     }
 
-    public static HydraClient convertToHydraClient(Client client, boolean ssoMode) {
+    public static HydraClient convertToHydraClient(Client client, boolean ssoMode, String sessionDuration) {
         HydraClientMetadata metadata = new HydraClientMetadata();
         OidcClient oidcClient = new OidcClient();
         HydraClient hydraClient = new HydraClient();
@@ -150,10 +151,15 @@ public class ClientHelper {
         metadata.setSkipUserConsentClientIds(client.getSkipUserConsentClientIds() != null ? getDistinctSkipUserConsentClientIds(client) : null);
         metadata.setPaasukeParameters(client.getPaasukeParameters());
         metadata.setMinimumAcrValue(client.getMinimumAcrValue());
-
+        Client.ClientTypeEnum clientType = client.getClientType();
         if (ssoMode) {
+            if (clientType == null) {
+                clientType = Client.ClientTypeEnum.DEFAULT;
+            }
+            metadata.setClientType(clientType.name());
             hydraClient.setGrantTypes(List.of("authorization_code", "refresh_token"));
         }
+
         if (client.getAccessTokenJwtEnabled()) {
             hydraClient.setAccessTokenStrategy(ACCESS_TOKEN_STRATEGY_JWT);
         }
@@ -171,6 +177,14 @@ public class ClientHelper {
 
         hydraOidcClientInstitution.setRegistryCode(client.getInstitutionMetainfo().getRegistryCode());
         hydraOidcClientInstitution.setSector(client.getInstitutionMetainfo().getType().getType().toString());
+
+        if (Client.ClientTypeEnum.SECURED_APP.equals(clientType)) {
+            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(sessionDuration);
+            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(sessionDuration);
+        } else {
+            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(null);
+            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(null);
+        }
 
         return hydraClient;
     }
@@ -237,6 +251,14 @@ public class ClientHelper {
 
         return translations;
     }
+
+    private static Client.ClientTypeEnum getClientType(HydraClient hydraClient) {
+        if (hydraClient.getMetadata() == null || hydraClient.getMetadata().getClientType() == null) {
+            return Client.ClientTypeEnum.DEFAULT;
+        }
+        return Client.ClientTypeEnum.fromValue(hydraClient.getMetadata().getClientType());
+    }
+
 
     private static ClientSmartIdSettings getSmartidSettings(HydraClient hydraClient) {
         ClientSmartIdSettings settings = new ClientSmartIdSettings();

@@ -614,6 +614,38 @@ class ClientValidatorTest {
     }
 
     @Test
+    void validateClient_taraClientWithClientTypeSet_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setClientType(Client.ClientTypeEnum.DEFAULT);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client type must not be set in TARA mode"));
+    }
+
+    @Test
+    void validateClient_ssoClientWithClientTypeSet_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    void validateClient_taraClientWithNullClientType_successfulValidation() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setClientType(null);
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
     void validateClient_skipUserConsentValid_successfulValidation() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
