@@ -1,4 +1,5 @@
 export type Client = {
+  metadata?: ClientMetaData;
   institution_metainfo: InstitutionMetainfo,
   client_id: string | undefined,
   client_name: ClientNameTranslation,
@@ -65,4 +66,8 @@ export type InstitutionMetainfo = {
   type: {
     type: "public" | "private"
   }
+}
+
+export type ClientMetaData = {
+  client_type?: 'DEFAULT' | 'SECURED_APP'
 }

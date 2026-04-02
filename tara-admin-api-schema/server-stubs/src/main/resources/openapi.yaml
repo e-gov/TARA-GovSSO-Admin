@@ -789,6 +789,8 @@ components:
         - https://jwt-service-uri.test.ee
         - https://jwt-service-uri.test.ee
         client_url: https://client.example.com/
+        metadata:
+          client_type: DEFAULT
         minimum_acr_value: high
         skip_user_consent_client_ids:
         - openIdDemo
@@ -949,6 +951,8 @@ components:
             pattern: (^.*@.*\..*$)
             type: string
           type: array
+        metadata:
+          $ref: "#/components/schemas/ClientMetaData"
         access_token_jwt_enabled:
           default: false
           type: boolean
@@ -1206,6 +1210,17 @@ components:
           items:
             type: string
           type: array
+      type: object
+    ClientMetaData:
+      example:
+        client_type: DEFAULT
+      properties:
+        client_type:
+          default: DEFAULT
+          enum:
+          - DEFAULT
+          - SECURED_APP
+          type: string
       type: object
     importClients_request:
       properties:

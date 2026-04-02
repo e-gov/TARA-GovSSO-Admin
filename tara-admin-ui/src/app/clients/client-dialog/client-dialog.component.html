@@ -53,6 +53,22 @@
           <label>{{newData.client_id}}</label>
         </div>
       </div>
+      <div class="form-group row" *ngIf="authService.isSsoMode">
+        <label class="col-sm-4 col-form-label">Klientrakenduse tüüp
+          <mat-icon inline class="material-icons ml-3 font-size-20"
+                    matTooltip="SECURED_APP on mobiilirakendus, mis täidab vastavaid nõudeid. DEFAULT on veebirakendus või mobiilirakendus.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8">
+          <mat-form-field class="w-75" panelClass="selection-panel">
+            <mat-select name="client_type" [disabled]="isInfo()" [(ngModel)]="newData.metadata.client_type" required>
+              <mat-option value="DEFAULT">DEFAULT</mat-option>
+              <mat-option value="SECURED_APP">SECURED_APP</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse nimetus
           <mat-icon inline class="material-icons ml-3 font-size-20"

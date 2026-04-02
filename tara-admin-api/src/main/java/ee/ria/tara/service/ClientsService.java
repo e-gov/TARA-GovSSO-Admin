@@ -31,6 +31,7 @@ import static ee.ria.tara.service.helper.ClientHelper.convertToClient;
 import static ee.ria.tara.service.helper.ClientHelper.convertToHydraClient;
 import static java.util.function.Function.identity;
 import static org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW;
+import ee.ria.tara.service.helper.HydraDurationHelper;
 
 @Slf4j
 @Service
@@ -150,6 +151,9 @@ public class ClientsService {
 
             boolean ssoMode = adminConfigurationProvider.isSsoMode();
             HydraClient hydraClient = convertToHydraClient(client, ssoMode);
+
+            setRefreshTokenLifespans(client, hydraClient);
+
             if (clientId == null) {
                 oidcService.createClient(hydraClient);
             } else {
@@ -159,6 +163,20 @@ public class ClientsService {
 
         if (client.getClientSecretExportSettings() != null) {
             resetSecret(client);
+        }
+    }
+
+    private void setRefreshTokenLifespans(Client client, HydraClient hydraClient) {
+        String clientType = (client.getMetadata() != null && client.getMetadata().getClientType() != null)
+                ? client.getMetadata().getClientType().name() : "DEFAULT";
+
+        if ("SECURED_APP".equals(clientType)) {
+            String sessionDuration = HydraDurationHelper.format(adminConfigurationProvider.getMaxSessionDuration());
+            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(sessionDuration);
+            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(sessionDuration);
+        } else {
+            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(null);
+            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(null);
         }
     }
 

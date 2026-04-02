@@ -66,7 +66,9 @@ public class ImportClientFromJsonFileTest {
                         "  \"access_token_strategy\": null," +
                         "  \"audience\": null," +
                         "  \"authorization_code_grant_access_token_lifespan\" : null,\n" +
+                        "  \"authorization_code_grant_refresh_token_lifespan\" : null,\n" +
                         "  \"refresh_token_grant_access_token_lifespan\" : null,\n" +
+                        "  \"refresh_token_grant_refresh_token_lifespan\" : null,\n" +
                         "  \"grant_types\" : [ \"authorization_code\" ],\n" +
                         "  \"redirect_uris\" : [ \"https://back.ee\" ],\n" +
                         "  \"post_logout_redirect_uris\": null," +
@@ -77,6 +79,7 @@ public class ImportClientFromJsonFileTest {
                         "  \"backchannel_logout_uri\" : null,\n" +
                         "  \"backchannel_logout_session_required\" : true,\n" +
                         "  \"metadata\" : {\n" +
+                        "    \"client_type\" : \"DEFAULT\",\n" +
                         "    \"display_user_consent\" : false,\n" +
                         "    \"skip_user_consent_client_ids\" : null,\n" +
                         "    \"oidc_client\" : {\n" +

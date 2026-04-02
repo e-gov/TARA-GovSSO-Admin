@@ -66,7 +66,9 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                         "\"access_token_strategy\": null," +
                         "\"audience\": null," +
                         "\"authorization_code_grant_access_token_lifespan\" : null,\n" +
+                        "\"authorization_code_grant_refresh_token_lifespan\" : null,\n" +
                         "\"refresh_token_grant_access_token_lifespan\" : null,\n" +
+                        "\"refresh_token_grant_refresh_token_lifespan\" : null,\n" +
                         "\"grant_types\":[\"authorization_code\"]," +
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
                         "\"post_logout_redirect_uris\": null," +
@@ -77,6 +79,7 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                         "\"backchannel_logout_uri\" : null,\n" +
                         "\"backchannel_logout_session_required\" : true,\n" +
                         "\"metadata\":{" +
+                            "\"client_type\":\"DEFAULT\"," +
                             "\"display_user_consent\":null," +
                             "\"skip_user_consent_client_ids\" : null,\n" +
                             "\"oidc_client\":{" +

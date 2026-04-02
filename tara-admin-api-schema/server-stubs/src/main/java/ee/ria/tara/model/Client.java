@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import ee.ria.tara.model.ClientContact;
+import ee.ria.tara.model.ClientMetaData;
 import ee.ria.tara.model.ClientMidSettings;
 import ee.ria.tara.model.ClientSecretExportSettings;
 import ee.ria.tara.model.ClientSmartIdSettings;
@@ -148,6 +149,8 @@ public class Client {
 
   @Valid
   private @Nullable List<@Email String> slaNotificationEmails;
+
+  private @Nullable ClientMetaData metadata;
 
   private Boolean accessTokenJwtEnabled = false;
 
@@ -609,6 +612,26 @@ public class Client {
     this.slaNotificationEmails = slaNotificationEmails;
   }
 
+  public Client metadata(@Nullable ClientMetaData metadata) {
+    this.metadata = metadata;
+    return this;
+  }
+
+  /**
+   * Get metadata
+   * @return metadata
+   */
+  @Valid 
+  @Schema(name = "metadata", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("metadata")
+  public @Nullable ClientMetaData getMetadata() {
+    return metadata;
+  }
+
+  public void setMetadata(@Nullable ClientMetaData metadata) {
+    this.metadata = metadata;
+  }
+
   public Client accessTokenJwtEnabled(Boolean accessTokenJwtEnabled) {
     this.accessTokenJwtEnabled = accessTokenJwtEnabled;
     return this;
@@ -892,6 +915,7 @@ public class Client {
         Objects.equals(this.description, client.description) &&
         Objects.equals(this.infoNotificationEmails, client.infoNotificationEmails) &&
         Objects.equals(this.slaNotificationEmails, client.slaNotificationEmails) &&
+        Objects.equals(this.metadata, client.metadata) &&
         Objects.equals(this.accessTokenJwtEnabled, client.accessTokenJwtEnabled) &&
         Objects.equals(this.isUserConsentRequired, client.isUserConsentRequired) &&
         Objects.equals(this.skipUserConsentClientIds, client.skipUserConsentClientIds) &&
@@ -908,7 +932,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, metadata, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -933,6 +957,7 @@ public class Client {
     sb.append("    description: ").append(toIndentedString(description)).append("\n");
     sb.append("    infoNotificationEmails: ").append(toIndentedString(infoNotificationEmails)).append("\n");
     sb.append("    slaNotificationEmails: ").append(toIndentedString(slaNotificationEmails)).append("\n");
+    sb.append("    metadata: ").append(toIndentedString(metadata)).append("\n");
     sb.append("    accessTokenJwtEnabled: ").append(toIndentedString(accessTokenJwtEnabled)).append("\n");
     sb.append("    isUserConsentRequired: ").append(toIndentedString(isUserConsentRequired)).append("\n");
     sb.append("    skipUserConsentClientIds: ").append(toIndentedString(skipUserConsentClientIds)).append("\n");
