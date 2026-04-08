@@ -459,11 +459,8 @@ export class ClientDialogComponent implements OnInit {
   validateAndGetNewClient(client: Client): Client {
     let newClient = JSON.parse(JSON.stringify(client));
 
-    if (newClient.metadata == undefined) {
-      newClient.metadata = {};
-    }
-    if (newClient.metadata.client_type !== 'SECURED_APP') {
-      newClient.metadata.client_type = 'DEFAULT';
+    if (newClient.client_type !== 'SECURED_APP') {
+      newClient.client_type = 'DEFAULT';
     }
 
     if (newClient.institution_metainfo == undefined) {

@@ -150,9 +150,8 @@ public class ClientsService {
             saveClientEntity(ClientHelper.convertToEntity(client, institution));
 
             boolean ssoMode = adminConfigurationProvider.isSsoMode();
-            HydraClient hydraClient = convertToHydraClient(client, ssoMode);
-
-            setRefreshTokenLifespans(client, hydraClient);
+            String sessionDuration = HydraDurationHelper.format(adminConfigurationProvider.getMaxSessionDuration());
+            HydraClient hydraClient = convertToHydraClient(client, ssoMode, sessionDuration);
 
             if (clientId == null) {
                 oidcService.createClient(hydraClient);
@@ -163,20 +162,6 @@ public class ClientsService {
 
         if (client.getClientSecretExportSettings() != null) {
             resetSecret(client);
-        }
-    }
-
-    private void setRefreshTokenLifespans(Client client, HydraClient hydraClient) {
-        String clientType = (client.getMetadata() != null && client.getMetadata().getClientType() != null)
-                ? client.getMetadata().getClientType().name() : "DEFAULT";
-
-        if ("SECURED_APP".equals(clientType)) {
-            String sessionDuration = HydraDurationHelper.format(adminConfigurationProvider.getMaxSessionDuration());
-            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(sessionDuration);
-            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(sessionDuration);
-        } else {
-            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(null);
-            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(null);
         }
     }
 
