@@ -151,13 +151,15 @@ public class ClientHelper {
         metadata.setSkipUserConsentClientIds(client.getSkipUserConsentClientIds() != null ? getDistinctSkipUserConsentClientIds(client) : null);
         metadata.setPaasukeParameters(client.getPaasukeParameters());
         metadata.setMinimumAcrValue(client.getMinimumAcrValue());
-        Client.ClientTypeEnum clientType = client.getClientType() != null
-                ? client.getClientType() : Client.ClientTypeEnum.DEFAULT;
-        metadata.setClientType(clientType.name());
-
+        Client.ClientTypeEnum clientType = client.getClientType();
         if (ssoMode) {
+            if (clientType == null) {
+                clientType = Client.ClientTypeEnum.DEFAULT;
+            }
+            metadata.setClientType(clientType.name());
             hydraClient.setGrantTypes(List.of("authorization_code", "refresh_token"));
         }
+
         if (client.getAccessTokenJwtEnabled()) {
             hydraClient.setAccessTokenStrategy(ACCESS_TOKEN_STRATEGY_JWT);
         }
