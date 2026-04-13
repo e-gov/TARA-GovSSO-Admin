@@ -20,7 +20,8 @@
               #addClientToInstitution(String,Client)redefines the configuration of InstitutionsApi
               #addClientToInstitution(String,Client). -->
         <openapi-generator-maven-plugin.version>7.15.0</openapi-generator-maven-plugin.version>
-        <springdoc-openapi-ui.version>2.8.15</springdoc-openapi-ui.version>
+        <!-- TODO Upgrade to springdoc-openapi-starter-webmvc-ui 3.x with Spring Boot 4.x -->
+        <springdoc-openapi-ui.version>2.8.17</springdoc-openapi-ui.version>
     </properties>
 
     <build>
