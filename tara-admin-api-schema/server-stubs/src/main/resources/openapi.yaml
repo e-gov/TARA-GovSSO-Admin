@@ -788,6 +788,7 @@ components:
         access_token_audience_uris:
         - https://jwt-service-uri.test.ee
         - https://jwt-service-uri.test.ee
+        session_lifespan: 89d1h
         client_url: https://client.example.com/
         minimum_acr_value: high
         skip_user_consent_client_ids:
@@ -954,6 +955,10 @@ components:
           enum:
           - DEFAULT
           - SECURED_APP
+          type: string
+        session_lifespan:
+          example: 89d1h
+          pattern: "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$"
           type: string
         access_token_jwt_enabled:
           default: false

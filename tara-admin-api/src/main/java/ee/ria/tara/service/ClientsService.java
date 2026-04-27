@@ -31,7 +31,6 @@ import static ee.ria.tara.service.helper.ClientHelper.convertToClient;
 import static ee.ria.tara.service.helper.ClientHelper.convertToHydraClient;
 import static java.util.function.Function.identity;
 import static org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW;
-import ee.ria.tara.service.helper.HydraDurationHelper;
 
 @Slf4j
 @Service
@@ -150,8 +149,7 @@ public class ClientsService {
             saveClientEntity(ClientHelper.convertToEntity(client, institution));
 
             boolean ssoMode = adminConfigurationProvider.isSsoMode();
-            String sessionDuration = HydraDurationHelper.format(adminConfigurationProvider.getMaxSessionDuration());
-            HydraClient hydraClient = convertToHydraClient(client, ssoMode, sessionDuration);
+            HydraClient hydraClient = convertToHydraClient(client, ssoMode);
 
             if (clientId == null) {
                 oidcService.createClient(hydraClient);

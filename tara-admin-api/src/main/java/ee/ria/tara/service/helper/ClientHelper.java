@@ -19,6 +19,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -119,17 +120,18 @@ public class ClientHelper {
         client.setUpdatedAt(OffsetDateTime.parse(hydraClient.getUpdatedAt()));
         client.setMinimumAcrValue(hydraClient.getMetadata().getMinimumAcrValue());
         client.setClientType(getClientType(hydraClient));
+        client.setSessionLifespan(fromHydraDuration(hydraClient.getAuthorizationCodeGrantRefreshTokenLifespan()));
         if (hydraClient.getAccessTokenStrategy() != null && hydraClient.getAccessTokenStrategy().equals(ACCESS_TOKEN_STRATEGY_JWT)) {
             client.setAccessTokenJwtEnabled(true);
         }
         client.setAccessTokenAudienceUris(hydraClient.getAudience());
-        client.setAccessTokenLifespan(hydraClient.getAuthorizationCodeGrantAccessTokenLifespan());
+        client.setAccessTokenLifespan(fromHydraDuration(hydraClient.getAuthorizationCodeGrantAccessTokenLifespan()));
         client.setPaasukeParameters(hydraClient.getMetadata().getPaasukeParameters());
 
         return client;
     }
 
-    public static HydraClient convertToHydraClient(Client client, boolean ssoMode, String sessionDuration) {
+    public static HydraClient convertToHydraClient(Client client, boolean ssoMode) {
         HydraClientMetadata metadata = new HydraClientMetadata();
         OidcClient oidcClient = new OidcClient();
         HydraClient hydraClient = new HydraClient();
@@ -164,8 +166,8 @@ public class ClientHelper {
             hydraClient.setAccessTokenStrategy(ACCESS_TOKEN_STRATEGY_JWT);
         }
         hydraClient.setAudience(client.getAccessTokenAudienceUris());
-        hydraClient.setAuthorizationCodeGrantAccessTokenLifespan(client.getAccessTokenLifespan());
-        hydraClient.setRefreshTokenGrantAccessTokenLifespan(client.getAccessTokenLifespan());
+        hydraClient.setAuthorizationCodeGrantAccessTokenLifespan(toHydraDuration(client.getAccessTokenLifespan()));
+        hydraClient.setRefreshTokenGrantAccessTokenLifespan(toHydraDuration(client.getAccessTokenLifespan()));
         hydraClient.setClientId(client.getClientId());
         hydraClient.setClientName(client.getClientName() != null ? client.getClientName().getEt() : null);
         hydraClient.setScope(String.join(" ", client.getScope()));
@@ -179,8 +181,8 @@ public class ClientHelper {
         hydraOidcClientInstitution.setSector(client.getInstitutionMetainfo().getType().getType().toString());
 
         if (Client.ClientTypeEnum.SECURED_APP.equals(clientType)) {
-            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(sessionDuration);
-            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(sessionDuration);
+            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(toHydraDuration(client.getSessionLifespan()));
+            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(toHydraDuration(client.getSessionLifespan()));
         } else {
             hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(null);
             hydraClient.setRefreshTokenGrantRefreshTokenLifespan(null);
@@ -257,6 +259,24 @@ public class ClientHelper {
             return Client.ClientTypeEnum.DEFAULT;
         }
         return Client.ClientTypeEnum.fromValue(hydraClient.getMetadata().getClientType());
+    }
+
+    private static String fromHydraDuration(String hydraDuration) {
+        if (hydraDuration == null) {
+            return null;
+        }
+        Duration duration = HydraDurationHelper.toDuration(hydraDuration);
+        if (duration.isZero()) {
+            return null;
+        }
+        return DurationHelper.toDisplayString(duration);
+    }
+
+    private static String toHydraDuration(String displayDuration) {
+        if (displayDuration == null) {
+            return null;
+        }
+        return HydraDurationHelper.toHydraString(DurationHelper.toDuration(displayDuration));
     }
 
 

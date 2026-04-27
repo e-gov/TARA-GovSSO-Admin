@@ -32,6 +32,7 @@ public class ClientValidator {
     private static final String VALID_QUERY_PARAM_VALUE = "[\\w-%!:.~'()*]";
     private static final String VALID_PAASUKE_PARAMS_PATTERN = "^"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?(&"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?)*?$";
     private static final Duration MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN = Duration.ofSeconds(1);
+    private static final Duration MIN_ALLOWED_SESSION_LIFESPAN = Duration.ofHours(1);
 
     private final AdminConfigurationProvider adminConfProvider;
     private final ClientRepository clientRepository;
@@ -54,6 +55,7 @@ public class ClientValidator {
         validateAccessTokenAudienceUris(client);
         validateAccessTokenLifespan(client);
         validateClientType(client);
+        validateSessionLifespan(client);
         validateClientSecretExportSettings(client);
     }
 
@@ -297,21 +299,54 @@ public class ClientValidator {
     }
 
     private void validateAccessTokenLifespanLimits(String accessTokenLifespan) {
-        Duration duration = HydraDurationHelper.toDuration(accessTokenLifespan);
+        Duration duration = DurationHelper.toDuration(accessTokenLifespan);
 
         if (duration.compareTo(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN) < 0) {
             throw new InvalidDataException(
-                "Client.accessTokenLifespan.tooShort",
-                HydraDurationHelper.format(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN)
-            );
+                    "Client.accessTokenLifespan.tooShort",
+                    DurationHelper.toDisplayString(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN));
         }
 
         Duration maxDuration = adminConfProvider.getMaxAccessTokenLifespan();
         if (duration.compareTo(maxDuration) > 0) {
             throw new InvalidDataException(
-                "Client.accessTokenLifespan.tooLong",
-                HydraDurationHelper.format(maxDuration)
-            );
+                    "Client.accessTokenLifespan.tooLong",
+                    DurationHelper.toDisplayString(maxDuration));
+        }
+    }
+
+    private void validateSessionLifespan(Client client) {
+        String sessionLifespan = client.getSessionLifespan();
+        if (!adminConfProvider.isSsoMode()) {
+            if (sessionLifespan != null) {
+                throw new IllegalStateException("Session lifespan must not be set in TARA mode");
+            }
+            return;
+        }
+        if (Client.ClientTypeEnum.SECURED_APP.equals(client.getClientType())) {
+            if (sessionLifespan == null) {
+                throw new InvalidDataException("Client.sessionLifespan.missing");
+            }
+            validateSessionLifespanLimits(sessionLifespan);
+        } else {
+            if (sessionLifespan != null) {
+                throw new IllegalStateException("Session lifespan must not be set for non-SECURED_APP client type");
+            }
+        }
+    }
+
+    private void validateSessionLifespanLimits(String sessionLifespan) {
+        Duration duration = DurationHelper.toDuration(sessionLifespan);
+        if (duration.compareTo(MIN_ALLOWED_SESSION_LIFESPAN) < 0) {
+            throw new InvalidDataException(
+                    "Client.sessionLifespan.tooShort",
+                    DurationHelper.toDisplayString(MIN_ALLOWED_SESSION_LIFESPAN));
+        }
+        Duration maxDuration = adminConfProvider.getMaxSessionDuration();
+        if (duration.compareTo(maxDuration) > 0) {
+            throw new InvalidDataException(
+                    "Client.sessionLifespan.tooLong",
+                    DurationHelper.toDisplayString(maxDuration));
         }
     }
 }

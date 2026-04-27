@@ -69,6 +69,17 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="form-group row" *ngIf="authService.isSsoMode && newData.client_type === 'SECURED_APP'">
+        <label class="col-sm-4 col-form-label">Seansi kehtivus
+          <mat-icon inline class="material-icons ml-3 font-size-20"
+                    matTooltip="Seansi kehtivusaeg päevades ja/või tundides ja/või minutites ja/või sekundites. Vorming peab olema ühel kujul järgnevatest: 90d või 1h või 89d1h või 1d5h1m30s">help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8" *ngIf="!isInfo()">
+          <input type="text" class="form-control w-75" name="session_lifespan" [(ngModel)]="_session_lifespan" [value]="newData.session_lifespan || ''" [disabled]="newData.client_type !== 'SECURED_APP'">
+        </div>
+        <label *ngIf="isInfo()">{{newData.session_lifespan}}</label>
+      </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse nimetus
           <mat-icon inline class="material-icons ml-3 font-size-20"

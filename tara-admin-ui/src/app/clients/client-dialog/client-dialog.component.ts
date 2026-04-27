@@ -48,6 +48,7 @@ export class ClientDialogComponent implements OnInit {
   _token_endpoint_auth_method: string;
   _minimum_acr_value: string;
   _access_token_lifespan: string;
+  _session_lifespan: string;
 
   clientLogoDataUri?: SafeUrl;
   newData: Client;
@@ -80,6 +81,7 @@ export class ClientDialogComponent implements OnInit {
     this._token_endpoint_auth_method = this.newData.token_endpoint_auth_method;
     this._minimum_acr_value = this.newData.minimum_acr_value;
     this._access_token_lifespan = this.newData.access_token_lifespan;
+    this._session_lifespan = this.newData.session_lifespan;
 
     if (this._client_logo !== undefined) {
       var unsafeDataUri = "data:image/svg+xml;base64," + this._client_logo;
@@ -328,6 +330,7 @@ export class ClientDialogComponent implements OnInit {
     this.newData.backchannel_logout_uri = this._backchannel_logout_uri!;
     this.newData.token_endpoint_auth_method = this._token_endpoint_auth_method!;
     this.newData.access_token_lifespan = this._access_token_lifespan!;
+    this.newData.session_lifespan = this._session_lifespan!;
 
     this.newData.minimum_acr_value = this._minimum_acr_value === 'undefinedAcr' ? undefined : this._minimum_acr_value;
 
@@ -364,6 +367,10 @@ export class ClientDialogComponent implements OnInit {
 
     if (!this.authService.isSsoMode) {
       this.newData.client_type = undefined;
+    }
+
+    if (this.newData.client_type !== 'SECURED_APP') {
+      this.newData.session_lifespan = undefined;
     }
 
     let requestBody = JSON.parse(JSON.stringify(this.newData), (key, value) => {

@@ -7,39 +7,36 @@ import java.time.Duration;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class HydraDurationHelperTest {
+
     @Test
-    void format_givenHoursMinutesAndSeconds_shouldReturnFormattedString() {
-        Duration duration = Duration.ofHours(1).plusMinutes(30).plusSeconds(10);
-        assertThat(HydraDurationHelper.format(duration)).isEqualTo("90m10s");
+    void toHydraString_givenMinutes_shouldReturnFormattedString() {
+        assertThat(HydraDurationHelper.toHydraString(Duration.ofMinutes(15))).isEqualTo("15m");
     }
 
     @Test
-    void format_giveMinutesAndSeconds_shouldReturnFormattedString() {
-        Duration duration = Duration.ofMinutes(30).plusSeconds(10);
-        assertThat(HydraDurationHelper.format(duration)).isEqualTo("30m10s");
+    void toHydraString_givenHoursAndMinutes_shouldReturnFormattedString() {
+        assertThat(HydraDurationHelper.toHydraString(Duration.ofHours(1).plusMinutes(30))).isEqualTo("1h30m");
     }
 
     @Test
-    void format_givenSeconds_shouldReturnFormattedString() {
-        Duration duration = Duration.ofSeconds(10);
-        assertThat(HydraDurationHelper.format(duration)).isEqualTo("10s");
+    void toHydraString_givenDays_shouldReturnHoursNotDays() {
+        assertThat(HydraDurationHelper.toHydraString(Duration.ofDays(90))).isEqualTo("2160h");
     }
 
     @Test
-    void toDuration_givenSeconds_shouldReturnDuration() {
-        Duration duration = HydraDurationHelper.toDuration("900s");
-        assertThat(duration.toSeconds()).isEqualTo(900);
+    void toHydraString_givenDaysAndHours_shouldReturnHoursNotDays() {
+        assertThat(HydraDurationHelper.toHydraString(Duration.ofDays(89).plusHours(1))).isEqualTo("2137h");
     }
 
     @Test
-    void toDuration_givenMinutes_shouldReturnDuration() {
-        Duration duration = HydraDurationHelper.toDuration("15m");
-        assertThat(duration.toMinutes()).isEqualTo(15);
+    void toDuration_givenHydraString_shouldReturnDuration() {
+        assertThat(HydraDurationHelper.toDuration("2160h")).isEqualTo(Duration.ofDays(90));
     }
 
     @Test
-    void toDuration_givenMinutesAndSeconds_shouldReturnDuration() {
-        Duration duration = HydraDurationHelper.toDuration("5m2s");
-        assertThat(duration.toSeconds()).isEqualTo(302);
+    void roundTrip_hydraFormat_shouldBeStable() {
+        String original = "2137h";
+        Duration duration = HydraDurationHelper.toDuration(original);
+        assertThat(HydraDurationHelper.toHydraString(duration)).isEqualTo(original);
     }
 }

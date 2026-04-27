@@ -628,9 +628,11 @@ class ClientValidatorTest {
     @Test
     void validateClient_ssoClientWithClientTypeSet_successfulValidation() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSSOClient();
         client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        client.setSessionLifespan("30d");
 
         clientValidator.validateClient(client, PUBLIC);
     }
@@ -658,6 +660,95 @@ class ClientValidatorTest {
         doReturn(List.of(repoClient)).when(clientRepository).findAll();
 
         clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    void validateClient_securedAppWithValidSessionLifespan_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSSOClient();
+        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        client.setSessionLifespan("30d");
+
+        clientValidator.validateClient(client, PUBLIC);
+    }
+
+    @Test
+    void validateClient_securedAppMissingSessionLifespan_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        client.setSessionLifespan(null);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.sessionLifespan.missing"));
+    }
+
+    @Test
+    void validateClient_whenSessionLifespanTooLong_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSSOClient();
+        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        client.setSessionLifespan("90d1h");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        assertAll(
+            () -> assertThat(exception.getMessage()).isEqualTo("Client.sessionLifespan.tooLong"),
+            () -> assertThat(exception.getArgs()).containsExactly("90d")
+        );
+    }
+
+    @Test
+    void validateClient_whenSessionLifespanTooShort_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSSOClient();
+        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        client.setSessionLifespan("0d");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        assertAll(
+            () -> assertThat(exception.getMessage()).isEqualTo("Client.sessionLifespan.tooShort"),
+            () -> assertThat(exception.getArgs()).containsExactly("1h")
+        );
+    }
+
+    @Test
+    void validateClient_givenSessionLifespanInTaraMode_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setSessionLifespan("30d");
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Session lifespan must not be set in TARA mode"));
+    }
+
+    @Test
+    void validateClient_givenSessionLifespanForDefaultClientType_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setClientType(Client.ClientTypeEnum.DEFAULT);
+        client.setSessionLifespan("30d");
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Session lifespan must not be set for non-SECURED_APP client type"));
     }
 
 }

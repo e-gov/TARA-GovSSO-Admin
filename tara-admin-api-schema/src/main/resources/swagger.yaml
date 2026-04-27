@@ -740,6 +740,10 @@ components:
           enum:
             - DEFAULT
             - SECURED_APP
+        session_lifespan:
+          type: string
+          pattern: ^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$
+          example: 89d1h
         access_token_jwt_enabled:
           type: boolean
           default: false

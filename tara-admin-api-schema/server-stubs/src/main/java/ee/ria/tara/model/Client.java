@@ -186,6 +186,8 @@ public class Client {
 
   private @Nullable ClientTypeEnum clientType;
 
+  private @Nullable String sessionLifespan;
+
   private Boolean accessTokenJwtEnabled = false;
 
   private @Nullable Boolean isUserConsentRequired;
@@ -666,6 +668,26 @@ public class Client {
     this.clientType = clientType;
   }
 
+  public Client sessionLifespan(@Nullable String sessionLifespan) {
+    this.sessionLifespan = sessionLifespan;
+    return this;
+  }
+
+  /**
+   * Get sessionLifespan
+   * @return sessionLifespan
+   */
+  @Pattern(regexp = "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$") 
+  @Schema(name = "session_lifespan", example = "89d1h", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("session_lifespan")
+  public @Nullable String getSessionLifespan() {
+    return sessionLifespan;
+  }
+
+  public void setSessionLifespan(@Nullable String sessionLifespan) {
+    this.sessionLifespan = sessionLifespan;
+  }
+
   public Client accessTokenJwtEnabled(Boolean accessTokenJwtEnabled) {
     this.accessTokenJwtEnabled = accessTokenJwtEnabled;
     return this;
@@ -950,6 +972,7 @@ public class Client {
         Objects.equals(this.infoNotificationEmails, client.infoNotificationEmails) &&
         Objects.equals(this.slaNotificationEmails, client.slaNotificationEmails) &&
         Objects.equals(this.clientType, client.clientType) &&
+        Objects.equals(this.sessionLifespan, client.sessionLifespan) &&
         Objects.equals(this.accessTokenJwtEnabled, client.accessTokenJwtEnabled) &&
         Objects.equals(this.isUserConsentRequired, client.isUserConsentRequired) &&
         Objects.equals(this.skipUserConsentClientIds, client.skipUserConsentClientIds) &&
@@ -966,7 +989,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, clientType, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, clientType, sessionLifespan, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -992,6 +1015,7 @@ public class Client {
     sb.append("    infoNotificationEmails: ").append(toIndentedString(infoNotificationEmails)).append("\n");
     sb.append("    slaNotificationEmails: ").append(toIndentedString(slaNotificationEmails)).append("\n");
     sb.append("    clientType: ").append(toIndentedString(clientType)).append("\n");
+    sb.append("    sessionLifespan: ").append(toIndentedString(sessionLifespan)).append("\n");
     sb.append("    accessTokenJwtEnabled: ").append(toIndentedString(accessTokenJwtEnabled)).append("\n");
     sb.append("    isUserConsentRequired: ").append(toIndentedString(isUserConsentRequired)).append("\n");
     sb.append("    skipUserConsentClientIds: ").append(toIndentedString(skipUserConsentClientIds)).append("\n");
