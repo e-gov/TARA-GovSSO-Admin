@@ -1,6 +1,9 @@
 package ee.ria.tara.service.helper;
 
 
+import ee.ria.tara.duration.AdminDurationFormat;
+import ee.ria.tara.duration.DurationFormat;
+import ee.ria.tara.duration.HydraDurationFormat;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientContact;
 import ee.ria.tara.model.ClientMidSettings;
@@ -33,6 +36,9 @@ public class ClientHelper {
     private static final String ACCESS_TOKEN_STRATEGY_JWT = "jwt";
     public static final String SCOPE_REPRESENTEE = "representee.*";
     public static final String SCOPE_REPRESENTEE_LIST = "representee_list";
+
+    private static final DurationFormat HYDRA_DURATION_FORMAT = new HydraDurationFormat();
+    private static final DurationFormat ADMIN_DURATION_FORMAT = new AdminDurationFormat();
 
     public static Client convertToClient(HydraClient hydraClient, ee.ria.tara.repository.model.Client entity) {
         Client client = convertToClient(hydraClient);
@@ -265,18 +271,18 @@ public class ClientHelper {
         if (hydraDuration == null) {
             return null;
         }
-        Duration duration = HydraDurationHelper.toDuration(hydraDuration);
+        Duration duration = HYDRA_DURATION_FORMAT.parse(hydraDuration);
         if (duration.isZero()) {
             return null;
         }
-        return DurationHelper.toDisplayString(duration);
+        return ADMIN_DURATION_FORMAT.format(duration);
     }
 
     private static String toHydraDuration(String displayDuration) {
         if (displayDuration == null) {
             return null;
         }
-        return HydraDurationHelper.toHydraString(DurationHelper.toDuration(displayDuration));
+        return HYDRA_DURATION_FORMAT.format(ADMIN_DURATION_FORMAT.parse(displayDuration));
     }
 
 

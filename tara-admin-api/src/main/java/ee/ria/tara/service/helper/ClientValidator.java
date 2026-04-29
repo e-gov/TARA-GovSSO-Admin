@@ -2,6 +2,8 @@ package ee.ria.tara.service.helper;
 
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.controllers.exception.InvalidDataException;
+import ee.ria.tara.duration.AdminDurationFormat;
+import ee.ria.tara.duration.DurationFormat;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientSecretExportSettings;
 import ee.ria.tara.model.InstitutionType;
@@ -36,6 +38,8 @@ public class ClientValidator {
 
     private final AdminConfigurationProvider adminConfProvider;
     private final ClientRepository clientRepository;
+
+    private final DurationFormat durationFormat = new AdminDurationFormat();
 
     public void validateClient(Client client, InstitutionType.TypeEnum institutionType) {
         if (adminConfProvider.isSsoMode() && institutionType == InstitutionType.TypeEnum.PRIVATE) {
@@ -299,19 +303,19 @@ public class ClientValidator {
     }
 
     private void validateAccessTokenLifespanLimits(String accessTokenLifespan) {
-        Duration duration = DurationHelper.toDuration(accessTokenLifespan);
+        Duration duration = durationFormat.parse(accessTokenLifespan);
 
         if (duration.compareTo(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN) < 0) {
             throw new InvalidDataException(
                     "Client.accessTokenLifespan.tooShort",
-                    DurationHelper.toDisplayString(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN));
+                    durationFormat.format(MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN));
         }
 
         Duration maxDuration = adminConfProvider.getMaxAccessTokenLifespan();
         if (duration.compareTo(maxDuration) > 0) {
             throw new InvalidDataException(
                     "Client.accessTokenLifespan.tooLong",
-                    DurationHelper.toDisplayString(maxDuration));
+                    durationFormat.format(maxDuration));
         }
     }
 
@@ -336,17 +340,17 @@ public class ClientValidator {
     }
 
     private void validateSessionLifespanLimits(String sessionLifespan) {
-        Duration duration = DurationHelper.toDuration(sessionLifespan);
+        Duration duration = durationFormat.parse(sessionLifespan);
         if (duration.compareTo(MIN_ALLOWED_SESSION_LIFESPAN) < 0) {
             throw new InvalidDataException(
                     "Client.sessionLifespan.tooShort",
-                    DurationHelper.toDisplayString(MIN_ALLOWED_SESSION_LIFESPAN));
+                    durationFormat.format(MIN_ALLOWED_SESSION_LIFESPAN));
         }
         Duration maxDuration = adminConfProvider.getMaxSessionDuration();
         if (duration.compareTo(maxDuration) > 0) {
             throw new InvalidDataException(
                     "Client.sessionLifespan.tooLong",
-                    DurationHelper.toDisplayString(maxDuration));
+                    durationFormat.format(maxDuration));
         }
     }
 }
