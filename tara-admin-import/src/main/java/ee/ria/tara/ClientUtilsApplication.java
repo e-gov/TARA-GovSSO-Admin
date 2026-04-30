@@ -12,6 +12,7 @@ import ee.ria.tara.model.Institution;
 import ee.ria.tara.model.InstitutionMetainfo;
 import ee.ria.tara.repository.helper.PropertyFilterMixIn;
 import ee.ria.tara.service.ImportService;
+import ee.ria.tara.mapper.ClientMapper;
 import ee.ria.tara.service.helper.ClientValidator;
 import ee.ria.tara.service.helper.GovSsoScopeFilter;
 import ee.ria.tara.service.helper.TaraScopeFilter;
@@ -41,7 +42,8 @@ import java.util.Map;
         ClientValidator.class,
         AdminConfigurationProvider.class,
         TaraScopeFilter.class,
-        GovSsoScopeFilter.class
+        GovSsoScopeFilter.class,
+        ClientMapper.class
 })
 public class ClientUtilsApplication implements CommandLineRunner {
 

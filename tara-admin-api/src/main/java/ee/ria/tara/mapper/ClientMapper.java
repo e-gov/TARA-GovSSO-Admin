@@ -1,6 +1,7 @@
-package ee.ria.tara.service.helper;
+package ee.ria.tara.mapper;
 
 
+import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.duration.AdminDurationFormat;
 import ee.ria.tara.duration.DurationFormat;
 import ee.ria.tara.duration.HydraDurationFormat;
@@ -16,9 +17,11 @@ import ee.ria.tara.service.model.HydraClient;
 import ee.ria.tara.service.model.HydraClientMetadata;
 import ee.ria.tara.service.model.HydraOidcClientInstitution;
 import ee.ria.tara.service.model.OidcClient;
+import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.stereotype.Component;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -31,17 +34,21 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class ClientHelper {
+@Component
+@RequiredArgsConstructor
+public class ClientMapper {
 
     private static final String ACCESS_TOKEN_STRATEGY_JWT = "jwt";
     public static final String SCOPE_REPRESENTEE = "representee.*";
     public static final String SCOPE_REPRESENTEE_LIST = "representee_list";
 
-    private static final DurationFormat HYDRA_DURATION_FORMAT = new HydraDurationFormat();
-    private static final DurationFormat ADMIN_DURATION_FORMAT = new AdminDurationFormat();
+    private final DurationFormat hydraDurationFormat = new HydraDurationFormat();
+    private final DurationFormat adminDurationFormat = new AdminDurationFormat();
+    
+    private final AdminConfigurationProvider configuration;
 
-    public static Client convertToClient(HydraClient hydraClient, ee.ria.tara.repository.model.Client entity) {
-        Client client = convertToClient(hydraClient);
+    public Client toModel(HydraClient hydraClient, ee.ria.tara.repository.model.Client entity) {
+        Client client = toModel(hydraClient);
 
         if (entity != null) {
             client.getInstitutionMetainfo().setRegistryCode(entity.getInstitution().getRegistryCode());
@@ -98,7 +105,7 @@ public class ClientHelper {
         return StringUtils.equals(hostAndPortFromParsedUri, backchannelLogoutHostAndPort);
     }
 
-    public static Client convertToClient(HydraClient hydraClient) {
+    private Client toModel(HydraClient hydraClient) {
         Client client = new Client();
         InstitutionType institutionType = new InstitutionType();
         InstitutionMetainfo institutionMetainfo = new InstitutionMetainfo();
@@ -120,7 +127,7 @@ public class ClientHelper {
         client.setTokenEndpointAuthMethod(Client.TokenEndpointAuthMethodEnum.fromValue(hydraClient.getTokenEndpointAuthMethod()));
         client.setIsUserConsentRequired(hydraClient.getMetadata().getDisplayUserConsent());
         client.setClientUrl(getOidcClientLegacyReturnUrl(hydraClient));
-        client.setSmartidSettings(getSmartidSettings(hydraClient));
+        client.setSmartidSettings(getSmartIdSettings(hydraClient));
         client.setMidSettings(getMobileIdSettings(hydraClient));
         client.setCreatedAt(OffsetDateTime.parse(hydraClient.getCreatedAt()));
         client.setUpdatedAt(OffsetDateTime.parse(hydraClient.getUpdatedAt()));
@@ -137,7 +144,8 @@ public class ClientHelper {
         return client;
     }
 
-    public static HydraClient convertToHydraClient(Client client, boolean ssoMode) {
+    public HydraClient toHydraClient(Client client) {
+        boolean ssoMode = configuration.isSsoMode();
         HydraClientMetadata metadata = new HydraClientMetadata();
         OidcClient oidcClient = new OidcClient();
         HydraClient hydraClient = new HydraClient();
@@ -184,7 +192,7 @@ public class ClientHelper {
         hydraClient.setTokenEndpointAuthMethod(client.getTokenEndpointAuthMethod().getValue());
 
         hydraOidcClientInstitution.setRegistryCode(client.getInstitutionMetainfo().getRegistryCode());
-        hydraOidcClientInstitution.setSector(client.getInstitutionMetainfo().getType().getType().toString());
+        hydraOidcClientInstitution.setSector(client.getInstitutionMetainfo().getType().getType().getValue());
 
         if (Client.ClientTypeEnum.SECURED_APP.equals(clientType)) {
             hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(toHydraDuration(client.getSessionLifespan()));
@@ -198,7 +206,7 @@ public class ClientHelper {
     }
 
     @SneakyThrows
-    public static ee.ria.tara.repository.model.Client convertToEntity(Client client, ee.ria.tara.repository.model.Institution institution) {
+    public ee.ria.tara.repository.model.Client toEntity(Client client, ee.ria.tara.repository.model.Institution institution) {
         ee.ria.tara.repository.model.Client entity = new ee.ria.tara.repository.model.Client();
 
         entity.setId(client.getId() == null ? null : Long.valueOf(client.getId()));
@@ -267,26 +275,26 @@ public class ClientHelper {
         return Client.ClientTypeEnum.fromValue(hydraClient.getMetadata().getClientType());
     }
 
-    private static String fromHydraDuration(String hydraDuration) {
+    private String fromHydraDuration(String hydraDuration) {
         if (hydraDuration == null) {
             return null;
         }
-        Duration duration = HYDRA_DURATION_FORMAT.parse(hydraDuration);
+        Duration duration = hydraDurationFormat.parse(hydraDuration);
         if (duration.isZero()) {
             return null;
         }
-        return ADMIN_DURATION_FORMAT.format(duration);
+        return adminDurationFormat.format(duration);
     }
 
-    private static String toHydraDuration(String displayDuration) {
+    private String toHydraDuration(String displayDuration) {
         if (displayDuration == null) {
             return null;
         }
-        return HYDRA_DURATION_FORMAT.format(ADMIN_DURATION_FORMAT.parse(displayDuration));
+        return hydraDurationFormat.format(adminDurationFormat.parse(displayDuration));
     }
 
 
-    private static ClientSmartIdSettings getSmartidSettings(HydraClient hydraClient) {
+    private static ClientSmartIdSettings getSmartIdSettings(HydraClient hydraClient) {
         ClientSmartIdSettings settings = new ClientSmartIdSettings();
         ClientSmartIdSettings hydraClientSmartIdSettings = hydraClient.getMetadata().getOidcClient().getSmartidSettings();
 

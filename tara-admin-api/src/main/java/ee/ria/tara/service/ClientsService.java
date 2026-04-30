@@ -1,6 +1,5 @@
 package ee.ria.tara.service;
 
-import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
@@ -8,7 +7,7 @@ import ee.ria.tara.model.Client;
 import ee.ria.tara.repository.ClientRepository;
 import ee.ria.tara.repository.InstitutionRepository;
 import ee.ria.tara.repository.model.Institution;
-import ee.ria.tara.service.helper.ClientHelper;
+import ee.ria.tara.mapper.ClientMapper;
 import ee.ria.tara.service.helper.ClientValidator;
 import ee.ria.tara.service.helper.ScopeFilter;
 import ee.ria.tara.service.helper.SecureRandomAlphaNumericStringGenerator;
@@ -27,8 +26,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import static ee.ria.tara.service.helper.ClientHelper.convertToClient;
-import static ee.ria.tara.service.helper.ClientHelper.convertToHydraClient;
 import static java.util.function.Function.identity;
 import static org.springframework.transaction.TransactionDefinition.PROPAGATION_REQUIRES_NEW;
 
@@ -43,16 +40,16 @@ public class ClientsService {
     private final InstitutionRepository institutionRepository;
     private final ClientSecretEmailService clientSecretEmailService;
     private final OidcService oidcService;
-    private final AdminConfigurationProvider adminConfigurationProvider;
     private final ClientValidator clientValidator;
     private final ScopeFilter scopeFilter;
     private final SecureRandomAlphaNumericStringGenerator secureRandomAlphaNumericStringGenerator;
     private final PlatformTransactionManager transactionManager;
+    private final ClientMapper clientMapper;
 
     public Client getClient(@NonNull String clientId) throws FatalApiException {
         HydraClient hydraClient = this.oidcService.getClient(clientId);
         ee.ria.tara.repository.model.Client entity = clientRepository.findByClientId(clientId);
-        return convertToClient(hydraClient, entity);
+        return clientMapper.toModel(hydraClient, entity);
     }
 
     public List<Client> getAllClients() throws FatalApiException {
@@ -64,7 +61,7 @@ public class ClientsService {
                 .collect(Collectors.toMap(entity -> entity.getClientId(), identity()));
 
         hydraClients.forEach(hydraClient ->
-                clients.add(convertToClient(hydraClient, clientMap.get(hydraClient.getClientId()))));
+                clients.add(clientMapper.toModel(hydraClient, clientMap.get(hydraClient.getClientId()))));
 
         return clients;
     }
@@ -89,7 +86,7 @@ public class ClientsService {
         oidcService.getAllClients()
                 .stream()
                 .filter(hydraClient -> clientMap.containsKey(hydraClient.getClientId()))
-                .forEach(hydraClient -> clients.add(convertToClient(hydraClient, clientMap.get(hydraClient.getClientId()))));
+                .forEach(hydraClient -> clients.add(clientMapper.toModel(hydraClient, clientMap.get(hydraClient.getClientId()))));
 
         return clients;
     }
@@ -146,10 +143,9 @@ public class ClientsService {
             Institution institution = institutionRepository.findInstitutionByRegistryCode(registryCode);
             client.setScope(scopeFilter.filterInstitutionClientScopes(client.getScope(), institution.getType()));
             clientValidator.validateClient(client, institution.getType());
-            saveClientEntity(ClientHelper.convertToEntity(client, institution));
+            saveClientEntity(clientMapper.toEntity(client, institution));
 
-            boolean ssoMode = adminConfigurationProvider.isSsoMode();
-            HydraClient hydraClient = convertToHydraClient(client, ssoMode);
+            HydraClient hydraClient = clientMapper.toHydraClient(client);
 
             if (clientId == null) {
                 oidcService.createClient(hydraClient);

@@ -10,7 +10,7 @@ import ee.ria.tara.model.InstitutionMetainfo;
 import ee.ria.tara.repository.ClientRepository;
 import ee.ria.tara.repository.InstitutionRepository;
 import ee.ria.tara.repository.model.Institution;
-import ee.ria.tara.service.helper.ClientHelper;
+import ee.ria.tara.mapper.ClientMapper;
 import ee.ria.tara.service.helper.ClientValidator;
 import ee.ria.tara.service.helper.ScopeFilter;
 import ee.ria.tara.service.helper.SecureRandomAlphaNumericStringGenerator;
@@ -76,21 +76,25 @@ public class ClientsServiceTest {
     @Mock
     private SecureRandomAlphaNumericStringGenerator secureRandomAlphaNumericStringGenerator;
 
+    //TODO: ClientMapper should be mocked, as it should not be part of the system-under-test
+    private ClientMapper clientMapper;
+
     private ClientsService clientsService;
 
     @BeforeEach
     public void setUp() {
         AdminConfigurationProvider adminConfigurationProvider = new AdminConfigurationProvider();
+        clientMapper = new ClientMapper(adminConfigurationProvider);
         clientsService = new ClientsService(
                 clientRepository,
                 institutionRepository,
                 clientSecretEmailService,
                 oidcService,
-                adminConfigurationProvider,
                 clientValidator,
                 scopeFilter,
                 secureRandomAlphaNumericStringGenerator,
-                new ResourcelessTransactionManager()
+                new ResourcelessTransactionManager(),
+                clientMapper
         );
         client = validTARAClient();
         institution = institution(client.getInstitutionMetainfo());
@@ -98,7 +102,7 @@ public class ClientsServiceTest {
 
     @Test
     public void getAllClients_allClientsReturned() {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
+        HydraClient hydraClient = clientMapper.toHydraClient(validTARAClient());
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
@@ -127,11 +131,11 @@ public class ClientsServiceTest {
 
     @Test
     public void getClient_clientReturned(){
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
+        HydraClient hydraClient = clientMapper.toHydraClient(validTARAClient());
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
-        ee.ria.tara.repository.model.Client entity = ClientHelper.convertToEntity(client, institution);
+        ee.ria.tara.repository.model.Client entity = clientMapper.toEntity(client, institution);
         entity.setId(7L);
 
         doReturn(entity).when(clientRepository).findByClientId(client.getClientId());
@@ -174,8 +178,8 @@ public class ClientsServiceTest {
         HydraClient savedHydraClient = hydraClientCaptor.getValue();
         ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
 
-        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
-        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
+        assertEquals(clientMapper.toHydraClient(client), savedHydraClient);
+        assertEquals(clientMapper.toEntity(client, institution), savedEntity);
     }
 
     @Test
@@ -198,11 +202,11 @@ public class ClientsServiceTest {
     @Test
     public void getClientsByInstitution_clientsReturned() {
         String registryCode = client.getInstitutionMetainfo().getRegistryCode();
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(client, false);
+        HydraClient hydraClient = clientMapper.toHydraClient(client);
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
-        ee.ria.tara.repository.model.Client entity = ClientHelper.convertToEntity(client, institution);
+        ee.ria.tara.repository.model.Client entity = clientMapper.toEntity(client, institution);
         entity.setId(7L);
 
         doReturn(List.of(entity)).when(clientRepository).findAllByInstitution_RegistryCode(registryCode);
@@ -244,8 +248,8 @@ public class ClientsServiceTest {
         HydraClient savedHydraClient = hydraClientCaptor.getValue();
         ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
 
-        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
-        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
+        assertEquals(clientMapper.toHydraClient(client), savedHydraClient);
+        assertEquals(clientMapper.toEntity(client, institution), savedEntity);
     }
 
     @Test
@@ -273,8 +277,8 @@ public class ClientsServiceTest {
         HydraClient savedHydraClient = hydraClientCaptor.getValue();
         ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
 
-        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
-        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
+        assertEquals(clientMapper.toHydraClient(client), savedHydraClient);
+        assertEquals(clientMapper.toEntity(client, institution), savedEntity);
     }
 
     @Test
@@ -310,8 +314,8 @@ public class ClientsServiceTest {
         HydraClient savedHydraClient = hydraClientCaptor.getValue();
         ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
 
-        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
-        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
+        assertEquals(clientMapper.toHydraClient(client), savedHydraClient);
+        assertEquals(clientMapper.toEntity(client, institution), savedEntity);
     }
 
     @Test
@@ -339,8 +343,8 @@ public class ClientsServiceTest {
         HydraClient savedHydraClient = hydraClientCaptor.getValue();
         ee.ria.tara.repository.model.Client savedEntity = clientEntityCaptor.getValue();
 
-        assertEquals(ClientHelper.convertToHydraClient(client, false), savedHydraClient);
-        assertEquals(ClientHelper.convertToEntity(client, institution), savedEntity);
+        assertEquals(clientMapper.toHydraClient(client), savedHydraClient);
+        assertEquals(clientMapper.toEntity(client, institution), savedEntity);
     }
 
     @Test

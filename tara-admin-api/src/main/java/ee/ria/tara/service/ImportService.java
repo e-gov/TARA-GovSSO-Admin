@@ -22,7 +22,7 @@ import ee.ria.tara.repository.ClientRepository;
 import ee.ria.tara.repository.InstitutionRepository;
 import ee.ria.tara.repository.helper.PropertyFilterMixIn;
 import ee.ria.tara.repository.model.Institution;
-import ee.ria.tara.service.helper.ClientHelper;
+import ee.ria.tara.mapper.ClientMapper;
 import ee.ria.tara.service.helper.ClientValidator;
 import ee.ria.tara.service.helper.ScopeFilter;
 import ee.ria.tara.service.model.ClientImportItem;
@@ -57,7 +57,6 @@ import java.util.List;
 import java.util.Map;
 
 import static ee.ria.tara.service.OidcService.getDigest;
-import static ee.ria.tara.service.helper.ClientHelper.convertToHydraClient;
 
 @Slf4j
 @Service
@@ -72,6 +71,7 @@ public class ImportService {
     private final TaraOidcConfigurationProvider taraOidcConfigurationProvider;
     private final PlatformTransactionManager transactionManager;
     private final AdminConfigurationProvider adminConfigurationProvider;
+    private final ClientMapper clientMapper;
 
     private final static ObjectMapper mapper = JsonMapper.builder()
             .addModule(new JavaTimeModule())
@@ -255,14 +255,14 @@ public class ImportService {
                     log.info(String.format("Added new institution. Name: '%s', Code: '%s'", institution.getName(), institution.getRegistryCode()));
                 }
 
-                ee.ria.tara.repository.model.Client clientEntity = ClientHelper.convertToEntity(client, dbInstitution);
+                ee.ria.tara.repository.model.Client clientEntity = clientMapper.toEntity(client, dbInstitution);
                 clientRepository.save(clientEntity);
                 log.info("Client added: " + clientEntity);
             } catch (Exception e) {
                 throw new IllegalStateException("Something went wrong while saving to admin-service database: " + e.getMessage(), e);
             }
 
-            HydraClient hydraClient = convertToHydraClient(client, false);
+            HydraClient hydraClient = clientMapper.toHydraClient(client);
             HydraClientWithSecret hydraClientWithSecret =
                     new HydraClientWithSecret(hydraClient, getDigest(clientImportItem.secret()));
 

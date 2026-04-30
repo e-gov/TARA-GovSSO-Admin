@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ee.ria.tara.service.helper.ClientHelper.SCOPE_REPRESENTEE;
-import static ee.ria.tara.service.helper.ClientHelper.SCOPE_REPRESENTEE_LIST;
+import static ee.ria.tara.mapper.ClientMapper.SCOPE_REPRESENTEE;
+import static ee.ria.tara.mapper.ClientMapper.SCOPE_REPRESENTEE_LIST;
 
 @Service
 @RequiredArgsConstructor

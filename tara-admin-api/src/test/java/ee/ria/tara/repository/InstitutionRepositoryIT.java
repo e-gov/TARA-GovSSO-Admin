@@ -3,7 +3,7 @@ package ee.ria.tara.repository;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.InstitutionType;
 import ee.ria.tara.repository.model.Institution;
-import ee.ria.tara.service.helper.ClientHelper;
+import ee.ria.tara.mapper.ClientMapper;
 import ee.ria.tara.service.helper.ClientTestHelper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -32,6 +32,7 @@ public class InstitutionRepositoryIT {
 
     private final InstitutionRepository repository;
     private final ClientRepository clientRepository;
+    private final ClientMapper clientMapper;
 
     @Test
     @Order(1)
@@ -160,7 +161,7 @@ public class InstitutionRepositoryIT {
         Client client = ClientTestHelper.validTARAClient();
         Institution institution = repository.findAllByRegistryCodeContainingIgnoreCaseOrNameContainingIgnoreCase(institutionName, institutionName).get(0);
 
-        clientRepository.save(ClientHelper.convertToEntity(client, institution));
+        clientRepository.save(clientMapper.toEntity(client, institution));
 
         institution.setRegistryCode(newRegistryCode);
         repository.save(institution);

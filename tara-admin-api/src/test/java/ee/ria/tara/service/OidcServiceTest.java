@@ -1,17 +1,17 @@
 package ee.ria.tara.service;
 
+import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.controllers.exception.RecordDoesNotExistException;
 import ee.ria.tara.model.Client;
-import ee.ria.tara.service.helper.ClientHelper;
+import ee.ria.tara.mapper.ClientMapper;
 import ee.ria.tara.service.model.HydraClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.ParameterizedTypeReference;
@@ -50,23 +50,32 @@ public class OidcServiceTest {
 
     @Mock
     private RestTemplate restTemplate;
-    @Mock
+
+    //TODO: ClientMapper should be mocked, as it should not be part of the system-under-test
+    private ClientMapper clientMapper;
+    private AdminConfigurationProvider adminConfigurationProvider;
     private TaraOidcConfigurationProvider taraOidcConfigurationProvider;
-    @InjectMocks
+
     private OidcService oidcService;
 
     @BeforeEach
     public void setUp() {
+        adminConfigurationProvider = new AdminConfigurationProvider();
+        taraOidcConfigurationProvider = new TaraOidcConfigurationProvider();
+        taraOidcConfigurationProvider.setUrl("http://hydra");
+        taraOidcConfigurationProvider.setPageSize(5);
+
+        clientMapper = new ClientMapper(adminConfigurationProvider);
+        oidcService = new OidcService(restTemplate, taraOidcConfigurationProvider, adminConfigurationProvider);
+
         client = validTARAClient();
-        doReturn("http://hydra").when(taraOidcConfigurationProvider).getUrl();
     }
 
     @Test
     public void getAllClients_allClientsReturned() throws URISyntaxException {
         List<HydraClient> hydraClients = IntStream.rangeClosed(1, 15)
-                .mapToObj(i -> ClientHelper.convertToHydraClient(validTARAClient(i), false))
+                .mapToObj(i -> clientMapper.toHydraClient(validTARAClient(i)))
                 .collect(Collectors.toList());
-        doReturn(5).when(taraOidcConfigurationProvider).getPageSize();
         HttpHeaders headersPage1 = new HttpHeaders();
         headersPage1.set(HttpHeaders.LINK, "</admin/clients?page_size=5&page_token=pageToken2>; rel=\"next\",</admin/clients?page_size=5&page_token=pageToken3>; rel=\"last\"");
         doReturn(ResponseEntity.ok().headers(headersPage1).body(hydraClients.subList(0, 5)))
@@ -88,9 +97,8 @@ public class OidcServiceTest {
     @Test
     public void getAllClients_whenNextLinkContainsUrlEncodedCharacters_allClientsReturned() throws URISyntaxException {
         List<HydraClient> hydraClients = IntStream.rangeClosed(1, 10)
-                .mapToObj(i -> ClientHelper.convertToHydraClient(validTARAClient(i), false))
+                .mapToObj(i -> clientMapper.toHydraClient(validTARAClient(i)))
                 .collect(Collectors.toList());
-        doReturn(5).when(taraOidcConfigurationProvider).getPageSize();
         HttpHeaders headersFirst = new HttpHeaders();
         headersFirst.set(HttpHeaders.LINK, "</admin/clients?page_size=5&page_token=page%23Token%30>; rel=\"next\"");
         doReturn(ResponseEntity.ok().headers(headersFirst).body(hydraClients.subList(0, 5)))
@@ -117,7 +125,7 @@ public class OidcServiceTest {
 
     @Test
     public void getClient_clientReturned() {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
+        HydraClient hydraClient = clientMapper.toHydraClient(validTARAClient());
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
@@ -153,7 +161,7 @@ public class OidcServiceTest {
 
     @Test
     public void createClient_clientCreated() throws URISyntaxException {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
+        HydraClient hydraClient = clientMapper.toHydraClient(validTARAClient());
         hydraClient.setCreatedAt(OffsetDateTime.now().toString());
         hydraClient.setUpdatedAt(OffsetDateTime.now().toString());
 
@@ -168,7 +176,7 @@ public class OidcServiceTest {
 
     @Test
     public void createClient_whenHydraRequestFailsWithBadRequest_invalidDataExceptionThrown() {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
+        HydraClient hydraClient = clientMapper.toHydraClient(validTARAClient());
 
         doThrow(new HttpClientErrorException(HttpStatus.BAD_REQUEST))
                 .when(restTemplate).exchange(any(URI.class), any(HttpMethod.class), any(), eq(Object.class));
@@ -181,7 +189,7 @@ public class OidcServiceTest {
 
     @Test
     public void createClient_whenHydraRequestFailsWithConflict_invalidDataExceptionThrown() {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
+        HydraClient hydraClient = clientMapper.toHydraClient(validTARAClient());
 
         doThrow(new HttpClientErrorException(HttpStatus.CONFLICT))
                 .when(restTemplate).exchange(any(URI.class), any(HttpMethod.class), any(), eq(Object.class));
@@ -194,7 +202,7 @@ public class OidcServiceTest {
 
     @Test
     public void createClient_whenHydraRequestFailsWithServerError_fatalApiExceptionThrown() {
-        HydraClient hydraClient = ClientHelper.convertToHydraClient(validTARAClient(), false);
+        HydraClient hydraClient = clientMapper.toHydraClient(validTARAClient());
 
         doThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR))
                 .when(restTemplate).exchange(any(URI.class), any(HttpMethod.class), any(), eq(Object.class));

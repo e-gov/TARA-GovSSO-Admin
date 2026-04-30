@@ -10,7 +10,7 @@ import ee.ria.tara.controllers.exception.RecordDoesNotExistException;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.repository.ClientRepository;
 import ee.ria.tara.repository.InstitutionRepository;
-import ee.ria.tara.service.helper.ClientHelper;
+import ee.ria.tara.mapper.ClientMapper;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.AfterEach;
@@ -60,6 +60,8 @@ public class ClientsServiceIT {
     private ClientsService service;
     @Autowired
     private TaraOidcConfigurationProvider taraOidcConfigurationProvider;
+    @Autowired
+    private ClientMapper clientMapper;
     @MockitoBean
     private ClientSecretEmailService clientSecretEmailService;
 
@@ -116,7 +118,7 @@ public class ClientsServiceIT {
     @Order(3)
     public void testAddClientWhenClientExists() {
         Assertions.assertEquals(0, clientRepository.findAll().size());
-        var client1 = ClientHelper.convertToEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode));
+        var client1 = clientMapper.toEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode));
         clientRepository.save(client1);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -219,7 +221,7 @@ public class ClientsServiceIT {
     @Order(9)
     public void testDeleteClient() throws ApiException {
         Assertions.assertEquals(0, clientRepository.findAll().size());
-        clientRepository.save(ClientHelper.convertToEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode)));
+        clientRepository.save(clientMapper.toEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode)));
         Assertions.assertEquals(1, clientRepository.findAll().size());
 
         hydraWireMockServer.stubFor(
@@ -251,7 +253,7 @@ public class ClientsServiceIT {
     @Order(11)
     public void testNotDeleteClientWhenHydraRequestFailsClientError() {
         Assertions.assertEquals(0, clientRepository.findAll().size());
-        clientRepository.save(ClientHelper.convertToEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode)));
+        clientRepository.save(clientMapper.toEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode)));
         Assertions.assertEquals(1, clientRepository.findAll().size());
 
         hydraWireMockServer.stubFor(
@@ -272,7 +274,7 @@ public class ClientsServiceIT {
     @Order(12)
     public void testNotDeleteClientWhenHydraRequestFailsServerError() {
         Assertions.assertEquals(0, clientRepository.findAll().size());
-        clientRepository.save(ClientHelper.convertToEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode)));
+        clientRepository.save(clientMapper.toEntity(client, institutionRepository.findInstitutionByRegistryCode(registryCode)));
         Assertions.assertEquals(1, clientRepository.findAll().size());
 
         hydraWireMockServer.stubFor(
