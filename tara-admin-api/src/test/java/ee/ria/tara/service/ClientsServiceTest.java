@@ -13,7 +13,7 @@ import ee.ria.tara.repository.model.Institution;
 import ee.ria.tara.mapper.ClientMapper;
 import ee.ria.tara.service.helper.ClientValidator;
 import ee.ria.tara.service.helper.ScopeFilter;
-import ee.ria.tara.service.helper.SecureRandomAlphaNumericStringGenerator;
+import ee.ria.tara.service.helper.ClientSecretGenerator;
 import ee.ria.tara.service.model.HydraClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -74,7 +74,7 @@ public class ClientsServiceTest {
     private ScopeFilter scopeFilter;
 
     @Mock
-    private SecureRandomAlphaNumericStringGenerator secureRandomAlphaNumericStringGenerator;
+    private ClientSecretGenerator clientSecretGenerator;
 
     //TODO: ClientMapper should be mocked, as it should not be part of the system-under-test
     private ClientMapper clientMapper;
@@ -92,7 +92,7 @@ public class ClientsServiceTest {
                 oidcService,
                 clientValidator,
                 scopeFilter,
-                secureRandomAlphaNumericStringGenerator,
+                clientSecretGenerator,
                 new ResourcelessTransactionManager(),
                 clientMapper
         );
@@ -254,14 +254,14 @@ public class ClientsServiceTest {
 
     @Test
     public void addClientToInstitution_whenSecretRecipientSet_secretEmailedAndClientUpdatedAfterEmailSent() {
-        String secret = "a".repeat(ClientsService.SIGNING_SECRET_LENGTH);
+        String secret = "a".repeat(ClientSecretGenerator.SIGNING_SECRET_LENGTH);
         String registryCode = "10101010005";
         ClientSecretExportSettings secretExportSettings = new ClientSecretExportSettings();
         secretExportSettings.setRecipientEmail("email");
         secretExportSettings.setRecipientIdCode(registryCode);
         client.setClientSecretExportSettings(secretExportSettings);
 
-        doReturn(secret).when(secureRandomAlphaNumericStringGenerator).generate(ClientsService.SIGNING_SECRET_LENGTH);
+        doReturn(secret).when(clientSecretGenerator).generate();
         doNothing().when(oidcService).createClient(any(HydraClient.class));
         doNothing().when(oidcService).setSecret(eq(client.getClientId()), eq(secret));
         doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
@@ -296,7 +296,7 @@ public class ClientsServiceTest {
 
     @Test
     public void updateClient_whenSecretRecipientNotSet_secretNotEmailedAndClientUpdatedOnce() {
-        String secret = "a".repeat(ClientsService.SIGNING_SECRET_LENGTH);
+        String secret = "a".repeat(ClientSecretGenerator.SIGNING_SECRET_LENGTH);
         String registryCode = "1";
         String clientId = "10101010005";
         client.setClientSecretExportSettings(null);
@@ -320,7 +320,7 @@ public class ClientsServiceTest {
 
     @Test
     public void updateClient_whenSecretRecipientSet_newSecretEmailedAndClientUpdated() {
-        String secret = "a".repeat(ClientsService.SIGNING_SECRET_LENGTH);
+        String secret = "a".repeat(ClientSecretGenerator.SIGNING_SECRET_LENGTH);
         String registryCode = "10101010005";
         String clientId = client.getClientId();
         ClientSecretExportSettings secretExportSettings = new ClientSecretExportSettings();
@@ -328,7 +328,7 @@ public class ClientsServiceTest {
         secretExportSettings.setRecipientIdCode("30303039914");
         client.setClientSecretExportSettings(secretExportSettings);
 
-        doReturn(secret).when(secureRandomAlphaNumericStringGenerator).generate(ClientsService.SIGNING_SECRET_LENGTH);
+        doReturn(secret).when(clientSecretGenerator).generate();
         doNothing().when(oidcService).updateClient(eq(clientId), any(HydraClient.class));
         doReturn(institution).when(institutionRepository).findInstitutionByRegistryCode(registryCode);
 

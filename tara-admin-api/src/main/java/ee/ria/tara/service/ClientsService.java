@@ -10,7 +10,7 @@ import ee.ria.tara.repository.model.Institution;
 import ee.ria.tara.mapper.ClientMapper;
 import ee.ria.tara.service.helper.ClientValidator;
 import ee.ria.tara.service.helper.ScopeFilter;
-import ee.ria.tara.service.helper.SecureRandomAlphaNumericStringGenerator;
+import ee.ria.tara.service.helper.ClientSecretGenerator;
 import ee.ria.tara.service.model.HydraClient;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -34,15 +34,13 @@ import static org.springframework.transaction.TransactionDefinition.PROPAGATION_
 @RequiredArgsConstructor
 public class ClientsService {
 
-    static final int SIGNING_SECRET_LENGTH = 32;
-
     private final ClientRepository clientRepository;
     private final InstitutionRepository institutionRepository;
     private final ClientSecretEmailService clientSecretEmailService;
     private final OidcService oidcService;
     private final ClientValidator clientValidator;
     private final ScopeFilter scopeFilter;
-    private final SecureRandomAlphaNumericStringGenerator secureRandomAlphaNumericStringGenerator;
+    private final ClientSecretGenerator clientSecretGenerator;
     private final PlatformTransactionManager transactionManager;
     private final ClientMapper clientMapper;
 
@@ -160,7 +158,7 @@ public class ClientsService {
     }
 
     private void resetSecret(Client client) {
-        String newSecret = secureRandomAlphaNumericStringGenerator.generate(SIGNING_SECRET_LENGTH);
+        String newSecret = clientSecretGenerator.generate();
         clientSecretEmailService.sendSigningSecretByEmail(client, newSecret);
         oidcService.setSecret(client.getClientId(), newSecret);
     }
