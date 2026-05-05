@@ -67,8 +67,10 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                         "\"audience\": null," +
                         "\"authorization_code_grant_access_token_lifespan\" : null,\n" +
                         "\"authorization_code_grant_refresh_token_lifespan\" : null,\n" +
+                        "\"authorization_code_grant_id_token_lifespan\" : null,\n" +
                         "\"refresh_token_grant_access_token_lifespan\" : null,\n" +
                         "\"refresh_token_grant_refresh_token_lifespan\" : null,\n" +
+                        "\"refresh_token_grant_id_token_lifespan\" : null,\n" +
                         "\"grant_types\":[\"authorization_code\"]," +
                         "\"redirect_uris\":[\"https://oidc-client-mock:8451/oauth/response\"]," +
                         "\"post_logout_redirect_uris\": null," +

@@ -195,11 +195,17 @@ public class ClientMapper {
         hydraOidcClientInstitution.setSector(client.getInstitutionMetainfo().getType().getType().getValue());
 
         if (Client.ClientTypeEnum.SECURED_APP.equals(clientType)) {
-            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(toHydraDuration(client.getSessionLifespan()));
-            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(toHydraDuration(client.getSessionLifespan()));
+            String refreshTokenLifespan = toHydraDuration(client.getSessionLifespan());
+            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(refreshTokenLifespan);
+            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(refreshTokenLifespan);
+            String idTokenLifespan = hydraDurationFormat.format(configuration.getSecuredAppIdTokenLifespan());
+            hydraClient.setAuthorizationCodeGrantIdTokenLifespan(idTokenLifespan);
+            hydraClient.setRefreshTokenGrantIdTokenLifespan(idTokenLifespan);
         } else {
             hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(null);
             hydraClient.setRefreshTokenGrantRefreshTokenLifespan(null);
+            hydraClient.setAuthorizationCodeGrantIdTokenLifespan(null);
+            hydraClient.setRefreshTokenGrantIdTokenLifespan(null);
         }
 
         return hydraClient;

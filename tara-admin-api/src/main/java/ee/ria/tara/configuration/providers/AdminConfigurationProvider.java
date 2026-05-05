@@ -17,6 +17,7 @@ public class AdminConfigurationProvider {
     boolean ssoMode = false;
     Duration maxAccessTokenLifespan = Duration.ofMinutes(15);
     Duration maxSessionDuration = Duration.ofDays(90);
+    Duration securedAppIdTokenLifespan = Duration.ofSeconds(40);
 
     @Positive
     int maxShortNameLength = 38;
