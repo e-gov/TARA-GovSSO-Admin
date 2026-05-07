@@ -1,27 +1,27 @@
 package ee.ria.tara.configuration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.tara.model.LoginRequest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.webmvc.test.autoconfigure.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.ldap.userdetails.LdapUserDetailsImpl;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 import org.springframework.test.web.servlet.result.HeaderResultMatchers;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
 import static ee.ria.tara.controllers.ControllerTestData.EXPECTED_RESPONSE_HEADERS;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -41,7 +41,7 @@ public class SecurityConfigurationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
 
     @Test
     public void testUnauthenticatedRequestReturns401() throws Exception {
@@ -63,10 +63,12 @@ public class SecurityConfigurationTest {
         userDetails.setUsername("user");
         userDetails.setDn("dn");
 
-        SecurityContextHolder.getContext().setAuthentication(
-                new UsernamePasswordAuthenticationToken(userDetails.createUserDetails(), "pass", Collections.emptyList()));
+        UsernamePasswordAuthenticationToken authentication =
+                new UsernamePasswordAuthenticationToken(userDetails.createUserDetails(), "pass", Collections.emptyList());
 
-        mockMvc.perform(get("/whoami").with(csrf()))
+        mockMvc.perform(get("/whoami")
+                        .with(authentication(authentication))
+                        .with(csrf()))
                 .andExpect(status().is(STATUS_200))
                 .andExpectAll(expectedHeaderMatchers(header()));
     }

@@ -1,10 +1,6 @@
 package ee.ria.tara;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.core.json.JsonReadFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import ee.ria.tara.conf.FileImportConfiguration;
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.model.ClientImportResponse;
@@ -22,10 +18,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
-import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
-import org.springframework.boot.autoconfigure.liquibase.LiquibaseAutoConfiguration;
+import org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration;
+import org.springframework.boot.liquibase.autoconfigure.LiquibaseAutoConfiguration;
 import org.springframework.context.annotation.Import;
 import org.springframework.util.Assert;
+import tools.jackson.core.json.JsonReadFeature;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.ser.std.SimpleBeanPropertyFilter;
+import tools.jackson.databind.ser.std.SimpleFilterProvider;
 
 import java.io.InputStream;
 import java.nio.file.Files;
@@ -52,15 +52,23 @@ public class ClientUtilsApplication implements CommandLineRunner {
     @Autowired (required = false)
     private FileImportConfiguration fileImportConfigurationProvider;
 
-    private final static ObjectMapper mapper = new ObjectMapper();
+    private static final JsonMapper mapper = createMapper();
 
-    static {
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    private static JsonMapper createMapper() {
         String[] fieldsToSkip = new String[] { "secret" };
-        final SimpleFilterProvider filter = new SimpleFilterProvider();
-        filter.addFilter("custom_serializer", SimpleBeanPropertyFilter.serializeAllExcept(fieldsToSkip));
-        mapper.setFilters(filter);
-        mapper.addMixIn(Object.class, PropertyFilterMixIn.class);
+
+        SimpleFilterProvider filterProvider = new SimpleFilterProvider()
+                .addFilter("custom_serializer",
+                        SimpleBeanPropertyFilter.serializeAllExcept(fieldsToSkip));
+
+        return JsonMapper.builder()
+                .enable(JsonReadFeature.ALLOW_TRAILING_COMMA)
+                .changeDefaultPropertyInclusion(incl -> incl
+                        .withValueInclusion(JsonInclude.Include.NON_NULL)
+                        .withContentInclusion(JsonInclude.Include.NON_NULL))
+                .filterProvider(filterProvider)
+                .addMixIn(Object.class, PropertyFilterMixIn.class)
+                .build();
     }
 
     public static void main(String[] args) {
@@ -105,8 +113,7 @@ public class ClientUtilsApplication implements CommandLineRunner {
         if (Files.exists(path) && Files.isReadable(path)) {
             List<ClientImportItem> clients = Arrays.asList(
                     mapper.readerFor(ClientImportItem[].class)
-                            .with(JsonReadFeature.ALLOW_TRAILING_COMMA)
-                            .readValue(path.toFile(), ClientImportItem[].class));
+                            .readValue(path.toFile()));
             InstitutionMetainfo institutionMetainfo = clients.get(0).client().getInstitutionMetainfo();
             Institution institution = new Institution();
             institution.setRegistryCode(institutionMetainfo.getRegistryCode());

@@ -1,6 +1,5 @@
 package ee.ria.tara.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.tara.configuration.providers.AuthenticationConfigurationProvider;
 import ee.ria.tara.controllers.handler.ErrorHandler;
 import ee.ria.tara.model.LoginRequest;
@@ -22,6 +21,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -60,7 +60,7 @@ public class LdapLoginControllerTest {
         loginRequest.setUsername("user");
         loginRequest.setPassword("password");
 
-        JacksonTester.initFields(this, new ObjectMapper());
+        JacksonTester.initFields(this, JsonMapper.builder().build());
 
         mvc = MockMvcBuilders.standaloneSetup(controller)
                 .setControllerAdvice(errorHandler)

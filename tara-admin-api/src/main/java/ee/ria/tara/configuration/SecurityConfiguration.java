@@ -35,7 +35,7 @@ import java.time.Duration;
 import java.util.function.Supplier;
 
 import static ee.ria.tara.configuration.CookieConfiguration.COOKIE_NAME_XSRF_TOKEN;
-import static org.springframework.security.web.util.matcher.AntPathRequestMatcher.antMatcher;
+import static org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher.pathPattern;
 
 @Configuration
 @EnableWebSecurity
@@ -82,28 +82,28 @@ public class SecurityConfiguration {
             .addFilterAfter(new CsrfCookieFilter(), BasicAuthenticationFilter.class)
             .authorizeHttpRequests(httpRequestsConfig -> httpRequestsConfig
                 .requestMatchers(
-                    antMatcher("/"),
-                    antMatcher("/login"),
-                    antMatcher("/ssoMode"),
-                    antMatcher("/actuator/**")
+                    pathPattern("/"),
+                    pathPattern("/login"),
+                    pathPattern("/ssoMode"),
+                    pathPattern("/actuator/**")
                 ).permitAll()
                 .requestMatchers(
-                    antMatcher(HttpMethod.GET, "/alerts"),
-                    antMatcher(HttpMethod.GET, "/clients/tokenrequestallowedipaddresses")
+                    pathPattern(HttpMethod.GET, "/alerts"),
+                    pathPattern(HttpMethod.GET, "/clients/tokenrequestallowedipaddresses")
                 ).permitAll()
                 .requestMatchers(
-                    antMatcher("/*.js"),
-                    antMatcher("/*.css"),
-                    antMatcher("/*.woff2"),
-                    antMatcher("/*.woff"),
-                    antMatcher("/*.ttf")
+                   pathPattern("/*.js"),
+                   pathPattern("/*.css"),
+                   pathPattern("/*.woff2"),
+                   pathPattern("/*.woff"),
+                   pathPattern("/*.ttf")
                 ).permitAll()
                 .requestMatchers(
-                    antMatcher("/index.html"),
-                    antMatcher("/assets/ria-logo.png"),
-                    antMatcher("/favicon.ico")
+                    pathPattern("/index.html"),
+                    pathPattern("/assets/ria-logo.png"),
+                    pathPattern("/favicon.ico")
                 ).permitAll()
-                .requestMatchers(antMatcher("/**")).authenticated()
+                .requestMatchers(pathPattern("/**")).authenticated()
             );
         return http.build();
     }
@@ -118,8 +118,10 @@ public class SecurityConfiguration {
     private CsrfTokenRepository csrfTokenRepository() {
         CookieCsrfTokenRepository repository = CookieCsrfTokenRepository.withHttpOnlyFalse();
         repository.setCookieName(COOKIE_NAME_XSRF_TOKEN);
-        repository.setSecure(true);
-        repository.setCookiePath("/");
+        repository.setCookieCustomizer(cookie -> cookie
+                .secure(true)
+                .path("/")
+        );
         return repository;
     }
 

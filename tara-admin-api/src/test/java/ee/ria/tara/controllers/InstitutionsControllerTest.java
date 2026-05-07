@@ -1,7 +1,5 @@
 package ee.ria.tara.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ee.ria.tara.controllers.exception.ApiException;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.exception.InvalidDataException;
@@ -28,6 +26,7 @@ import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockHttpServletResponse;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -55,7 +54,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(MockitoExtension.class)
 public class InstitutionsControllerTest {
     private MockMvc mvc;
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
     @SuppressWarnings("unused") // Initialized by `JacksonTester#initFields`
     private JacksonTester<Client> jsonClient;
     @SuppressWarnings("unused") // Initialized by `JacksonTester#initFields`
@@ -73,8 +72,7 @@ public class InstitutionsControllerTest {
 
     @BeforeEach
     public void setup() {
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper = JsonMapper.builder().build();
 
         client = ClientTestHelper.validTARAClient();
         institution = InstitutionTestHelper.createTestInstitution();

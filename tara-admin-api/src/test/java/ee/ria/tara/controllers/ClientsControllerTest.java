@@ -1,6 +1,5 @@
 package ee.ria.tara.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.tara.controllers.exception.FatalApiException;
 import ee.ria.tara.controllers.handler.ErrorHandler;
 import ee.ria.tara.model.Client;
@@ -23,6 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class ClientsControllerTest {
     public void setup() {
         RequestContextHolder.setRequestAttributes(new ServletRequestAttributes(new MockHttpServletRequest(), new MockHttpServletResponse()));
         ReflectionTestUtils.setField(errorHandler, "messageSource", messageSource);
-        JacksonTester.initFields(this, new ObjectMapper());
+        JacksonTester.initFields(this, JsonMapper.builder().build());
 
         client = ClientTestHelper.validTARAClient();
 

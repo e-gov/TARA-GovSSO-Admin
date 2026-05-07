@@ -1,19 +1,19 @@
 package ee.ria.tara.service.helper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JavaType;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.tara.model.EmailAlert;
 import ee.ria.tara.model.LoginAlert;
 import ee.ria.tara.model.MessageTemplate;
 import ee.ria.tara.repository.model.Alert;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JavaType;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.util.List;
 
 public class AlertHelper {
 
-    private static final ObjectMapper jsonMapper = new ObjectMapper();
+    public static final JsonMapper jsonMapper = JsonMapper.builder().build();
 
     public static Alert convertToEntity(ee.ria.tara.model.Alert alert) {
         Alert entity = new Alert();
@@ -86,7 +86,7 @@ public class AlertHelper {
             JavaType targetType = jsonMapper.getTypeFactory()
                     .constructParametricType(List.class, MessageTemplate.class);
             return jsonMapper.treeToValue(jsonNode, targetType);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
     }

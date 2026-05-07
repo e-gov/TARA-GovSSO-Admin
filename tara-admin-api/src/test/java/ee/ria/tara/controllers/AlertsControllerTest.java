@@ -1,7 +1,5 @@
 package ee.ria.tara.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ee.ria.tara.controllers.handler.ErrorHandler;
 import ee.ria.tara.model.Alert;
 import ee.ria.tara.model.EmailAlert;
@@ -23,6 +21,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import jakarta.servlet.http.HttpServletRequest;
+import tools.jackson.databind.json.JsonMapper;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 
@@ -40,7 +40,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 @ExtendWith(MockitoExtension.class)
 public class AlertsControllerTest {
     private MockMvc mvc;
-    private ObjectMapper objectMapper;
+    private JsonMapper objectMapper;
     private JacksonTester<Alert> jsonAlert;
     private Alert alert;
     @Mock
@@ -59,8 +59,7 @@ public class AlertsControllerTest {
     public void setup() {
         ReflectionTestUtils.setField(errorHandler, "messageSource", messageSource);
 
-        objectMapper = new ObjectMapper();
-        objectMapper.registerModule(new JavaTimeModule());
+        objectMapper = JsonMapper.builder().build();
 
         alert = createAlert();
 

@@ -1,22 +1,21 @@
 package ee.ria.tara.repository.helper;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
 import jakarta.persistence.AttributeConverter;
 import jakarta.persistence.Converter;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 @Converter
 public class JsonConverter implements AttributeConverter<JsonNode, String> {
 
-    private static final ObjectMapper jsonMapper = new ObjectMapper();
+    private static final JsonMapper jsonMapper = JsonMapper.builder().build();
 
     @Override
     public String convertToDatabaseColumn(JsonNode object) {
         try {
             return jsonMapper.writeValueAsString(object);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
     }
@@ -25,7 +24,7 @@ public class JsonConverter implements AttributeConverter<JsonNode, String> {
     public JsonNode convertToEntityAttribute(String dbValue) {
         try {
             return jsonMapper.readTree(dbValue);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             throw new RuntimeException(e);
         }
     }

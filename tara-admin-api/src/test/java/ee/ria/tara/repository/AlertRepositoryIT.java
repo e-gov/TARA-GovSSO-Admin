@@ -1,6 +1,5 @@
 package ee.ria.tara.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import ee.ria.tara.repository.model.Alert;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Assertions;
@@ -12,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import tools.jackson.databind.JsonNode;
+import tools.jackson.databind.json.JsonMapper;
 
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -24,7 +25,7 @@ import java.util.List;
 @RequiredArgsConstructor(onConstructor_ = @Autowired)
 public class AlertRepositoryIT {
 
-    public static final ObjectMapper jsonMapper = new ObjectMapper();
+    public static final JsonMapper jsonMapper = JsonMapper.builder().build();
 
     private final AlertRepository repository;
 
@@ -87,14 +88,15 @@ public class AlertRepositoryIT {
         alert.setTitle("Title");
         alert.setEmailTemplate("Erakorraline katkestus");
         alert.setEndTime(OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS));
-        alert.setNotificationTemplates(
-                jsonMapper.createArrayNode()
-                        .add(jsonMapper.createObjectNode()
-                                .put("locale", "et")
-                                .put("message", "Erakorraline katkestus"))
-                        .add(jsonMapper.createObjectNode()
-                                .put("locale", "en")
-                                .put("message", "Emergency interruption")));
+        JsonNode notificationTemplates = jsonMapper.createArrayNode()
+                .add(jsonMapper.createObjectNode()
+                        .put("locale", "et")
+                        .put("message", "Erakorraline katkestus"))
+                .add(jsonMapper.createObjectNode()
+                        .put("locale", "en")
+                        .put("message", "Emergency interruption"));
+
+        alert.setNotificationTemplates(notificationTemplates);
         alert.setNotifyClientsByEmail(true);
         alert.setSendAt(OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS));
         alert.setNotifyClientsOnTaraLoginPage(true);

@@ -26,7 +26,7 @@
         <commons-email.version>2.0.0-M1</commons-email.version>
         <greenmail.version>2.1.8</greenmail.version>
         <jacoco-maven-plugin.version>0.8.14</jacoco-maven-plugin.version>
-        <logstash-logback-encoder.version>8.1</logstash-logback-encoder.version><!-- TODO Upgrade to logstash-logback-encoder 9.x with Spring Boot 4.x, both upgrade to Jackson 3 -->
+        <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <poi.version>5.5.1</poi.version>
         <tara-admin-api-schema.version>1.13.0</tara-admin-api-schema.version>
 
@@ -130,11 +130,19 @@
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-restclient</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
         <dependency>
             <groupId>io.micrometer</groupId>
             <artifactId>micrometer-registry-prometheus</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-liquibase</artifactId>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -219,6 +227,11 @@
                     <artifactId>junit-vintage-engine</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-webmvc-test</artifactId>
+            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.springframework.security</groupId>

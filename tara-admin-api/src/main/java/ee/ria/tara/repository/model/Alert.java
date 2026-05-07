@@ -1,6 +1,5 @@
 package ee.ria.tara.repository.model;
 
-import com.fasterxml.jackson.databind.JsonNode;
 import ee.ria.tara.repository.helper.JsonConverter;
 import ee.ria.tara.repository.helper.StringListConverter;
 import lombok.EqualsAndHashCode;
@@ -16,6 +15,8 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import tools.jackson.databind.JsonNode;
+
 import java.time.OffsetDateTime;
 import java.util.List;
 

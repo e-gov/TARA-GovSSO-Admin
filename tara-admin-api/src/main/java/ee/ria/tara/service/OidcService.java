@@ -160,7 +160,7 @@ public class OidcService {
         } catch (HttpClientErrorException ex) {
             log.error(String.format("Hydra request: %s %s failed.", httpMethod.name(), uri), ex);
 
-            if (ex.getRawStatusCode() == 400) {
+            if (ex.getStatusCode() == HttpStatus.BAD_REQUEST) {
                 throw new InvalidDataException("Oidc.clientError.400");
             }
 
