@@ -19,6 +19,9 @@ public class HydraDurationFormat implements DurationFormat {
      */
     @SuppressWarnings("DuplicatedCode")
     public String format(@NonNull Duration duration) {
+        if (duration.compareTo(Duration.ofSeconds(1)) < 0) {
+            return "0s";
+        }
         long hours = duration.toHours();
         long minutes = duration.toMinutesPart();
         long seconds = duration.toSecondsPart();

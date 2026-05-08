@@ -41,6 +41,9 @@ public class AdminDurationFormat implements DurationFormat {
      */
     @SuppressWarnings("DuplicatedCode")
     public String format(@NonNull Duration duration) {
+        if (duration.compareTo(Duration.ofSeconds(1)) < 0) {
+            return "0s";
+        }
         long days = duration.toDays();
         long hours = duration.toHoursPart();
         long minutes = duration.toMinutesPart();

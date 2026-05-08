@@ -18,6 +18,10 @@ class HydraDurationFormatTest {
 
     @SuppressWarnings("unused") // Used by `@FieldSource("FORMAT_TEST_CASES")`
     private static final List<FormatTestCase> FORMAT_TEST_CASES = List.of(
+            new FormatTestCase("Zero", Duration.ZERO, "0s"),
+            new FormatTestCase("Sub-second as zero", Duration.ofMillis(100), "0s"),
+            new FormatTestCase("Sub-second part stripped", Duration.ofSeconds(1).plusMillis(100), "1s"),
+            new FormatTestCase("1 second", Duration.ofSeconds(1), "1s"),
             new FormatTestCase("Seconds", Duration.ofSeconds(30), "30s"),
             new FormatTestCase("Minutes", Duration.ofMinutes(15), "15m"),
             new FormatTestCase("Hours", Duration.ofHours(1), "1h"),
@@ -26,8 +30,9 @@ class HydraDurationFormatTest {
             new FormatTestCase("Days, hours to just hours", Duration.ofDays(90).plusHours(1), "2161h")
     );
 
-    @SuppressWarnings("unused") //Used by `@FieldSource("PARSE_TEST_CASES")`
+    @SuppressWarnings("unused") // Used by `@FieldSource("PARSE_TEST_CASES")`
     private static final List<ParseTestCase> PARSE_TEST_CASES = List.of(
+            new ParseTestCase("Zero seconds", "0s", Duration.ZERO),
             new ParseTestCase("Seconds", "30s", Duration.ofSeconds(30)),
             new ParseTestCase("Minutes, seconds as seconds", "90s", Duration.ofSeconds(90)),
             new ParseTestCase("Minutes", "15m", Duration.ofMinutes(15)),

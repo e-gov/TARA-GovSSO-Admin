@@ -33,8 +33,9 @@ The backend application is built on top of classes generated from the API specif
 | Parameter                    | Required | Description                       | Example                                              |
 | ---------------------------- | -------- | --------------------------------- | ---------------------------------------------------- |
 | tara.admin.sso-mode           | N        | Toggle between GovSSO mode when true and TARA mode when false, false by default  | false                                                 |
-| tara.admin.max-access-token-lifespan  | N | Max allowed value for JWT access token lifespan. Default value is PT15M (15 minutes). | PT14M |
-| tara.admin.max-session-duration       | N | Duration of a session, defaults to 90 days (P90D). Applied as refresh token lifespan for SECURED_APP type clients. | P90D |
+| tara.admin.max-access-token-lifespan  | N | Max allowed value for JWT access token lifespan. Default value is PT15M (15 minutes). [See allowed formats here.](https://docs.spring.io/spring-boot/4.0/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.conversion.durations) | PT14M |
+| tara.admin.max-session-duration       | N | Duration of a session, defaults to 90 days (P90D). Applied as refresh token lifespan for SECURED_APP type clients. [See allowed formats here.](https://docs.spring.io/spring-boot/4.0/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.conversion.durations) | P90D |
+| tara.admin.secured-app-id-token-lifespan | N | Lifespan of ID tokens for SECURED_APP (long-living) sessions. Default value is PT40S. [See allowed formats here.](https://docs.spring.io/spring-boot/4.0/reference/features/external-config.html#features.external-config.typesafe-configuration-properties.conversion.durations) | PT40s |
 | tara.admin.max-short-name-length | N | Maximum allowed length for client short name. Default value is 38. | 38 |
 | tara.admin.max-name-length | N | Maximum allowed length for client full name. Default value is 150. | 150 |
 
