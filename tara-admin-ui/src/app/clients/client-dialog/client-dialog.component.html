@@ -53,7 +53,7 @@
           <label>{{newData.client_id}}</label>
         </div>
       </div>
-      <div class="form-group row" *ngIf="authService.isSsoMode">
+      <div class="form-group row mb-0" *ngIf="authService.isSsoMode">
         <label class="col-sm-4 col-form-label">Klientrakenduse tüüp
           <mat-icon inline class="material-icons ml-3 font-size-20"
                     matTooltip="SECURED_APP on mobiilirakendus, mis täidab vastavaid nõudeid. DEFAULT on veebirakendus või mobiilirakendus.">
@@ -78,7 +78,7 @@
         <div class="col-sm-8" *ngIf="!isInfo()">
           <input type="text" class="form-control w-75" name="session_lifespan" [(ngModel)]="_session_lifespan" [value]="newData.session_lifespan || ''" [disabled]="newData.client_type !== 'SECURED_APP'">
         </div>
-        <label *ngIf="isInfo()">{{newData.session_lifespan}}</label>
+        <label class="col-sm-8" *ngIf="isInfo()">{{newData.session_lifespan}}</label>
       </div>
       <div class="form-group row">
         <label class="col-sm-4 col-form-label">Klientrakenduse nimetus
