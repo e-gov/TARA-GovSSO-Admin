@@ -8,6 +8,16 @@ import java.util.List;
 
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PUBLIC;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EIDAS;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EIDAS_COUNTRY;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EIDAS_ONLY;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EMAIL;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_IDCARD;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_LEGALPERSON;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_MID;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_OPENID;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_PHONE;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_SMARTID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ActiveProfiles("test")
@@ -21,12 +31,12 @@ public class TaraScopeFilterTest {
         @Test
         public void filterInstitutionClientScopes_whenPrivateInstitution_whenScopesContainDisallowedScopes_onlyAllowedScopesReturned() {
             List<String> clientScopes = List.of(
-                    "openid", "eidas", "eidasonly", "eidas:country:*", "idcard", "mid",
-                    "smartid", "email", "phone", "legalperson", "invalid_value", "unknown_value");
+                    SCOPE_OPENID, SCOPE_EIDAS, SCOPE_EIDAS_ONLY, SCOPE_EIDAS_COUNTRY, SCOPE_IDCARD, SCOPE_MID,
+                    SCOPE_SMARTID, SCOPE_EMAIL, SCOPE_PHONE, SCOPE_LEGALPERSON, "invalid_value", "unknown_value");
 
             List<String> filteredScopes = scopeFilter.filterInstitutionClientScopes(clientScopes, PRIVATE);
 
-            assertEquals(List.of("openid", "eidas", "eidasonly", "eidas:country:*"), filteredScopes);
+            assertEquals(List.of(SCOPE_OPENID, SCOPE_EIDAS, SCOPE_EIDAS_ONLY, SCOPE_EIDAS_COUNTRY), filteredScopes);
         }
 
     }
@@ -37,27 +47,27 @@ public class TaraScopeFilterTest {
         @Test
         public void filterInstitutionClientScopes_whenScopesContainDisallowedScopes_onlyAllowedScopesReturned() {
             List<String> clientScopes = List.of(
-                    "openid", "eidas", "eidasonly", "eidas:country:*", "idcard", "mid",
-                    "smartid", "email", "phone", "legalperson", "invalid_value", "unknown_value");
+                    SCOPE_OPENID, SCOPE_EIDAS, SCOPE_EIDAS_ONLY, SCOPE_EIDAS_COUNTRY, SCOPE_IDCARD, SCOPE_MID,
+                    SCOPE_SMARTID, SCOPE_EMAIL, SCOPE_PHONE, SCOPE_LEGALPERSON, "invalid_value", "unknown_value");
 
             List<String> filteredScopes = scopeFilter.filterInstitutionClientScopes(clientScopes, PUBLIC);
 
             assertEquals(List.of(
-                    "openid", "eidas", "eidasonly", "eidas:country:*", "idcard", "mid",
-                    "smartid", "email", "phone", "legalperson"), filteredScopes);
+                    SCOPE_OPENID, SCOPE_EIDAS, SCOPE_EIDAS_ONLY, SCOPE_EIDAS_COUNTRY, SCOPE_IDCARD, SCOPE_MID,
+                    SCOPE_SMARTID, SCOPE_EMAIL, SCOPE_PHONE, SCOPE_LEGALPERSON), filteredScopes);
         }
 
         @Test
         public void filterInstitutionClientScopes_whenScopesInRandomOrder_scopesReturnedInFixedOrder() {
             List<String> clientScopes = List.of(
-                    "idcard", "eidas", "legalperson", "openid", "eidasonly", "eidas:country:*", "mid",
-                    "smartid", "phone", "email");
+                    SCOPE_IDCARD, SCOPE_EIDAS, SCOPE_LEGALPERSON, SCOPE_OPENID, SCOPE_EIDAS_ONLY, SCOPE_EIDAS_COUNTRY, SCOPE_MID,
+                    SCOPE_SMARTID, SCOPE_PHONE, SCOPE_EMAIL);
 
             List<String> filteredScopes = scopeFilter.filterInstitutionClientScopes(clientScopes, PUBLIC);
 
             assertEquals(List.of(
-                    "openid", "eidas", "eidasonly", "eidas:country:*", "idcard", "mid",
-                    "smartid", "email", "phone", "legalperson"), filteredScopes);
+                    SCOPE_OPENID, SCOPE_EIDAS, SCOPE_EIDAS_ONLY, SCOPE_EIDAS_COUNTRY, SCOPE_IDCARD, SCOPE_MID,
+                    SCOPE_SMARTID, SCOPE_EMAIL, SCOPE_PHONE, SCOPE_LEGALPERSON), filteredScopes);
         }
 
     }

@@ -20,6 +20,9 @@ target/
 *.ipr
 overlays/
 
+### VS Code ###
+.vscode/
+
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

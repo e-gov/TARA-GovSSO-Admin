@@ -23,8 +23,9 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import static ee.ria.tara.mapper.ClientMapper.SCOPE_REPRESENTEE;
-import static ee.ria.tara.mapper.ClientMapper.SCOPE_REPRESENTEE_LIST;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE_LIST;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_AUTH_HANDOVER;
 
 @Service
 @RequiredArgsConstructor
@@ -60,12 +61,27 @@ public class ClientValidator {
         validateAccessTokenLifespan(client);
         validateClientType(client);
         validateSessionLifespan(client);
+        validateAuthHandoverScope(client);
         validateClientSecretExportSettings(client);
     }
 
     private void validateClientType(Client client) {
         if (!adminConfProvider.isSsoMode() && client.getClientType() != null) {
             throw new IllegalStateException("Client type must not be set in TARA mode");
+        }
+    }
+
+    private void validateAuthHandoverScope(Client client) {
+        if (!adminConfProvider.isSsoMode()) {
+            return;
+        }
+        boolean hasAuthHandoverScope = client.getScope().contains(SCOPE_AUTH_HANDOVER);
+        boolean isSecuredApp = Client.ClientTypeEnum.SECURED_APP.equals(client.getClientType());
+        if (isSecuredApp && !hasAuthHandoverScope) {
+            throw new InvalidDataException("Client.authHandoverScope.missing");
+        } 
+        if (!isSecuredApp && hasAuthHandoverScope) {
+            throw new InvalidDataException("Client.authHandoverScope.notAllowed");
         }
     }
 

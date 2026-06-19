@@ -25,6 +25,16 @@ import ee.ria.tara.repository.model.Institution;
 import ee.ria.tara.mapper.ClientMapper;
 import ee.ria.tara.service.helper.ClientValidator;
 import ee.ria.tara.service.helper.ScopeFilter;
+
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EIDAS;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EIDAS_COUNTRY;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EIDAS_ONLY;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EMAIL;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_IDCARD;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_MID;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_OPENID;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_PHONE;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_SMARTID;
 import ee.ria.tara.service.model.ClientImportItem;
 import ee.ria.tara.service.model.HydraClient;
 import lombok.NonNull;
@@ -79,16 +89,15 @@ public class ImportService {
 
     static {
         mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String[] fieldsToSkip = new String[]{"secret"};
+        String[] fieldsToSkip = new String[] { "secret" };
         final SimpleFilterProvider filter = new SimpleFilterProvider();
         filter.addFilter("custom_serializer", SimpleBeanPropertyFilter.serializeAllExcept(fieldsToSkip));
         mapper.setFilters(filter);
         mapper.addMixIn(Object.class, PropertyFilterMixIn.class);
     }
 
-
-    private final List<String> defaultListOfScopes =
-            List.of("openid", "mid", "idcard", "smartid", "eidas", "eidasonly", "eidas:country:*", "email", "phone");
+    private final List<String> defaultListOfScopes = List.of(SCOPE_OPENID, SCOPE_MID, SCOPE_IDCARD, SCOPE_SMARTID,
+            SCOPE_EIDAS, SCOPE_EIDAS_ONLY, SCOPE_EIDAS_COUNTRY, SCOPE_EMAIL, SCOPE_PHONE);
 
     private final DataFormatter formatter = new DataFormatter();
 
@@ -153,7 +162,8 @@ public class ImportService {
         return saveClients(clientRows);
     }
 
-    public ClientImportResponse saveClients(Map<ee.ria.tara.model.Institution, List<ClientImportItem>> institutionClients) {
+    public ClientImportResponse saveClients(
+            Map<ee.ria.tara.model.Institution, List<ClientImportItem>> institutionClients) {
         List<String> importFailedClientIds = new ArrayList<>();
         int clientsTotal = 0;
         int clientsImportedOk = 0;
@@ -162,7 +172,8 @@ public class ImportService {
             for (ClientImportItem clientImportItem : institutionClients.get(institution)) {
                 Client client = clientImportItem.client();
                 Assert.notNull(client.getInstitutionMetainfo(), "Missing institutionMetaInfo");
-                Assert.notNull(client.getInstitutionMetainfo().getRegistryCode(), "Missing institutionMetaInfo.registryCode");
+                Assert.notNull(client.getInstitutionMetainfo().getRegistryCode(),
+                        "Missing institutionMetaInfo.registryCode");
                 try {
                     saveClient(institution, clientImportItem);
                     clientsImportedOk++;
@@ -194,9 +205,11 @@ public class ImportService {
             return null;
 
         try {
-            return Arrays.asList(objectMapper.readerFor(ClientContact[].class).with(JsonReadFeature.ALLOW_TRAILING_COMMA).readValue(cellValue, ClientContact[].class));
+            return Arrays.asList(objectMapper.readerFor(ClientContact[].class)
+                    .with(JsonReadFeature.ALLOW_TRAILING_COMMA).readValue(cellValue, ClientContact[].class));
         } catch (Exception e) {
-            throw new IllegalArgumentException(String.format("Unexpected value for contacts in row: %s (value = '%s')", (row.getRowNum() + 1), cellValue));
+            throw new IllegalArgumentException(String.format("Unexpected value for contacts in row: %s (value = '%s')",
+                    (row.getRowNum() + 1), cellValue));
         }
     }
 
@@ -206,16 +219,20 @@ public class ImportService {
 
     private void assertValidHeader(Row row) {
         List<String> expectedColumnValues = List.of("Institution name", "Institution registry code", "Client ID",
-                "Redirect URI", "Secret", "Return URL (legacy)", "Client name (et)", "Client name (en)", "Client name (ru)",
-                "Client shortname (et)", "Client shortname (en)", "Client shortname (ru)", "Contacts", "eIDAS RequesterID", "Description", "Token request allowed IP addresses");
+                "Redirect URI", "Secret", "Return URL (legacy)", "Client name (et)", "Client name (en)",
+                "Client name (ru)",
+                "Client shortname (et)", "Client shortname (en)", "Client shortname (ru)", "Contacts",
+                "eIDAS RequesterID", "Description", "Token request allowed IP addresses");
         List<String> actualColumnValues = new ArrayList<>();
         for (int i = 0; i < 16; i++) {
             actualColumnValues.add(getCellValue(row, i));
         }
 
         if (!expectedColumnValues.equals(actualColumnValues)) {
-            log.error(String.format("Invalid header row. Expecting following header columns: %s, but found: %s", expectedColumnValues, actualColumnValues));
-            throw new IllegalArgumentException(String.format("Invalid header row. Expecting following header columns: %s", expectedColumnValues));
+            log.error(String.format("Invalid header row. Expecting following header columns: %s, but found: %s",
+                    expectedColumnValues, actualColumnValues));
+            throw new IllegalArgumentException(
+                    String.format("Invalid header row. Expecting following header columns: %s", expectedColumnValues));
         }
     }
 
@@ -238,13 +255,17 @@ public class ImportService {
             try {
                 var existingClient = clientRepository.findByClientId(client.getClientId());
                 if (existingClient != null) {
-                    log.warn(String.format("Client with client_id: '%s' already exists in database with id: '%s'. Removing", client.getClientId(), existingClient.getId()));
+                    log.warn(String.format(
+                            "Client with client_id: '%s' already exists in database with id: '%s'. Removing",
+                            client.getClientId(), existingClient.getId()));
                     clientRepository.delete(existingClient);
                     clientRepository.flush();
-                    log.warn(String.format("Client removed (client_id: '%s', id: '%s')", client.getClientId(), existingClient.getId()));
+                    log.warn(String.format("Client removed (client_id: '%s', id: '%s')", client.getClientId(),
+                            existingClient.getId()));
                 }
 
-                Institution dbInstitution = institutionRepository.findInstitutionByRegistryCode(institution.getRegistryCode());
+                Institution dbInstitution = institutionRepository
+                        .findInstitutionByRegistryCode(institution.getRegistryCode());
                 if (dbInstitution == null) {
                     dbInstitution = new Institution();
                     dbInstitution.setName(institution.getName());
@@ -252,28 +273,34 @@ public class ImportService {
                     dbInstitution.setType(InstitutionType.TypeEnum.PUBLIC);
                     institutionRepository.save(dbInstitution);
                     institutionRepository.flush();
-                    log.info(String.format("Added new institution. Name: '%s', Code: '%s'", institution.getName(), institution.getRegistryCode()));
+                    log.info(String.format("Added new institution. Name: '%s', Code: '%s'", institution.getName(),
+                            institution.getRegistryCode()));
                 }
 
                 ee.ria.tara.repository.model.Client clientEntity = clientMapper.toEntity(client, dbInstitution);
                 clientRepository.save(clientEntity);
                 log.info("Client added: " + clientEntity);
             } catch (Exception e) {
-                throw new IllegalStateException("Something went wrong while saving to admin-service database: " + e.getMessage(), e);
+                throw new IllegalStateException(
+                        "Something went wrong while saving to admin-service database: " + e.getMessage(), e);
             }
 
             HydraClient hydraClient = clientMapper.toHydraClient(client);
-            HydraClientWithSecret hydraClientWithSecret =
-                    new HydraClientWithSecret(hydraClient, getDigest(clientImportItem.secret()));
+            HydraClientWithSecret hydraClientWithSecret = new HydraClientWithSecret(hydraClient,
+                    getDigest(clientImportItem.secret()));
 
             try {
-                ResponseEntity<String> response = restTemplate.getForEntity(uri + "/" + client.getClientId(), String.class);
+                ResponseEntity<String> response = restTemplate.getForEntity(uri + "/" + client.getClientId(),
+                        String.class);
                 if (response.getStatusCode() == HttpStatus.OK) {
-                    log.info(String.format("Client with client_id: '%s' already exists in OIDC service. Updating", client.getClientId()));
-                    restTemplate.exchange(uri + "/" + client.getClientId(), HttpMethod.PUT, new HttpEntity<>(hydraClientWithSecret), Object.class);
+                    log.info(String.format("Client with client_id: '%s' already exists in OIDC service. Updating",
+                            client.getClientId()));
+                    restTemplate.exchange(uri + "/" + client.getClientId(), HttpMethod.PUT,
+                            new HttpEntity<>(hydraClientWithSecret), Object.class);
                     log.info(String.format("Client updated", client.getClientId()));
                 } else {
-                    throw new IllegalStateException("Failed to update client in hydra. Unexpected status was returned: " + response.getStatusCode());
+                    throw new IllegalStateException("Failed to update client in hydra. Unexpected status was returned: "
+                            + response.getStatusCode());
                 }
 
             } catch (HttpClientErrorException ex) {
@@ -282,7 +309,8 @@ public class ImportService {
                     restTemplate.exchange(uri, HttpMethod.POST, new HttpEntity<>(hydraClientWithSecret), Object.class);
                     log.info(String.format("Client added with client_id: '%s'", client.getClientId()));
                 } else {
-                    throw new IllegalStateException("Failed to add client to hydra. Unexpected status was returned: " + ex.getMessage(), ex);
+                    throw new IllegalStateException(
+                            "Failed to add client to hydra. Unexpected status was returned: " + ex.getMessage(), ex);
                 }
             }
         });
@@ -294,7 +322,7 @@ public class ImportService {
 
     private record HydraClientWithSecret(
             @NonNull @JsonUnwrapped HydraClient client,
-            @JsonProperty("client_secret") String secret
-    ) {}
+            @JsonProperty("client_secret") String secret) {
+    }
 
 }

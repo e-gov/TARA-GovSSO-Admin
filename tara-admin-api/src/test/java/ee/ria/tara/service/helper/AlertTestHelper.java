@@ -9,6 +9,11 @@ import java.time.OffsetDateTime;
 import java.util.Arrays;
 import java.util.Collections;
 
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EIDAS;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_IDCARD;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_MID;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_SMARTID;
+
 public class AlertTestHelper {
 
     public static Alert validSSOAlert() {
@@ -53,7 +58,7 @@ public class AlertTestHelper {
         loginMessage.setMessage("TARA login message");
         loginMessage.setLocale("et");
         loginAlert.addMessageTemplatesItem(loginMessage);
-        loginAlert.setAuthMethods(Arrays.asList("idcard", "mid", "smartid", "eidas"));
+        loginAlert.setAuthMethods(Arrays.asList(SCOPE_IDCARD, SCOPE_MID, SCOPE_SMARTID, SCOPE_EIDAS));
         alert.setLoginAlert(loginAlert);
 
         EmailAlert emailAlert = new EmailAlert();

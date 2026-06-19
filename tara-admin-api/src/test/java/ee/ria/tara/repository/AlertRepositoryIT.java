@@ -18,6 +18,8 @@ import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_IDCARD;
+
 @SpringBootTest
 @EnableConfigurationProperties
 @ActiveProfiles({"integrationtest"})
@@ -101,7 +103,7 @@ public class AlertRepositoryIT {
         alert.setSendAt(OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS));
         alert.setNotifyClientsOnTaraLoginPage(true);
         alert.setStartTime(OffsetDateTime.now().truncatedTo(ChronoUnit.MICROS));
-        alert.setDisplayOnlyForAuthmethods(List.of("idcard"));
+        alert.setDisplayOnlyForAuthmethods(List.of(SCOPE_IDCARD));
 
         return alert;
     }

@@ -12,12 +12,17 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EIDAS;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_IDCARD;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_MID;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_SMARTID;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class AlertsService {
 
-    private static final List<String> ALLOWED_AUTHENTICATION_METHODS = List.of("idcard", "mid", "smartid", "eidas");
+    private static final List<String> ALLOWED_AUTHENTICATION_METHODS = List.of(SCOPE_IDCARD, SCOPE_MID, SCOPE_SMARTID, SCOPE_EIDAS);
 
     private final AlertRepository repository;
     private final AlertValidator alertValidator;

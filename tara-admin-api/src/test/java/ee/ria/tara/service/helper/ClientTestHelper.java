@@ -16,6 +16,8 @@ import ee.ria.tara.service.model.OidcClient;
 import java.time.OffsetDateTime;
 import java.util.List;
 
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_OPENID;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_AUTH_HANDOVER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class ClientTestHelper {
@@ -48,6 +50,14 @@ public class ClientTestHelper {
         client.setBackchannelLogoutUri("https://localhost:4200");
         client.setPostLogoutRedirectUris(List.of("https://localhost:4200"));
         client.setClientLogo(new byte[10240]);
+        client.setClientType(Client.ClientTypeEnum.DEFAULT);
+        return client;
+    }
+
+    public static Client validSecuredAppSsoClient() {
+        Client client = validSSOClient();
+        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        client.setScope(List.of(SCOPE_OPENID, SCOPE_AUTH_HANDOVER));
         return client;
     }
 
@@ -88,7 +98,7 @@ public class ClientTestHelper {
         client.setPostLogoutRedirectUris(null);
         client.setMinimumAcrValue(Client.MinimumAcrValueEnum.HIGH);
         client.setClientSecretExportSettings(clientSecretExportSettings);
-        client.setScope(List.of("openid"));
+        client.setScope(List.of(SCOPE_OPENID));
         client.setEidasRequesterId("urn:uuid:f75256ee-740d-4427-84ad-0f4b08417259");
         client.setSmartidSettings(new ClientSmartIdSettings());
         client.setMidSettings(new ClientMidSettings());

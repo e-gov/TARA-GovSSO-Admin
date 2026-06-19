@@ -1,0 +1,13 @@
+export const SCOPE_OPENID = "openid";
+export const SCOPE_EMAIL = "email";
+export const SCOPE_PHONE = "phone";
+export const SCOPE_IDCARD = "idcard";
+export const SCOPE_MID = "mid";
+export const SCOPE_SMARTID = "smartid";
+export const SCOPE_EIDAS = "eidas";
+export const SCOPE_EIDAS_ONLY = "eidasonly";
+export const SCOPE_EIDAS_COUNTRY = "eidas:country:*";
+export const SCOPE_LEGALPERSON = "legalperson";
+export const SCOPE_REPRESENTEE = "representee.*";
+export const SCOPE_REPRESENTEE_LIST = "representee_list";
+export const SCOPE_AUTH_HANDOVER = "auth_handover";

@@ -21,7 +21,12 @@ import java.util.List;
 
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PUBLIC;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_OPENID;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE_LIST;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_AUTH_HANDOVER;
 import static ee.ria.tara.service.helper.ClientTestHelper.validSSOClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.validSecuredAppSsoClient;
 import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
@@ -507,7 +512,7 @@ class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
-        client.setScope(List.of("representee.*"));
+        client.setScope(List.of(SCOPE_REPRESENTEE));
         client.setPaasukeParameters(queryParameters);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -523,7 +528,7 @@ class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
-        client.setScope(List.of("representee.*"));
+        client.setScope(List.of(SCOPE_REPRESENTEE));
         client.setPaasukeParameters(queryParameters);
 
         clientValidator.validateClient(client, PUBLIC);
@@ -534,7 +539,7 @@ class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validSSOClient();
-        client.setScope(List.of("representee_list"));
+        client.setScope(List.of(SCOPE_REPRESENTEE_LIST));
         client.setPaasukeParameters("a=a");
 
         clientValidator.validateClient(client, PUBLIC);
@@ -630,8 +635,7 @@ class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
         doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
 
-        Client client = validSSOClient();
-        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        Client client = validSecuredAppSsoClient();
         client.setSessionLifespan("30d");
 
         clientValidator.validateClient(client, PUBLIC);
@@ -667,8 +671,7 @@ class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
         doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
 
-        Client client = validSSOClient();
-        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        Client client = validSecuredAppSsoClient();
         client.setSessionLifespan("30d");
 
         clientValidator.validateClient(client, PUBLIC);
@@ -678,8 +681,7 @@ class ClientValidatorTest {
     void validateClient_securedAppMissingSessionLifespan_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
-        Client client = validSSOClient();
-        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        Client client = validSecuredAppSsoClient();
         client.setSessionLifespan(null);
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -693,8 +695,7 @@ class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
         doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
 
-        Client client = validSSOClient();
-        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        Client client = validSecuredAppSsoClient();
         client.setSessionLifespan("90d1h");
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -711,8 +712,7 @@ class ClientValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
         doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
 
-        Client client = validSSOClient();
-        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        Client client = validSecuredAppSsoClient();
         client.setSessionLifespan("0d");
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
@@ -749,6 +749,35 @@ class ClientValidatorTest {
                 () -> clientValidator.validateClient(client, PUBLIC));
 
         Assertions.assertTrue(exception.getMessage().contains("Session lifespan must not be set for non-SECURED_APP client type"));
+    }
+
+    @Test
+    void validateClient_securedAppMissingAuthHandoverScope_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSSOClient();
+        client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        client.setSessionLifespan("30d");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.authHandoverScope.missing"));
+    }
+
+    @Test
+    void validateClient_nonSecuredAppWithAuthHandoverScope_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setClientType(Client.ClientTypeEnum.DEFAULT);
+        client.setScope(List.of(SCOPE_OPENID, SCOPE_AUTH_HANDOVER));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.authHandoverScope.notAllowed"));
     }
 
 }

@@ -9,6 +9,12 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EMAIL;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_OPENID;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_PHONE;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE_LIST;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_AUTH_HANDOVER;
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 
 @Service
@@ -17,7 +23,7 @@ import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 public class GovSsoScopeFilter implements ScopeFilter {
 
     private static final List<String> PUBLIC_INSTITUTION_CLIENT_ALLOWED_SCOPES =
-            Arrays.asList("openid", "email", "phone", "representee.*", "representee_list");
+            Arrays.asList(SCOPE_OPENID, SCOPE_EMAIL, SCOPE_PHONE, SCOPE_REPRESENTEE, SCOPE_REPRESENTEE_LIST, SCOPE_AUTH_HANDOVER);
 
     public List<String> filterInstitutionClientScopes(List<String> clientScopes, InstitutionType.TypeEnum institutionType) {
         if (institutionType == PRIVATE) {

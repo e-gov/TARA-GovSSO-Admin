@@ -17,6 +17,7 @@ import java.util.List;
 
 import static ee.ria.tara.service.helper.AlertTestHelper.validSSOAlert;
 import static ee.ria.tara.service.helper.AlertTestHelper.validTARAAlert;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_IDCARD;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 
@@ -59,7 +60,7 @@ public class AlertValidatorTest {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 
         Alert alert = validSSOAlert();
-        alert.getLoginAlert().setAuthMethods(List.of("idcard"));
+        alert.getLoginAlert().setAuthMethods(List.of(SCOPE_IDCARD));
 
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> alertValidator.validateAlert(alert));

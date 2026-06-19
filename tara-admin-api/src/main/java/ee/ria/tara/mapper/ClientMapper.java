@@ -39,8 +39,6 @@ import java.util.stream.Collectors;
 public class ClientMapper {
 
     private static final String ACCESS_TOKEN_STRATEGY_JWT = "jwt";
-    public static final String SCOPE_REPRESENTEE = "representee.*";
-    public static final String SCOPE_REPRESENTEE_LIST = "representee_list";
 
     private final DurationFormat hydraDurationFormat = new HydraDurationFormat();
     private final DurationFormat adminDurationFormat = new AdminDurationFormat();
