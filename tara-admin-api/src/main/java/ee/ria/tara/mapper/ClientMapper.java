@@ -130,7 +130,9 @@ public class ClientMapper {
         client.setCreatedAt(OffsetDateTime.parse(hydraClient.getCreatedAt()));
         client.setUpdatedAt(OffsetDateTime.parse(hydraClient.getUpdatedAt()));
         client.setMinimumAcrValue(hydraClient.getMetadata().getMinimumAcrValue());
-        client.setClientType(getClientType(hydraClient));
+        if (configuration.isSsoMode()) {
+            client.setClientType(getClientType(hydraClient));
+        }
         client.setSessionLifespan(fromHydraDuration(hydraClient.getAuthorizationCodeGrantRefreshTokenLifespan()));
         if (hydraClient.getAccessTokenStrategy() != null && hydraClient.getAccessTokenStrategy().equals(ACCESS_TOKEN_STRATEGY_JWT)) {
             client.setAccessTokenJwtEnabled(true);
