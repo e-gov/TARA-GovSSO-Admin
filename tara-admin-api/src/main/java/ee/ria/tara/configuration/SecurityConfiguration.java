@@ -100,7 +100,8 @@ public class SecurityConfiguration {
                 ).permitAll()
                 .requestMatchers(
                     pathPattern("/index.html"),
-                    pathPattern("/assets/ria-logo.png"),
+                    pathPattern("/assets/ria-logo.svg"),
+                    pathPattern("/favicon.svg"),
                     pathPattern("/favicon.ico")
                 ).permitAll()
                 .requestMatchers(pathPattern("/**")).authenticated()
