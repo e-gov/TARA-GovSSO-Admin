@@ -100,7 +100,8 @@ public class SecurityConfiguration {
                 ).permitAll()
                 .requestMatchers(
                     antMatcher("/index.html"),
-                    antMatcher("/assets/ria-logo.png"),
+                    antMatcher("/assets/ria-logo.svg"),
+                    antMatcher("/favicon.svg"),
                     antMatcher("/favicon.ico")
                 ).permitAll()
                 .requestMatchers(antMatcher("/**")).authenticated()
