@@ -13,6 +13,9 @@ import org.springframework.security.ldap.authentication.ad.ActiveDirectoryLdapAu
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 
+import static ee.ria.tara.configuration.AuthenticationProfiles.IN_MEMORY_AUTH;
+import static ee.ria.tara.configuration.AuthenticationProfiles.LDAP_AUTH;
+
 @Configuration
 @RequiredArgsConstructor
 public class AuthenticationConfiguration {
@@ -20,7 +23,7 @@ public class AuthenticationConfiguration {
     private final AuthenticationConfigurationProvider configurationProvider;
 
     @Bean
-    @Profile("!inMemoryAuth")
+    @Profile(LDAP_AUTH)
     AuthenticationProvider activeDirectoryLdapAuthenticationProvider() {
         ActiveDirectoryLdapAuthenticationProvider provider = new ActiveDirectoryLdapAuthenticationProvider(
                 configurationProvider.getLdapDomain(),
@@ -31,7 +34,7 @@ public class AuthenticationConfiguration {
     }
 
     @Bean
-    @Profile("inMemoryAuth")
+    @Profile(IN_MEMORY_AUTH)
     UserDetailsManager inMemoryUserDetailsManager() {
         InMemoryUserDetailsManager manager = new InMemoryUserDetailsManager();
         manager.createUser(User

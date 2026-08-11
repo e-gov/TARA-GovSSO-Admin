@@ -18,8 +18,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.validation.Valid;
 
+import static ee.ria.tara.configuration.AuthenticationProfiles.LDAP_AUTH;
+
 @Slf4j
-@Profile("!inMemoryAuth")
+@Profile(LDAP_AUTH)
 @RestController
 public class LdapLoginController implements LoginApi {
     final AuthenticationProvider activeDirectoryLdapAuthenticationProvider;

@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import static ee.ria.tara.configuration.AuthenticationProfiles.IN_MEMORY_AUTH;
 import static ee.ria.tara.controllers.ControllerTestData.EXPECTED_RESPONSE_HEADERS;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.authentication;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
@@ -31,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
-@ActiveProfiles({"test", "inMemoryAuth"})
+@ActiveProfiles({"test", IN_MEMORY_AUTH})
 public class SecurityConfigurationTest {
     private static final int STATUS_200 = HttpStatus.OK.value();
     private static final int STATUS_401 = HttpStatus.UNAUTHORIZED.value();

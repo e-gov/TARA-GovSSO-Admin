@@ -8,8 +8,11 @@ import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
+import org.springframework.core.env.Profiles;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
@@ -34,6 +37,7 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.function.Supplier;
 
+import static ee.ria.tara.configuration.AuthenticationProfiles.OIDC_AUTH;
 import static ee.ria.tara.configuration.CookieConfiguration.COOKIE_NAME_XSRF_TOKEN;
 import static org.springframework.security.web.servlet.util.matcher.PathPatternRequestMatcher.pathPattern;
 
@@ -44,6 +48,7 @@ public class SecurityConfiguration {
     private static final long STRICT_TRANSPORT_SECURITY_MAX_AGE = Duration.ofDays(186).toSeconds();
 
     private final SecurityConfigurationProperties securityConfProperties;
+    private final Environment environment;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -84,8 +89,11 @@ public class SecurityConfiguration {
                 .requestMatchers(
                     pathPattern("/"),
                     pathPattern("/login"),
+                    pathPattern("/authMode"),
                     pathPattern("/ssoMode"),
-                    pathPattern("/actuator/**")
+                    pathPattern("/actuator/**"),
+                    pathPattern("/oauth2/**"),
+                    pathPattern("/login/oauth2/**")
                 ).permitAll()
                 .requestMatchers(
                     pathPattern(HttpMethod.GET, "/alerts"),
@@ -106,6 +114,9 @@ public class SecurityConfiguration {
                 ).permitAll()
                 .requestMatchers(pathPattern("/**")).authenticated()
             );
+        if (environment.acceptsProfiles(Profiles.of(OIDC_AUTH))) {
+            http.oauth2Login(Customizer.withDefaults());
+        }
         return http.build();
     }
 

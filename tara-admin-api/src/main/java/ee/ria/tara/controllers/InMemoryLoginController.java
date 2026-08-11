@@ -24,8 +24,10 @@ import org.springframework.web.bind.annotation.RestController;
 import jakarta.validation.Valid;
 import java.util.List;
 
+import static ee.ria.tara.configuration.AuthenticationProfiles.IN_MEMORY_AUTH;
+
 @Slf4j
-@Profile("inMemoryAuth")
+@Profile(IN_MEMORY_AUTH)
 @RestController
 public class InMemoryLoginController implements LoginApi {
     final UserDetailsManager inMemoryUserDetailsManager;

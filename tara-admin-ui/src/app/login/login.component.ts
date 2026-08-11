@@ -29,4 +29,20 @@ export class LoginComponent {
       });
   }
 
+  oidcLogin() {
+    this.authService.startOidcLogin();
+  }
+
+  isOidcAuth() {
+    return this.authService.isOidcAuth;
+  }
+
+  isUsernamePasswordAuth() {
+    return this.authService.isUsernamePasswordAuth;
+  }
+
+  applicationTitle() {
+    return this.authService.isSsoMode ? "GovSSO haldus" : "TARA haldus";
+  }
+
 }

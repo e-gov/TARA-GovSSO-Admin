@@ -1,18 +1,28 @@
 <app-message></app-message>
 <div class="text-center mt-5">
-  <form (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm" class="form-login">
+  <div class="form-login">
     <img class="mb-4" src="./assets/ria-logo.svg" alt="" height="100">
-    <h1 class="h3 mb-3 font-weight-normal">Login</h1>
-    <label for="username" class="sr-only">Username</label>
-    <input type="text" id="username" class="form-control" placeholder="Username"
+    <h1 class="h3 mb-5 font-weight-normal">{{ applicationTitle() }}</h1>
+    <button *ngIf="isOidcAuth()" type="button" class="btn btn-lg btn-primary btn-block mb-3" (click)="oidcLogin()">
+      Logi sisse
+    </button>
+  </div>
+  <div *ngIf="isOidcAuth() && isUsernamePasswordAuth()" class="auth-separator" role="separator">
+    <span>või</span>
+  </div>
+  <form *ngIf="isUsernamePasswordAuth()" (ngSubmit)="onSubmit(loginForm)" #loginForm="ngForm" class="form-login">
+    <label for="username" class="sr-only">Kasutajanimi</label>
+    <input type="text" id="username" class="form-control" placeholder="Kasutajanimi"
            name="username"
            autocomplete="on"
            [(ngModel)]="loginRequest.username">
-    <label for="password" class="sr-only">Password</label>
-    <input type="password" id="password" class="form-control mb-3" placeholder="Password"
+    <label for="password" class="sr-only">Parool</label>
+    <input type="password" id="password" class="form-control mb-3" placeholder="Parool"
            name="password"
            autocomplete="on"
            [(ngModel)]="loginRequest.password">
-    <button type="submit" class="btn btn-lg btn-primary btn-block">Log In</button>
+    <button type="submit" class="btn btn-lg btn-block"
+            [class.btn-primary]="!isOidcAuth()"
+            [class.btn-secondary]="isOidcAuth()">Logi sisse kasutajanime ja parooliga</button>
   </form>
 </div>

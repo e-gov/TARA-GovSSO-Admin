@@ -11,6 +11,8 @@ import {MessageService} from "../main/message/message.service";
 export class AuthService {
   public hasCheckedUser: boolean = false;
   public isSsoMode: boolean = false;
+  public isOidcAuth: boolean = false;
+  public isUsernamePasswordAuth: boolean = true;
   private readonly currentUser: BehaviorSubject<string>;
 
   constructor(
@@ -23,6 +25,7 @@ export class AuthService {
     this.currentUser = new BehaviorSubject<string>(null);
     this.checkCurrentUser();
     this.checkSsoMode();
+    this.checkAuthMode();
   }
 
   getCurrentUser(): BehaviorSubject<string> {
@@ -53,6 +56,10 @@ export class AuthService {
       }));
   }
 
+  startOidcLogin() {
+    window.location.assign("/oauth2/authorization/oidc");
+  }
+
   logout() {
     return this.httpClient.post("/logout", null)
       .pipe(map(result => {
@@ -74,5 +81,15 @@ export class AuthService {
       }).catch(err => {
       console.log("failed ssoMode check");
     });
+  }
+
+  checkAuthMode() {
+    this.httpClient.get("/authMode")
+      .toPromise()
+      .then(response => {
+        this.isOidcAuth = response.oidc;
+        this.isUsernamePasswordAuth = response.usernamePassword;
+      })
+      .catch(() => console.log("failed auth mode check"));
   }
 }

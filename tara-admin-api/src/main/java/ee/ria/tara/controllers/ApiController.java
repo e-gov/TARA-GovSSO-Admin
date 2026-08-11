@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.ldap.userdetails.LdapUserDetails;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
 
@@ -31,7 +30,7 @@ public class ApiController implements WhoamiApi, LogoutApi, SsoModeApi {
     @Override
     public ResponseEntity<Void> logoutUser() {
         log.info(String.format("User %s successfully logged out.",
-                ((LdapUserDetails)SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername()));
+                SecurityContextHolder.getContext().getAuthentication().getName()));
         SecurityContextHolder.clearContext();
         return ResponseEntity.status(200).build();
     }
@@ -42,7 +41,7 @@ public class ApiController implements WhoamiApi, LogoutApi, SsoModeApi {
 
         SecurityContext context = SecurityContextHolder.getContext();
         WhoAmIResponse response = new WhoAmIResponse();
-        response.setUsername(((LdapUserDetails)context.getAuthentication().getPrincipal()).getUsername());
+        response.setUsername(context.getAuthentication().getName());
 
         return ResponseEntity.ok(response);
     }

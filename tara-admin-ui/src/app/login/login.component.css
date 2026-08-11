@@ -5,6 +5,23 @@
   margin: auto;
 }
 
+.auth-separator {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  max-width: 300px;
+  margin: 0 auto;
+  color: #6c757d;
+}
+
+.auth-separator::before,
+.auth-separator::after {
+  content: "";
+  flex: 1;
+  border-top: 1px solid #ced4da;
+}
+
 .form-login .checkbox {
   font-weight: 400;
 }
