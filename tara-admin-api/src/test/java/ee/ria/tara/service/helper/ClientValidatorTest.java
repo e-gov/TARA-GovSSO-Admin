@@ -75,6 +75,17 @@ class ClientValidatorTest {
                 () -> clientValidator.validateClient(client, PUBLIC));
         Assertions.assertTrue(exception.getMessage().contains("Client.sso.clientName"));
     }
+    @Test
+    void validateClient_ssoClientNameNull_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setClientName(null);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.sso.clientName"));
+    }
 
     @Test
     void validateClient_ssoClientShortNameMissing_exceptionThrown() {
@@ -89,14 +100,62 @@ class ClientValidatorTest {
     }
 
     @Test
-    void validateClient_taraNameMissing_valid() {
+    void validateClient_ssoClientShortNameNull_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setClientShortName(null);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.sso.clientShortName"));
+    }
+
+    @Test
+    void validateClient_taraNameMissing_exceptionThrown() {
         doReturn(false).when(adminConfigurationProvider).isSsoMode();
 
         Client client = validTARAClient();
         client.setClientName(new NameTranslations());
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.sso.clientName"));    }
+
+    @Test
+    void validateClient_taraShortNameMissing_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
         client.setClientShortName(new ShortNameTranslations());
 
-        clientValidator.validateClient(client, PUBLIC);
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.sso.clientShortName"));
+    }
+
+    @Test
+    void validateClient_taraNameNull_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setClientName(null);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.sso.clientName"));
+    }
+
+    @Test
+    void validateClient_taraShortNameNull_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setClientShortName(null);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.sso.clientShortName"));
     }
 
     @Test

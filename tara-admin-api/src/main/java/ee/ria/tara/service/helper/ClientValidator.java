@@ -127,26 +127,21 @@ public class ClientValidator {
         var clientName = client.getClientName();
         var clientShortName = client.getClientShortName();
 
-        if (adminConfProvider.isSsoMode()) {
-            if (clientName == null || StringUtils.isBlank(clientName.getEt())) {
-                throw new InvalidDataException("Client.sso.clientName");
-            }
-            if (clientShortName == null || StringUtils.isBlank(clientShortName.getEt())) {
-                throw new InvalidDataException("Client.sso.clientShortName");
-            }
+        if (clientName == null || StringUtils.isBlank(clientName.getEt())) {
+            throw new InvalidDataException("Client.sso.clientName");
+        }
+        if (clientShortName == null || StringUtils.isBlank(clientShortName.getEt())) {
+            throw new InvalidDataException("Client.sso.clientShortName");
         }
 
-        if (clientName != null) {
-            validateFullName(clientName.getEt());
-            validateFullName(clientName.getEn());
-            validateFullName(clientName.getRu());
-        }
+        validateFullName(clientName.getEt());
+        validateFullName(clientName.getEn());
+        validateFullName(clientName.getRu());
 
-        if (clientShortName != null) {
-            validateShortName(clientShortName.getEt());
-            validateShortName(clientShortName.getEn());
-            validateShortName(clientShortName.getRu());
-        }
+        validateShortName(clientShortName.getEt());
+        validateShortName(clientShortName.getEn());
+        validateShortName(clientShortName.getRu());
+
     }
 
     private void validateFullName(String name) {
