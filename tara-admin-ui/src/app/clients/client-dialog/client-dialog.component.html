@@ -83,6 +83,21 @@
           </div>
         </div>
       </div>
+      <div class="form-group row"
+           *ngIf="authService.isSsoMode && newData.client_type === 'DEFAULT' && newData.allow_secured_app_web_session">
+        <label class="col-sm-4 col-form-label">Luba SECURED_APP-ist jätkata siia kui seansi maksimumkehtivus on
+          <mat-icon inline class="material-icons ml-3 font-size-20"
+                    matTooltip="Maksimaalne aeg algsest SECURED_APP autentimisest, mille jooksul on lubatud SECURED_APP-is alustatud seanssi jätkata käesolevas DEFAULT klientrakenduses. Tühjaks jätmisel jätkamine pole lubatud. Vorming peab olema ühel kujul järgnevatest: 90d või 1h või 89d1h või 1d5h1m30s">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8" *ngIf="!isInfo()">
+          <input type="text" class="form-control w-75" name="secured_app_session_max_duration"
+                 pattern="^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$"
+                 [(ngModel)]="_secured_app_session_max_duration">
+        </div>
+        <label class="col-sm-8" *ngIf="isInfo()">{{newData.secured_app_session_max_duration}}</label>
+      </div>
       <div class="form-group row" *ngIf="authService.isSsoMode && newData.client_type === 'SECURED_APP'">
         <label class="col-sm-4 col-form-label">Seansi kehtivus
           <mat-icon inline class="material-icons ml-3 font-size-20"

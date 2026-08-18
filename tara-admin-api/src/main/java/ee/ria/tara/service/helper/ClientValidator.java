@@ -36,6 +36,7 @@ public class ClientValidator {
     private static final String VALID_PAASUKE_PARAMS_PATTERN = "^"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?(&"+VALID_QUERY_PARAM_VALUE+"+(="+VALID_QUERY_PARAM_VALUE+"*)?)*?$";
     private static final Duration MIN_ALLOWED_ACCESS_TOKEN_LIFESPAN = Duration.ofSeconds(1);
     private static final Duration MIN_ALLOWED_SESSION_LIFESPAN = Duration.ofHours(1);
+    private static final Duration MIN_ALLOWED_SECURED_APP_SESSION_MAX_DURATION = Duration.ofHours(1);
 
     private final AdminConfigurationProvider adminConfProvider;
     private final ClientRepository clientRepository;
@@ -61,6 +62,7 @@ public class ClientValidator {
         validateAccessTokenLifespan(client);
         validateClientType(client);
         validateAllowSecuredAppWebSession(client);
+        validateSecuredAppSessionMaxDuration(client);
         validateSessionLifespan(client);
         validateAuthHandoverScope(client);
         validateClientSecretExportSettings(client);
@@ -84,6 +86,49 @@ public class ClientValidator {
             }
         } else if (allowSecuredAppWebSession == null) {
             throw new InvalidDataException("Client.allowSecuredAppWebSession.missing");
+        }
+    }
+
+    private void validateSecuredAppSessionMaxDuration(Client client) {
+        String securedAppSessionMaxDuration = client.getSecuredAppSessionMaxDuration();
+        if (!adminConfProvider.isSsoMode()) {
+            if (securedAppSessionMaxDuration != null) {
+                throw new IllegalStateException("SECURED_APP session max duration must not be set in TARA mode");
+            }
+            return;
+        }
+        if (securedAppSessionMaxDuration == null) {
+            return;
+        }
+        if (Client.ClientTypeEnum.SECURED_APP.equals(client.getClientType())) {
+            throw new InvalidDataException("Client.securedAppSessionMaxDuration.notAllowed");
+        }
+        if (!Boolean.TRUE.equals(client.getAllowSecuredAppWebSession())) {
+            throw new InvalidDataException("Client.securedAppSessionMaxDuration.webSessionNotAllowed");
+        }
+        validateSecuredAppSessionMaxDurationLimits(securedAppSessionMaxDuration);
+    }
+
+    private void validateSecuredAppSessionMaxDurationLimits(String securedAppSessionMaxDuration) {
+        Duration duration = parseSecuredAppSessionMaxDuration(securedAppSessionMaxDuration);
+        if (duration.compareTo(MIN_ALLOWED_SECURED_APP_SESSION_MAX_DURATION) < 0) {
+            throw new InvalidDataException(
+                    "Client.securedAppSessionMaxDuration.tooShort",
+                    durationFormat.format(MIN_ALLOWED_SECURED_APP_SESSION_MAX_DURATION));
+        }
+        Duration maxDuration = adminConfProvider.getMaxSessionDuration();
+        if (duration.compareTo(maxDuration) > 0) {
+            throw new InvalidDataException(
+                    "Client.securedAppSessionMaxDuration.tooLong",
+                    durationFormat.format(maxDuration));
+        }
+    }
+
+    private Duration parseSecuredAppSessionMaxDuration(String securedAppSessionMaxDuration) {
+        try {
+            return durationFormat.parse(securedAppSessionMaxDuration);
+        } catch (IllegalArgumentException | ArithmeticException e) {
+            throw new InvalidDataException("Client.securedAppSessionMaxDuration.invalid", e);
         }
     }
 

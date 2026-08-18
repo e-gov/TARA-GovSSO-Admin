@@ -894,6 +894,124 @@ class ClientValidatorTest {
     }
 
     @Test
+    void validateClient_defaultClientTypeWithValidSecuredAppSessionMaxDuration_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSSOClient();
+        client.setAllowSecuredAppWebSession(true);
+        client.setSecuredAppSessionMaxDuration("12h");
+
+        assertDoesNotThrow(() -> clientValidator.validateClient(client, PUBLIC));
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"1h", "90d"})
+    void validateClient_securedAppSessionMaxDurationAtAllowedLimit_successfulValidation(String securedAppSessionMaxDuration) {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSSOClient();
+        client.setAllowSecuredAppWebSession(true);
+        client.setSecuredAppSessionMaxDuration(securedAppSessionMaxDuration);
+
+        assertDoesNotThrow(() -> clientValidator.validateClient(client, PUBLIC));
+    }
+
+    @Test
+    void validateClient_whenSecuredAppSessionMaxDurationTooLong_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSSOClient();
+        client.setAllowSecuredAppWebSession(true);
+        client.setSecuredAppSessionMaxDuration("90d1h");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        assertAll(
+            () -> assertThat(exception.getMessage()).isEqualTo("Client.securedAppSessionMaxDuration.tooLong"),
+            () -> assertThat(exception.getArgs()).containsExactly("90d")
+        );
+    }
+
+    @Test
+    void validateClient_whenSecuredAppSessionMaxDurationTooShort_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSSOClient();
+        client.setAllowSecuredAppWebSession(true);
+        client.setSecuredAppSessionMaxDuration("30m");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        assertAll(
+            () -> assertThat(exception.getMessage()).isEqualTo("Client.securedAppSessionMaxDuration.tooShort"),
+            () -> assertThat(exception.getArgs()).containsExactly("1h")
+        );
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"", "12", "12 hours", "99999999999999999999d", "999999999999999d"})
+    void validateClient_whenSecuredAppSessionMaxDurationHasInvalidFormat_exceptionThrown(String securedAppSessionMaxDuration) {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAllowSecuredAppWebSession(true);
+        client.setSecuredAppSessionMaxDuration(securedAppSessionMaxDuration);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        assertThat(exception.getMessage()).isEqualTo("Client.securedAppSessionMaxDuration.invalid");
+    }
+
+    @Test
+    void validateClient_givenSecuredAppSessionMaxDurationInTaraMode_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setSecuredAppSessionMaxDuration("12h");
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("SECURED_APP session max duration must not be set in TARA mode"));
+    }
+
+    @Test
+    void validateClient_securedAppWithSecuredAppSessionMaxDuration_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSecuredAppSsoClient();
+        client.setSessionLifespan("30d");
+        client.setSecuredAppSessionMaxDuration("12h");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.securedAppSessionMaxDuration.notAllowed"));
+    }
+
+    @Test
+    void validateClient_givenSecuredAppSessionMaxDurationWithoutAllowSecuredAppWebSession_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAllowSecuredAppWebSession(false);
+        client.setSecuredAppSessionMaxDuration("12h");
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.securedAppSessionMaxDuration.webSessionNotAllowed"));
+    }
+
+    @Test
     void validateClient_nonSecuredAppWithAuthHandoverScope_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
 

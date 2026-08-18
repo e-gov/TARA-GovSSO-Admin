@@ -21,6 +21,9 @@ public class HydraClientMetadata   {
   @JsonProperty("allow_secured_app_web_session")
   private Boolean allowSecuredAppWebSession;
 
+  @JsonProperty("secured_app_session_max_duration")
+  private String securedAppSessionMaxDuration;
+
   @JsonProperty("display_user_consent")
   @NotNull
   private Boolean displayUserConsent;

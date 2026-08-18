@@ -743,6 +743,10 @@ components:
         allow_secured_app_web_session:
           type: boolean
           example: false
+        secured_app_session_max_duration:
+          type: string
+          pattern: ^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$
+          example: 12h
         session_lifespan:
           type: string
           pattern: ^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$

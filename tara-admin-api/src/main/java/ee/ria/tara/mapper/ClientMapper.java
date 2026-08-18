@@ -137,6 +137,7 @@ public class ClientMapper {
             client.setClientType(clientType);
             if (Client.ClientTypeEnum.DEFAULT.equals(clientType)) {
                 client.setAllowSecuredAppWebSession(hydraClient.getMetadata().getAllowSecuredAppWebSession());
+                client.setSecuredAppSessionMaxDuration(fromHydraDuration(hydraClient.getMetadata().getSecuredAppSessionMaxDuration()));
             }
         }
         client.setSessionLifespan(fromHydraDuration(hydraClient.getAuthorizationCodeGrantRefreshTokenLifespan()));
@@ -176,9 +177,10 @@ public class ClientMapper {
         if (ssoMode) {
             Client.ClientTypeEnum clientType = requireNonNullElse(client.getClientType(), Client.ClientTypeEnum.DEFAULT);
             metadata.setClientType(clientType.name());
-            metadata.setAllowSecuredAppWebSession(Client.ClientTypeEnum.DEFAULT.equals(clientType)
-                    ? client.getAllowSecuredAppWebSession()
-                    : null);
+            if (Client.ClientTypeEnum.DEFAULT.equals(clientType)) {
+                metadata.setAllowSecuredAppWebSession(client.getAllowSecuredAppWebSession());
+                metadata.setSecuredAppSessionMaxDuration(toHydraDuration(client.getSecuredAppSessionMaxDuration()));
+            }
             hydraClient.setGrantTypes(List.of("authorization_code", "refresh_token"));
 
             if (Client.ClientTypeEnum.SECURED_APP.equals(clientType)) {

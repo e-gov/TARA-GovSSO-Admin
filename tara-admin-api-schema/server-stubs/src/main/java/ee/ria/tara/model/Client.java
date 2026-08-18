@@ -188,6 +188,8 @@ public class Client {
 
   private @Nullable Boolean allowSecuredAppWebSession;
 
+  private @Nullable String securedAppSessionMaxDuration;
+
   private @Nullable String sessionLifespan;
 
   private Boolean accessTokenJwtEnabled = false;
@@ -690,6 +692,26 @@ public class Client {
     this.allowSecuredAppWebSession = allowSecuredAppWebSession;
   }
 
+  public Client securedAppSessionMaxDuration(@Nullable String securedAppSessionMaxDuration) {
+    this.securedAppSessionMaxDuration = securedAppSessionMaxDuration;
+    return this;
+  }
+
+  /**
+   * Get securedAppSessionMaxDuration
+   * @return securedAppSessionMaxDuration
+   */
+  @Pattern(regexp = "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$") 
+  @Schema(name = "secured_app_session_max_duration", example = "12h", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("secured_app_session_max_duration")
+  public @Nullable String getSecuredAppSessionMaxDuration() {
+    return securedAppSessionMaxDuration;
+  }
+
+  public void setSecuredAppSessionMaxDuration(@Nullable String securedAppSessionMaxDuration) {
+    this.securedAppSessionMaxDuration = securedAppSessionMaxDuration;
+  }
+
   public Client sessionLifespan(@Nullable String sessionLifespan) {
     this.sessionLifespan = sessionLifespan;
     return this;
@@ -995,6 +1017,7 @@ public class Client {
         Objects.equals(this.slaNotificationEmails, client.slaNotificationEmails) &&
         Objects.equals(this.clientType, client.clientType) &&
         Objects.equals(this.allowSecuredAppWebSession, client.allowSecuredAppWebSession) &&
+        Objects.equals(this.securedAppSessionMaxDuration, client.securedAppSessionMaxDuration) &&
         Objects.equals(this.sessionLifespan, client.sessionLifespan) &&
         Objects.equals(this.accessTokenJwtEnabled, client.accessTokenJwtEnabled) &&
         Objects.equals(this.isUserConsentRequired, client.isUserConsentRequired) &&
@@ -1012,7 +1035,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, clientType, allowSecuredAppWebSession, sessionLifespan, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, clientType, allowSecuredAppWebSession, securedAppSessionMaxDuration, sessionLifespan, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -1039,6 +1062,7 @@ public class Client {
     sb.append("    slaNotificationEmails: ").append(toIndentedString(slaNotificationEmails)).append("\n");
     sb.append("    clientType: ").append(toIndentedString(clientType)).append("\n");
     sb.append("    allowSecuredAppWebSession: ").append(toIndentedString(allowSecuredAppWebSession)).append("\n");
+    sb.append("    securedAppSessionMaxDuration: ").append(toIndentedString(securedAppSessionMaxDuration)).append("\n");
     sb.append("    sessionLifespan: ").append(toIndentedString(sessionLifespan)).append("\n");
     sb.append("    accessTokenJwtEnabled: ").append(toIndentedString(accessTokenJwtEnabled)).append("\n");
     sb.append("    isUserConsentRequired: ").append(toIndentedString(isUserConsentRequired)).append("\n");

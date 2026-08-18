@@ -49,6 +49,7 @@ export class ClientDialogComponent implements OnInit {
   _minimum_acr_value: string;
   _access_token_lifespan: string;
   _session_lifespan: string;
+  _secured_app_session_max_duration: string;
 
   clientLogoDataUri?: SafeUrl;
   newData: Client;
@@ -82,6 +83,7 @@ export class ClientDialogComponent implements OnInit {
     this._minimum_acr_value = this.newData.minimum_acr_value;
     this._access_token_lifespan = this.newData.access_token_lifespan;
     this._session_lifespan = this.newData.session_lifespan;
+    this._secured_app_session_max_duration = this.newData.secured_app_session_max_duration;
 
     if (this._client_logo !== undefined) {
       var unsafeDataUri = "data:image/svg+xml;base64," + this._client_logo;
@@ -321,6 +323,11 @@ export class ClientDialogComponent implements OnInit {
       this.messageService.showMessage('Minimaalne autentimistase on valimata', 'ERROR', environment.errorMessageDurationInMills);
       return;
     }
+    const securedAppSessionMaxDurationErrors = form.form.controls.secured_app_session_max_duration?.errors;
+    if (securedAppSessionMaxDurationErrors != null && securedAppSessionMaxDurationErrors.pattern != null) {
+      this.messageService.showMessage('SECURED_APP-ist siia jätkamise aeg on vigases vormingus', 'ERROR', environment.errorMessageDurationInMills);
+      return;
+    }
     this.newData.client_name = this._client_name!;
     this.newData.client_short_name = this._client_short_name!;
     this.newData.description = this._description!;
@@ -377,6 +384,12 @@ export class ClientDialogComponent implements OnInit {
       this.newData.allow_secured_app_web_session = this.newData.allow_secured_app_web_session ?? false;
     } else {
       this.newData.allow_secured_app_web_session = undefined;
+    }
+
+    if (this.newData.client_type === 'DEFAULT' && this.newData.allow_secured_app_web_session) {
+      this.newData.secured_app_session_max_duration = this._secured_app_session_max_duration!;
+    } else {
+      this.newData.secured_app_session_max_duration = undefined;
     }
 
     const requestBody = JSON.parse(JSON.stringify(this.newData), (key, value) => {

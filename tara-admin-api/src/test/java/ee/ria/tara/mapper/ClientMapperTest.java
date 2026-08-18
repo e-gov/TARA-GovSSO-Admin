@@ -104,6 +104,17 @@ class ClientMapperTest {
     }
 
     @Test
+    void toModel_ssoModeSecuredAppClientType_securedAppSessionMaxDurationNotSet() {
+        adminConfigurationProvider.setSsoMode(true);
+        HydraClient hydraClient = toHydraClientWithTimestamps(validSecuredAppSsoClient());
+        hydraClient.getMetadata().setSecuredAppSessionMaxDuration("12h");
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertNull(result.getSecuredAppSessionMaxDuration());
+    }
+
+    @Test
     void toHydraClient_taraMode_allowSecuredAppWebSessionNotSetInMetadata() {
         adminConfigurationProvider.setSsoMode(false);
         Client input = validTARAClient();
@@ -168,6 +179,96 @@ class ClientMapperTest {
         HydraClient result = clientMapper.toHydraClient(input);
 
         Assertions.assertNull(result.getMetadata().getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toModel_taraMode_securedAppSessionMaxDurationNotSet() {
+        adminConfigurationProvider.setSsoMode(false);
+        HydraClient hydraClient = toHydraClientWithTimestamps(validTARAClient());
+        hydraClient.getMetadata().setSecuredAppSessionMaxDuration("12h");
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertNull(result.getSecuredAppSessionMaxDuration());
+    }
+
+    @Test
+    void toModel_ssoMode_securedAppSessionMaxDurationMappedFromMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSSOClient();
+        input.setSecuredAppSessionMaxDuration("2d12h");
+        HydraClient hydraClient = toHydraClientWithTimestamps(input);
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertEquals("2d12h", result.getSecuredAppSessionMaxDuration());
+    }
+
+    @Test
+    void toModel_ssoModeMissingSecuredAppSessionMaxDurationInMetadata_securedAppSessionMaxDurationNotSet() {
+        adminConfigurationProvider.setSsoMode(true);
+        HydraClient hydraClient = toHydraClientWithTimestamps(validSSOClient());
+        hydraClient.getMetadata().setSecuredAppSessionMaxDuration(null);
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertNull(result.getSecuredAppSessionMaxDuration());
+    }
+
+    @Test
+    void toHydraClient_taraMode_securedAppSessionMaxDurationNotSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(false);
+        Client input = validTARAClient();
+        input.setSecuredAppSessionMaxDuration("12h");
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertNull(result.getMetadata().getSecuredAppSessionMaxDuration());
+    }
+
+    @Test
+    void toHydraClient_ssoModeDefaultClientType_securedAppSessionMaxDurationSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSSOClient();
+        input.setSecuredAppSessionMaxDuration("2d12h");
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertEquals("60h", result.getMetadata().getSecuredAppSessionMaxDuration());
+    }
+
+    @Test
+    void toHydraClient_ssoModeDefaultClientTypeWithoutSecuredAppSessionMaxDuration_nullSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSSOClient();
+        input.setSecuredAppSessionMaxDuration(null);
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertNull(result.getMetadata().getSecuredAppSessionMaxDuration());
+    }
+
+    @Test
+    void toHydraClient_ssoModeMissingClientType_securedAppSessionMaxDurationSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSSOClient();
+        input.setClientType(null);
+        input.setSecuredAppSessionMaxDuration("12h");
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertEquals("12h", result.getMetadata().getSecuredAppSessionMaxDuration());
+    }
+
+    @Test
+    void toHydraClient_ssoModeSecuredAppClientType_securedAppSessionMaxDurationNotSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSecuredAppSsoClient();
+        input.setSecuredAppSessionMaxDuration("12h");
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertNull(result.getMetadata().getSecuredAppSessionMaxDuration());
     }
 
     private HydraClient toHydraClientWithTimestamps(Client client) {

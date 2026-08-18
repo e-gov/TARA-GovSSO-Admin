@@ -848,6 +848,7 @@ components:
         redirect_uris:
         - https://redirect-uri.test.ee/callback
         - https://redirect-uri.test.ee/callback
+        secured_app_session_max_duration: 12h
         is_user_consent_required: false
         eidas_requester_id: urn:uuid:33ca0ae1-a5fb-4885-80d7-6af6bf6e0e5f
         mid_settings:
@@ -960,6 +961,10 @@ components:
         allow_secured_app_web_session:
           example: false
           type: boolean
+        secured_app_session_max_duration:
+          example: 12h
+          pattern: "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$"
+          type: string
         session_lifespan:
           example: 89d1h
           pattern: "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$"
