@@ -51,6 +51,7 @@ public class ClientTestHelper {
         client.setPostLogoutRedirectUris(List.of("https://localhost:4200"));
         client.setClientLogo(new byte[10240]);
         client.setClientType(Client.ClientTypeEnum.DEFAULT);
+        client.setAllowSecuredAppWebSession(false);
         return client;
     }
 
@@ -58,6 +59,7 @@ public class ClientTestHelper {
         Client client = validSSOClient();
         client.setClientType(Client.ClientTypeEnum.SECURED_APP);
         client.setScope(List.of(SCOPE_OPENID, SCOPE_AUTH_HANDOVER));
+        client.setAllowSecuredAppWebSession(null);
         return client;
     }
 

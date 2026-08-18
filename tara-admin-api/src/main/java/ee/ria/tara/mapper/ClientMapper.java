@@ -33,6 +33,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.stream.Collectors;
 
+import static java.util.Objects.requireNonNullElse;
+
 @Slf4j
 @Component
 @RequiredArgsConstructor
@@ -131,7 +133,11 @@ public class ClientMapper {
         client.setUpdatedAt(OffsetDateTime.parse(hydraClient.getUpdatedAt()));
         client.setMinimumAcrValue(hydraClient.getMetadata().getMinimumAcrValue());
         if (configuration.isSsoMode()) {
-            client.setClientType(getClientType(hydraClient));
+            Client.ClientTypeEnum clientType = getClientType(hydraClient);
+            client.setClientType(clientType);
+            if (Client.ClientTypeEnum.DEFAULT.equals(clientType)) {
+                client.setAllowSecuredAppWebSession(hydraClient.getMetadata().getAllowSecuredAppWebSession());
+            }
         }
         client.setSessionLifespan(fromHydraDuration(hydraClient.getAuthorizationCodeGrantRefreshTokenLifespan()));
         if (hydraClient.getAccessTokenStrategy() != null && hydraClient.getAccessTokenStrategy().equals(ACCESS_TOKEN_STRATEGY_JWT)) {
@@ -167,13 +173,27 @@ public class ClientMapper {
         metadata.setSkipUserConsentClientIds(client.getSkipUserConsentClientIds() != null ? getDistinctSkipUserConsentClientIds(client) : null);
         metadata.setPaasukeParameters(client.getPaasukeParameters());
         metadata.setMinimumAcrValue(client.getMinimumAcrValue());
-        Client.ClientTypeEnum clientType = client.getClientType();
         if (ssoMode) {
-            if (clientType == null) {
-                clientType = Client.ClientTypeEnum.DEFAULT;
-            }
+            Client.ClientTypeEnum clientType = requireNonNullElse(client.getClientType(), Client.ClientTypeEnum.DEFAULT);
             metadata.setClientType(clientType.name());
+            metadata.setAllowSecuredAppWebSession(Client.ClientTypeEnum.DEFAULT.equals(clientType)
+                    ? client.getAllowSecuredAppWebSession()
+                    : null);
             hydraClient.setGrantTypes(List.of("authorization_code", "refresh_token"));
+
+            if (Client.ClientTypeEnum.SECURED_APP.equals(clientType)) {
+                String refreshTokenLifespan = toHydraDuration(client.getSessionLifespan());
+                hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(refreshTokenLifespan);
+                hydraClient.setRefreshTokenGrantRefreshTokenLifespan(refreshTokenLifespan);
+                String idTokenLifespan = hydraDurationFormat.format(configuration.getSecuredAppIdTokenLifespan());
+                hydraClient.setAuthorizationCodeGrantIdTokenLifespan(idTokenLifespan);
+                hydraClient.setRefreshTokenGrantIdTokenLifespan(idTokenLifespan);
+            } else {
+                hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(null);
+                hydraClient.setRefreshTokenGrantRefreshTokenLifespan(null);
+                hydraClient.setAuthorizationCodeGrantIdTokenLifespan(null);
+                hydraClient.setRefreshTokenGrantIdTokenLifespan(null);
+            }
         }
 
         if (client.getAccessTokenJwtEnabled()) {
@@ -193,20 +213,6 @@ public class ClientMapper {
 
         hydraOidcClientInstitution.setRegistryCode(client.getInstitutionMetainfo().getRegistryCode());
         hydraOidcClientInstitution.setSector(client.getInstitutionMetainfo().getType().getType().getValue());
-
-        if (Client.ClientTypeEnum.SECURED_APP.equals(clientType)) {
-            String refreshTokenLifespan = toHydraDuration(client.getSessionLifespan());
-            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(refreshTokenLifespan);
-            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(refreshTokenLifespan);
-            String idTokenLifespan = hydraDurationFormat.format(configuration.getSecuredAppIdTokenLifespan());
-            hydraClient.setAuthorizationCodeGrantIdTokenLifespan(idTokenLifespan);
-            hydraClient.setRefreshTokenGrantIdTokenLifespan(idTokenLifespan);
-        } else {
-            hydraClient.setAuthorizationCodeGrantRefreshTokenLifespan(null);
-            hydraClient.setRefreshTokenGrantRefreshTokenLifespan(null);
-            hydraClient.setAuthorizationCodeGrantIdTokenLifespan(null);
-            hydraClient.setRefreshTokenGrantIdTokenLifespan(null);
-        }
 
         return hydraClient;
     }

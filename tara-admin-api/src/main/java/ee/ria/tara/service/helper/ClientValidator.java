@@ -60,6 +60,7 @@ public class ClientValidator {
         validateAccessTokenAudienceUris(client);
         validateAccessTokenLifespan(client);
         validateClientType(client);
+        validateAllowSecuredAppWebSession(client);
         validateSessionLifespan(client);
         validateAuthHandoverScope(client);
         validateClientSecretExportSettings(client);
@@ -68,6 +69,21 @@ public class ClientValidator {
     private void validateClientType(Client client) {
         if (!adminConfProvider.isSsoMode() && client.getClientType() != null) {
             throw new IllegalStateException("Client type must not be set in TARA mode");
+        }
+    }
+
+    private void validateAllowSecuredAppWebSession(Client client) {
+        Boolean allowSecuredAppWebSession = client.getAllowSecuredAppWebSession();
+        if (!adminConfProvider.isSsoMode()) {
+            if (allowSecuredAppWebSession != null) {
+                throw new IllegalStateException("Allow SECURED_APP web session must not be set in TARA mode");
+            }
+        } else if (Client.ClientTypeEnum.SECURED_APP.equals(client.getClientType())) {
+            if (allowSecuredAppWebSession != null) {
+                throw new InvalidDataException("Client.allowSecuredAppWebSession.notAllowed");
+            }
+        } else if (allowSecuredAppWebSession == null) {
+            throw new InvalidDataException("Client.allowSecuredAppWebSession.missing");
         }
     }
 

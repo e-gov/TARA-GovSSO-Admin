@@ -837,6 +837,7 @@ components:
           type:
             type: public
           registry_code: "12345678"
+        allow_secured_app_web_session: false
         smartid_settings:
           should_use_additional_verification_code_check: true
           relying_party_name: relying_party_name
@@ -956,6 +957,9 @@ components:
           - DEFAULT
           - SECURED_APP
           type: string
+        allow_secured_app_web_session:
+          example: false
+          type: boolean
         session_lifespan:
           example: 89d1h
           pattern: "^([0-9]+d)?([0-9]+h)?([0-9]+m)?([0-9]+s)?$"

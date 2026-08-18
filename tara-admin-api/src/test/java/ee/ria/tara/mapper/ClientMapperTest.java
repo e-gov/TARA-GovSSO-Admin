@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test;
 import java.time.OffsetDateTime;
 
 import static ee.ria.tara.service.helper.ClientTestHelper.validSSOClient;
+import static ee.ria.tara.service.helper.ClientTestHelper.validSecuredAppSsoClient;
 import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 
 class ClientMapperTest {
@@ -55,6 +56,118 @@ class ClientMapperTest {
         Client result = clientMapper.toModel(hydraClient, null);
 
         Assertions.assertEquals(Client.ClientTypeEnum.DEFAULT, result.getClientType());
+    }
+
+    @Test
+    void toModel_taraMode_allowSecuredAppWebSessionNotSet() {
+        adminConfigurationProvider.setSsoMode(false);
+        HydraClient hydraClient = toHydraClientWithTimestamps(validTARAClient());
+        hydraClient.getMetadata().setAllowSecuredAppWebSession(true);
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertNull(result.getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toModel_ssoMode_allowSecuredAppWebSessionMappedFromMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSSOClient();
+        input.setAllowSecuredAppWebSession(true);
+        HydraClient hydraClient = toHydraClientWithTimestamps(input);
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertEquals(true, result.getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toModel_ssoModeMissingAllowSecuredAppWebSessionInMetadata_allowSecuredAppWebSessionNotSet() {
+        adminConfigurationProvider.setSsoMode(true);
+        HydraClient hydraClient = toHydraClientWithTimestamps(validSSOClient());
+        hydraClient.getMetadata().setAllowSecuredAppWebSession(null);
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertNull(result.getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toModel_ssoModeSecuredAppClientType_allowSecuredAppWebSessionNotSet() {
+        adminConfigurationProvider.setSsoMode(true);
+        HydraClient hydraClient = toHydraClientWithTimestamps(validSecuredAppSsoClient());
+        hydraClient.getMetadata().setAllowSecuredAppWebSession(true);
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertNull(result.getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toHydraClient_taraMode_allowSecuredAppWebSessionNotSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(false);
+        Client input = validTARAClient();
+        input.setAllowSecuredAppWebSession(true);
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertNull(result.getMetadata().getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toHydraClient_ssoModeDefaultClientType_allowSecuredAppWebSessionSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSSOClient();
+        input.setAllowSecuredAppWebSession(true);
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertEquals(true, result.getMetadata().getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toHydraClient_ssoModeDefaultClientTypeWithAllowSecuredAppWebSessionFalse_falseSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSSOClient();
+        input.setAllowSecuredAppWebSession(false);
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertEquals(false, result.getMetadata().getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toHydraClient_ssoModeDefaultClientTypeWithoutAllowSecuredAppWebSession_nullSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSSOClient();
+        input.setAllowSecuredAppWebSession(null);
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertNull(result.getMetadata().getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toHydraClient_ssoModeMissingClientType_allowSecuredAppWebSessionSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSSOClient();
+        input.setClientType(null);
+        input.setAllowSecuredAppWebSession(true);
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertEquals(true, result.getMetadata().getAllowSecuredAppWebSession());
+    }
+
+    @Test
+    void toHydraClient_ssoModeSecuredAppClientType_allowSecuredAppWebSessionNotSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(true);
+        Client input = validSecuredAppSsoClient();
+        input.setAllowSecuredAppWebSession(true);
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertNull(result.getMetadata().getAllowSecuredAppWebSession());
     }
 
     private HydraClient toHydraClientWithTimestamps(Client client) {

@@ -30,6 +30,7 @@ import static ee.ria.tara.service.helper.ClientTestHelper.validSecuredAppSsoClie
 import static ee.ria.tara.service.helper.ClientTestHelper.validTARAClient;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.mock;
@@ -817,12 +818,79 @@ class ClientValidatorTest {
 
         Client client = validSSOClient();
         client.setClientType(Client.ClientTypeEnum.SECURED_APP);
+        client.setAllowSecuredAppWebSession(null);
         client.setSessionLifespan("30d");
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
 
         Assertions.assertTrue(exception.getMessage().contains("Client.authHandoverScope.missing"));
+    }
+
+    @Test
+    void validateClient_taraClientWithAllowSecuredAppWebSessionSet_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setAllowSecuredAppWebSession(false);
+
+        IllegalStateException exception = assertThrows(IllegalStateException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Allow SECURED_APP web session must not be set in TARA mode"));
+    }
+
+    @Test
+    void validateClient_defaultClientTypeWithAllowSecuredAppWebSession_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAllowSecuredAppWebSession(true);
+
+        assertDoesNotThrow(() -> clientValidator.validateClient(client, PUBLIC));
+    }
+
+    @Test
+    void validateClient_defaultClientTypeWithoutAllowSecuredAppWebSession_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setAllowSecuredAppWebSession(null);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.allowSecuredAppWebSession.missing"));
+    }
+
+    @Test
+    void validateClient_nullClientTypeWithoutAllowSecuredAppWebSession_exceptionThrown() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setClientType(null);
+        client.setAllowSecuredAppWebSession(null);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.allowSecuredAppWebSession.missing"));
+    }
+
+    @ParameterizedTest
+    @ValueSource(booleans = {true, false})
+    void validateClient_securedAppWithAllowSecuredAppWebSessionSet_exceptionThrown(boolean allowSecuredAppWebSession) {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+
+        Client client = validSecuredAppSsoClient();
+        client.setSessionLifespan("30d");
+        client.setAllowSecuredAppWebSession(allowSecuredAppWebSession);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+
+        Assertions.assertTrue(exception.getMessage().contains("Client.allowSecuredAppWebSession.notAllowed"));
     }
 
     @Test

@@ -1,5 +1,6 @@
 export type Client = {
   client_type?: 'DEFAULT' | 'SECURED_APP';
+  allow_secured_app_web_session?: boolean,
   session_lifespan: string | undefined,
   institution_metainfo: InstitutionMetainfo,
   client_id: string | undefined,

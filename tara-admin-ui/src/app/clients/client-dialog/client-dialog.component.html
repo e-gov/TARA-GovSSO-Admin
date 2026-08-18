@@ -69,6 +69,20 @@
           </mat-form-field>
         </div>
       </div>
+      <div class="form-row" *ngIf="authService.isSsoMode && newData.client_type === 'DEFAULT'">
+        <label class="col-sm-4 col-form-label">Luba SECURED_APP sessiooni üleandmist
+          <mat-icon inline class="material-icons ml-3 font-size-20"
+                    matTooltip="Määrab ära, kas SECURED_APP tüüpi klientrakendus tohib oma seansi käesolevale klientrakendusele üle anda.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-4 m-2">
+          <div class="form-row">
+            <mat-checkbox [disabled]="isInfo()" [checked]="newData.allow_secured_app_web_session"
+                          (change)="newData.allow_secured_app_web_session = !newData.allow_secured_app_web_session"></mat-checkbox>
+          </div>
+        </div>
+      </div>
       <div class="form-group row" *ngIf="authService.isSsoMode && newData.client_type === 'SECURED_APP'">
         <label class="col-sm-4 col-form-label">Seansi kehtivus
           <mat-icon inline class="material-icons ml-3 font-size-20"

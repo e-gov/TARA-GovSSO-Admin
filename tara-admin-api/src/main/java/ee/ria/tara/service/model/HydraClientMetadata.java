@@ -18,6 +18,9 @@ public class HydraClientMetadata   {
   @JsonProperty("client_type")
   private String clientType;
 
+  @JsonProperty("allow_secured_app_web_session")
+  private Boolean allowSecuredAppWebSession;
+
   @JsonProperty("display_user_consent")
   @NotNull
   private Boolean displayUserConsent;

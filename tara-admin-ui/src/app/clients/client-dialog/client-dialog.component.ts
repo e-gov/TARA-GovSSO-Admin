@@ -373,10 +373,20 @@ export class ClientDialogComponent implements OnInit {
       this.newData.session_lifespan = undefined;
     }
 
-    let requestBody = JSON.parse(JSON.stringify(this.newData), (key, value) => {
-       if (value == '')
-           return undefined;
-       return value;
+    if (this.newData.client_type === 'DEFAULT') {
+      this.newData.allow_secured_app_web_session = this.newData.allow_secured_app_web_session ?? false;
+    } else {
+      this.newData.allow_secured_app_web_session = undefined;
+    }
+
+    const requestBody = JSON.parse(JSON.stringify(this.newData), (key, value) => {
+      if (value === '') {
+        return undefined;
+      }
+      if (Array.isArray(value) && value.length === 0) {
+        return undefined;
+      }
+      return value;
     });
 
     this.data.onSave(requestBody).then(() => {

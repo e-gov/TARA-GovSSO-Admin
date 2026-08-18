@@ -81,6 +81,7 @@ public class ImportClientFromJsonFileTest {
                         "  \"backchannel_logout_uri\" : null,\n" +
                         "  \"backchannel_logout_session_required\" : true,\n" +
                         "  \"metadata\" : {\n" +
+                        "    \"allow_secured_app_web_session\" : null,\n" +
                         "    \"client_type\" : null,\n" +
                         "    \"display_user_consent\" : false,\n" +
                         "    \"skip_user_consent_client_ids\" : null,\n" +
