@@ -1,8 +1,27 @@
 {
+  "backchannel_logout_session_required": true,
   "client_id": "openIdDemo-7",
+  "client_name": "client_name",
   "grant_types": [
     "authorization_code"
   ],
+  "metadata": {
+    "oidc_client": {
+      "eidas_requester_id": "58ee2267-7864-4e09-958b-b53c3135298g",
+      "institution": {
+        "registry_code": "00000000",
+        "sector": "public"
+      },
+      "name": "client_name",
+      "name_translations": {
+        "et": "client_name"
+      },
+      "short_name": "client_short_name",
+      "short_name_translations": {
+        "et": "client_short_name"
+      }
+    }
+  },
   "redirect_uris": [
     "https://example-dev.example.com:8080/_oauth/tara"
   ],
@@ -12,17 +31,5 @@
   "scope": "openid eidas eidasonly eidas:country:* idcard mid smartid email phone",
   "subject_type": "public",
   "token_endpoint_auth_method": "client_secret_basic",
-  "backchannel_logout_session_required": true,
-  "metadata": {
-    "oidc_client": {
-      "name_translations": {},
-      "short_name_translations": {},
-      "eidas_requester_id": "58ee2267-7864-4e09-958b-b53c3135298g",
-      "institution": {
-        "registry_code": "00000000",
-        "sector": "public"
-      }
-    }
-  },
   "client_secret": "6caac826aa68fcfb221994b9f1c58af4d9e27d172d55b5b0fa563a27068be3bd"
 }

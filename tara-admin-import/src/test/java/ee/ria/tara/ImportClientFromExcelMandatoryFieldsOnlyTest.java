@@ -61,7 +61,7 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                 .withHeader("Content-Type", equalTo("application/json"))
                 .withRequestBody(equalToJson("{" +
                         "\"client_id\":\"mock_client_id\"," +
-                        "\"client_name\":null," +
+                        "\"client_name\":\"n_et\"," +
                         "\"client_secret\":\"3d91b58504a6cc3a159005ee7b16c7ae503ca6ac2a6a3c893837083c236b864a\"," +
                         "\"access_token_strategy\": null," +
                         "\"audience\": null," +
@@ -85,8 +85,8 @@ public class ImportClientFromExcelMandatoryFieldsOnlyTest {
                             "\"display_user_consent\":null," +
                             "\"skip_user_consent_client_ids\" : null,\n" +
                             "\"oidc_client\":{" +
-                                "\"name\":null," +
-                                "\"name_translations\":{\"et\":null,\"en\":null,\"ru\":null}," +
+                                "\"name\":\"n_et\"," +
+                                "\"name_translations\":{\"et\":\"n_et\",\"en\":null,\"ru\":null}," +
                                 "\"short_name\": \"sn_et\",\"short_name_translations\":{\"et\":\"sn_et\",\"en\":null,\"ru\":null}," +
                                 "\"legacy_return_url\":null," +
                                 "\"eidas_requester_id\":\"urn:uuid:59999382-daa6-11ec-b3dd-8396fd413a71\"," +
