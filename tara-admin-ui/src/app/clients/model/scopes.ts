@@ -8,6 +8,7 @@ export const SCOPE_EIDAS = "eidas";
 export const SCOPE_EIDAS_ONLY = "eidasonly";
 export const SCOPE_EIDAS_COUNTRY = "eidas:country:*";
 export const SCOPE_LEGALPERSON = "legalperson";
+export const SCOPE_EUDI = "eudi";
 export const SCOPE_REPRESENTEE = "representee.*";
 export const SCOPE_REPRESENTEE_LIST = "representee_list";
 export const SCOPE_AUTH_HANDOVER = "auth_handover";

@@ -11,6 +11,7 @@ public class ClientScopes {
     public static final String SCOPE_EIDAS_ONLY = "eidasonly";
     public static final String SCOPE_EIDAS_COUNTRY = "eidas:country:*";
     public static final String SCOPE_LEGALPERSON = "legalperson";
+    public static final String SCOPE_EUDI = "eudi";
     public static final String SCOPE_REPRESENTEE = "representee.*";
     public static final String SCOPE_REPRESENTEE_LIST = "representee_list";
     public static final String SCOPE_AUTH_HANDOVER = "auth_handover";
