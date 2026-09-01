@@ -8,10 +8,15 @@ import ee.ria.tara.model.SsoModeResponse;
 import ee.ria.tara.model.WhoAmIResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.NativeWebRequest;
+
+import java.util.Objects;
 
 import java.util.Optional;
 
@@ -41,9 +46,25 @@ public class ApiController implements WhoamiApi, LogoutApi, SsoModeApi {
 
         SecurityContext context = SecurityContextHolder.getContext();
         WhoAmIResponse response = new WhoAmIResponse();
-        response.setUsername(context.getAuthentication().getName());
+        Authentication authentication = Objects.requireNonNull(
+                context.getAuthentication(), "Authenticated user is missing from the security context");
+        response.setUsername(getDisplayName(authentication));
 
         return ResponseEntity.ok(response);
+    }
+
+    private static String getDisplayName(Authentication authentication) {
+        if (authentication.getPrincipal() instanceof OidcUser oidcUser) {
+            String fullName = oidcUser.getFullName();
+            if (StringUtils.hasText(fullName)) {
+                return fullName;
+            }
+            String preferredUsername = oidcUser.getPreferredUsername();
+            if (StringUtils.hasText(preferredUsername)) {
+                return preferredUsername;
+            }
+        }
+        return authentication.getName();
     }
 
     @Override
