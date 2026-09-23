@@ -416,7 +416,7 @@
             <properties>
                 <!-- Override only if necessary -->
                 <skipUT>false</skipUT>
-                <skipIT>true</skipIT>
+                <skipIT>false</skipIT>
             </properties>
         </profile>
         <profile>
