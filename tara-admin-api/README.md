@@ -95,11 +95,14 @@ not be stored in Git.
 | `spring.security.oauth2.client.provider.oidc.issuer-uri` | Y | OIDC issuer URI with discovery metadata | `https://issuer.example.com` |
 | `spring.security.oauth2.client.registration.oidc.client-id` | Y | Registered client identifier | `client-id` |
 | `spring.security.oauth2.client.registration.oidc.client-secret` | Y | Registered client secret | Supplied from a secret store |
-| `spring.security.oauth2.client.registration.oidc.redirect-uri` | Y | Authorization response URI template; Spring resolves `{baseUrl}` from the incoming request | `{baseUrl}/login/oauth2/code/oidc` |
-| `spring.security.oauth2.client.registration.oidc.scope` | Y | OIDC scope | `openid` |
+| `spring.security.oauth2.client.registration.oidc.redirect-uri` | N | Authorization response URI template; Spring resolves `{baseUrl}` from the incoming request. Default value is `{baseUrl}/login/oauth2/code/oidc`. | `{baseUrl}/login/oauth2/code/oidc` |
+| `spring.security.oauth2.client.registration.oidc.scope` | N | OIDC scope. Default value is `openid`. | `openid` |
 
-The identity provider must be configured with the resulting concrete redirect URI, for example
-`https://admin.example.com/login/oauth2/code/oidc`. The application uses `oidc` as its fixed client registration ID.
+The identity provider must be configured with the concrete redirect URI that the application sends in the
+authorization request, for example `https://admin.example.com/login/oauth2/code/oidc`. When the default redirect URI
+is used and the application runs behind a reverse proxy, set `server.forward-headers-strategy=native` (and ensure the
+proxy sends `X-Forwarded-*` headers) so that `{baseUrl}` resolves to the public address instead of the internal one.
+The application uses `oidc` as its fixed client registration ID.
 
 For local and DEV testing, activate both `inMemoryAuth` and `oidcAuth` to offer both authentication methods on the
 same login page. The `inMemoryAuth` profile must not be enabled in DEMO, PROD, or another production-like environment.
