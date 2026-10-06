@@ -38,9 +38,9 @@ public class Client {
 
   private String clientId;
 
-  private @Nullable NameTranslations clientName;
+  private NameTranslations clientName;
 
-  private @Nullable ShortNameTranslations clientShortName;
+  private ShortNameTranslations clientShortName;
 
   private @Nullable ClientSecretExportSettings clientSecretExportSettings;
 
@@ -227,8 +227,10 @@ public class Client {
   /**
    * Constructor with only required parameters
    */
-  public Client(String clientId, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<@Size(min = 2, max = 200)String> scope, List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses, TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
+  public Client(String clientId, NameTranslations clientName, ShortNameTranslations clientShortName, InstitutionMetainfo institutionMetainfo, List<String> redirectUris, List<@Size(min = 2, max = 200)String> scope, List<@Size(min = 1, max = 200)String> tokenRequestAllowedIpAddresses, TokenEndpointAuthMethodEnum tokenEndpointAuthMethod) {
     this.clientId = clientId;
+    this.clientName = clientName;
+    this.clientShortName = clientShortName;
     this.institutionMetainfo = institutionMetainfo;
     this.redirectUris = redirectUris;
     this.scope = scope;
@@ -276,7 +278,7 @@ public class Client {
     this.clientId = clientId;
   }
 
-  public Client clientName(@Nullable NameTranslations clientName) {
+  public Client clientName(NameTranslations clientName) {
     this.clientName = clientName;
     return this;
   }
@@ -285,18 +287,18 @@ public class Client {
    * Get clientName
    * @return clientName
    */
-  @Valid 
-  @Schema(name = "client_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "client_name", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("client_name")
-  public @Nullable NameTranslations getClientName() {
+  public NameTranslations getClientName() {
     return clientName;
   }
 
-  public void setClientName(@Nullable NameTranslations clientName) {
+  public void setClientName(NameTranslations clientName) {
     this.clientName = clientName;
   }
 
-  public Client clientShortName(@Nullable ShortNameTranslations clientShortName) {
+  public Client clientShortName(ShortNameTranslations clientShortName) {
     this.clientShortName = clientShortName;
     return this;
   }
@@ -305,14 +307,14 @@ public class Client {
    * Get clientShortName
    * @return clientShortName
    */
-  @Valid 
-  @Schema(name = "client_short_name", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Valid 
+  @Schema(name = "client_short_name", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("client_short_name")
-  public @Nullable ShortNameTranslations getClientShortName() {
+  public ShortNameTranslations getClientShortName() {
     return clientShortName;
   }
 
-  public void setClientShortName(@Nullable ShortNameTranslations clientShortName) {
+  public void setClientShortName(ShortNameTranslations clientShortName) {
     this.clientShortName = clientShortName;
   }
 

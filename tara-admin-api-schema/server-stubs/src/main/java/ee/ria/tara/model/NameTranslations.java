@@ -21,13 +21,24 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class NameTranslations {
 
-  private @Nullable String et;
+  private String et;
 
   private @Nullable String en;
 
   private @Nullable String ru;
 
-  public NameTranslations et(@Nullable String et) {
+  public NameTranslations() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public NameTranslations(String et) {
+    this.et = et;
+  }
+
+  public NameTranslations et(String et) {
     this.et = et;
     return this;
   }
@@ -36,14 +47,14 @@ public class NameTranslations {
    * Get et
    * @return et
    */
-  @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3) 
-  @Schema(name = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3) 
+  @Schema(name = "et", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("et")
-  public @Nullable String getEt() {
+  public String getEt() {
     return et;
   }
 
-  public void setEt(@Nullable String et) {
+  public void setEt(String et) {
     this.et = et;
   }
 

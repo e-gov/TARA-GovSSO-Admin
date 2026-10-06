@@ -21,13 +21,24 @@ import jakarta.annotation.Generated;
 @Generated(value = "org.openapitools.codegen.languages.SpringCodegen", comments = "Generator version: 7.15.0")
 public class ShortNameTranslations {
 
-  private @Nullable String et;
+  private String et;
 
   private @Nullable String en;
 
   private @Nullable String ru;
 
-  public ShortNameTranslations et(@Nullable String et) {
+  public ShortNameTranslations() {
+    super();
+  }
+
+  /**
+   * Constructor with only required parameters
+   */
+  public ShortNameTranslations(String et) {
+    this.et = et;
+  }
+
+  public ShortNameTranslations et(String et) {
     this.et = et;
     return this;
   }
@@ -36,14 +47,14 @@ public class ShortNameTranslations {
    * Get et
    * @return et
    */
-  @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3) 
-  @Schema(name = "et", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @NotNull @Pattern(regexp = "^(?!\\s*$).+") @Size(min = 3) 
+  @Schema(name = "et", requiredMode = Schema.RequiredMode.REQUIRED)
   @JsonProperty("et")
-  public @Nullable String getEt() {
+  public String getEt() {
     return et;
   }
 
-  public void setEt(@Nullable String et) {
+  public void setEt(String et) {
     this.et = et;
   }
 

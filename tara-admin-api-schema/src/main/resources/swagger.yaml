@@ -483,6 +483,8 @@ components:
   schemas:
     NameTranslations:
       type: object
+      required:
+        - et
       properties:
         et:
           type: string
@@ -496,6 +498,8 @@ components:
           minLength: 3
     ShortNameTranslations:
       type: object
+      required:
+        - et
       properties:
         et:
           type: string
@@ -634,6 +638,8 @@ components:
       type: object
       required:
         - client_id
+        - client_name
+        - client_short_name
         - redirect_uris
         - scope
         - institution_metainfo
