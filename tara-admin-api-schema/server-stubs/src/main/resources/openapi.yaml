@@ -607,6 +607,8 @@ components:
         ru:
           minLength: 3
           type: string
+      required:
+      - et
       type: object
     ShortNameTranslations:
       example:
@@ -624,6 +626,8 @@ components:
         ru:
           minLength: 3
           type: string
+      required:
+      - et
       type: object
     InstitutionBillingSettings:
       example:
@@ -1012,6 +1016,8 @@ components:
           type: string
       required:
       - client_id
+      - client_name
+      - client_short_name
       - institution_metainfo
       - redirect_uris
       - scope
