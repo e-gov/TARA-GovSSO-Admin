@@ -19,13 +19,13 @@
         <imageName>tara-admin:latest</imageName>
         <githubMirror>https://github.com</githubMirror>
 
-        <bouncycastle.version>1.85</bouncycastle.version>
-        <cdoc4j.version>1.5</cdoc4j.version>
-        <elastic-apm.version>1.56.0</elastic-apm.version>
+        <bouncycastle.version>1.86</bouncycastle.version>
+        <cdoc4j.version>1.5.1</cdoc4j.version>
+        <elastic-apm.version>1.57.1</elastic-apm.version>
         <ipaddress.version>5.6.2</ipaddress.version>
         <commons-email.version>2.0.0-M1</commons-email.version>
-        <greenmail.version>2.1.12</greenmail.version>
-        <jacoco-maven-plugin.version>0.8.15</jacoco-maven-plugin.version>
+        <greenmail.version>2.1.15</greenmail.version>
+        <jacoco-maven-plugin.version>0.8.16</jacoco-maven-plugin.version>
         <logstash-logback-encoder.version>9.0</logstash-logback-encoder.version>
         <poi.version>5.5.1</poi.version>
         <tara-admin-api-schema.version>1.13.1</tara-admin-api-schema.version>

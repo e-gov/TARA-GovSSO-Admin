@@ -20,7 +20,7 @@
               #addClientToInstitution(String,Client)redefines the configuration of InstitutionsApi
               #addClientToInstitution(String,Client). -->
         <openapi-generator-maven-plugin.version>7.15.0</openapi-generator-maven-plugin.version>
-        <springdoc-openapi-ui.version>3.0.3</springdoc-openapi-ui.version>
+        <springdoc-openapi-ui.version>3.2.0</springdoc-openapi-ui.version>
     </properties>
 
     <build>
