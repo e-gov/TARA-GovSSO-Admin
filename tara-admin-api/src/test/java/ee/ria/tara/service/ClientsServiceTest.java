@@ -118,6 +118,21 @@ public class ClientsServiceTest {
     }
 
     @Test
+    public void getAllBackchannelLogoutHostsAndPorts_distinctSortedValuesReturned() {
+        doReturn(List.of(
+                clientEntity("localhost:4201"),
+                clientEntity("localhost:4200"),
+                clientEntity(null),
+                clientEntity("localhost:4201")
+        )).when(clientRepository).findAll();
+
+        List<String> hostsAndPorts = clientsService.getAllBackchannelLogoutHostsAndPorts();
+
+        assertEquals(List.of("localhost:4200", "localhost:4201"), hostsAndPorts);
+        verify(clientRepository, times(1)).findAll();
+    }
+
+    @Test
     public void getAllClients_whenOidcServiceFails_exceptionRethrown() {
         String errorMessage = "Oops";
         doThrow(new FatalApiException(errorMessage)).when(oidcService).getAllClients();
@@ -406,6 +421,12 @@ public class ClientsServiceTest {
         institution.setRegistryCode(metainfo.getRegistryCode());
         institution.setType(metainfo.getType().getType());
         return institution;
+    }
+
+    private static ee.ria.tara.repository.model.Client clientEntity(String backchannelLogoutHostAndPort) {
+        ee.ria.tara.repository.model.Client entity = new ee.ria.tara.repository.model.Client();
+        entity.setBackchannelLogoutHostAndPort(backchannelLogoutHostAndPort);
+        return entity;
     }
 
 }

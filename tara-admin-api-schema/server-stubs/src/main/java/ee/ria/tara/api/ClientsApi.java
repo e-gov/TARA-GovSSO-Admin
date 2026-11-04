@@ -45,6 +45,48 @@ public interface ClientsApi {
         return Optional.empty();
     }
 
+    public static final String PATH_GET_ALL_BACKCHANNEL_LOGOUT_HOSTS_AND_PORTS = "/clients/backchannellogouthostsandports";
+    /**
+     * GET /clients/backchannellogouthostsandports : Get back-channel logout hosts of all registered clients
+     *
+     * @return Successful operation (status code 200)
+     */
+    @Operation(
+        operationId = "getAllBackchannelLogoutHostsAndPorts",
+        summary = "Get back-channel logout hosts of all registered clients",
+        tags = { "clients" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Successful operation", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = String.class)))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "cookieAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = ClientsApi.PATH_GET_ALL_BACKCHANNEL_LOGOUT_HOSTS_AND_PORTS,
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<List<String>> getAllBackchannelLogoutHostsAndPorts(
+        
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ \"\", \"\" ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
     public static final String PATH_GET_ALL_CLIENTS = "/clients";
     /**
      * GET /clients : Get all registered clients

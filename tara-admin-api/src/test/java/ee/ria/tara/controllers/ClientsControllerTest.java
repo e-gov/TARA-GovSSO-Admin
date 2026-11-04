@@ -95,6 +95,22 @@ public class ClientsControllerTest {
     }
 
     @Test
+    public void testGetAllBackchannelLogoutHostsAndPorts() throws Exception {
+        doReturn(List.of("localhost:4200", "localhost:4201"))
+                .when(service).getAllBackchannelLogoutHostsAndPorts();
+
+        MockHttpServletResponse response = mvc.perform(
+                get("/clients/backchannellogouthostsandports")
+                        .accept(MediaType.APPLICATION_JSON))
+                .andReturn().getResponse();
+
+        Assertions.assertEquals(200, response.getStatus());
+        Assertions.assertEquals("[\"localhost:4200\",\"localhost:4201\"]",
+                response.getContentAsString());
+        verify(service, times(1)).getAllBackchannelLogoutHostsAndPorts();
+    }
+
+    @Test
     public void testNonExistingEndpointReturns404() throws Exception {
         doCallRealMethod().when(errorHandler).handleNoResourceException(any());
 

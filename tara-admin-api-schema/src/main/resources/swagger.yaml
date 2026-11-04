@@ -153,6 +153,21 @@ paths:
                   type: array
                   items:
                     type: string
+  '/clients/backchannellogouthostsandports':
+    get:
+      tags:
+        - clients
+      summary: Get back-channel logout hosts of all registered clients
+      operationId: getAllBackchannelLogoutHostsAndPorts
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
   '/clients/import':
     post:
       tags:

@@ -24,6 +24,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static java.util.function.Function.identity;
@@ -71,6 +72,16 @@ public class ClientsService {
                 .collect(Collectors.toMap(client -> client.getClientId(), client -> client.getTokenRequestAllowedIpAddresses()));
 
             return clientsIps;
+    }
+
+    public List<String> getAllBackchannelLogoutHostsAndPorts() {
+        return clientRepository.findAll()
+                .stream()
+                .map(ee.ria.tara.repository.model.Client::getBackchannelLogoutHostAndPort)
+                .filter(Objects::nonNull)
+                .distinct()
+                .sorted()
+                .toList();
     }
 
     public List<Client> getClientsByInstitution(String registryCode) throws ApiException {

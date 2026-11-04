@@ -97,7 +97,8 @@ public class SecurityConfiguration {
                 ).permitAll()
                 .requestMatchers(
                     pathPattern(HttpMethod.GET, "/alerts"),
-                    pathPattern(HttpMethod.GET, "/clients/tokenrequestallowedipaddresses")
+                    pathPattern(HttpMethod.GET, "/clients/tokenrequestallowedipaddresses"),
+                    pathPattern(HttpMethod.GET, "/clients/backchannellogouthostsandports")
                 ).permitAll()
                 .requestMatchers(
                    pathPattern("/*.js"),

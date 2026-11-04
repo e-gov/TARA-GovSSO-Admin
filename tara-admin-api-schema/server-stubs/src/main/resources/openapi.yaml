@@ -194,6 +194,25 @@ paths:
       - application/json
       x-tags:
       - tag: clients
+  /clients/backchannellogouthostsandports:
+    get:
+      operationId: getAllBackchannelLogoutHostsAndPorts
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+          description: Successful operation
+      summary: Get back-channel logout hosts of all registered clients
+      tags:
+      - clients
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: clients
   /clients/import:
     post:
       operationId: importClients
