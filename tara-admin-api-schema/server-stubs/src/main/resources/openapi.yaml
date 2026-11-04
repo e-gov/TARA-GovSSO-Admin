@@ -194,6 +194,25 @@ paths:
       - application/json
       x-tags:
       - tag: clients
+  /clients/backchannel-logout-allowlist:
+    get:
+      operationId: getBackchannelLogoutAllowlist
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  type: string
+                type: array
+          description: Successful operation
+      summary: Get back-channel logout allowlist of all registered clients
+      tags:
+      - clients
+      x-accepts:
+      - application/json
+      x-tags:
+      - tag: clients
   /clients/import:
     post:
       operationId: importClients

@@ -121,6 +121,48 @@ public interface ClientsApi {
     }
 
 
+    public static final String PATH_GET_BACKCHANNEL_LOGOUT_ALLOWLIST = "/clients/backchannel-logout-allowlist";
+    /**
+     * GET /clients/backchannel-logout-allowlist : Get back-channel logout allowlist of all registered clients
+     *
+     * @return Successful operation (status code 200)
+     */
+    @Operation(
+        operationId = "getBackchannelLogoutAllowlist",
+        summary = "Get back-channel logout allowlist of all registered clients",
+        tags = { "clients" },
+        responses = {
+            @ApiResponse(responseCode = "200", description = "Successful operation", content = {
+                @Content(mediaType = "application/json", array = @ArraySchema(schema = @Schema(implementation = String.class)))
+            })
+        },
+        security = {
+            @SecurityRequirement(name = "cookieAuth")
+        }
+    )
+    @RequestMapping(
+        method = RequestMethod.GET,
+        value = ClientsApi.PATH_GET_BACKCHANNEL_LOGOUT_ALLOWLIST,
+        produces = { "application/json" }
+    )
+    
+    default ResponseEntity<List<String>> getBackchannelLogoutAllowlist(
+        
+    ) {
+        getRequest().ifPresent(request -> {
+            for (MediaType mediaType: MediaType.parseMediaTypes(request.getHeader("Accept"))) {
+                if (mediaType.isCompatibleWith(MediaType.valueOf("application/json"))) {
+                    String exampleString = "[ \"\", \"\" ]";
+                    ApiUtil.setExampleResponse(request, "application/json", exampleString);
+                    break;
+                }
+            }
+        });
+        return new ResponseEntity<>(HttpStatus.NOT_IMPLEMENTED);
+
+    }
+
+
     public static final String PATH_IMPORT_CLIENTS = "/clients/import";
     /**
      * POST /clients/import : Import clients

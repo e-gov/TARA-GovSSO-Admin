@@ -48,6 +48,13 @@ public class ClientsController implements ClientsApi {
     }
 
     @Override
+    public ResponseEntity<List<String>> getBackchannelLogoutAllowlist() {
+        HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+        log.info(String.format("Incoming request: GET %s, with query %s.", request.getRequestURI(), request.getQueryString()));
+        return ResponseEntity.ok(service.getBackchannelLogoutAllowlist());
+    }
+
+    @Override
     public ResponseEntity<ClientImportResponse> importClients(@RequestPart("file") MultipartFile fileName) {
         try {
             log.info("Upload file: " + fileName.getOriginalFilename());
