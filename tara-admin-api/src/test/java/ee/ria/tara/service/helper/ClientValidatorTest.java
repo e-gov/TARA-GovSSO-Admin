@@ -693,7 +693,7 @@ class ClientValidatorTest {
     @Test
     void validateClient_ssoClientWithClientTypeSet_successfulValidation() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSecuredAppSsoClient();
         client.setSessionLifespan("30d");
@@ -729,7 +729,7 @@ class ClientValidatorTest {
     @Test
     void validateClient_securedAppWithValidSessionLifespan_successfulValidation() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSecuredAppSsoClient();
         client.setSessionLifespan("30d");
@@ -753,24 +753,24 @@ class ClientValidatorTest {
     @Test
     void validateClient_whenSessionLifespanTooLong_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSecuredAppSsoClient();
-        client.setSessionLifespan("90d1h");
+        client.setSessionLifespan("30d1h");
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
 
         assertAll(
             () -> assertThat(exception.getMessage()).isEqualTo("Client.sessionLifespan.tooLong"),
-            () -> assertThat(exception.getArgs()).containsExactly("90d")
+            () -> assertThat(exception.getArgs()).containsExactly("30d")
         );
     }
 
     @Test
     void validateClient_whenSessionLifespanTooShort_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSecuredAppSsoClient();
         client.setSessionLifespan("0d");
@@ -814,7 +814,7 @@ class ClientValidatorTest {
     @Test
     void validateClient_securedAppMissingAuthHandoverScope_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSSOClient();
         client.setClientType(Client.ClientTypeEnum.SECURED_APP);
@@ -881,7 +881,7 @@ class ClientValidatorTest {
     @ValueSource(booleans = {true, false})
     void validateClient_securedAppWithAllowSecuredAppWebSessionSet_exceptionThrown(boolean allowSecuredAppWebSession) {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSecuredAppSsoClient();
         client.setSessionLifespan("30d");
@@ -896,7 +896,7 @@ class ClientValidatorTest {
     @Test
     void validateClient_defaultClientTypeWithValidSecuredAppSessionMaxDuration_successfulValidation() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSSOClient();
         client.setAllowSecuredAppWebSession(true);
@@ -906,10 +906,10 @@ class ClientValidatorTest {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"1h", "90d"})
+    @ValueSource(strings = {"1h", "30d"})
     void validateClient_securedAppSessionMaxDurationAtAllowedLimit_successfulValidation(String securedAppSessionMaxDuration) {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSSOClient();
         client.setAllowSecuredAppWebSession(true);
@@ -921,25 +921,25 @@ class ClientValidatorTest {
     @Test
     void validateClient_whenSecuredAppSessionMaxDurationTooLong_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSSOClient();
         client.setAllowSecuredAppWebSession(true);
-        client.setSecuredAppSessionMaxDuration("90d1h");
+        client.setSecuredAppSessionMaxDuration("30d1h");
 
         InvalidDataException exception = assertThrows(InvalidDataException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
 
         assertAll(
             () -> assertThat(exception.getMessage()).isEqualTo("Client.securedAppSessionMaxDuration.tooLong"),
-            () -> assertThat(exception.getArgs()).containsExactly("90d")
+            () -> assertThat(exception.getArgs()).containsExactly("30d")
         );
     }
 
     @Test
     void validateClient_whenSecuredAppSessionMaxDurationTooShort_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSSOClient();
         client.setAllowSecuredAppWebSession(true);
@@ -985,7 +985,7 @@ class ClientValidatorTest {
     @Test
     void validateClient_securedAppWithSecuredAppSessionMaxDuration_exceptionThrown() {
         doReturn(true).when(adminConfigurationProvider).isSsoMode();
-        doReturn(Duration.ofDays(90)).when(adminConfigurationProvider).getMaxSessionDuration();
+        doReturn(Duration.ofDays(30)).when(adminConfigurationProvider).getMaxSessionDuration();
 
         Client client = validSecuredAppSsoClient();
         client.setSessionLifespan("30d");
