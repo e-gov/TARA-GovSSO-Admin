@@ -194,9 +194,9 @@ paths:
       - application/json
       x-tags:
       - tag: clients
-  /clients/backchannellogouthostsandports:
+  /clients/backchannel-logout-allowlist:
     get:
-      operationId: getAllBackchannelLogoutHostsAndPorts
+      operationId: getBackchannelLogoutAllowlist
       responses:
         "200":
           content:
@@ -206,7 +206,7 @@ paths:
                   type: string
                 type: array
           description: Successful operation
-      summary: Get back-channel logout hosts of all registered clients
+      summary: Get back-channel logout allowlist of all registered clients
       tags:
       - clients
       x-accepts:

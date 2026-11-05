@@ -95,19 +95,19 @@ public class ClientsControllerTest {
     }
 
     @Test
-    public void testGetAllBackchannelLogoutHostsAndPorts() throws Exception {
+    public void testGetBackchannelLogoutAllowlist() throws Exception {
         doReturn(List.of("localhost:4200", "localhost:4201"))
-                .when(service).getAllBackchannelLogoutHostsAndPorts();
+                .when(service).getBackchannelLogoutAllowlist();
 
         MockHttpServletResponse response = mvc.perform(
-                get("/clients/backchannellogouthostsandports")
+                get("/clients/backchannel-logout-allowlist")
                         .accept(MediaType.APPLICATION_JSON))
                 .andReturn().getResponse();
 
         Assertions.assertEquals(200, response.getStatus());
         Assertions.assertEquals("[\"localhost:4200\",\"localhost:4201\"]",
                 response.getContentAsString());
-        verify(service, times(1)).getAllBackchannelLogoutHostsAndPorts();
+        verify(service, times(1)).getBackchannelLogoutAllowlist();
     }
 
     @Test

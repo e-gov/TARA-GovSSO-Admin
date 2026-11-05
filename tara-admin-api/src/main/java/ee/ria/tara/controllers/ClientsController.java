@@ -48,10 +48,10 @@ public class ClientsController implements ClientsApi {
     }
 
     @Override
-    public ResponseEntity<List<String>> getAllBackchannelLogoutHostsAndPorts() {
+    public ResponseEntity<List<String>> getBackchannelLogoutAllowlist() {
         HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
         log.info(String.format("Incoming request: GET %s, with query %s.", request.getRequestURI(), request.getQueryString()));
-        return ResponseEntity.ok(service.getAllBackchannelLogoutHostsAndPorts());
+        return ResponseEntity.ok(service.getBackchannelLogoutAllowlist());
     }
 
     @Override

@@ -118,7 +118,7 @@ public class ClientsServiceTest {
     }
 
     @Test
-    public void getAllBackchannelLogoutHostsAndPorts_distinctSortedValuesReturned() {
+    public void getBackchannelLogoutAllowlist_distinctSortedValuesReturned() {
         doReturn(List.of(
                 clientEntity("localhost:4201"),
                 clientEntity("localhost:4200"),
@@ -126,9 +126,9 @@ public class ClientsServiceTest {
                 clientEntity("localhost:4201")
         )).when(clientRepository).findAll();
 
-        List<String> hostsAndPorts = clientsService.getAllBackchannelLogoutHostsAndPorts();
+        List<String> allowlist = clientsService.getBackchannelLogoutAllowlist();
 
-        assertEquals(List.of("localhost:4200", "localhost:4201"), hostsAndPorts);
+        assertEquals(List.of("localhost:4200", "localhost:4201"), allowlist);
         verify(clientRepository, times(1)).findAll();
     }
 

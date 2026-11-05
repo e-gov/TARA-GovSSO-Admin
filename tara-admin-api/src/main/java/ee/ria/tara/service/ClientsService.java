@@ -74,7 +74,7 @@ public class ClientsService {
             return clientsIps;
     }
 
-    public List<String> getAllBackchannelLogoutHostsAndPorts() {
+    public List<String> getBackchannelLogoutAllowlist() {
         return clientRepository.findAll()
                 .stream()
                 .map(ee.ria.tara.repository.model.Client::getBackchannelLogoutHostAndPort)

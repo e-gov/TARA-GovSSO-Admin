@@ -153,12 +153,12 @@ paths:
                   type: array
                   items:
                     type: string
-  '/clients/backchannellogouthostsandports':
+  '/clients/backchannel-logout-allowlist':
     get:
       tags:
         - clients
-      summary: Get back-channel logout hosts of all registered clients
-      operationId: getAllBackchannelLogoutHostsAndPorts
+      summary: Get back-channel logout allowlist of all registered clients
+      operationId: getBackchannelLogoutAllowlist
       responses:
         '200':
           description: Successful operation
