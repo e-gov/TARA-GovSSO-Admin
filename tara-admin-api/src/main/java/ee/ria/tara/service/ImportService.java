@@ -3,12 +3,6 @@ package ee.ria.tara.service;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonUnwrapped;
-import com.fasterxml.jackson.core.json.JsonReadFeature;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
-import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.configuration.providers.TaraOidcConfigurationProvider;
 import ee.ria.tara.model.Client;
@@ -57,6 +51,11 @@ import org.springframework.util.Assert;
 import org.springframework.util.StringUtils;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import tools.jackson.core.json.JsonReadFeature;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.ser.std.SimpleBeanPropertyFilter;
+import tools.jackson.databind.ser.std.SimpleFilterProvider;
 
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -83,25 +82,21 @@ public class ImportService {
     private final AdminConfigurationProvider adminConfigurationProvider;
     private final ClientMapper clientMapper;
 
-    private final static ObjectMapper mapper = JsonMapper.builder()
-            .addModule(new JavaTimeModule())
+    private final static ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults()
+            .changeDefaultPropertyInclusion(incl -> incl
+                    .withValueInclusion(JsonInclude.Include.NON_NULL)
+                    .withContentInclusion(JsonInclude.Include.NON_NULL))
+            .filterProvider(new SimpleFilterProvider()
+                    .addFilter("custom_serializer", SimpleBeanPropertyFilter.serializeAllExcept("secret")))
+            .addMixIn(Object.class, PropertyFilterMixIn.class)
             .build();
-
-    static {
-        mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        String[] fieldsToSkip = new String[] { "secret" };
-        final SimpleFilterProvider filter = new SimpleFilterProvider();
-        filter.addFilter("custom_serializer", SimpleBeanPropertyFilter.serializeAllExcept(fieldsToSkip));
-        mapper.setFilters(filter);
-        mapper.addMixIn(Object.class, PropertyFilterMixIn.class);
-    }
 
     private final List<String> defaultListOfScopes = List.of(SCOPE_OPENID, SCOPE_MID, SCOPE_IDCARD, SCOPE_SMARTID,
             SCOPE_EIDAS, SCOPE_EIDAS_ONLY, SCOPE_EIDAS_COUNTRY, SCOPE_EMAIL, SCOPE_PHONE);
 
     private final DataFormatter formatter = new DataFormatter();
 
-    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ObjectMapper objectMapper = JsonMapper.builderWithJackson2Defaults().build();
 
     public ClientImportResponse importFromExcelFile(InputStream inputStream) throws Exception {
 
@@ -206,7 +201,7 @@ public class ImportService {
 
         try {
             return Arrays.asList(objectMapper.readerFor(ClientContact[].class)
-                    .with(JsonReadFeature.ALLOW_TRAILING_COMMA).readValue(cellValue, ClientContact[].class));
+                    .with(JsonReadFeature.ALLOW_TRAILING_COMMA).<ClientContact[]>readValue(cellValue));
         } catch (Exception e) {
             throw new IllegalArgumentException(String.format("Unexpected value for contacts in row: %s (value = '%s')",
                     (row.getRowNum() + 1), cellValue));

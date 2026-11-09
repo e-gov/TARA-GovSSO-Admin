@@ -2,6 +2,7 @@ package ee.ria.tara;
 
 import co.elastic.apm.attach.ElasticApmAttacher;
 import ee.ria.tara.configuration.HomeController;
+import ee.ria.tara.configuration.SpringDocConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -16,7 +17,9 @@ import java.util.stream.Collectors;
 @Slf4j
 @SpringBootApplication
 @ConfigurationPropertiesScan
-@ComponentScan(excludeFilters = {@ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = HomeController.class)})
+@ComponentScan(excludeFilters = {@ComponentScan.Filter(
+        type = FilterType.ASSIGNABLE_TYPE,
+        value = {HomeController.class, SpringDocConfiguration.class})})
 public class Application {
 
     // Modifying "jdk.tls.disabledAlgorithms" security property can only be done before running main() method

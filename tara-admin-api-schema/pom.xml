@@ -20,7 +20,7 @@
               #addClientToInstitution(String,Client)redefines the configuration of InstitutionsApi
               #addClientToInstitution(String,Client). -->
         <openapi-generator-maven-plugin.version>7.15.0</openapi-generator-maven-plugin.version>
-        <springdoc-openapi-ui.version>3.0.3</springdoc-openapi-ui.version>
+        <swagger-core.version>2.2.55</swagger-core.version>
     </properties>
 
     <build>
@@ -33,9 +33,14 @@
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
         <dependency>
-            <groupId>org.springdoc</groupId>
-            <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
-            <version>${springdoc-openapi-ui.version}</version>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-annotations-jakarta</artifactId>
+            <version>${swagger-core.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>io.swagger.core.v3</groupId>
+            <artifactId>swagger-models-jakarta</artifactId>
+            <version>${swagger-core.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
