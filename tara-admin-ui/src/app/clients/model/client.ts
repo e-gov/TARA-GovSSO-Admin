@@ -27,6 +27,7 @@ export type Client = {
   skip_user_consent_client_ids: string[],
   client_contacts: ClientContact[],
   mid_settings: ClientMidSettings,
+  eudi_settings: ClientEudiSettings,
   eidas_requester_id: string | undefined,
   description: string | undefined,
   client_logo: string | undefined,
@@ -56,6 +57,10 @@ export type ClientSmartIdSettings = {
 export type ClientMidSettings = {
   relying_party_UUID: string | undefined,
   relying_party_name: string | undefined
+}
+
+export type ClientEudiSettings = {
+  presentation_config_id: string | undefined
 }
 
 export type ClientSecretExportSettings = {

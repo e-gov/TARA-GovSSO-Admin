@@ -626,6 +626,26 @@
       </div>
     </div>
 
+    <div *ngIf="eudiSettingsAvailable()" class="mat-dialog-container-content">
+      <h1><span>EUDI rahakoti seadistus</span></h1>
+      <div class="form-group row">
+        <label class="col-sm-4 col-form-label">Esitluskonfiguratsiooni ID
+          <mat-icon inline class="material-icons ml-3 font-size-20"
+                    matTooltip="eudiplo esitluskonfiguratsiooni ID, mille alusel kuvatakse rahakotis klientrakenduse andmed. Määramata jätmisel ei pakuta klientrakendusele EUDI rahakotiga autentimist.">
+            help_outline
+          </mat-icon>
+        </label>
+        <div class="col-sm-8">
+          <input *ngIf="!isInfo()" type="text" class="form-control w-75" maxlength="512"
+                 name="eudi_presentation_config_id" [required]="eudiSettingsRequired()"
+                 [(ngModel)]="_eudi_settings.presentation_config_id">
+          <label *ngIf="isInfo()">
+            {{newData.eudi_settings.presentation_config_id}}
+          </label>
+        </div>
+      </div>
+    </div>
+
     <div class="mat-dialog-container-content" *ngIf="(newData.scope.includes('representee.*') || newData.scope.includes('representee_list')) && authService.isSsoMode">
       <h1><span>Esindatava valiku seadistus</span></h1>
 

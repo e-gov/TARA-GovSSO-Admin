@@ -2,6 +2,7 @@ package ee.ria.tara.service.helper;
 
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.Client.TokenEndpointAuthMethodEnum;
+import ee.ria.tara.model.ClientEudiSettings;
 import ee.ria.tara.model.ClientMidSettings;
 import ee.ria.tara.model.ClientSecretExportSettings;
 import ee.ria.tara.model.ClientSmartIdSettings;
@@ -104,6 +105,7 @@ public class ClientTestHelper {
         client.setEidasRequesterId("urn:uuid:f75256ee-740d-4427-84ad-0f4b08417259");
         client.setSmartidSettings(new ClientSmartIdSettings());
         client.setMidSettings(new ClientMidSettings());
+        client.setEudiSettings(new ClientEudiSettings());
         client.setCreatedAt(OffsetDateTime.now());
         client.setUpdatedAt(OffsetDateTime.now());
         client.setClientLogo(null);

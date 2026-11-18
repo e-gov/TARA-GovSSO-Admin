@@ -7,6 +7,7 @@ import ee.ria.tara.duration.DurationFormat;
 import ee.ria.tara.duration.HydraDurationFormat;
 import ee.ria.tara.model.Client;
 import ee.ria.tara.model.ClientContact;
+import ee.ria.tara.model.ClientEudiSettings;
 import ee.ria.tara.model.ClientMidSettings;
 import ee.ria.tara.model.ClientSmartIdSettings;
 import ee.ria.tara.model.InstitutionMetainfo;
@@ -129,6 +130,7 @@ public class ClientMapper {
         client.setClientUrl(getOidcClientLegacyReturnUrl(hydraClient));
         client.setSmartidSettings(getSmartIdSettings(hydraClient));
         client.setMidSettings(getMobileIdSettings(hydraClient));
+        client.setEudiSettings(getEudiSettings(hydraClient));
         client.setCreatedAt(OffsetDateTime.parse(hydraClient.getCreatedAt()));
         client.setUpdatedAt(OffsetDateTime.parse(hydraClient.getUpdatedAt()));
         client.setMinimumAcrValue(hydraClient.getMetadata().getMinimumAcrValue());
@@ -160,6 +162,7 @@ public class ClientMapper {
 
         oidcClient.setMidSettings(client.getMidSettings());
         oidcClient.setSmartidSettings(client.getSmartidSettings());
+        oidcClient.setEudiSettings(client.getEudiSettings());
         oidcClient.setName(client.getClientName() != null ? client.getClientName().getEt() : null);
         oidcClient.setNameTranslations(client.getClientName());
         oidcClient.setShortName(client.getClientShortName() != null ? client.getClientShortName().getEt() : null);
@@ -328,6 +331,16 @@ public class ClientMapper {
         if (hydraClientMidSettings != null) {
             settings.setRelyingPartyName(hydraClientMidSettings.getRelyingPartyName());
             settings.setRelyingPartyUUID(hydraClientMidSettings.getRelyingPartyUUID());
+        }
+        return settings;
+    }
+
+    private static ClientEudiSettings getEudiSettings(HydraClient hydraClient) {
+        ClientEudiSettings settings = new ClientEudiSettings();
+        ClientEudiSettings hydraClientEudiSettings = hydraClient.getMetadata().getOidcClient().getEudiSettings();
+
+        if (hydraClientEudiSettings != null) {
+            settings.setPresentationConfigId(hydraClientEudiSettings.getPresentationConfigId());
         }
         return settings;
     }

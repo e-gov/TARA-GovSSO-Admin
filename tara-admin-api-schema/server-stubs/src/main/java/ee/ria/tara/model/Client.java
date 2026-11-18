@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 import ee.ria.tara.model.ClientContact;
+import ee.ria.tara.model.ClientEudiSettings;
 import ee.ria.tara.model.ClientMidSettings;
 import ee.ria.tara.model.ClientSecretExportSettings;
 import ee.ria.tara.model.ClientSmartIdSettings;
@@ -208,6 +209,8 @@ public class Client {
   private @Nullable ClientMidSettings midSettings;
 
   private @Nullable ClientSmartIdSettings smartidSettings;
+
+  private @Nullable ClientEudiSettings eudiSettings;
 
   @Valid
   private @Nullable List<@Valid ClientContact> clientContacts;
@@ -902,6 +905,26 @@ public class Client {
     this.smartidSettings = smartidSettings;
   }
 
+  public Client eudiSettings(@Nullable ClientEudiSettings eudiSettings) {
+    this.eudiSettings = eudiSettings;
+    return this;
+  }
+
+  /**
+   * Get eudiSettings
+   * @return eudiSettings
+   */
+  @Valid 
+  @Schema(name = "eudi_settings", requiredMode = Schema.RequiredMode.NOT_REQUIRED)
+  @JsonProperty("eudi_settings")
+  public @Nullable ClientEudiSettings getEudiSettings() {
+    return eudiSettings;
+  }
+
+  public void setEudiSettings(@Nullable ClientEudiSettings eudiSettings) {
+    this.eudiSettings = eudiSettings;
+  }
+
   public Client clientContacts(@Nullable List<@Valid ClientContact> clientContacts) {
     this.clientContacts = clientContacts;
     return this;
@@ -1029,6 +1052,7 @@ public class Client {
         Objects.equals(this.paasukeParameters, client.paasukeParameters) &&
         Objects.equals(this.midSettings, client.midSettings) &&
         Objects.equals(this.smartidSettings, client.smartidSettings) &&
+        Objects.equals(this.eudiSettings, client.eudiSettings) &&
         Objects.equals(this.clientContacts, client.clientContacts) &&
         Objects.equals(this.createdAt, client.createdAt) &&
         Objects.equals(this.updatedAt, client.updatedAt) &&
@@ -1037,7 +1061,7 @@ public class Client {
 
   @Override
   public int hashCode() {
-    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, clientType, allowSecuredAppWebSession, securedAppSessionMaxDuration, sessionLifespan, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
+    return Objects.hash(id, clientId, clientName, clientShortName, clientSecretExportSettings, institutionMetainfo, accessTokenAudienceUris, accessTokenLifespan, redirectUris, postLogoutRedirectUris, scope, tokenRequestAllowedIpAddresses, tokenEndpointAuthMethod, minimumAcrValue, eidasRequesterId, description, infoNotificationEmails, slaNotificationEmails, clientType, allowSecuredAppWebSession, securedAppSessionMaxDuration, sessionLifespan, accessTokenJwtEnabled, isUserConsentRequired, skipUserConsentClientIds, clientUrl, backchannelLogoutUri, paasukeParameters, midSettings, smartidSettings, eudiSettings, clientContacts, createdAt, updatedAt, Arrays.hashCode(clientLogo));
   }
 
   @Override
@@ -1074,6 +1098,7 @@ public class Client {
     sb.append("    paasukeParameters: ").append(toIndentedString(paasukeParameters)).append("\n");
     sb.append("    midSettings: ").append(toIndentedString(midSettings)).append("\n");
     sb.append("    smartidSettings: ").append(toIndentedString(smartidSettings)).append("\n");
+    sb.append("    eudiSettings: ").append(toIndentedString(eudiSettings)).append("\n");
     sb.append("    clientContacts: ").append(toIndentedString(clientContacts)).append("\n");
     sb.append("    createdAt: ").append(toIndentedString(createdAt)).append("\n");
     sb.append("    updatedAt: ").append(toIndentedString(updatedAt)).append("\n");

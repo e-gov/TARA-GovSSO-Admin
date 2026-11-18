@@ -3,6 +3,7 @@ package ee.ria.tara.service.helper;
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.model.Client;
+import ee.ria.tara.model.ClientEudiSettings;
 import ee.ria.tara.model.NameTranslations;
 import ee.ria.tara.model.ShortNameTranslations;
 import ee.ria.tara.repository.ClientRepository;
@@ -21,6 +22,7 @@ import java.util.List;
 
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PRIVATE;
 import static ee.ria.tara.model.InstitutionType.TypeEnum.PUBLIC;
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EUDI;
 import static ee.ria.tara.service.helper.ClientScopes.SCOPE_OPENID;
 import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE;
 import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE_LIST;
@@ -549,6 +551,65 @@ class ClientValidatorTest {
         IllegalStateException exception = assertThrows(IllegalStateException.class,
                 () -> clientValidator.validateClient(client, PUBLIC));
         Assertions.assertTrue(exception.getMessage().contains("Access token audience uris must not be set if access token JWT strategy is not enabled"));
+    }
+
+    @ParameterizedTest
+    @NullAndEmptySource
+    @ValueSource(strings = {" "})
+    void validateClient_taraModeEudiScopeWithoutPresentationConfigId_exceptionThrown(String presentationConfigId) {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setScope(List.of(SCOPE_OPENID, SCOPE_EUDI));
+        client.setEudiSettings(new ClientEudiSettings().presentationConfigId(presentationConfigId));
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.eudiSettings.presentationConfigId.missing"));
+    }
+
+    @Test
+    void validateClient_taraModeEudiScopeWithoutEudiSettings_exceptionThrown() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setScope(List.of(SCOPE_OPENID, SCOPE_EUDI));
+        client.setEudiSettings(null);
+
+        InvalidDataException exception = assertThrows(InvalidDataException.class,
+                () -> clientValidator.validateClient(client, PUBLIC));
+        Assertions.assertTrue(exception.getMessage().contains("Client.eudiSettings.presentationConfigId.missing"));
+    }
+
+    @Test
+    void validateClient_taraModeEudiScopeWithPresentationConfigId_successfulValidation() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setScope(List.of(SCOPE_OPENID, SCOPE_EUDI));
+        client.setEudiSettings(new ClientEudiSettings().presentationConfigId("pid-tara-client"));
+
+        assertDoesNotThrow(() -> clientValidator.validateClient(client, PUBLIC));
+    }
+
+    @Test
+    void validateClient_taraModeWithoutEudiScopeAndPresentationConfigId_successfulValidation() {
+        doReturn(false).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validTARAClient();
+        client.setEudiSettings(new ClientEudiSettings());
+
+        assertDoesNotThrow(() -> clientValidator.validateClient(client, PUBLIC));
+    }
+
+    @Test
+    void validateClient_ssoModeWithoutPresentationConfigId_successfulValidation() {
+        doReturn(true).when(adminConfigurationProvider).isSsoMode();
+
+        Client client = validSSOClient();
+        client.setEudiSettings(new ClientEudiSettings());
+
+        assertDoesNotThrow(() -> clientValidator.validateClient(client, PUBLIC));
     }
 
     @Test

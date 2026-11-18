@@ -704,6 +704,14 @@ components:
         should_use_additional_verification_code_check:
           type: boolean
       type: object
+    ClientEudiSettings:
+      example:
+        presentation_config_id: presentation_config_id
+      properties:
+        presentation_config_id:
+          maxLength: 512
+          type: string
+      type: object
     Institution:
       example:
         address: Test st 123
@@ -823,6 +831,8 @@ components:
         client_id: openIdDemo
         token_endpoint_auth_method: client_secret_basic
         paasuke_parameters: ns=A&role=B
+        eudi_settings:
+          presentation_config_id: presentation_config_id
         client_secret_export_settings:
           recipient_id_code: "60001019906"
           recipient_email: 60001019906@eesti.ee
@@ -1018,6 +1028,8 @@ components:
           $ref: "#/components/schemas/ClientMidSettings"
         smartid_settings:
           $ref: "#/components/schemas/ClientSmartIdSettings"
+        eudi_settings:
+          $ref: "#/components/schemas/ClientEudiSettings"
         client_contacts:
           items:
             $ref: "#/components/schemas/ClientContact"

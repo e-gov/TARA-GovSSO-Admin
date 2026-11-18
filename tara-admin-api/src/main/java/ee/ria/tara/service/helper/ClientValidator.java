@@ -5,6 +5,7 @@ import ee.ria.tara.controllers.exception.InvalidDataException;
 import ee.ria.tara.duration.AdminDurationFormat;
 import ee.ria.tara.duration.DurationFormat;
 import ee.ria.tara.model.Client;
+import ee.ria.tara.model.ClientEudiSettings;
 import ee.ria.tara.model.ClientSecretExportSettings;
 import ee.ria.tara.model.InstitutionType;
 import ee.ria.tara.repository.ClientRepository;
@@ -23,6 +24,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static ee.ria.tara.service.helper.ClientScopes.SCOPE_EUDI;
 import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE;
 import static ee.ria.tara.service.helper.ClientScopes.SCOPE_REPRESENTEE_LIST;
 import static ee.ria.tara.service.helper.ClientScopes.SCOPE_AUTH_HANDOVER;
@@ -57,6 +59,7 @@ public class ClientValidator {
         }
         validateEidasRequesterId(client);
         validatePaasukeQueryParameters(client);
+        validateEudiSettings(client);
         validateAccessTokenJwtEnabled(client);
         validateAccessTokenAudienceUris(client);
         validateAccessTokenLifespan(client);
@@ -338,6 +341,20 @@ public class ClientValidator {
         }
 
     }
+    /*
+        TARA login offers EUDI wallet authentication only to clients with an eudiplo presentation configuration id in
+        their Hydra metadata. GovSSO clients have no eudi scope, so the id is optional in SSO mode.
+     */
+    private void validateEudiSettings(Client client) {
+        if (adminConfProvider.isSsoMode() || !client.getScope().contains(SCOPE_EUDI)) {
+            return;
+        }
+        ClientEudiSettings eudiSettings = client.getEudiSettings();
+        if (eudiSettings == null || StringUtils.isBlank(eudiSettings.getPresentationConfigId())) {
+            throw new InvalidDataException("Client.eudiSettings.presentationConfigId.missing");
+        }
+    }
+
     private void validateAccessTokenJwtEnabled(Client client) {
         if (!adminConfProvider.isSsoMode() && client.getAccessTokenJwtEnabled()) {
             throw new IllegalStateException("Access token JWT enabled must not be set to true in TARA mode");

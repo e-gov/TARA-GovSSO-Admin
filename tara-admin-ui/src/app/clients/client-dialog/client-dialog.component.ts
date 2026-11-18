@@ -3,6 +3,7 @@ import {Component, Inject, OnInit} from '@angular/core';
 import {
   Client,
   ClientContact,
+  ClientEudiSettings,
   ClientMidSettings,
   ClientNameTranslation,
   ClientSmartIdSettings,
@@ -23,6 +24,7 @@ import {EditValueDialogComponent} from "./edit-value-dialog/edit-value-dialog.co
 import {DomSanitizer, SafeUrl} from '@angular/platform-browser';
 import {NgForm} from '@angular/forms';
 import {MessageService} from '../../main/message/message.service';
+import {SCOPE_EUDI} from '../model/scopes';
 
 type DialogType = 'ADD' | 'UPDATE' | 'INFO';
 
@@ -38,6 +40,7 @@ export class ClientDialogComponent implements OnInit {
   _client_url?: string;
   _mid_settings?: ClientMidSettings;
   _smartid_settings?: ClientSmartIdSettings;
+  _eudi_settings?: ClientEudiSettings;
   _eidas_requester_id?: string;
   _description?: string;
   _use_specific_mid_configuration: boolean;
@@ -76,6 +79,7 @@ export class ClientDialogComponent implements OnInit {
     this._client_url = this.newData.client_url;
     this._smartid_settings = this.newData.smartid_settings;
     this._mid_settings = this.newData.mid_settings;
+    this._eudi_settings = this.newData.eudi_settings;
     this._client_logo = this.newData.client_logo;
     this._backchannel_logout_uri = this.newData.backchannel_logout_uri;
     this._paasuke_parameters = this.newData.paasuke_parameters;
@@ -122,6 +126,16 @@ export class ClientDialogComponent implements OnInit {
 
   midSettingsAvailable(): boolean {
     return this.newData.scope.includes('mid') || this.authService.isSsoMode;
+  }
+
+  // GovSSO clients have no eudi scope, but TARA login reads the presentation configuration of a GovSSO login from the
+  // GovSSO client, so the setting is offered (as optional) for all GovSSO clients.
+  eudiSettingsAvailable(): boolean {
+    return this.newData.scope.includes(SCOPE_EUDI) || this.authService.isSsoMode;
+  }
+
+  eudiSettingsRequired(): boolean {
+    return !this.authService.isSsoMode && this.newData.scope.includes(SCOPE_EUDI);
   }
 
   removeImage(): void {
@@ -361,6 +375,14 @@ export class ClientDialogComponent implements OnInit {
       };
     }
 
+    if (this.eudiSettingsAvailable()) {
+      this.newData.eudi_settings = this._eudi_settings!;
+    } else {
+      this.newData.eudi_settings = {
+        presentation_config_id: undefined
+      };
+    }
+
     if (this.newData.scope.includes("representee.*") || this.newData.scope.includes("representee_list") ) {
       this.newData.paasuke_parameters = this._paasuke_parameters!;
     } else {
@@ -519,6 +541,10 @@ export class ClientDialogComponent implements OnInit {
 
     if (newClient.mid_settings == undefined) {
       newClient.mid_settings = {};
+    }
+
+    if (newClient.eudi_settings == undefined) {
+      newClient.eudi_settings = {};
     }
 
     if (newClient.skip_user_consent_client_ids == undefined) {

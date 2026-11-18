@@ -96,6 +96,7 @@ public class ImportClientFromExcelAllFieldsTest {
                                 "\"institution\":{\"registry_code\":\"12345678\",\"sector\":\"public\"}," +
                                 "\"mid_settings\":null," +
                                 "\"smartid_settings\":null," +
+                                "\"eudi_settings\":null," +
                                 "\"logo\" : null\n" +
                             "}," +
                         "   \"paasuke_parameters\" : null," +

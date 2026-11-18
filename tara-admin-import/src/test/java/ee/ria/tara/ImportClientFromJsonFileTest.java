@@ -111,6 +111,7 @@ public class ImportClientFromJsonFileTest {
                         "        \"relying_party_name\" : null,\n" +
                         "        \"should_use_additional_verification_code_check\" : true\n" +
                         "      },\n" +
+                        "      \"eudi_settings\" : null,\n" +
                         "      \"logo\" : null\n" +
                         "    },\n" +
                         "  \"paasuke_parameters\" : null," +

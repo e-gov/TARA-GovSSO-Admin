@@ -21,6 +21,7 @@ src/main/java/ee/ria/tara/configuration/SpringDocConfiguration.java
 src/main/java/ee/ria/tara/model/Alert.java
 src/main/java/ee/ria/tara/model/Client.java
 src/main/java/ee/ria/tara/model/ClientContact.java
+src/main/java/ee/ria/tara/model/ClientEudiSettings.java
 src/main/java/ee/ria/tara/model/ClientImportResponse.java
 src/main/java/ee/ria/tara/model/ClientMidSettings.java
 src/main/java/ee/ria/tara/model/ClientSecretExportSettings.java

@@ -2,6 +2,7 @@ package ee.ria.tara.mapper;
 
 import ee.ria.tara.configuration.providers.AdminConfigurationProvider;
 import ee.ria.tara.model.Client;
+import ee.ria.tara.model.ClientEudiSettings;
 import ee.ria.tara.service.model.HydraClient;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -269,6 +270,42 @@ class ClientMapperTest {
         HydraClient result = clientMapper.toHydraClient(input);
 
         Assertions.assertNull(result.getMetadata().getSecuredAppSessionMaxDuration());
+    }
+
+    @Test
+    void toHydraClient_eudiSettingsSetInMetadata() {
+        adminConfigurationProvider.setSsoMode(false);
+        Client input = validTARAClient();
+        input.setEudiSettings(new ClientEudiSettings().presentationConfigId("pid-tara-client"));
+
+        HydraClient result = clientMapper.toHydraClient(input);
+
+        Assertions.assertEquals("pid-tara-client",
+                result.getMetadata().getOidcClient().getEudiSettings().getPresentationConfigId());
+    }
+
+    @Test
+    void toModel_eudiSettingsMappedFromMetadata() {
+        adminConfigurationProvider.setSsoMode(false);
+        Client input = validTARAClient();
+        input.setEudiSettings(new ClientEudiSettings().presentationConfigId("pid-tara-client"));
+        HydraClient hydraClient = toHydraClientWithTimestamps(input);
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertEquals("pid-tara-client", result.getEudiSettings().getPresentationConfigId());
+    }
+
+    @Test
+    void toModel_missingEudiSettingsInMetadata_emptyEudiSettingsReturned() {
+        adminConfigurationProvider.setSsoMode(false);
+        HydraClient hydraClient = toHydraClientWithTimestamps(validTARAClient());
+        hydraClient.getMetadata().getOidcClient().setEudiSettings(null);
+
+        Client result = clientMapper.toModel(hydraClient, null);
+
+        Assertions.assertNotNull(result.getEudiSettings());
+        Assertions.assertNull(result.getEudiSettings().getPresentationConfigId());
     }
 
     private HydraClient toHydraClientWithTimestamps(Client client) {

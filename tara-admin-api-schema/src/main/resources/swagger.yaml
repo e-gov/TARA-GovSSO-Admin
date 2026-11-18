@@ -570,6 +570,12 @@ components:
           maxLength: 512
         should_use_additional_verification_code_check:
           type: boolean
+    ClientEudiSettings:
+      type: object
+      properties:
+        presentation_config_id:
+          type: string
+          maxLength: 512
     Institution:
       type: object
       required:
@@ -798,6 +804,8 @@ components:
           $ref: '#/components/schemas/ClientMidSettings'
         smartid_settings:
           $ref: '#/components/schemas/ClientSmartIdSettings'
+        eudi_settings:
+          $ref: '#/components/schemas/ClientEudiSettings'
         client_contacts:
           type: array
           items:

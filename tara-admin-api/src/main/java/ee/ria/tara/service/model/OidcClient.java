@@ -1,6 +1,7 @@
 package ee.ria.tara.service.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import ee.ria.tara.model.ClientEudiSettings;
 import ee.ria.tara.model.ClientMidSettings;
 import ee.ria.tara.model.ClientSmartIdSettings;
 import ee.ria.tara.model.NameTranslations;
@@ -48,6 +49,9 @@ public class OidcClient {
   @JsonProperty("smartid_settings")
   @NotNull
   private ClientSmartIdSettings smartidSettings;
+
+  @JsonProperty("eudi_settings")
+  private ClientEudiSettings eudiSettings;
 
   @JsonProperty("logo")
   private byte[] logo;
